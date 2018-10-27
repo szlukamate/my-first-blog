@@ -1,0 +1,17 @@
+{% extends 'quotation/base.html' %}
+	{% block content %}
+          
+
+                	<div class="post">
+	                    <div class="post">
+        	                haha
+				{% for tblDoc in  quotations %}
+					<p>irszám: 	{{ tblDoc.Pcd_tblDoc}}</p>
+					        <h1><a href="">{{ tblDoc.Docid_tblDoc }}</a></h1>
+						<p>Város:{{ tblDoc.Town_tblDoc|linebreaksbr }}</p>		
+			    	{% endfor %}	    
+                	    </div>
+	                </div>
+
+
+	{% endblock %}
