@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Post, Comment
 #, tblDoc, tblDoc_details, tblProduct
 
-from quotation.models import tblDoc
+from quotation.models import tblDoc, tblDoc_kind
 #class a(admin.TabularInline):
 #    model = tblDoc_details
 
@@ -17,5 +17,7 @@ from quotation.models import tblDoc
 admin.site.register(Post)
 admin.site.register(Comment)
 admin.site.register(tblDoc)
+admin.site.register(tblDoc_kind)
+
 #admin.site.register(tblDoc_details)
 #admin.site.register(tblProduct)

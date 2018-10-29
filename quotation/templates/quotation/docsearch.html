@@ -1,0 +1,20 @@
+{% extends 'quotation/base.html' %}
+	{% block content %}
+          
+
+                	<div class="post">
+	                    <div class="post">
+        	                Docsearch form
+				{% for tblDoc in  docs %}
+
+					        <h1><a href="{% url 'docform' pk=tblDoc.Docid_tblDoc %}">{{ tblDoc.Docid_tblDoc }}</a></h1>
+						<p>irszám: 	{{ tblDoc.Pcd_tblDoc}}</p>
+						<p>Város:{{ tblDoc.Town_tblDoc|linebreaksbr }}</p>
+						<p>Doc_kind_name:{{ tblDoc.Doc_kindid_tblDoc|linebreaksbr }}</p>
+
+			    	{% endfor %}	    
+                	    </div>
+	                </div>
+
+
+	{% endblock %}
