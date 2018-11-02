@@ -2,13 +2,46 @@
 	{% block content %}
           
 
-                	<div class="post">
-	                    <div class="post">
-        	                haha
+                	         haha
 				<p>{{ doc.Pcd_tblDoc}}</p>
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
 
-                	    </div>
-	                </div>
+												<tr>
+													<td>f1</td>
+													<td>f2</td>
+													<td>f3</td>
+													<td>f4</td>
+													<td>Qty</td>
+													<td>Product Name</td>
+													<td>Note</td>
+												</tr>
+											</thead>
+
+											<tbody>
+											{% for tblDoc_details in  docdetails %}
+
+
+												<tr>
+													<td>{{ tblDoc_details.firstnum_tblDoc_details}}</td>
+													<td>{{ tblDoc_details.secondnum_tblDoc_details}}</td>
+													<td>{{ tblDoc_details.thirdnum_tblDoc_details}}</td>
+													<td>{{ tblDoc_details.fourthnum_tblDoc_details}}</td>
+													<td>{{ tblDoc_details.Qty_tblDoc_details}}</td>
+													<td>{{ tblDoc_details.Productid_tblDoc_details}}</td>
+													<td>{{ tblDoc_details.Note_tblDoc_details}}</td>
+													<td><a href="{% url 'quotationrowedit' pk=tblDoc_details.Doc_detailsid_tblDoc_details %}"<span class="glyphicon glyphicon-pencil"></span></a></td>
+
+												</tr>
+
+
+
+											{% endfor %}
+											</tbody>
+
+										</table>
+							</div>
 
 
 	{% endblock %}
