@@ -7,4 +7,7 @@ urlpatterns = [
     url(r'^doc/(?P<pk>[0-9]+)/$', views.docform, name='docform'),
     url(r'^docsearch/$', views.docsearch, name='docsearch'),
     url(r'^quotationrowedit/(?P<pk>[0-9]+)/$', views.quotationrowedit, name='quotationrowedit'),
-    ]
+    url(r'^quotationnewrow/(?P<pk>[0-9]+)/$', views.quotationnewrow, name='quotationnewrow'),
+    url(r'^quotationrowremove/(?P<pk>[0-9]+)/$', views.quotationrowremove, name='quotationrowremove')
+
+]

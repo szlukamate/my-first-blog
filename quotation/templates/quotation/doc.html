@@ -4,6 +4,7 @@
 
                 	         haha
 				<p>{{ doc.Pcd_tblDoc}}</p>
+					<p align="right"><a href="{% url 'quotationnewrow' pk=doc.Docid_tblDoc %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 							<div class="container">
 										<table class="table table-striped"">
 											<thead>
@@ -32,7 +33,7 @@
 													<td>{{ tblDoc_details.Productid_tblDoc_details}}</td>
 													<td>{{ tblDoc_details.Note_tblDoc_details}}</td>
 													<td><a href="{% url 'quotationrowedit' pk=tblDoc_details.Doc_detailsid_tblDoc_details %}"<span class="glyphicon glyphicon-pencil"></span></a></td>
-
+													<td><a href="{% url 'quotationrowremove' pk=tblDoc_details.Doc_detailsid_tblDoc_details %}"><span class="glyphicon glyphicon-remove"></span></a></td>
 												</tr>
 
 

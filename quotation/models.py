@@ -13,7 +13,7 @@ class tblDoc(models.Model):
 class tblDoc_details(models.Model):
     Doc_detailsid_tblDoc_details= models.AutoField(primary_key=True)
     Docid_tblDoc_details= models.ForeignKey('quotation.tblDoc', on_delete=models.CASCADE, related_name='tblDoc')
-    Productid_tblDoc_details= models.ForeignKey('quotation.tblProduct', on_delete=models.CASCADE, related_name='tblProduct')
+    Productid_tblDoc_details= models.ForeignKey('quotation.tblProduct', on_delete=models.CASCADE, related_name='tblProduct',default=1)
     Qty_tblDoc_details= models.IntegerField(default=1)
     firstnum_tblDoc_details= models.IntegerField(default=1)
     secondnum_tblDoc_details= models.IntegerField(default=0)
