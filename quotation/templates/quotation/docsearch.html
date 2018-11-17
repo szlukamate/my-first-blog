@@ -2,19 +2,39 @@
 	{% block content %}
           
 
-                	<div class="post">
-	                    <div class="post">
-        	                Docsearch form
-				{% for tblDoc in  docs %}
-
-					        <h1><a href="{% url 'docform' pk=tblDoc.Docid_tblDoc %}">{{ tblDoc.Docid_tblDoc }}</a></h1>
-						<p>irszám: 	{{ tblDoc.Pcd_tblDoc}}</p>
-						<p>Város:{{ tblDoc.Town_tblDoc|linebreaksbr }}</p>
-						<p>Doc_kind_name:{{ tblDoc.Doc_kindid_tblDoc|linebreaksbr }}</p>
-
-			    	{% endfor %}	    
-                	    </div>
-	                </div>
 
 
+							<p align="center" style="font-size:160%;">Docsearch Form</p>
+							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>Docid</td>
+													<td>PCD</td>
+													<td>Town</td>
+													<td>Doc Kind</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												{%  for tblDoc in  docs %}
+
+
+													<tr>
+														<td><a href="{% url 'docselector' pk=tblDoc.Docid_tblDoc %}">{{ tblDoc.Docid_tblDoc }}</a></td>
+														<td>{{ tblDoc.Pcd_tblDoc}}</td>
+														<td>{{ tblDoc.Town_tblDoc}}</td>
+														<td>{{ tblDoc.Doc_kindid_tblDoc}}</td>
+													</tr>
+
+
+
+												{% endfor %}
+											</tbody>
+
+										</table>
+							</div>
 	{% endblock %}

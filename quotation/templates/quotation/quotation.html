@@ -2,8 +2,8 @@
 	{% block content %}
           
 
-                	         haha
-				<p>{{ doc.Pcd_tblDoc}}</p>
+
+				<p>{{ doc.Doc_kindid_tblDoc}}-{{ doc.Docid_tblDoc}}</p>
 					<p align="right"><a href="{% url 'quotationnewrow' pk=doc.Docid_tblDoc %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 							<div class="container">
 										<table class="table table-striped"">

@@ -1,0 +1,19 @@
+{% extends 'quotation/base.html' %}
+ 	{% block content %}
+
+				    <p align="center" style="font-size:260%">Docadd Form</p>
+					<p align="center" style="font-size:260%">in Quotation Maker</p>
+                    <p onclick="$(this).hide();"> This is a paragraph</p>
+
+                	    <div class="dropdown">
+                            <button id="selecteddockind" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dockinds</button>
+                              <span class="caret"></span></button>
+                              <ul class="dropdown-menu">
+                                  {% for dockind in  dockinds %}
+                                    <li><a id="{{ dockind.0}}" href="#">{{ dockind.0}}</a></li>
+                                  {% endfor %}
+                              </ul>
+                        </div>
+
+	{% endblock %}
+
