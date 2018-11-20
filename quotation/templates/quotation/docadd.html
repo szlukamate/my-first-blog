@@ -1,9 +1,10 @@
 {% extends 'quotation/base.html' %}
  	{% block content %}
 
-				    <p align="center" style="font-size:260%">Docadd Form</p>
-					<p align="center" style="font-size:260%">in Quotation Maker</p>
-                    <p onclick="$(this).hide();"> This is a paragraph</p>
+				    <p id="formtitle" align="center" style="font-size:260%">Docadd Form</p>
+
+                    <p onclick="$(this).hide();"> This is an inner jq</p>
+                    <p id="para" > This is an external jq</p>
 
                 	    <div class="dropdown">
                             <button id="selecteddockind" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dockinds</button>
