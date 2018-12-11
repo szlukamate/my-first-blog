@@ -21,6 +21,7 @@ class tblDoc_details(models.Model):
     thirdnum_tblDoc_details= models.IntegerField(default=0)
     fourthnum_tblDoc_details= models.IntegerField(default=0)
     Note_tblDoc_details = models.CharField(max_length=200, default='Defaultnote')
+    creationtime_tblDoc_details = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.Note_tblDoc_details
 

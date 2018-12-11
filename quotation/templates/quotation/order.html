@@ -1,0 +1,28 @@
+{% extends 'quotation/base.html' %}
+	{% block content %}
+          
+
+				<p align="center" id="title" style="font-size:160%;">Order Form</p>{% csrf_token %}
+				<p>{{ doc.Doc_kindid_tblDoc}}-{{ doc.Docid_tblDoc}}</p>
+					<p align="right"><a href="{% url 'quotationnewrow' pk=doc.Docid_tblDoc %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+											<label for="firstnum_tblDoc_details" >C1</label>
+											<label for="secondnum_tblDoc_details" style="padding-left: 34px;">C2</label>
+											<label for="thirdnum_tblDoc_details" style="padding-left: 34px;">C3</label>
+											<label for="fourthnum_tblDoc_details" style="padding-left: 34px;">C4</label>
+											<label for="Qty_tblDoc_details" style="padding-left: 34px;">Qty</label>
+											<label for="Productid_tblDoc_details_id" style="padding-left: 24px;">Description</label>
+											<label for="Note_tblDoc_details" style="padding-left: 21px;">Note</label><br>
+											{% for tblDoc_details in  docdetails %}
+											<input type="text" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="3">
+											<input type="text" value="{{ tblDoc_details.6}}" name="secondnum_tblDoc_details" maxlength="10" size="3">
+											<input type="text" value="{{ tblDoc_details.7}}" name="thirdnum_tblDoc_details" maxlength="10" size="3">
+											<input type="text" value="{{ tblDoc_details.5}}" name="fourthnum_tblDoc_details" maxlength="10" size="3">
+											<input type="text" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" size="3">
+											<input type="text" value="{{ tblDoc_details.2}}" name="Productid_tblDoc_details_id" size="9">
+											<input type="text" value="{{ tblDoc_details.8}}" name="Note_tblDoc_details" size="9">
+											<a href="{% url 'quotationrowedit' pk=tblDoc_details.0 %}"<span class="glyphicon glyphicon-pencil"></span></a>
+											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><br>
+											{% endfor %}
+
+
+	{% endblock %}

@@ -1,0 +1,13 @@
+{% if rownmbs > 0 %}
+
+{% for result in results %}
+
+    <li><a href="{{result.0}}">{{result.1}} {{result.2}} {{result.3}} {{result.4}}</a></li>
+
+{% endfor %}
+
+{% else %}
+
+    <li>None to show!</li>
+
+{% endif %}

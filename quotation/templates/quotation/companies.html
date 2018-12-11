@@ -1,0 +1,38 @@
+{% extends 'quotation/base.html' %}
+	{% block content %}
+          
+
+
+
+							<p align="center" style="font-size:160%;">Companies Form</p>
+							<p align="right"><a href="{% url 'companynew' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+							<span id="drag">Dragg me</span>
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>Companyid</td>
+													<td>Company Name</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												{%  for company in  companies %}
+
+
+													<tr>
+														<td><a href="{% url 'companyedit' pk=company.0 %}">{{ company.0 }}</a></td>
+														<td>{{ company.1}}</td>
+														<td><a href="{% url 'companyremove' pk=company.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+
+													</tr>
+
+
+
+												{% endfor %}
+											</tbody>
+
+										</table>
+							</div>
+	{% endblock %}

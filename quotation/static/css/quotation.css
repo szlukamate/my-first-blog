@@ -1,15 +1,51 @@
+#productsearchtextarea {
+    position: fixed;
+    top: 235px;
+    left: 500px;
+    z-index: 10;
+    overflow: auto;
+    resize: none;
+}
+
+
+#productsearch {
+
+    position: fixed;
+    top: 200px;
+    left: 500px;
+    z-index: 10;
+}
+
+#sqlsavingfeedbackproduct {
+
+    position: fixed;
+    top 0px;
+    left: 1000px;
+    color: #828282;
+    width: 100px;
+    //background-color: #d6ffdb;
+    float: right;
+
+}
+
 h1 a {
 	color: #24ff14;
 	font-family: 'Lobster';
 }
+
 body {
     padding-left: 15px;
+ //   background-color: lightgrey;
+    height:3000px;
+ //   position: absolute;
+ //   top: 0px;
 }
 .page-header {
     background-color: #14FF14;
     margin-top: 0;
     padding: 0px 20px 0px 3px;
     height: 30px;
+    //position: fixed;
 }
 
 .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
@@ -27,7 +63,7 @@ h1, h2, h3, h4 {
 }
 
 .date {
-    float: right;
+
     color: #828282;
 }
 

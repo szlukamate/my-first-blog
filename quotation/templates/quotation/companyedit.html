@@ -1,0 +1,46 @@
+{% extends 'quotation/base.html' %}
+	{% block content %}
+          
+
+				<p align="center" style="font-size:160%;" id="title" >Companyedit Form</p>
+				<form action="{% url 'companyedit' pk=particularcompany.0.0 %}" method="post">{% csrf_token %}
+					<input type="text" value="{{ particularcompany.0.1}}" name="companyname">
+					<input type="submit" value="Sub">
+				</form>
+				<input id="withoutformbutton" type="button" value="Sub2">
+				<p>{{ particularcompany.0.1}}</p>
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>f1</td>
+												</tr>
+											</thead>
+
+											<tbody>
+											{% for contact in contacts %}
+
+
+												<tr>
+													<td>{{ contact.1}}</td>
+												</tr>
+
+
+
+											{% endfor %}
+											</tbody>
+
+										</table>
+							</div>
+
+							{% for contact in contacts %}
+								<input type="text" value="{{ contact.0}}" name="id1"><input type="text" value="{{ contact.1}}" name="firstname"><input type="text" value="{{ contact.2}}" name="lastname">
+								<br>
+
+
+
+
+							{% endfor %}
+
+	{% endblock %}
