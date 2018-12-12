@@ -1,48 +1,42 @@
 {% extends 'quotation/base.html' %}
+{% load staticfiles%}
 	{% block content %}
           
 
+				<p align="center" id="title" style="font-size:160%;">Quotation Form</p>{% csrf_token %}
+				<p>Companyname:{{ doc.0.3}} Companyid:{{ companyid.0.0}}<a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a></p>
+				<p>Firstname:{{ doc.0.4}} </p>
+				<p>Lastname:{{ doc.0.5}} </p>
 
-				<p>{{ doc.Doc_kindid_tblDoc}}-{{ doc.Docid_tblDoc}}</p>
-					<p align="right"><a href="{% url 'quotationnewrow' pk=doc.Docid_tblDoc %}"><span class="glyphicon glyphicon-plus"></span></a></p>
-							<div class="container">
-										<table class="table table-striped"">
-											<thead>
+			{% block sidebar %}
+				{% csrf_token %}
+				<input type="text" id="search" name="search" />
 
-												<tr>
-													<td>f1</td>
-													<td>f2</td>
-													<td>f3</td>
-													<td>f4</td>
-													<td>Qty</td>
-													<td>Product Name</td>
-													<td>Note</td>
-												</tr>
-											</thead>
+				<ul id="search-results" style="list-style-type: none;">
 
-											<tbody>
+
+				</ul>
+			{% endblock sidebar %}
+<p>Contactid:{{ doc.0.1}} </p>
+<p>Dockindid: {{ doc.0.2}}-<span>Docid:</span><span id="quotationdocidspan">{{ doc.0.0}}</span></p>
+					<p align="right"><a href="{% url 'quotationnewrow' pk=doc.0.0 %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+											<label for="firstnum_tblDoc_details" >C1</label>
+											<label for="secondnum_tblDoc_details" style="padding-left: 34px;">C2</label>
+											<label for="thirdnum_tblDoc_details" style="padding-left: 34px;">C3</label>
+											<label for="fourthnum_tblDoc_details" style="padding-left: 34px;">C4</label>
+											<label for="Qty_tblDoc_details" style="padding-left: 34px;">Qty</label>
+											<label for="Productid_tblDoc_details_id" style="padding-left: 24px;">Description</label>
+											<label for="Note_tblDoc_details" style="padding-left: 21px;">Note</label><br>
 											{% for tblDoc_details in  docdetails %}
-
-
-												<tr>
-													<td>{{ tblDoc_details.firstnum_tblDoc_details}}</td>
-													<td>{{ tblDoc_details.secondnum_tblDoc_details}}</td>
-													<td>{{ tblDoc_details.thirdnum_tblDoc_details}}</td>
-													<td>{{ tblDoc_details.fourthnum_tblDoc_details}}</td>
-													<td>{{ tblDoc_details.Qty_tblDoc_details}}</td>
-													<td>{{ tblDoc_details.Productid_tblDoc_details}}</td>
-													<td>{{ tblDoc_details.Note_tblDoc_details}}</td>
-													<td><a href="{% url 'quotationrowedit' pk=tblDoc_details.Doc_detailsid_tblDoc_details %}"<span class="glyphicon glyphicon-pencil"></span></a></td>
-													<td><a href="{% url 'quotationrowremove' pk=tblDoc_details.Doc_detailsid_tblDoc_details %}"><span class="glyphicon glyphicon-remove"></span></a></td>
-												</tr>
-
-
-
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="3">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.6}}" name="secondnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="3">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.7}}" name="thirdnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="3">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.5}}" name="fourthnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="3">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.2}}" name="Productid_tblDoc_details_id" rowid="{{ tblDoc_details.0}}" size="9">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.8}}" name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
+											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><br>
 											{% endfor %}
-											</tbody>
-
-										</table>
-							</div>
-
+											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
 
 	{% endblock %}

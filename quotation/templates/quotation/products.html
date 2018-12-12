@@ -1,0 +1,25 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+
+
+
+							<p align="center" id="title" style="font-size:160%;">Products Form</p>{% csrf_token %}
+							<input id="productsearch" type="text" maxlength="10">
+							<textarea id="productsearchtextarea" rows="4" cols="22">
+								At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+							</textarea>
+
+							<p  id="sqlsavingfeedbackproduct"></p><br>
+											<label for="Productid_tblProduct" >Id</label>
+											<label for="Product_price_tblProduct" style="padding-left: 34px;">Price</label>
+											<label for="Product_description_tblProduct" style="padding-left: 34px;">Description</label><br>
+											{% for product in products %}
+											<input type="text" id="x" class="updateable" value="{{product.0}}" name="Productid_tblProduct" maxlength="10" rowid="{{product.0}}" size="3" disabled>
+											<input type="text" class="updateable" value="{{product.1}}" name="Product_price_tblProduct" maxlength="10" rowid="{{product.0}}" size="3">
+											<input type="text" class="updateable" value="{{product.2}}" name="Product_description_tblProduct" maxlength="10" rowid="{{product.0}}" size="8"><br>
+											{% endfor %}
+											<script type="text/javascript" src="{% static 'js/products.js' %}"></script>
+
+	{% endblock %}
