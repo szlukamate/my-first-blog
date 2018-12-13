@@ -12,6 +12,7 @@ def welcome(request):
         return render(request, 'quotation/welcome.html', {})
 
 def docs(request):
+<<<<<<< HEAD
         cursor1 = connection.cursor()
         cursor1.execute("SELECT docid_tbldoc, Pcd_tblDoc, Town_tblDoc, Doc_kindid_tblDoc_id "
                         "FROM quotation_tbldoc "
@@ -22,6 +23,13 @@ def docs(request):
 
 def companies(request):
 
+=======
+        docs = tblDoc.objects.all()
+        return render(request, 'quotation/docs.html', {'docs': docs})
+
+def companies(request):
+
+>>>>>>> aab59635ca3ec79857281d64a90704dcd3b4576f
     cursor = connection.cursor()
     cursor.execute("SELECT Companyid_tblCompanies, companyname_tblcompanies FROM quotation_tblcompanies")
     companies = cursor.fetchall()
@@ -133,6 +141,7 @@ def quotationform(request,pk):
                 #import pdb;
                 #pdb.set_trace()
                 cursor2.execute(sqlquery)
+<<<<<<< HEAD
 
         cursor1 = connection.cursor()
         cursor1.execute("SELECT "
@@ -171,6 +180,18 @@ def quotationform(request,pk):
 
 
         return render(request, 'quotation/quotation.html', {'doc':doc, 'docdetails':docdetails, 'companyid':companyid})
+=======
+        doc = get_object_or_404(tblDoc,pk=pk)
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT  * "
+                       "FROM quotation_tbldoc_details "
+                       "WHERE docid_tbldoc_details_id=%s "
+                        "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details", [pk])
+        docdetails = cursor3.fetchall()
+
+
+        return render(request, 'quotation/quotation.html', {'doc':doc, 'docdetails':docdetails})
+>>>>>>> aab59635ca3ec79857281d64a90704dcd3b4576f
 '''
 def quotationrowedit(request, pk):
         quotationrow = get_object_or_404(tblDoc_details, pk=pk)
@@ -245,7 +266,10 @@ def orderform(request,pk):
 def searchquotationcontacts(request):
     if request.method == 'POST':
         search_text = request.POST['search_text']
+<<<<<<< HEAD
         docidinquotationjs = request.POST['docidinquotationjs']
+=======
+>>>>>>> aab59635ca3ec79857281d64a90704dcd3b4576f
     else:
         search_text = ""
     search_textmodified="%" + search_text + "%"
@@ -264,7 +288,11 @@ def searchquotationcontacts(request):
 
     rownmbs=len(results)
 
+<<<<<<< HEAD
     return render(request, 'quotation/ajax_search_quotation_contacts.html', {'results': results, 'rownmbs': rownmbs, 'docidinquotationjs': docidinquotationjs})
+=======
+    return render(request, 'quotation/ajax_search_quotation_contacts.html', {'results': results, 'rownmbs': rownmbs})
+>>>>>>> aab59635ca3ec79857281d64a90704dcd3b4576f
 def products(request):
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
@@ -279,6 +307,7 @@ def products(request):
     cursor.execute("SELECT Productid_tblProduct, Product_price_tblProduct, Product_description_tblProduct FROM quotation_tblproduct")
     products = cursor.fetchall()
     transaction.commit()
+<<<<<<< HEAD
     return render(request, 'quotation/products.html', {'products': products})
 def quotationupdatecontact(request,pkdocid, pkcontactid):
     cursor0 = connection.cursor()
@@ -305,3 +334,6 @@ def quotationupdatecontact(request,pkdocid, pkcontactid):
                     "WHERE Docid_tblDoc =%s ", [pkcontactid, companynameclone, firstnameclone, lastnameclone, pkdocid])
 
     return redirect('quotationform', pk=pkdocid)
+=======
+    return render(request, 'quotation/products.html', {'products': products})
+>>>>>>> aab59635ca3ec79857281d64a90704dcd3b4576f

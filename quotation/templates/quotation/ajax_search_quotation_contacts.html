@@ -2,7 +2,11 @@
 
 {% for result in results %}
 
+<<<<<<< HEAD
     <li><a href="{% url 'quotationupdatecontact' pkdocid=docidinquotationjs pkcontactid=result.0 %}">{{result.0}} {{result.1}} {{docidinquotationjs}} {{result.3}} {{result.4}}</a></li>
+=======
+    <li><a href="{{result.0}}">{{result.1}} {{result.2}} {{result.3}} {{result.4}}</a></li>
+>>>>>>> aab59635ca3ec79857281d64a90704dcd3b4576f
 
 {% endfor %}
 

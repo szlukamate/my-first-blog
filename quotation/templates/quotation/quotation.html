@@ -4,10 +4,13 @@
           
 
 				<p align="center" id="title" style="font-size:160%;">Quotation Form</p>{% csrf_token %}
+<<<<<<< HEAD
 				<p>Companyname:{{ doc.0.3}} Companyid:{{ companyid.0.0}}<a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a></p>
 				<p>Firstname:{{ doc.0.4}} </p>
 				<p>Lastname:{{ doc.0.5}} </p>
 
+=======
+>>>>>>> aab59635ca3ec79857281d64a90704dcd3b4576f
 			{% block sidebar %}
 				{% csrf_token %}
 				<input type="text" id="search" name="search" />
@@ -17,9 +20,15 @@
 
 				</ul>
 			{% endblock sidebar %}
+<<<<<<< HEAD
 <p>Contactid:{{ doc.0.1}} </p>
 <p>Dockindid: {{ doc.0.2}}-<span>Docid:</span><span id="quotationdocidspan">{{ doc.0.0}}</span></p>
 					<p align="right"><a href="{% url 'quotationnewrow' pk=doc.0.0 %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+=======
+				<p>{{ doc.Contactid_tblDoc_id}}</p>
+                <p>{{ doc.Doc_kindid_tblDoc}}-{{ doc.Docid_tblDoc}}</p>
+					<p align="right"><a href="{% url 'quotationnewrow' pk=doc.Docid_tblDoc %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+>>>>>>> aab59635ca3ec79857281d64a90704dcd3b4576f
 											<label for="firstnum_tblDoc_details" >C1</label>
 											<label for="secondnum_tblDoc_details" style="padding-left: 34px;">C2</label>
 											<label for="thirdnum_tblDoc_details" style="padding-left: 34px;">C3</label>
