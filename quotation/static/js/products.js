@@ -31,19 +31,22 @@ $('#title').click(function() {
                 },
                 success:function(){
                     $('input[name="' + fieldname + '"][rowid="' + rowid + '"').css("background-color", "white");
-                    $('#sqlsavingfeedbackproduct').text("Saving...");
+                    $('#sqlsavingfeedbackproduct').html('<span  class="glyphicon glyphicon-hdd"></span>');
+
+/*
                     setTimeout(
                       function()
                       {
-                        $('#sqlsavingfeedbackproduct').text("Saved");
+                        $('#sqlsavingfeedbackproduct').unhide();
 
                       }, 400);
+*/
                     setTimeout(
                       function()
                       {
-                        $('#sqlsavingfeedbackproduct').text("");
+                        $('#sqlsavingfeedbackproduct').html("");
 
-                      }, 1000);
+                      }, 500);
                     console.log(fieldvalue);
                             },
                 error: function(){

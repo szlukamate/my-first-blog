@@ -35,13 +35,13 @@ h1 a {
 
 body {
     padding-left: 15px;
- //   background-color: lightgrey;
+    background-color: #fff7e2;
     height:3000px;
  //   position: absolute;
  //   top: 0px;
 }
 .page-header {
-    background-color: #14FF14;
+    background-color: #a5ff84;
     margin-top: 0;
     padding: 0px 20px 0px 3px;
     height: 30px;
