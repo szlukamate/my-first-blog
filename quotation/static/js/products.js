@@ -95,6 +95,48 @@ $('#title').click(function() {
             console.log(data);
 
             }
-        });
+    });
+   $('.currencychoiceselect').change(function() {
 
+        var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
+        var fieldvalue = $(this).val();
+        var rowid = $(this).attr( "productid" );
+        var fieldname = $(this).attr( "name" );
+        console.log('fieldvalue:' + fieldvalue, 'rowid:' + rowid, 'fieldname:' + fieldname );
+
+
+           $.ajax({
+                type: 'POST',
+                url: '',
+
+                data: {
+                'fieldvalue': fieldvalue,
+                'rowid' : rowid,
+                'fieldname': fieldname,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function(){
+                    $('input[name="' + fieldname + '"][rowid="' + rowid + '"').css("background-color", "white");
+                    $('#sqlsavingfeedbackproduct').html('<span  class="glyphicon glyphicon-hdd"></span>');
+
+                    setTimeout(
+                      function()
+                      {
+                        $('#sqlsavingfeedbackproduct').html("");
+
+                      }, 500);
+                },
+
+                error: function(){
+                    alert('failure');
+                },
+
+
+                datatype: 'html'
+
+
+                });
+
+
+    });
 });

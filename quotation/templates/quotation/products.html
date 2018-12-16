@@ -18,6 +18,12 @@
 											{% for product in products %}
 											<input type="text" id="x" class="updateable" value="{{product.0}}" name="Productid_tblProduct" maxlength="10" rowid="{{product.0}}" size="3" disabled>
 											<input type="text" class="updateable" value="{{product.1}}" name="Product_price_tblProduct" maxlength="10" rowid="{{product.0}}" size="3">
+											<select class="currencychoiceselect" productid="{{product.0}}" name="currencyid_tblcurrency_fktblproduct">
+													<option value="" disabled selected>{{product.3}}</option>
+												{% for currencycode in currencycodes %}
+													<option value="{{ currencycode.0}}">{{ currencycode.1}}</option>
+												{% endfor %}
+                                			</select>
 											<input type="text" class="updateable" value="{{product.2}}" name="Product_description_tblProduct" maxlength="10" rowid="{{product.0}}" size="8"><br>
 											{% endfor %}
 											<script type="text/javascript" src="{% static 'js/products.js' %}"></script>
