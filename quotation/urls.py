@@ -15,10 +15,10 @@ urlpatterns = [
     url(r'^companyremove/(?P<pk>[0-9]+)/$', views.companyremove, name='companyremove'),
     url(r'companyedit/(?P<pk>[0-9]+)/$', views.companyedit, name='companyedit'),
     url(r'^quotationnewrow/(?P<pk>[0-9]+)/$', views.quotationnewrow, name='quotationnewrow'),
-    #url(r'^quotationupdatecontact/(?P<pkdocid>[0-9]+)/(?P<pkcontactid>[0-9]+)/$', views.quotationupdatecontact, name='quotationupdatecontact'),
     url(r'^quotationupdatecontact/(?P<pkdocid>[0-9]+)/(?P<pkcontactid>[0-9]+)/$', views.quotationupdatecontact, name='quotationupdatecontact'),
-
+    url(r'^productupdatecurrencyisocode/(?P<pkproductid>[0-9]+)/(?P<pkcurrencyid>[0-9]+)/$', views.productupdatecurrencyisocode, name='productupdatecurrencyisocode'),
     url(r'^quotationrowremove/(?P<pk>[0-9]+)/$', views.quotationrowremove, name='quotationrowremove'),
     url('searchquotationcontacts', views.searchquotationcontacts, name='searchquotationcontacts'),
+    url('productsalespricefieldupdate', views.productsalespricefieldupdate, name='productsalespricefieldupdate'),
 
 ]

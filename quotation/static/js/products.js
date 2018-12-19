@@ -6,15 +6,15 @@ quotation.js
                     console.log(msg);
 $(function () {
 
-$('#title').click(function() {
-    $('#title').hide();
+    $('#title').click(function() {
+        $('#title').hide();
 
-});
+    });
    $('.updateable').focusout(function() {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var fieldvalue = $(this).val();
-        var rowid = $(this).attr( "rowid" );
+        var productid = $(this).attr( "productid" );
         var fieldname = $(this).attr( "name" );
 
 
@@ -25,22 +25,15 @@ $('#title').click(function() {
 
                 data: {
                 'fieldvalue': fieldvalue,
-                'rowid' : rowid,
+                'rowid' : productid,
                 'fieldname': fieldname,
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
                 },
-                success:function(){
-                    $('input[name="' + fieldname + '"][rowid="' + rowid + '"').css("background-color", "white");
+                success:function(data, textStatus, jqXHR){
+                    console.log('datafromsql:' + data);
+                    $('input[name="' + fieldname + '"][productid="' + productid + '"').css("background-color", "white").val(data);
                     $('#sqlsavingfeedbackproduct').html('<span  class="glyphicon glyphicon-hdd"></span>');
 
-/*
-                    setTimeout(
-                      function()
-                      {
-                        $('#sqlsavingfeedbackproduct').unhide();
-
-                      }, 400);
-*/
                     setTimeout(
                       function()
                       {
@@ -50,25 +43,26 @@ $('#title').click(function() {
                     console.log(fieldvalue);
                             },
                 error: function(){
-                    alert('failure');
+                    alert('Failure in saving');
                 },
 
 
                 datatype: 'html'
 
 
-                });
-                console.log(fieldname, fieldvalue, rowid);
-           });
+            });
+                console.log(fieldname, fieldvalue, productid);
+           //     window.location.reload();
+    });
 
    $('.updateable').click(function() {
         $(this).css("background-color", "yellow");
 
 //          console.log(data);
-            console.log('click event');
+//            console.log('click event');
 
-           });
-
+   });
+/*
    $('#search').keyup(function() {
             $.ajax({
                 type: 'POST',
@@ -81,7 +75,7 @@ $('#title').click(function() {
 
                 success: SearchSuccess,
                 error: function(){
-                    alert('failure');
+ //                   alert('failure');
                 },
                 datatype: 'html'
 
@@ -96,47 +90,65 @@ $('#title').click(function() {
 
             }
     });
-   $('.currencychoiceselect').change(function() {
+*/
+    $('.salespricechangerbutton').click(function() {
+        var productid=$(this).attr( "productid" );
 
-        var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
-        var fieldvalue = $(this).val();
-        var rowid = $(this).attr( "productid" );
-        var fieldname = $(this).attr( "name" );
-        console.log('fieldvalue:' + fieldvalue, 'rowid:' + rowid, 'fieldname:' + fieldname );
+            if ($('input[name="salesprice"][productid="' + productid + '"').is(':disabled')){
+            // Salesprice is disabled
+                console.log('yes disabled');
+                $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', false)
+                $(this).attr('value', 'Confirm');
+            } else
+            // Salesprice is not disabled
+            {
+                console.log('not disabled');
+                $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', true)
+                $(this).attr('value', 'Change sales price');
+                var salesprice=$('input[name="salesprice"][productid="' + productid + '"').val();
+                var purchaseprice=$('input[name="purchase_price_tblproduct"][productid="' + productid + '"').val();
+                var marginrequired=((salesprice-purchaseprice)/salesprice)*100
 
+                    $.ajax({
+                    type: 'POST',
+                    url: 'productsalespricefieldupdate/',
 
-           $.ajax({
-                type: 'POST',
-                url: '',
+                    data: {
+                    'marginrequired' : marginrequired,
+                    'productidinproductjs' : productid,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
 
-                data: {
-                'fieldvalue': fieldvalue,
-                'rowid' : rowid,
-                'fieldname': fieldname,
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                },
-                success:function(){
-                    $('input[name="' + fieldname + '"][rowid="' + rowid + '"').css("background-color", "white");
-                    $('#sqlsavingfeedbackproduct').html('<span  class="glyphicon glyphicon-hdd"></span>');
+                    success: UpdateSuccess,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
 
-                    setTimeout(
-                      function()
-                      {
-                        $('#sqlsavingfeedbackproduct').html("");
+                        console.log('ajax done');
+                    },
 
-                      }, 500);
-                },
+                    datatype: 'json'
 
-                error: function(){
-                    alert('failure');
-                },
+                    });
 
+       //             console.log('Works the updatejs')
 
-                datatype: 'html'
+            function UpdateSuccess(data, textStatus, jqXHR)
+            {
+        //    console.log('ajax success!!!');
+        //    $('#search-results').html(data);
+            console.log(data);
+            var marginnewfromsql=data[0][1];
+            $('input[name="margin_tblproduct"][productid="' + productid + '"').val(marginnewfromsql);
 
+            }
+            }
 
-                });
-
+      //          $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', false).val('q');
+      //          $(this).attr('value', 'Confirm');
+       //         console.log('works', productid);
 
     });
+
 });

@@ -5,27 +5,28 @@
 
 
 
-							<p align="center" id="title" style="font-size:160%;">Products Form</p>{% csrf_token %}
-							<input id="productsearch" type="text" maxlength="10">
-							<textarea id="productsearchtextarea" rows="4" cols="22">
-								At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
-							</textarea>
+		<p align="center" id="title" style="font-size:160%;">Products Form</p>{% csrf_token %}
 
-							<p id="sqlsavingfeedbackproduct"></p><br>
-											<label for="Productid_tblProduct" >Id</label>
-											<label for="Product_price_tblProduct" style="padding-left: 34px;">Price</label>
-											<label for="Product_description_tblProduct" style="padding-left: 34px;">Description</label><br>
-											{% for product in products %}
-											<input type="text" id="x" class="updateable" value="{{product.0}}" name="Productid_tblProduct" maxlength="10" rowid="{{product.0}}" size="3" disabled>
-											<input type="text" class="updateable" value="{{product.1}}" name="Product_price_tblProduct" maxlength="10" rowid="{{product.0}}" size="3">
-											<select class="currencychoiceselect" productid="{{product.0}}" name="currencyid_tblcurrency_fktblproduct">
-													<option value="" disabled selected>{{product.3}}</option>
-												{% for currencycode in currencycodes %}
-													<option value="{{ currencycode.0}}">{{ currencycode.1}}</option>
-												{% endfor %}
-                                			</select>
-											<input type="text" class="updateable" value="{{product.2}}" name="Product_description_tblProduct" maxlength="10" rowid="{{product.0}}" size="8"><br>
-											{% endfor %}
-											<script type="text/javascript" src="{% static 'js/products.js' %}"></script>
+		<p id="sqlsavingfeedbackproduct"></p><br>
+			<label for="Productid_tblProduct" >Id</label>
+			<label for="purchase_price_tblproduct" style="padding-left: 34px;">Price</label>
+			<label for="Product_description_tblProduct" style="padding-left: 34px;">Description</label><br>
+			{% for product in products %}
+			<input type="text" id="x" class="updateable" value="{{product.0}}" name="Productid_tblProduct" maxlength="10" productid="{{product.0}}" size="3" disabled>
+			<input type="text" class="updateable" value="{{product.1}}" name="purchase_price_tblproduct" maxlength="10" productid="{{product.0}}" size="3">
+			<select productid="{{product.0}}" name="currencyid_tblcurrency_fktblproduct" onchange="window.location.href=this.value;">
+					<option value="" disabled selected>{{product.3}}</option>
+				{% for currencycode in currencycodes %}
+					<option value="{% url 'productupdatecurrencyisocode' pkproductid=product.0 pkcurrencyid=currencycode.0 %}">{{ currencycode.1}}</option>
+				{% endfor %}
+			</select>
+			<input type="text" class="updateable" value="{{product.4}}" name="margin_tblproduct" maxlength="3" productid="{{product.0}}" size="3"/>
+			<input type="text" value="{{product.5}}" name="salesprice" maxlength="10" size="8" productid="{{product.0}}" disabled/>
+
+			<input type="button" name="salespricechangerbutton" value="Change Sales Price" class="salespricechangerbutton" productid="{{product.0}}" style="width:200px">
+
+			<input type="text" class="updateable" value="{{product.2}}" name="Product_description_tblProduct" maxlength="10" productid="{{product.0}}" size="8"><br>
+			{% endfor %}
+			<script type="text/javascript" src="{% static 'js/products.js' %}"></script>
 
 	{% endblock %}
