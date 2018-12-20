@@ -18,7 +18,6 @@ $(function () {
         var fieldname = $(this).attr( "name" );
 
 
-             if (fieldname!=='salesprice') {
 
                    $.ajax({
                         type: 'POST',
@@ -51,9 +50,7 @@ $(function () {
                         datatype: 'html'
 
 
-                    });
-             };
-             setTimeout( function(){
+                   });
 
                  if ((fieldname=='purchase_price_tblproduct') || (fieldname=='margin_tblproduct')){
 
@@ -85,10 +82,27 @@ $(function () {
 
 
 
-                if (fieldname=='salesprice'){
 
 
-                    console.log('not disabled');
+   });
+
+   $('.updateable').click(function() {
+        $(this).css("background-color", "yellow");
+
+
+   });
+    $('.salespricechangerbutton').click(function() {
+        var productid=$(this).attr( "productid" );
+
+            if ($('input[name="salesprice"][productid="' + productid + '"').is(':disabled')){
+            // Salesprice is disabled
+                console.log('yes disabled');
+                $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', false)
+                $(this).attr('value', 'Confirm');
+            } else {
+            // Salesprice is enabled
+
+                    console.log('enabled');
                     $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', true)
                     $(this).attr('value', 'Change sales price');
                     var salesprice=$('input[name="salesprice"][productid="' + productid + '"').val();
@@ -123,28 +137,9 @@ $(function () {
                         datatype: 'json'
 
                         });
-                    $('input[name="salespricechangerbutton"][productid="' + productid + '"').attr('value', 'Change');
-                    $('input[name="' + fieldname + '"][productid="' + productid + '"').css("background-color", "white")
-                };
-
-             },500);
-
-   });
-
-   $('.updateable').click(function() {
-        $(this).css("background-color", "yellow");
 
 
-   });
-    $('.salespricechangerbutton').click(function() {
-        var productid=$(this).attr( "productid" );
-
-            if ($('input[name="salesprice"][productid="' + productid + '"').is(':disabled')){
-            // Salesprice is disabled
-                console.log('yes disabled');
-                $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', false)
-                $(this).attr('value', 'Confirm');
-            }
+            };
 
     });
     $('.currencyselection').change(function() {
