@@ -53,6 +53,8 @@ $(function () {
 
                     });
              };
+             setTimeout( function(){
+
              if ((fieldname=='purchase_price_tblproduct') || (fieldname=='margin_tblproduct')){
 
                 $.ajax({
@@ -80,6 +82,9 @@ $(function () {
                 }
                 });
              };
+             
+             },1000);
+
             if (fieldname=='salesprice'){
 
 
