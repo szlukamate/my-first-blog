@@ -1,0 +1,44 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+
+				<p align="center" id="title" style="font-size:160%;">Quotation Newrow Add Form</p>{% csrf_token %}
+					<p align="right"></p>
+											<div class="container">
+										<table class="table table-striped">
+											<thead>
+
+												<tr>
+													<td>Productid</td>
+													<td>Purchase price</td>
+													<td>Margin</td>
+													<td>Salesprice</td>
+													<td>Description</td>
+													<td>Currency</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												{%  for product in  products %}
+
+
+													<tr>
+														<td>{{ product.0 }}</td>
+														<td>{{ product.1 }}</td>
+														<td>{{ product.2 }}</td>
+														<td>{{ product.3 }}</td>
+														<td>{{ product.4 }}</td>
+														<td>{{ product.5 }}<a href="{% url 'quotationnewrow' pkdocid=docid pkproductid=product.0 %}"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+													</tr>
+
+
+
+												{% endfor %}
+											</tbody>
+
+										</table>
+							</div>
+											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
+
+	{% endblock %}

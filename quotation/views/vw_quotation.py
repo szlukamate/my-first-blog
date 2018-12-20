@@ -32,13 +32,6 @@ def quotationform(request, pk):
                     "order by docid_tbldoc desc",
                     [pk])
     doc = cursor1.fetchall()
-    # import pdb;
-    # pdb.set_trace()
-
-    #        doc = get_object_or_404(tblDoc,pk=pk)
-
-    # To determine Companyid to pass it to template to goto
-    # companyid_tblcontacts
     for x in doc:
         contactid = x[1]
     cursor4 = connection.cursor()
@@ -48,7 +41,8 @@ def quotationform(request, pk):
     companyid = cursor4.fetchall()
 
     cursor3 = connection.cursor()
-    cursor3.execute("SELECT  * "
+    cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
+                    "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details` "
                     "FROM quotation_tbldoc_details "
                     "WHERE docid_tbldoc_details_id=%s "
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
@@ -84,15 +78,41 @@ def quotationrowedit(request, pk):
 '''
 
 
-def quotationnewrow(request, pk):
+def quotationnewrow(request, pkdocid, pkproductid):
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT `Productid_tblProduct`, `purchase_price_tblproduct`, `Product_description_tblProduct`, "
+        "`margin_tblproduct`,`currencyisocode_tblcurrency_ctblproduct` "
+        "FROM `quotation_tblproduct` WHERE Productid_tblProduct= %s", [pkproductid])
+
+    results = cursor0.fetchall()
+    for instancesingle in results:
+        purchase_priceclone = instancesingle[1]
+        productdescriptionclone = instancesingle[2]
+        marginclone = instancesingle[3]
+        currencyisocodeclone = instancesingle[4]
+
     cursor1 = connection.cursor()
     cursor1.execute(
-        "INSERT INTO quotation_tbldoc_details (Docid_tblDoc_details_id, Productid_tblDoc_details_id,Qty_tblDoc_details,firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details,Note_tblDoc_details) VALUES (%s, 1,1, 1,0,0,0,'Defaultnote')",
-        [pk])
+        "INSERT INTO quotation_tbldoc_details "
+        "(`Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Productid_tblDoc_details_id`, `firstnum_tblDoc_details`, `fourthnum_tblDoc_details`, "
+        "`secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `purchase_price_tblproduct_ctblDoc_details`, `margin_tblproduct_ctblDoc_details`, "
+        "`Product_description_tblProduct_ctblDoc_details`, `currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`) "
+        "VALUES (1, %s, %s, 1,0,0,0,'Defaultnote', %s, %s, %s, %s)",
+        [pkdocid, pkproductid, purchase_priceclone, marginclone, productdescriptionclone, currencyisocodeclone])
     transaction.commit()
 
-    return redirect('quotationform', pk=pk)
+    return redirect('quotationform', pk=pkdocid)
 
+def quotationnewrowadd(request, pk):
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT Productid_tblProduct, purchase_price_tblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice, Product_description_tblProduct, currencyisocode_tblcurrency_ctblproduct "
+        "FROM quotation_tblproduct")
+    products = cursor1.fetchall()
+    transaction.commit()
+
+    return render(request, 'quotation/quotationnewrowadd.html',{'products': products, 'docid': pk})
 
 def quotationrowremove(request, pk):
     cursor2 = connection.cursor()
