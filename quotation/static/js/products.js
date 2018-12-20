@@ -18,90 +18,71 @@ $(function () {
         var fieldname = $(this).attr( "name" );
 
 
+             if (fieldname!=='salesprice') {
 
-           $.ajax({
+                   $.ajax({
+                        type: 'POST',
+                        url: '',
+
+                        data: {
+                        'fieldvalue': fieldvalue,
+                        'rowid' : productid,
+                        'fieldname': fieldname,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                        },
+                        success:function(data, textStatus, jqXHR){
+                            console.log('datafromsql:' + data);
+                            $('input[name="' + fieldname + '"][productid="' + productid + '"').css("background-color", "white").val(data);
+                            $('#sqlsavingfeedbackproduct').html('<span  class="glyphicon glyphicon-hdd"></span>');
+
+                            setTimeout(
+                              function()
+                              {
+                                $('#sqlsavingfeedbackproduct').html("");
+
+                              }, 500);
+                            console.log(fieldvalue);
+                                    },
+                        error: function(){
+                            alert('Failure in saving');
+                        },
+
+
+                        datatype: 'html'
+
+
+                    });
+             };
+             if ((fieldname=='purchase_price_tblproduct') || (fieldname=='margin_tblproduct')){
+
+                $.ajax({
                 type: 'POST',
-                url: '',
+                url: 'productsalespricefieldupdate/',
 
                 data: {
-                'fieldvalue': fieldvalue,
-                'rowid' : productid,
-                'fieldname': fieldname,
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                },
+                    'postselector' : 'salespriceupdaterequestonly',
+                    'productidinproductjs' : productid,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
                 success:function(data, textStatus, jqXHR){
-                    console.log('datafromsql:' + data);
-                    $('input[name="' + fieldname + '"][productid="' + productid + '"').css("background-color", "white").val(data);
-                    $('#sqlsavingfeedbackproduct').html('<span  class="glyphicon glyphicon-hdd"></span>');
+                console.log('Success requery!!!');
+                console.log(data);
+                var salespricefromsql=data[0][2];
+                $('input[name="salesprice"][productid="' + productid + '"').val(salespricefromsql);
 
-                    setTimeout(
-                      function()
-                      {
-                        $('#sqlsavingfeedbackproduct').html("");
-
-                      }, 500);
-                    console.log(fieldvalue);
-                            },
+                },
                 error: function(){
-                    alert('Failure in saving');
+                console.log('Failure requery');
                 },
+                complete: function(){
+                console.log('ajax done');
+                }
+                });
+             };
+            if (fieldname=='salesprice'){
 
 
-                datatype: 'html'
-
-
-            });
-                console.log(fieldname, fieldvalue, productid);
-           //     window.location.reload();
-    });
-
-   $('.updateable').click(function() {
-        $(this).css("background-color", "yellow");
-
-//          console.log(data);
-//            console.log('click event');
-
-   });
-/*
-   $('#search').keyup(function() {
-            $.ajax({
-                type: 'POST',
-                url: 'searchquotationcontacts/',
-
-                data: {
-                'search_text' : $('#search').val(),
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                },
-
-                success: SearchSuccess,
-                error: function(){
- //                   alert('failure');
-                },
-                datatype: 'html'
-
-            });
-
-            console.log('Works')
-            function SearchSuccess(data, textStatus, jqXHR)
-            {
-
-            $('#search-results').html(data);
-            console.log(data);
-
-            }
-    });
-*/
-    $('.salespricechangerbutton').click(function() {
-        var productid=$(this).attr( "productid" );
-
-            if ($('input[name="salesprice"][productid="' + productid + '"').is(':disabled')){
-            // Salesprice is disabled
-                console.log('yes disabled');
-                $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', false)
-                $(this).attr('value', 'Confirm');
-            } else
-            // Salesprice is not disabled
-            {
                 console.log('not disabled');
                 $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', true)
                 $(this).attr('value', 'Change sales price');
@@ -114,8 +95,62 @@ $(function () {
                     url: 'productsalespricefieldupdate/',
 
                     data: {
+                    'postselector' : 'salespriceupdaterequestwithpassingmarginrequired',
                     'marginrequired' : marginrequired,
                     'productidinproductjs' : productid,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: function (data, textStatus, jqXHR){
+                    console.log(data);
+                    var marginnewfromsql=data[0][1];
+                    $('input[name="margin_tblproduct"][productid="' + productid + '"').val(marginnewfromsql);
+
+                    },
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                        console.log('ajax done');
+                    },
+
+                    datatype: 'json'
+
+                    });
+                $('input[name="salespricechangerbutton"][productid="' + productid + '"').attr('value', 'Change');
+                $('input[name="' + fieldname + '"][productid="' + productid + '"').css("background-color", "white")
+            };
+
+
+
+   });
+
+   $('.updateable').click(function() {
+        $(this).css("background-color", "yellow");
+
+
+   });
+    $('.salespricechangerbutton').click(function() {
+        var productid=$(this).attr( "productid" );
+
+            if ($('input[name="salesprice"][productid="' + productid + '"').is(':disabled')){
+            // Salesprice is disabled
+                console.log('yes disabled');
+                $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', false)
+                $(this).attr('value', 'Confirm');
+            }
+
+    });
+    $('.currencyselection').change(function() {
+        var productid=$(this).attr( "productid" );
+                    $.ajax({
+                    type: 'POST',
+                    url: 'productupdatecurrencyisocode/',
+
+                    data: {
+                    'currencyidinjs' : $(this).val(),
+                    'productidinjs' : $(this).attr( "productid" ),
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
                     },
 
@@ -132,22 +167,14 @@ $(function () {
 
                     });
 
-       //             console.log('Works the updatejs')
+                    function UpdateSuccess(data, textStatus, jqXHR)
+                    {
+                    console.log(data);
+                    var currencyidsql= data[0]
+                    $('select[class="currencyselection"][productid="' + productid + '"] option:selected').html(currencyidsql);
 
-            function UpdateSuccess(data, textStatus, jqXHR)
-            {
-        //    console.log('ajax success!!!');
-        //    $('#search-results').html(data);
-            console.log(data);
-            var marginnewfromsql=data[0][1];
-            $('input[name="margin_tblproduct"][productid="' + productid + '"').val(marginnewfromsql);
 
-            }
-            }
-
-      //          $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', false).val('q');
-      //          $(this).attr('value', 'Confirm');
-       //         console.log('works', productid);
+                    }
 
     });
 

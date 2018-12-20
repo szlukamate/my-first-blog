@@ -46,14 +46,18 @@ def products(request):
 
     return render(request, 'quotation/products.html', {'products': products, 'currencycodes': currencycodes })
 
-def productupdatecurrencyisocode(request,pkproductid, pkcurrencyid):
+def productupdatecurrencyisocode(request):
+    if request.method == 'POST':
+        productidinjs = request.POST['productidinjs']
+        currencyidinjs = request.POST['currencyidinjs']
+
     cursor0 = connection.cursor()
     cursor0.execute(
         "SELECT currencyisocode_tblcurrency "
         "FROM quotation_tblproduct "
         "JOIN quotation_tblcurrency "
         "ON currencyid_tblcurrency = currencyid_tblcurrency_fktblproduct "
-        "WHERE currencyid_tblcurrency= %s ", [pkcurrencyid])
+        "WHERE currencyid_tblcurrency= %s ", [currencyidinjs])
     currencyisocoderecords = cursor0.fetchall()
     for instancesingle in currencyisocoderecords:
         currencyisocodeforrow= instancesingle[0]
@@ -61,21 +65,36 @@ def productupdatecurrencyisocode(request,pkproductid, pkcurrencyid):
     cursor2 = connection.cursor()
     cursor2.execute("UPDATE quotation_tblproduct SET "
                     "currencyisocode_tblcurrency_ctblproduct= %s "
-                    "WHERE productid_tblproduct =%s ", [currencyisocodeforrow, pkproductid])
+                    "WHERE productid_tblproduct =%s ", [currencyisocodeforrow, productidinjs])
 
-    return redirect('products')
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT currencyisocode_tblcurrency_ctblproduct "
+        "FROM quotation_tblproduct "
+        "WHERE productid_tblproduct= %s ", [productidinjs])
+    results = cursor3.fetchall()
+
+    json_data = json.dumps(results)
+
+    return HttpResponse(json_data, content_type="application/json")
 
 
 def productsalespricefieldupdate(request):
     if request.method == 'POST':
-        marginrequired = request.POST['marginrequired']
+        postselector = request.POST['postselector']
         productidinproductjs = request.POST['productidinproductjs']
 
-    cursor2 = connection.cursor()
-    cursor2.execute("UPDATE quotation_tblproduct SET "
-                    "margin_tblproduct= %s "
-                    "WHERE productid_tblproduct =%s ", [marginrequired, productidinproductjs])
+        if postselector=='salespriceupdaterequestwithpassingmarginrequired':
 
+            marginrequired = request.POST['marginrequired']
+
+            cursor2 = connection.cursor()
+            cursor2.execute("UPDATE quotation_tblproduct SET "
+                            "margin_tblproduct= %s "
+                            "WHERE productid_tblproduct =%s ", [marginrequired, productidinproductjs])
+
+        elif postselector=='salespriceupdaterequestonly':
+            pass
     cursor0 = connection.cursor()
     cursor0.execute(
         "SELECT purchase_price_tblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice "

@@ -14,14 +14,14 @@
 			{% for product in products %}
 			<input type="text" id="x" class="updateable" value="{{product.0}}" name="Productid_tblProduct" maxlength="10" productid="{{product.0}}" size="3" disabled>
 			<input type="text" class="updateable" value="{{product.1}}" name="purchase_price_tblproduct" maxlength="10" productid="{{product.0}}" size="3">
-			<select productid="{{product.0}}" name="currencyid_tblcurrency_fktblproduct" onchange="window.location.href=this.value;">
+			<select class="currencyselection" productid="{{product.0}}">
 					<option value="" disabled selected>{{product.3}}</option>
 				{% for currencycode in currencycodes %}
-					<option value="{% url 'productupdatecurrencyisocode' pkproductid=product.0 pkcurrencyid=currencycode.0 %}">{{ currencycode.1}}</option>
+					<option value="{{ currencycode.0 }}">{{ currencycode.1}}</option>
 				{% endfor %}
 			</select>
 			<input type="text" class="updateable" value="{{product.4}}" name="margin_tblproduct" maxlength="3" productid="{{product.0}}" size="3"/>
-			<input type="text" value="{{product.5}}" name="salesprice" maxlength="10" size="8" productid="{{product.0}}" disabled/>
+			<input type="text" class="updateable" value="{{product.5}}" name="salesprice" maxlength="10" size="8" productid="{{product.0}}" disabled/>
 
 			<input type="button" name="salespricechangerbutton" value="Change Sales Price" class="salespricechangerbutton" productid="{{product.0}}" style="width:200px">
 
