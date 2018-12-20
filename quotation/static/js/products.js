@@ -82,8 +82,8 @@ $(function () {
                 }
                 });
              };
-             
-             },1000);
+
+             },500);
 
             if (fieldname=='salesprice'){
 
