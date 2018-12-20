@@ -55,79 +55,79 @@ $(function () {
              };
              setTimeout( function(){
 
-             if ((fieldname=='purchase_price_tblproduct') || (fieldname=='margin_tblproduct')){
-
-                $.ajax({
-                type: 'POST',
-                url: 'productsalespricefieldupdate/',
-
-                data: {
-                    'postselector' : 'salespriceupdaterequestonly',
-                    'productidinproductjs' : productid,
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                    },
-
-                success:function(data, textStatus, jqXHR){
-                console.log('Success requery!!!');
-                console.log(data);
-                var salespricefromsql=data[0][2];
-                $('input[name="salesprice"][productid="' + productid + '"').val(salespricefromsql);
-
-                },
-                error: function(){
-                console.log('Failure requery');
-                },
-                complete: function(){
-                console.log('ajax done');
-                }
-                });
-             };
-
-             },500);
-
-            if (fieldname=='salesprice'){
-
-
-                console.log('not disabled');
-                $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', true)
-                $(this).attr('value', 'Change sales price');
-                var salesprice=$('input[name="salesprice"][productid="' + productid + '"').val();
-                var purchaseprice=$('input[name="purchase_price_tblproduct"][productid="' + productid + '"').val();
-                var marginrequired=((salesprice-purchaseprice)/salesprice)*100
+                 if ((fieldname=='purchase_price_tblproduct') || (fieldname=='margin_tblproduct')){
 
                     $.ajax({
                     type: 'POST',
                     url: 'productsalespricefieldupdate/',
 
                     data: {
-                    'postselector' : 'salespriceupdaterequestwithpassingmarginrequired',
-                    'marginrequired' : marginrequired,
-                    'productidinproductjs' : productid,
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                    },
+                        'postselector' : 'salespriceupdaterequestonly',
+                        'productidinproductjs' : productid,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                        },
 
-                    success: function (data, textStatus, jqXHR){
+                    success:function(data, textStatus, jqXHR){
+                    console.log('Success requery!!!');
                     console.log(data);
-                    var marginnewfromsql=data[0][1];
-                    $('input[name="margin_tblproduct"][productid="' + productid + '"').val(marginnewfromsql);
+                    var salespricefromsql=data[0][2];
+                    $('input[name="salesprice"][productid="' + productid + '"').val(salespricefromsql);
 
                     },
                     error: function(){
-                       console.log('ajax failure');
+                    console.log('Failure requery');
                     },
                     complete: function(){
-
-                        console.log('ajax done');
-                    },
-
-                    datatype: 'json'
-
+                    console.log('ajax done');
+                    }
                     });
-                $('input[name="salespricechangerbutton"][productid="' + productid + '"').attr('value', 'Change');
-                $('input[name="' + fieldname + '"][productid="' + productid + '"').css("background-color", "white")
-            };
+                 };
 
 
+
+                if (fieldname=='salesprice'){
+
+
+                    console.log('not disabled');
+                    $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', true)
+                    $(this).attr('value', 'Change sales price');
+                    var salesprice=$('input[name="salesprice"][productid="' + productid + '"').val();
+                    var purchaseprice=$('input[name="purchase_price_tblproduct"][productid="' + productid + '"').val();
+                    var marginrequired=((salesprice-purchaseprice)/salesprice)*100
+
+                        $.ajax({
+                        type: 'POST',
+                        url: 'productsalespricefieldupdate/',
+
+                        data: {
+                        'postselector' : 'salespriceupdaterequestwithpassingmarginrequired',
+                        'marginrequired' : marginrequired,
+                        'productidinproductjs' : productid,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                        },
+
+                        success: function (data, textStatus, jqXHR){
+                        console.log(data);
+                        var marginnewfromsql=data[0][1];
+                        $('input[name="margin_tblproduct"][productid="' + productid + '"').val(marginnewfromsql);
+
+                        },
+                        error: function(){
+                           console.log('ajax failure');
+                        },
+                        complete: function(){
+
+                            console.log('ajax done');
+                        },
+
+                        datatype: 'json'
+
+                        });
+                    $('input[name="salespricechangerbutton"][productid="' + productid + '"').attr('value', 'Change');
+                    $('input[name="' + fieldname + '"][productid="' + productid + '"').css("background-color", "white")
+                };
+
+             },500);
 
    });
 
