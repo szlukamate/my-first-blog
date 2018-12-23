@@ -2,7 +2,7 @@
 {% load staticfiles%}
 	{% block content %}
           
-
+				<span id="quotationtemplate"></span>
 				<p align="center" id="title" style="font-size:160%;">Quotation Form</p>{% csrf_token %}
 				<p>Companyname:{{ doc.0.3}} Companyid:{{ companyid.0.0}}<a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a></p>
 				<p>Firstname:{{ doc.0.4}} </p>
@@ -18,8 +18,15 @@
 				</ul>
 			{% endblock sidebar %}
 <p>Contactid:{{ doc.0.1}} </p>
-<p>Dockindid: {{ doc.0.2}}-<span>Docid:</span><span id="quotationdocidspan">{{ doc.0.0}}</span></p>
-					<p align="right"><a href="{% url 'quotationnewrowadd' pk=doc.0.0 %}"><span class="glyphicon glyphicon-arrow-down"></span></a></p>
+<p><span>Docid:</span><span id="quotationdocid">{{ doc.0.0}}</span></p>
+					<p align="right">
+						<input type="text" value="{{ nextchapternums.0 }}" id="nextfirstnumonhtml" maxlength="10" size="2">
+						<input type="text" value="{{ nextchapternums.1 }}" id="nextsecondnumonhtml" maxlength="10" size="2">
+						<input type="text" value="{{ nextchapternums.2 }}" id="nextthirdnumonhtml" maxlength="10" size="2">
+						<input type="text" value="{{ nextchapternums.3 }}" id="nextfourthnumonhtml" maxlength="10" size="2">
+						<a href="#" ><span id="newquotationrowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
+
+					</p>
 											<label for="firstnum_tblDoc_details" >C1</label>
 											<label for="secondnum_tblDoc_details" style="padding-left: 34px;">C2</label>
 											<label for="thirdnum_tblDoc_details" style="padding-left: 34px;">C3</label>
@@ -35,7 +42,7 @@
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.3}}" name="Product_description_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.8}}" name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
-											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a><br>
+											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right"></span><span class="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a><br>
 											{% endfor %}
 											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
 

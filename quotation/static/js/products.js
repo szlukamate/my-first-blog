@@ -149,6 +149,7 @@ $(function () {
                     url: 'productupdatecurrencyisocode/',
 
                     data: {
+
                     'currencyidinjs' : $(this).val(),
                     'productidinjs' : $(this).attr( "productid" ),
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()

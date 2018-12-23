@@ -37,7 +37,7 @@ $('#title').click(function() {
 //          console.log(data);
             console.log(fieldname, fieldvalue, rowid);
 
-           });
+   });
 
    $('#search').keyup(function() {
             var docidinquotationjs = $('#quotationdocidspan').text();
@@ -65,8 +65,75 @@ $('#title').click(function() {
 
             $('#search-results').html(data);
 
-
             }
-        });
+   });
+    $('#newquotationrowsignonhtml').click(function() {
+        var quotationid=$('#quotationdocid').text();
+
+            $.ajax({
+                type: 'POST',
+                url: 'quotationnewrowadd',
+
+                data: {
+                'quotationid' : quotationid,
+                'docdetailsid' : 0, // New row in docdetails the 0 shows it (the quotationnewrowadd def in vw_quotation.py recognizes it)
+                'nextfirstnumonhtml' : $('#nextfirstnumonhtml').val(),
+                'nextsecondnumonhtml' : $('#nextsecondnumonhtml').val(),
+                'nextthirdnumonhtml' : $('#nextthirdnumonhtml').val(),
+                'nextfourthnumonhtml' : $('#nextfourthnumonhtml').val(),
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(data){
+
+                    $('#quotationtemplate').html(data);
+                    console.log(data);
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
+
+
+    });
+
+    $('.quotationproductforrow').click(function() {
+        var quotationid=$('#quotationdocid').text();
+        var docdetailsid=$(this).attr( "rowid" );
+        console.log('in');
+            $.ajax({
+                type: 'POST',
+                url: 'quotationnewrowadd',
+
+                data: {
+                'quotationid' : quotationid,
+                'docdetailsid' : docdetailsid, // Only product update the !0 shows it (the quotationnewrowadd def in vw_quotation.py recognizes it)
+                'nextfirstnumonhtml' :    $('input[name="firstnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
+                'nextsecondnumonhtml' : 111,
+                'nextthirdnumonhtml' : 111,
+                'nextfourthnumonhtml' : 111,
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(data){
+
+                    $('#quotationtemplate').html(data);
+                    console.log(data);
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
+
+
+    });
 
 });

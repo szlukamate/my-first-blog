@@ -1,10 +1,9 @@
-{% extends 'quotation/base.html' %}
 {% load staticfiles%}
 	{% block content %}
           
 
 				<p align="center" id="title" style="font-size:160%;">Quotation Newrow Add Form</p>{% csrf_token %}
-					<p align="right"></p>
+					<p  >Product nums: {{nextchapternumset.0}}-{{nextchapternumset.1}}-{{nextchapternumset.2}}-{{nextchapternumset.3}}</p>
 											<div class="container">
 										<table class="table table-striped">
 											<thead>
@@ -22,14 +21,13 @@
 											<tbody>
 												{%  for product in  products %}
 
-
 													<tr>
 														<td>{{ product.0 }}</td>
 														<td>{{ product.1 }}</td>
 														<td>{{ product.2 }}</td>
 														<td>{{ product.3 }}</td>
 														<td>{{ product.4 }}</td>
-														<td>{{ product.5 }}<a href="{% url 'quotationnewrow' pkdocid=docid pkproductid=product.0 %}"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+														<td>{{ product.5 }}<a href="{% url 'quotationnewrow' pkdocid=docid pkproductid=product.0 pkdocdetailsid=docdetailsid nextfirstnumonhtml=nextchapternumset.0 nextsecondnumonhtml=nextchapternumset.1 nextthirdnumonhtml=nextchapternumset.2 nextfourthnumonhtml=nextchapternumset.3 %}"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
 													</tr>
 
 
