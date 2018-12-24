@@ -40,7 +40,7 @@ $('#title').click(function() {
    });
 
    $('#search').keyup(function() {
-            var docidinquotationjs = $('#quotationdocidspan').text();
+            var docidinquotationjs = $('#quotationdocid').text();
             $.ajax({
                 type: 'POST',
                 url: 'searchquotationcontacts/',
@@ -101,7 +101,7 @@ $('#title').click(function() {
 
     });
 
-    $('.quotationproductforrow').click(function() {
+    $('[name="quotationproductforrow"]').click(function() {
         var quotationid=$('#quotationdocid').text();
         var docdetailsid=$(this).attr( "rowid" );
         console.log('in');
@@ -113,9 +113,9 @@ $('#title').click(function() {
                 'quotationid' : quotationid,
                 'docdetailsid' : docdetailsid, // Only product update the !0 shows it (the quotationnewrowadd def in vw_quotation.py recognizes it)
                 'nextfirstnumonhtml' :    $('input[name="firstnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
-                'nextsecondnumonhtml' : 111,
-                'nextthirdnumonhtml' : 111,
-                'nextfourthnumonhtml' : 111,
+                'nextsecondnumonhtml' : $('input[name="secondnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
+                'nextthirdnumonhtml' : $('input[name="thirdnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
+                'nextfourthnumonhtml' : $('input[name="fourthnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },

@@ -42,7 +42,7 @@
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.3}}" name="Product_description_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.8}}" name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
-											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right"></span><span class="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a><br>
+											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a><br>
 											{% endfor %}
 											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
 
