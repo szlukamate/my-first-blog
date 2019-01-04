@@ -43,7 +43,9 @@ def quotationform(request, pk):
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
-                    "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details` "
+                    "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details`, "
+                    "purchase_price_tblproduct_ctblDoc_details, salesprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
+                    "Doc_detailsid_tblDoc_details "
                     "FROM quotation_tbldoc_details "
                     "WHERE docid_tbldoc_details_id=%s "
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
@@ -123,8 +125,10 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
     for instancesingle in results:
         purchase_priceclone = instancesingle[1]
         productdescriptionclone = instancesingle[2]
-        marginclone = instancesingle[3]
         currencyisocodeclone = instancesingle[4]
+
+        marginfromproducttable=instancesingle[3]
+        salespricecomputed=round((100*purchase_priceclone)/(100-marginfromproducttable),2)
     #import pdb;
     #pdb.set_trace()
     #pkdocdetailsid=3
@@ -139,20 +143,20 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
             "thirdnum_tblDoc_details=%s, "
             "fourthnum_tblDoc_details=%s, "
             "purchase_price_tblproduct_ctblDoc_details=%s, "
-            "margin_tblproduct_ctblDoc_details=%s, "
             "Product_description_tblProduct_ctblDoc_details=%s, "
-            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details=%s "
-            "WHERE doc_detailsid_tbldoc_details =%s ", [pkproductid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml, purchase_priceclone, marginclone, productdescriptionclone, currencyisocodeclone, pkdocdetailsid])
+            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details=%s, "
+            "salesprice_tblDoc_details=%s "
+            "WHERE doc_detailsid_tbldoc_details =%s ", [pkproductid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml, purchase_priceclone,  productdescriptionclone, currencyisocodeclone, salespricecomputed, pkdocdetailsid])
 
     else:
         cursor1 = connection.cursor()
         cursor1.execute(
             "INSERT INTO quotation_tbldoc_details "
             "(`Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Productid_tblDoc_details_id`, `firstnum_tblDoc_details`, `fourthnum_tblDoc_details`, "
-            "`secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `purchase_price_tblproduct_ctblDoc_details`, `margin_tblproduct_ctblDoc_details`, "
-            "`Product_description_tblProduct_ctblDoc_details`, `currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`) "
+            "`secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `purchase_price_tblproduct_ctblDoc_details`, "
+            "`Product_description_tblProduct_ctblDoc_details`, `currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`, salesprice_tblDoc_details) "
             "VALUES (1, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s)",
-            [pkdocid, pkproductid, nextfirstnumonhtml, nextfourthnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, purchase_priceclone, marginclone, productdescriptionclone, currencyisocodeclone])
+            [pkdocid, pkproductid, nextfirstnumonhtml, nextfourthnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, purchase_priceclone, productdescriptionclone, currencyisocodeclone, salespricecomputed])
         transaction.commit()
 
     return redirect('quotationform', pk=pkdocid)

@@ -13,9 +13,13 @@
 
 												<tr>
 													<td>Docid</td>
+													<td>Company</td>
+													<td>Firstname</td>
+													<td>Lastname</td>
 													<td>PCD</td>
 													<td>Town</td>
 													<td>Doc Kind</td>
+													<td>Created</td>
 												</tr>
 											</thead>
 
@@ -25,9 +29,14 @@
 
 													<tr>
 														<td><a href="{% url 'docselector' pk=tblDoc.0 %}">{{ tblDoc.0 }}</a></td>
+														<td>{{ tblDoc.4}}</td>
+														<td>{{ tblDoc.5}}</td>
+														<td>{{ tblDoc.6}}</td>
+
 														<td>{{ tblDoc.1}}</td>
 														<td>{{ tblDoc.2}}</td>
 														<td>{{ tblDoc.3}}</td>
+														<td>{{ tblDoc.7|date:"M.d.Y" }}</td>
 													</tr>
 
 

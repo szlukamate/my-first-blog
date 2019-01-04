@@ -1,19 +1,13 @@
-#productsearchtextarea {
-    position: fixed;
-    top: 235px;
-    left: 500px;
-    z-index: 10;
-    overflow: auto;
-    resize: none;
-}
 
 
-#productsearch {
-
-    position: fixed;
-    top: 200px;
-    left: 500px;
-    z-index: 10;
+hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
 }
 
 #sqlsavingfeedbackproduct {
@@ -37,6 +31,7 @@ body {
     padding-left: 15px;
     background-color: #fff5e8;
     height:3000px;
+    width: 100%;
  //   position: absolute;
  //   top: 0px;
 }

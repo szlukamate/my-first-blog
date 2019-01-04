@@ -10,7 +10,7 @@ from django.db import connection, transaction
 
 def docs(request):
     cursor1 = connection.cursor()
-    cursor1.execute("SELECT docid_tbldoc, Pcd_tblDoc, Town_tblDoc, Doc_kindid_tblDoc_id "
+    cursor1.execute("SELECT docid_tbldoc, Pcd_tblDoc, Town_tblDoc, Doc_kindid_tblDoc_id, companyname_tblcompanies_ctbldoc, firstname_tblcontacts_ctbldoc, lastname_tblcontacts_ctbldoc, creationtime_tbldoc "
                     "FROM quotation_tbldoc "
                     "order by docid_tbldoc desc")
     docs = cursor1.fetchall()

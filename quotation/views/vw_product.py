@@ -9,7 +9,7 @@ import json
 from django.http import HttpResponse
 # import pdb;
 # pdb.set_trace()
-def products(request):
+def products(request, pkproductid):
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
         rowid = request.POST['rowid']
@@ -29,14 +29,25 @@ def products(request):
         json_data = json.dumps(results)
 
         return HttpResponse(json_data, content_type="application/json")
+    # pkproductid == 0 if the request not asks a particular product
+    if int(pkproductid) == 0:
+        cursor = connection.cursor()
+        cursor.execute("SELECT Productid_tblProduct, purchase_price_tblproduct, Product_description_tblProduct, "
+                       "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice "
+                        "FROM quotation_tblproduct ")
+        products = cursor.fetchall()
+        transaction.commit()
 
-    cursor = connection.cursor()
-    cursor.execute("SELECT Productid_tblProduct, purchase_price_tblproduct, Product_description_tblProduct, "
-                   "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice "
-                    "FROM quotation_tblproduct ")
 
-    products = cursor.fetchall()
-    transaction.commit()
+    else:
+        cursor = connection.cursor()
+        cursor.execute("SELECT Productid_tblProduct, purchase_price_tblproduct, Product_description_tblProduct, "
+                       "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice "
+                        "FROM quotation_tblproduct "
+                        "WHERE productid_tblproduct= %s ", [pkproductid])
+
+        products = cursor.fetchall()
+        transaction.commit()
 
     cursor3 = connection.cursor()
     cursor3.execute(

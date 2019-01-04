@@ -19,7 +19,7 @@
 			{% endblock sidebar %}
 <p>Contactid:{{ doc.0.1}} </p>
 <p><span>Docid:</span><span id="quotationdocid">{{ doc.0.0}}</span></p>
-					<p align="right">
+					<p  align="right">
 						<input type="text" value="{{ nextchapternums.0 }}" id="nextfirstnumonhtml" maxlength="10" size="2">
 						<input type="text" value="{{ nextchapternums.1 }}" id="nextsecondnumonhtml" maxlength="10" size="2">
 						<input type="text" value="{{ nextchapternums.2 }}" id="nextthirdnumonhtml" maxlength="10" size="2">
@@ -27,22 +27,35 @@
 						<a href="#" ><span id="newquotationrowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
 
 					</p>
+
+
+											<label for="Productid_tblDoc_details_id" >Prid</label>
+											<label for="Doc_detailsid_tblDoc_details" style="padding-left: 17px;">Ddetid</label>
 											<label for="firstnum_tblDoc_details" >C1</label>
-											<label for="secondnum_tblDoc_details" style="padding-left: 34px;">C2</label>
-											<label for="thirdnum_tblDoc_details" style="padding-left: 34px;">C3</label>
-											<label for="fourthnum_tblDoc_details" style="padding-left: 34px;">C4</label>
-											<label for="Qty_tblDoc_details" style="padding-left: 34px;">Qty</label>
+											<label for="secondnum_tblDoc_details" style="padding-left: 23px;">C2</label>
+											<label for="thirdnum_tblDoc_details" style="padding-left: 24px;">C3</label>
+											<label for="fourthnum_tblDoc_details" style="padding-left: 24px;">C4</label>
+											<label for="Qty_tblDoc_details" style="padding-left: 24px;">Qty</label>
 											<label for="Productid_tblDoc_details_id" style="padding-left: 24px;">Description</label>
-											<label for="Note_tblDoc_details" style="padding-left: 21px;">Note</label><br>
+											<label for="Note_tblDoc_details" style="padding-left: 21px;">Note</label>
+											<label for="purchase_price_tblproduct_ctblDoc_details" style="padding-left: 19px;">Purchaseprice</label>
+											<label for="salesprice_tblDoc_details" style="padding-left: 9px;">Salesprice</label>
+											<label for="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" style="padding-left: 33px;">Currencycode</label><br>
+
 											{% for tblDoc_details in  docdetails %}
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="3">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.6}}" name="secondnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="3">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.7}}" name="thirdnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="3">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.5}}" name="fourthnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="3">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.13}}" name="Productid_tblDoc_details_id" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.14}}" name="Doc_detailsid_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.6}}" name="secondnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.7}}" name="thirdnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.5}}" name="fourthnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="2">
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.3}}" name="Product_description_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.8}}" name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
-											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a><br>
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.8}}"  name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.11}}" name="salesprice_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
+											<input type="text" class="updateablequotation" value="{{ tblDoc_details.12}}" name="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9" disabled>
+											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a><a href="{% url 'products' pkproductid=tblDoc_details.13 %}"><span class="glyphicon glyphicon-filter"></span></a><br><hr>
 											{% endfor %}
 											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
 
