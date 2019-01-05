@@ -34,7 +34,9 @@ def products(request, pkproductid):
         cursor = connection.cursor()
         cursor.execute("SELECT Productid_tblProduct, purchase_price_tblproduct, Product_description_tblProduct, "
                        "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice "
-                        "FROM quotation_tblproduct ")
+                       "FROM quotation_tblproduct "
+                       "WHERE obsolete_tblproduct=0 "
+                       )
         products = cursor.fetchall()
         transaction.commit()
 
@@ -44,7 +46,7 @@ def products(request, pkproductid):
         cursor.execute("SELECT Productid_tblProduct, purchase_price_tblproduct, Product_description_tblProduct, "
                        "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice "
                         "FROM quotation_tblproduct "
-                        "WHERE productid_tblproduct= %s ", [pkproductid])
+                        "WHERE productid_tblproduct= %s and obsolete_tblproduct=0", [pkproductid])
 
         products = cursor.fetchall()
         transaction.commit()
@@ -116,3 +118,22 @@ def productsalespricefieldupdate(request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+
+def productnew(request):
+
+    cursor1 = connection.cursor()
+    cursor1.execute("INSERT INTO quotation_tblproduct (product_description_tblproduct) VALUES ('DefaultDescription')")
+    transaction.commit()
+
+    return redirect('products', pkproductid=0)
+
+def productremove(request,pkproductid):
+    cursor1 = connection.cursor()
+    cursor1.execute(
+                        "UPDATE quotation_tblproduct SET "
+                        "obsolete_tblproduct=1 "
+                        "WHERE productid_tblproduct =%s ", [pkproductid])
+
+    transaction.commit()
+
+    return redirect('products', pkproductid=0)

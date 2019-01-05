@@ -55,7 +55,16 @@
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.11}}" name="salesprice_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.12}}" name="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9" disabled>
-											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a><a href="{% url 'products' pkproductid=tblDoc_details.13 %}"><span class="glyphicon glyphicon-filter"></span></a><br><hr>
+											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
+
+											<!-- if exists the product in product table then jump otherwise not -->
+											{% if tblDoc_details.15 > 0 %}
+											<a href="{% url 'products' pkproductid=tblDoc_details.13 %}"><span class="glyphicon glyphicon-filter"  ></span></a><br><hr>
+											{% else %}
+											<br><hr>
+											{% endif %}
+
+
 											{% endfor %}
 											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
 

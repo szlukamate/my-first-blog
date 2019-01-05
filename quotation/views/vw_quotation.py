@@ -45,8 +45,11 @@ def quotationform(request, pk):
     cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
                     "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details`, "
                     "purchase_price_tblproduct_ctblDoc_details, salesprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
-                    "Doc_detailsid_tblDoc_details "
+                    "Doc_detailsid_tblDoc_details, COALESCE(Productid_tblProduct, 0) "
                     "FROM quotation_tbldoc_details "
+                    "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+                    "ON "
+                    "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
                     "WHERE docid_tbldoc_details_id=%s "
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                     [pk])
@@ -178,7 +181,8 @@ def quotationnewrowadd(request):
     cursor1.execute(
         "SELECT Productid_tblProduct, purchase_price_tblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice, "
         "Product_description_tblProduct, currencyisocode_tblcurrency_ctblproduct "
-        "FROM quotation_tblproduct")
+        "FROM quotation_tblproduct "
+        "WHERE obsolete_tblproduct=0 ")
     products = cursor1.fetchall()
     transaction.commit()
     #return redirect('quotationform', pk=1)
