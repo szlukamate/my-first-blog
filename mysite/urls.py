@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^accounts/logout/$', views.logout, name='logout', kwargs={'next_page': '/'}),
     url(r'', include('blog.urls')),
     url(r'quotation/', include('quotation.urls')),
+    url(r'ist/', include('ist.urls')),
 
 ]
 

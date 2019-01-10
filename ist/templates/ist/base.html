@@ -1,0 +1,39 @@
+{% load static %}
+<html>
+    <head>
+        <title>Issue Ticketer</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/quotation.css' %}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+	<link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+	<div class="page-header">
+	    {% if user.is_authenticated %}
+		<p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
+	    {% else %}
+                <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+	    {% endif %}
+	    <h1><a href="/">Issue Ticketer</a></h1>
+	</div>
+	<nav>
+		<a href="{% url 'issues' %}">Issues</a>
+
+	</nav>	
+	<div class="container-fluid">
+	    <div class="row">
+	        <div >
+			{% block content %}
+			{% endblock %}
+        </div>
+    </div>
+</div
+
+{% block javascript %}{% endblock %}
+    </body>
+</html>
