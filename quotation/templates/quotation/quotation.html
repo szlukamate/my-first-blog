@@ -3,7 +3,7 @@
 	{% block content %}
           
 				<span id="quotationtemplate"></span>
-				<p align="center" id="title" style="font-size:165%;">Quotation Form</p>{% csrf_token %}
+				<p align="center" id="title" style="font-size:166%;">Quotation Form</p>{% csrf_token %}
 				<p>Companyname:{{ doc.0.3}} Companyid:{{ companyid.0.0}}<a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a></p>
 				<p>Firstname:{{ doc.0.4}} </p>
 				<p>Lastname:{{ doc.0.5}} </p>
