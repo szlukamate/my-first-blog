@@ -1,35 +1,63 @@
-{% extends 'quotation/base.html' %}
-{% load staticfiles%}
-	{% block content %}
-          
-				<span id="quotationtemplate"></span>
-				<p align="center" id="title" style="font-size:173%;">Quotation Form</p>{% csrf_token %}
-				<p>Companyname:{{ doc.0.3}} Companyid:{{ companyid.0.0}}<a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a></p>
+{% load static %}
+<html>
+
+		<head>
+			<title>Quotation Maker</title>
+			<link rel="stylesheet" href="{% static 'css/quotationprint.css' %}">
+
+	   </head>
+    <body>
+
+
+		<div style="clear:both;">
+
+		</div>
+
+
+		<div class="descriptiondiv" >{{ docdetails.0.3}}</div>
+
+		<div class="page">
+				<p>Companyname:{{ doc.0.3}} </p>
 				<p>Firstname:{{ doc.0.4}} </p>
 				<p>Lastname:{{ doc.0.5}} </p>
 
-			{% block sidebar %}
-				{% csrf_token %}
-				<input type="text" id="search" name="search" />
-
-				<ul id="search-results" style="list-style-type: none;">
 
 
-				</ul>
-			{% endblock sidebar %}
-					<form action="{% url 'quotationprint' docid=doc.0.0 %}">
-						<input type="submit" value="Print" />
-					</form>
-				<p>Contactid:{{ doc.0.1}} </p>
-				<p><span>Docid:</span><span id="quotationdocid">{{ doc.0.0}}</span></p>
-					<p  align="right">
-						<input type="text" value="{{ nextchapternums.0 }}" id="nextfirstnumonhtml" maxlength="10" size="2">
-						<input type="text" value="{{ nextchapternums.1 }}" id="nextsecondnumonhtml" maxlength="10" size="2">
-						<input type="text" value="{{ nextchapternums.2 }}" id="nextthirdnumonhtml" maxlength="10" size="2">
-						<input type="text" value="{{ nextchapternums.3 }}" id="nextfourthnumonhtml" maxlength="10" size="2">
-						<a href="#" ><span id="newquotationrowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
+				<div class="labelrectangle" >
+				</div>
 
-					</p>
+				<div class="labelrectanglelabels" >
+					<span style="margin-left: 40mm" >Description</span>
+					<span style="margin-left: 40mm" >Qty</span>
+				</div>
+
+				{% for tblDoc_details in  docdetails %}
+
+				<div class="chapternumbersdiv">
+						<span name="firstnum_tblDoc_details">{{ tblDoc_details.4}}</span>
+
+						{% if tblDoc_details.6 > 0 %}
+						<span name="secondnum_tblDoc_details">{{ tblDoc_details.6}}</span>
+						{% endif %}
+
+						{% if tblDoc_details.7 > 0 %}
+						<span name="thirdnum_tblDoc_details">{{ tblDoc_details.7}}</span>
+						{% endif %}
+
+						{% if tblDoc_details.5 > 0 %}
+						<span name="fourthnum_tblDoc_details">{{ tblDoc_details.5}}</span>
+						{% endif %}
+				</div>
+						<br>
+				<div  class="descriptiondiv">
+						<span  name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</span>
+				</div>
+
+
+
+				{% endfor %}
+
+		</div>
 
 
 											<label for="Productid_tblDoc_details_id" >Prid</label>
@@ -45,7 +73,6 @@
 											<label for="salesprice_tblDoc_details" style="padding-left: 9px;">Salesprice</label>
 											<label for="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" style="padding-left: 33px;">Currencycode</label><br>
 
-											{% for tblDoc_details in  docdetails %}
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.13}}" name="Productid_tblDoc_details_id" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.14}}" name="Doc_detailsid_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
@@ -58,17 +85,7 @@
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.11}}" name="salesprice_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" class="updateablequotation" value="{{ tblDoc_details.12}}" name="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9" disabled>
-											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
-
-											<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->
-											{% if tblDoc_details.15 > 0 %}
-											<a href="{% url 'products' pkproductid=tblDoc_details.13 %}"><span class="glyphicon glyphicon-filter" ></span></a><br><hr>
-											{% else %}
-											<br><hr>
-											{% endif %}
 
 
-											{% endfor %}
-											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
-
-	{% endblock %}
+   </body>
+</html>

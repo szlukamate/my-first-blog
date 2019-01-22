@@ -252,3 +252,35 @@ def quotationupdatecontact(request,pkdocid, pkcontactid):
                     "WHERE Docid_tblDoc =%s ", [pkcontactid, companynameclone, firstnameclone, lastnameclone, pkdocid])
 
     return redirect('quotationform', pk=pkdocid)
+
+def quotationprint (request, docid):
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Docid_tblDoc, "
+                    "Contactid_tblDoc_id, "
+                    "Doc_kindid_tblDoc_id, "
+                    "companyname_tblcompanies_ctbldoc, "
+                    "firstname_tblcontacts_ctbldoc, "
+                    "lastname_tblcontacts_ctbldoc "
+                    "FROM quotation_tbldoc "
+                    "WHERE docid_tbldoc=%s "
+                    "order by docid_tbldoc desc",
+                    [docid])
+    doc = cursor1.fetchall()
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
+        "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details`, "
+        "purchase_price_tblproduct_ctblDoc_details, salesprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
+        "Doc_detailsid_tblDoc_details, COALESCE(Productid_tblProduct, 0) "
+        "FROM quotation_tbldoc_details "
+        "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+        "ON "
+        "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+        "WHERE docid_tbldoc_details_id=%s "
+        "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
+        [docid])
+    docdetails = cursor3.fetchall()
+
+    return render(request, 'quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails})
