@@ -26,7 +26,7 @@
 
 			<input type="button" name="salespricechangerbutton" value="Change Sales Price" class="salespricechangerbutton" productid="{{product.0}}" style="width:200px">
 
-			<input type="text" class="updateable" value="{{product.2}}" name="Product_description_tblProduct" maxlength="10" productid="{{product.0}}" size="8">
+			<input type="text" class="updateable" value="{{product.2}}" name="Product_description_tblProduct" maxlength="200" productid="{{product.0}}" size="8">
 			<a href="{% url 'productremove' pkproductid=product.0 %}"><span class="glyphicon glyphicon-remove"></span></a><br>
 			{% endfor %}
 			<script type="text/javascript" src="{% static 'js/products.js' %}"></script>

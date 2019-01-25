@@ -4,17 +4,10 @@
 		<head>
 			<title>Quotation Maker</title>
 			<link rel="stylesheet" href="{% static 'css/quotationprint.css' %}">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	   </head>
     <body>
-
-
-		<div style="clear:both;">
-
-		</div>
-
-
-		<div class="descriptiondiv" >{{ docdetails.0.3}}</div>
 
 		<div class="page">
 				<p>Companyname:{{ doc.0.3}} </p>
@@ -28,64 +21,47 @@
 
 				<div class="labelrectanglelabels" >
 					<span style="margin-left: 40mm" >Description</span>
-					<span style="margin-left: 40mm" >Qty</span>
+					<span style="margin-left: 60mm" >Qty</span>
 				</div>
-
-				{% for tblDoc_details in  docdetails %}
-
-				<div class="chapternumbersdiv">
-						<span name="firstnum_tblDoc_details">{{ tblDoc_details.4}}</span>
-
-						{% if tblDoc_details.6 > 0 %}
-						<span name="secondnum_tblDoc_details">{{ tblDoc_details.6}}</span>
-						{% endif %}
-
-						{% if tblDoc_details.7 > 0 %}
-						<span name="thirdnum_tblDoc_details">{{ tblDoc_details.7}}</span>
-						{% endif %}
-
-						{% if tblDoc_details.5 > 0 %}
-						<span name="fourthnum_tblDoc_details">{{ tblDoc_details.5}}</span>
-						{% endif %}
+					<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
+				<div class="footerfirstdiv" >
+					<hr>
+					<span class="footerfirstspan">Please see the payment and other conditions on the last page<br></span>
+					<span class="footerfirstspan">Description2</span>
 				</div>
-						<br>
-				<div  class="descriptiondiv">
-						<span  name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</span>
-				</div>
-
-
-
-				{% endfor %}
-
 		</div>
+						{% for tblDoc_details in docdetails %}
+						<span name="htmlinsertbefore" rowid="{{ forloop.counter0 }}"></span>
+						<div rowid="{{ forloop.counter0 }}" class="item-container">
+									<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{tblDoc_details.4}}.</span>
+
+									{% if tblDoc_details.6 > 0 or tblDoc_details.7 > 0 or tblDoc_details.5 > 0%}
+									<span  class="chapternumbersspan" name="secondnum_tblDoc_details">{{tblDoc_details.6}}.</span>
+									{% endif %}
+
+									{% if tblDoc_details.7 > 0 or tblDoc_details.5 > 0 %}
+									<span class="chapternumbersspan" name="thirdnum_tblDoc_details">{{tblDoc_details.7}}.</span>
+									{% endif %}
+
+									{% if tblDoc_details.5 > 0 %}
+									<span class="chapternumbersspan" name="fourthnum_tblDoc_details">{{tblDoc_details.5}}.</span>
+									{% endif %}
+									<br>
+							<div  class="descriptiondiv">
+									<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
+							</div>
+							<div  class="qtydiv">
+									<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}}</p>
+							</div>
+
+						</div>
+						<span name="htmlinsertafter" rowid="{{ forloop.counter0 }}"></span>
+						{% endfor %}
 
 
-											<label for="Productid_tblDoc_details_id" >Prid</label>
-											<label for="Doc_detailsid_tblDoc_details" style="padding-left: 17px;">Ddetid</label>
-											<label for="firstnum_tblDoc_details" >C1</label>
-											<label for="secondnum_tblDoc_details" style="padding-left: 23px;">C2</label>
-											<label for="thirdnum_tblDoc_details" style="padding-left: 24px;">C3</label>
-											<label for="fourthnum_tblDoc_details" style="padding-left: 24px;">C4</label>
-											<label for="Qty_tblDoc_details" style="padding-left: 24px;">Qty</label>
-											<label for="Productid_tblDoc_details_id" style="padding-left: 24px;">Description</label>
-											<label for="Note_tblDoc_details" style="padding-left: 21px;">Note</label>
-											<label for="purchase_price_tblproduct_ctblDoc_details" style="padding-left: 19px;">Purchaseprice</label>
-											<label for="salesprice_tblDoc_details" style="padding-left: 9px;">Salesprice</label>
-											<label for="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" style="padding-left: 33px;">Currencycode</label><br>
-
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.13}}" name="Productid_tblDoc_details_id" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.14}}" name="Doc_detailsid_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.6}}" name="secondnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.7}}" name="thirdnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.5}}" name="fourthnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="2">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.3}}" name="Product_description_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.8}}"  name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.11}}" name="salesprice_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
-											<input type="text" class="updateablequotation" value="{{ tblDoc_details.12}}" name="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9" disabled>
 
 
+
+		<script type="text/javascript" src="{% static 'js/quotationprint.js' %}"></script>
    </body>
 </html>

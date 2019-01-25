@@ -8,7 +8,7 @@ body {
 					  margin-bottom: 0.5cm;
 					  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
   					  width: 21cm;
-					  //height: 29.7cm;
+					  height: 29.7cm;
 					  position: relative;
 
 					}
@@ -18,7 +18,7 @@ body {
 					  position: absolute;
 					  top: 50mm;
 					  width: 170mm;
-					  //height: 10mm;
+					  height: 10mm;
 					  left: 20mm;
 					  border:2px solid #000;
 					}
@@ -26,27 +26,84 @@ body {
 				.labelrectanglelabels {
 					  position: absolute;
 					  top: 53mm;
+					  font-family: "Times New Roman", Times, serif;
+                      font-size: 14px;
+                      font-style: italic;
+                      font-weight: bold;
+				}
+				.item-container{
+					  position: relative;
+					  top: 50mm;
+   					left: 20.6mm;
+
 				}
 
 
 				.chapternumbersdiv {
 					  position: relative;
 					  top: 50mm;
-					left: 20mm;
+					left: 20.6mm;
+
+				   }
+
+				.chapternumbersspan {
+				   font-family: "Arial", Times, serif;
+                   font-size: 14px;
+                   margin-left: -4px;
+
 
 				}
 
 
 				.descriptiondiv {
 					  position: relative;
-					  top: 50mm;
-					left: 20mm;
-					width: 100%;
-					max-width: 45mm;
-					overflow:auto;
-
-
-
-
-
+					  top: 0mm;
+					width: 90mm;
+                   font-family: "Arial", Times, serif;
+                   font-size: 12px;
+                   overflow-wrap: break-word;
+                    margin-left: -4px;
 				}
+				.qtydiv {
+					  position: absolute;
+					  top: 4mm;
+					left: 100mm;
+					width: 10mm;
+                   font-family: "Arial", Times, serif;
+                   font-size: 12px;
+                   overflow-wrap: break-word;
+                }
+
+                .footerfirstdiv{
+                      position: absolute;
+                      bottom: 0;
+                      left: 0;
+                      width: 100%;
+                      background-color: white;
+                      text-align:Center;
+                      height:45mm;
+                }
+
+                .footerfirstspan{
+                      position:relative;
+                      width: 180mm;
+                      bottom: 20mm;
+                      font-family: "Arial", Times, serif;
+                      font-size: 20px;
+                 }
+
+
+                .footermiddle{
+
+                }
+
+                .footerlast{
+
+                }
+
+                hr {
+                position:relative;
+                top 0;
+                margin: 20mm;
+                border-top: 3px double #8c8b8b;
+                }
