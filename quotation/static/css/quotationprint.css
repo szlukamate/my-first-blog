@@ -1,109 +1,123 @@
 body {
-					  background: rgb(204,204,204);
-   					}
-				.page {
-					  background: white;
-					  //display: block;
-					  margin: 0 auto;
-					  margin-bottom: 0.5cm;
-					  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
-  					  width: 21cm;
-					  height: 29.7cm;
-					  position: relative;
+      background: rgb(204,204,204);
+    }
+.page {
+      background: white;
+      //display: block;
+      margin: 0 auto;
+      margin-bottom: 0.5cm;
+      box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+      width: 21cm;
+      height: 29.7cm;
+      position: relative;
 
-					}
-
-
-				.labelrectangle {
-					  position: absolute;
-					  top: 50mm;
-					  width: 170mm;
-					  height: 10mm;
-					  left: 20mm;
-					  border:2px solid #000;
-					}
-
-				.labelrectanglelabels {
-					  position: absolute;
-					  top: 53mm;
-					  font-family: "Times New Roman", Times, serif;
-                      font-size: 14px;
-                      font-style: italic;
-                      font-weight: bold;
-				}
-				.item-container{
-					  position: relative;
-					  top: 50mm;
-   					left: 20.6mm;
-
-				}
+    }
 
 
-				.chapternumbersdiv {
-					  position: relative;
-					  top: 50mm;
-					left: 20.6mm;
-
-				   }
-
-				.chapternumbersspan {
-				   font-family: "Arial", Times, serif;
-                   font-size: 14px;
-                   margin-left: -4px;
 
 
-				}
+
+.item-container{
+      position: relative;
+      top: 35mm;
+    left: 20.6mm;
+
+}
 
 
-				.descriptiondiv {
-					  position: relative;
-					  top: 0mm;
-					width: 90mm;
-                   font-family: "Arial", Times, serif;
-                   font-size: 12px;
-                   overflow-wrap: break-word;
-                    margin-left: -4px;
-				}
-				.qtydiv {
-					  position: absolute;
-					  top: 4mm;
-					left: 100mm;
-					width: 10mm;
-                   font-family: "Arial", Times, serif;
-                   font-size: 12px;
-                   overflow-wrap: break-word;
-                }
+.chapternumbersdiv {
+      position: relative;
+      top: 50mm;
+    left: 20.6mm;
 
-                .footerfirstdiv{
-                      position: absolute;
-                      bottom: 0;
-                      left: 0;
-                      width: 100%;
-                      background-color: white;
-                      text-align:Center;
-                      height:45mm;
-                }
+   }
 
-                .footerfirstspan{
-                      position:relative;
-                      width: 180mm;
-                      bottom: 20mm;
-                      font-family: "Arial", Times, serif;
-                      font-size: 20px;
-                 }
+.chapternumbersspan {
+   font-family: "Arial", Times, serif;
+   font-size: 14px;
+   margin-left: -4px;
 
 
-                .footermiddle{
+}
 
-                }
 
-                .footerlast{
+.descriptiondiv {
+      position: relative;
+      top: 0mm;
+    width: 90mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+    margin-left: -4px;
+}
+.qtydiv {
+      position: absolute;
+      top: 4mm;
+    left: 100mm;
+    width: 10mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+}
 
-                }
+.footerdiv{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      text-align:Center;
+      height:45mm;
+      font-family: "Arial", Times, serif;
+      font-size: 19px;
+}
 
-                hr {
-                position:relative;
-                top 0;
-                margin: 20mm;
-                border-top: 3px double #8c8b8b;
-                }
+.footerspan1{
+      position:relative;
+      width: 180mm;
+      bottom: 20mm;
+
+ }
+
+hr {
+position:relative;
+top 0;
+margin: 20mm;
+border-top: 3px double #8c8b8b;
+}
+.header {
+
+      position: absolute;
+      top: 20mm;
+      width: 170mm;
+      height: 10mm;
+      left: 20mm;
+      border:2px solid #000;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+.headerlabels {
+      position: relative;
+      top: 3mm;
+}
+#logo {
+      position: relative;
+      margin: 20mm;
+      width:170mm;
+      height:30mm;
+}
+.companyname {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 20px;
+      font-weight: bold;
+      margin-left: 20mm;
+}
+.contactname {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 20px;
+      font-weight: bold;
+      margin-left: 20mm;
+}

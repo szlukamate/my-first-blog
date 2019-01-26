@@ -10,29 +10,20 @@
     <body>
 
 		<div class="page">
-				<p>Companyname:{{ doc.0.3}} </p>
-				<p>Firstname:{{ doc.0.4}} </p>
-				<p>Lastname:{{ doc.0.5}} </p>
-
-
-
-				<div class="labelrectangle" >
-				</div>
-
-				<div class="labelrectanglelabels" >
-					<span style="margin-left: 40mm" >Description</span>
-					<span style="margin-left: 60mm" >Qty</span>
-				</div>
-					<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
-				<div class="footerfirstdiv" >
+				<img id="logo" src="{% static "pic/abstract-logos.png" %}" alt="Logo header template" ">
+				<p class="companyname">{{ doc.0.3}} </p>
+				<p class="contactname">To: {{ doc.0.4}} {{ doc.0.5}} </p>
+				<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
+				<div class="footerdiv" >
 					<hr>
-					<span class="footerfirstspan">Please see the payment and other conditions on the last page<br></span>
-					<span class="footerfirstspan">Description2</span>
+					<span class="footerspan1">Please see the conditions in details on the last page<br></span>
+					<span class="footerspan1" pagenumber="1">Description2</span>
 				</div>
 		</div>
 						{% for tblDoc_details in docdetails %}
 						<span name="htmlinsertbefore" rowid="{{ forloop.counter0 }}"></span>
 						<div rowid="{{ forloop.counter0 }}" class="item-container">
+
 									<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{tblDoc_details.4}}.</span>
 
 									{% if tblDoc_details.6 > 0 or tblDoc_details.7 > 0 or tblDoc_details.5 > 0%}
@@ -47,12 +38,12 @@
 									<span class="chapternumbersspan" name="fourthnum_tblDoc_details">{{tblDoc_details.5}}.</span>
 									{% endif %}
 									<br>
-							<div  class="descriptiondiv">
-									<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
-							</div>
-							<div  class="qtydiv">
-									<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}}</p>
-							</div>
+										<div  class="descriptiondiv">
+												<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
+										</div>
+										<div  class="qtydiv">
+												<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}}</p>
+										</div>
 
 						</div>
 						<span name="htmlinsertafter" rowid="{{ forloop.counter0 }}"></span>
