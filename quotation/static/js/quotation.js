@@ -10,7 +10,7 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
-$('#drag').draggable();
+$("#tabs").tabs();
 
 $('#title').click(function() {
     $('#title').hide();
@@ -22,20 +22,37 @@ $('#title').click(function() {
         var fieldvalue = $(this).val();
         var rowid = $(this).attr( "rowid" );
         var fieldname = $(this).attr( "name" );
-
-
-
-
+        var tbl="tblDoc_details";
 
            $.post("", {
+           'tbl' : tbl,
            'fieldvalue': fieldvalue,
            'rowid' : rowid,
            'fieldname': fieldname,
            'csrfmiddlewaretoken': CSRFtoken,
            });
 
-//          console.log(data);
-            console.log(fieldname, fieldvalue, rowid);
+            console.log("tbldocdetails" + fieldname, fieldvalue, rowid);
+
+   });
+   $('.updateabletbldoc').focusout(function() {
+
+        var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
+        var fieldvalue = $(this).val();
+        var docid = $('#quotationdocid').text();
+        var fieldname = $(this).attr( "name" );
+        var tbl="tblDoc";
+
+
+           $.post("", {
+           'tbl' : tbl,
+           'fieldvalue': fieldvalue,
+           'docid' : docid,
+           'fieldname': fieldname,
+           'csrfmiddlewaretoken': CSRFtoken,
+           });
+
+            console.log("tbldoc" + fieldname, fieldvalue, docid);
 
    });
 

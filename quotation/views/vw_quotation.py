@@ -12,13 +12,19 @@ def quotationform(request, pk):
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
         rowid = request.POST['rowid']
+        docid = request.POST['docid']
         fieldname = request.POST['fieldname']
+        tbl = request.POST['tbl']
+        if tbl == "tblDoc_details":
+            cursor2 = connection.cursor()
+            sqlquery = "UPDATE quotation_tbldoc_details SET " + fieldname + "= '" + fieldvalue + "' WHERE Doc_detailsid_tblDoc_details =" + rowid
+            cursor2.execute(sqlquery)
 
-        cursor2 = connection.cursor()
-        sqlquery = "UPDATE quotation_tbldoc_details SET " + fieldname + "= '" + fieldvalue + "' WHERE Doc_detailsid_tblDoc_details =" + rowid
-        # import pdb;
-        # pdb.set_trace()
-        cursor2.execute(sqlquery)
+        elif tbl == "tblDoc":
+            cursor6 = connection.cursor()
+            sqlquery = "UPDATE quotation_tbldoc" + fieldname + "= '" + fieldvalue + "' WHERE Doc_detailsid_tblDoc_details =" + docid
+            cursor6.execute(sqlquery)
+
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -27,7 +33,8 @@ def quotationform(request, pk):
                     "Doc_kindid_tblDoc_id, "
                     "companyname_tblcompanies_ctbldoc, "
                     "firstname_tblcontacts_ctbldoc, "
-                    "lastname_tblcontacts_ctbldoc "
+                    "lastname_tblcontacts_ctbldoc,"
+                    "preface_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",

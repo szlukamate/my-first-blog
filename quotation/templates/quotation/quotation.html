@@ -22,14 +22,26 @@
 					</form>
 				<p>Contactid:{{ doc.0.1}} </p>
 				<p><span>Docid:</span><span id="quotationdocid">{{ doc.0.0}}</span></p>
-					<p  align="right">
-						<input type="text" value="{{ nextchapternums.0 }}" id="nextfirstnumonhtml" maxlength="10" size="2">
-						<input type="text" value="{{ nextchapternums.1 }}" id="nextsecondnumonhtml" maxlength="10" size="2">
-						<input type="text" value="{{ nextchapternums.2 }}" id="nextthirdnumonhtml" maxlength="10" size="2">
-						<input type="text" value="{{ nextchapternums.3 }}" id="nextfourthnumonhtml" maxlength="10" size="2">
-						<a href="#" ><span id="newquotationrowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
+						<div id="tabs">
+						  <ul>
+							<li><a href="#fragment-1">Quotation</a></li>
+							<li><a href="#fragment-2">Items</a></li>
 
-					</p>
+						  </ul>
+						  <div id="fragment-1">
+							  <label for="preface_tbldoc" >Preface</label>
+							  <input type="text" class="updateabletbldoc" value="{{ doc.0.6}}" name="preface_tbldoc" >
+						  </div>
+						  <div id="fragment-2">
+
+							  <p  align="right">
+								<input type="text" value="{{ nextchapternums.0 }}" id="nextfirstnumonhtml" maxlength="10" size="2">
+								<input type="text" value="{{ nextchapternums.1 }}" id="nextsecondnumonhtml" maxlength="10" size="2">
+								<input type="text" value="{{ nextchapternums.2 }}" id="nextthirdnumonhtml" maxlength="10" size="2">
+								<input type="text" value="{{ nextchapternums.3 }}" id="nextfourthnumonhtml" maxlength="10" size="2">
+								<a href="#" ><span id="newquotationrowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
+
+							  </p>
 
 
 											<label for="Productid_tblDoc_details_id" >Prid</label>
@@ -69,6 +81,11 @@
 
 
 											{% endfor %}
-											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
+
+						  </div>
+
+						</div>
+
+				<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
 
 	{% endblock %}
