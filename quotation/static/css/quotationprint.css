@@ -121,3 +121,15 @@ border-top: 3px double #8c8b8b;
       font-weight: bold;
       margin-left: 20mm;
 }
+.preface {
+        font-family: "Arial", Times, serif;
+        font-size: 20px;
+        margin-left: 20mm;
+        overflow: auto;
+        resize: none;
+         outline: none;
+        border: none;
+        background-color: white;
+        color: #000;
+
+}

@@ -6,6 +6,8 @@ from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
 from array import *
+import json
+from django.http import HttpResponse
 # import pdb;
 # pdb.set_trace()
 def quotationform(request, pk):
@@ -20,11 +22,31 @@ def quotationform(request, pk):
             sqlquery = "UPDATE quotation_tbldoc_details SET " + fieldname + "= '" + fieldvalue + "' WHERE Doc_detailsid_tblDoc_details =" + rowid
             cursor2.execute(sqlquery)
 
-        elif tbl == "tblDoc":
-            cursor6 = connection.cursor()
-            sqlquery = "UPDATE quotation_tbldoc" + fieldname + "= '" + fieldvalue + "' WHERE Doc_detailsid_tblDoc_details =" + docid
-            cursor6.execute(sqlquery)
+            cursor7 = connection.cursor()
+            cursor7.execute("SELECT " + fieldname + " "
+                            "FROM quotation_tbldoc_details "
+                            "WHERE Doc_detailsid_tblDoc_details = %s ", [rowid])
+            results = cursor7.fetchall()
 
+            json_data = json.dumps(results)
+
+            return HttpResponse(json_data, content_type="application/json")
+
+        elif tbl == "tblDoc":
+            cursor8 = connection.cursor()
+            sqlquery = "UPDATE quotation_tbldoc SET " + fieldname + "= '" + fieldvalue + "' WHERE Docid_tblDoc =" + docid
+            cursor8.execute(sqlquery)
+
+
+            cursor9 = connection.cursor()
+            cursor9.execute("SELECT " + fieldname + " "
+                            "FROM quotation_tbldoc "
+                            "WHERE Docid_tblDoc = %s ", [docid])
+            results = cursor9.fetchall()
+
+            json_data = json.dumps(results)
+
+            return HttpResponse(json_data, content_type="application/json")
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -266,7 +288,8 @@ def quotationprint (request, docid):
                     "Doc_kindid_tblDoc_id, "
                     "companyname_tblcompanies_ctbldoc, "
                     "firstname_tblcontacts_ctbldoc, "
-                    "lastname_tblcontacts_ctbldoc "
+                    "lastname_tblcontacts_ctbldoc, "
+                    "preface_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",

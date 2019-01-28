@@ -16,7 +16,7 @@ $('#title').click(function() {
     $('#title').hide();
 
 });
-   $('.updateablequotation').focusout(function() {
+   $('.updateabletbldocdetails').change(function() {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var fieldvalue = $(this).val();
@@ -24,18 +24,42 @@ $('#title').click(function() {
         var fieldname = $(this).attr( "name" );
         var tbl="tblDoc_details";
 
-           $.post("", {
+           $.ajax({
+            type: 'POST',
+            url: '',
+
+            data: {
            'tbl' : tbl,
            'fieldvalue': fieldvalue,
            'rowid' : rowid,
+           'docid' : 0,
            'fieldname': fieldname,
            'csrfmiddlewaretoken': CSRFtoken,
-           });
+           },
+           success: updatesuccess,
+           error: updateerror,
+           datatype: 'html'
+          });
 
-            console.log("tbldocdetails" + fieldname, fieldvalue, rowid);
+        function updatesuccess (data, textStatus, jqXHR){
+            console.log('datafromsql:' + data);
+            $('input[name="' + fieldname + '"][rowid="' + rowid + '"').val(data);
+            $('#sqlsaving').html('<span  class="glyphicon glyphicon-hdd"></span>');
+
+            setTimeout(
+              function()
+              {
+                $('#sqlsaving').html("");
+
+              }, 500);
+            console.log(fieldvalue);
+        };
+        function updateerror (){
+            console.log('Failure in saving');
+        };
 
    });
-   $('.updateabletbldoc').focusout(function() {
+   $('.updateabletbldoc').change(function() {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var fieldvalue = $(this).val();
@@ -43,18 +67,52 @@ $('#title').click(function() {
         var fieldname = $(this).attr( "name" );
         var tbl="tblDoc";
 
+          $.ajax({
+            type: 'POST',
+            url: '',
 
-           $.post("", {
+            data: {
            'tbl' : tbl,
            'fieldvalue': fieldvalue,
+           'rowid' : 0,
            'docid' : docid,
            'fieldname': fieldname,
            'csrfmiddlewaretoken': CSRFtoken,
-           });
+           },
+           success: updatesuccess,
+           error: updateerror,
+           datatype: 'html'
+          });
 
-            console.log("tbldoc" + fieldname, fieldvalue, docid);
+        function updatesuccess (data, textStatus, jqXHR){
+            console.log('datafromsql:' + data);
+            $('input[name="' + fieldname + '"][docid="' + docid + '"').val(data);
+            $('#sqlsaving').html('<span  class="glyphicon glyphicon-hdd"></span>');
+
+            setTimeout(
+              function()
+              {
+                $('#sqlsaving').html("");
+
+              }, 500);
+            console.log(fieldvalue);
+        };
+        function updateerror (){
+            console.log('Failure in saving');
+        };
+
 
    });
+    /*
+    $('.updateabletbldocdetails').click(function() {
+        $(this).css("background-color", "yellow");
+    });
+    $('.updateabletbldocdetails').focusout(function() {
+        $(this).css("background-color", "white");
+    });
+    */
+
+
 
    $('#search').keyup(function() {
             var docidinquotationjs = $('#quotationdocid').text();

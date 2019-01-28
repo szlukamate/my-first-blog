@@ -10,15 +10,15 @@ hr {
   border-width: 1px;
 }
 
-#sqlsavingfeedbackproduct {
+#sqlsaving {
 
-    position: fixed;
+    position: absolute;
     top 0px;
     left: 1000px;
     color: #828282;
-    width: 100px;
+    //width: 100px;
     //background-color: #d6ffdb;
-    float: right;
+
 
 }
 
