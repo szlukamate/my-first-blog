@@ -33,6 +33,11 @@ def docadd(request):
         for x in results:
             maxdocid = x[0]
 
+        cursor4 = connection.cursor()
+        cursor4.execute(
+            "INSERT INTO quotation_tbldoc_details ( Docid_tblDoc_details_id) VALUES (%s)",
+            [maxdocid])
+
         return redirect('docselector', pk=maxdocid)
     cursor0 = connection.cursor()
     cursor0.execute(

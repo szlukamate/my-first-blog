@@ -56,7 +56,7 @@ def quotationform(request, pk):
                     "companyname_tblcompanies_ctbldoc, "
                     "firstname_tblcontacts_ctbldoc, "
                     "lastname_tblcontacts_ctbldoc,"
-                    "preface_tbldoc "
+                    "prefacetext_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
@@ -289,7 +289,7 @@ def quotationprint (request, docid):
                     "companyname_tblcompanies_ctbldoc, "
                     "firstname_tblcontacts_ctbldoc, "
                     "lastname_tblcontacts_ctbldoc, "
-                    "preface_tbldoc "
+                    "prefacetext_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",

@@ -4,13 +4,62 @@ quotation.js
 
             var msg="Hello Javascript2";
                     console.log(msg);
+
+                    // Store
+localStorage.lastname = "Smith";
+// Retrieve
+ console.log(localStorage.lastname);
 /*
 $(window).on("unload", function(){
   alert('Bye.');
 });
 */
 $(function () {
-$("#tabs").tabs();
+//$("#tabs").tabs({ active: 0 });
+
+
+    var index1 = 'qpsstats-active-tab1';
+    //  Define friendly data store name
+    var dataStore1 = window.sessionStorage;
+    var oldIndex1 = 0;
+    //  Start magic!
+    try {
+        // getter: Fetch previous value
+        oldIndex1 = dataStore1.getItem(index1);
+    } catch(e) {}
+
+    $( "#tabs1" ).tabs({
+        active: oldIndex1,
+        activate: function(event, ui) {
+            //  Get future value
+            var newIndex1 = ui.newTab.parent().children().index(ui.newTab);
+            //  Set future value
+            try {
+                dataStore1.setItem( index1, newIndex1 );
+            } catch(e) {}
+        }
+    });
+    var index2 = 'qpsstats-active-tab2';
+    //  Define friendly data store name
+    var dataStore2 = window.sessionStorage;
+    var oldIndex2 = 0;
+    //  Start magic!
+    try {
+        // getter: Fetch previous value
+        oldIndex2 = dataStore2.getItem(index2);
+    } catch(e) {}
+
+    $( "#tabs2" ).tabs({
+        active: oldIndex2,
+        activate: function(event, ui) {
+            //  Get future value
+            var newIndex2 = ui.newTab.parent().children().index(ui.newTab);
+            //  Set future value
+            try {
+                dataStore2.setItem( index2, newIndex2 );
+            } catch(e) {}
+        }
+    });
 
 $('#title').click(function() {
     $('#title').hide();
