@@ -12,7 +12,8 @@ def docs(request):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT docid_tbldoc, Pcd_tblDoc, Town_tblDoc, Doc_kindid_tblDoc_id, companyname_tblcompanies_ctbldoc, firstname_tblcontacts_ctbldoc, lastname_tblcontacts_ctbldoc, creationtime_tbldoc "
                     "FROM quotation_tbldoc "
-                    "order by docid_tbldoc desc")
+                    "WHERE obsolete_tbldoc = 0 "
+                    "order by docid_tbldoc desc ")
     docs = cursor1.fetchall()
     # docs = tblDoc.objects.all()
     return render(request, 'quotation/docs.html', {'docs': docs})
@@ -67,3 +68,16 @@ def docselector(request, pk):
         return redirect('quotationform', pk=pk)
     elif dockind == 2:  # Order
         return redirect('orderform', pk=pk)
+def docremove(request, pk):
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "UPDATE quotation_tbldoc SET "
+        "obsolete_tbldoc=1 "
+        "WHERE docid_tbldoc =%s ", [pk])
+
+    transaction.commit()
+
+    return redirect('docs')
+
+
+

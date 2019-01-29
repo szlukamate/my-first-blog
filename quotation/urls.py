@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^$', views.welcome, name='welcome'),
     url(r'^doc/(?P<pk>[0-9]+)/$', views.docselector, name='docselector'),
     url(r'docadd/$', views.docadd, name='docadd'),
+    url(r'docremove/(?P<pk>[0-9]+)/$', views.docremove, name='docremove'),
     url(r'^quotationform/(?P<pk>[0-9]+)/$', views.quotationform, name='quotationform'),
     url(r'^quotationprint/(?P<docid>[0-9]+)/$', views.quotationprint, name='quotationprint'),
     url(r'^orderform/(?P<pk>[0-9]+)/$', views.orderform, name='orderform'),
