@@ -1,46 +1,41 @@
 {% extends 'quotation/base.html' %}
-	{% block content %}
+{% load staticfiles%}
+{% block content %}
           
 
 				<p align="center" style="font-size:160%;" id="title" >Companyedit Form</p>
-				<form action="{% url 'companyedit' pk=particularcompany.0.0 %}" method="post">{% csrf_token %}
-					<input type="text" value="{{ particularcompany.0.1}}" name="companyname">
-					<input type="submit" value="Sub">
-				</form>
-				<input id="withoutformbutton" type="button" value="Sub2">
-				<p>{{ particularcompany.0.1}}</p>
-							<div class="container">
-										<table class="table table-striped"">
-											<thead>
+				<div id="tabs1">
+						  <ul>
+							<li><a href="#tabs1fragment-1">Company</a></li>
+							<li><a href="#tabs1fragment-2">Data</a></li>
+							<li><a href="#tabs1fragment-3">Default</a></li>
+						  </ul>
+						  <div id="tabs1fragment-1">
+							<form action="{% url 'companyedit' pk=particularcompany.0.0 %}" method="post">{% csrf_token %}
+								<input type="text" value="{{ particularcompany.0.0}}" name="companyid" size="3" disabled><br>
+								<input type="text" value="{{ particularcompany.0.1}}" name="companyname">
+								<input type="submit" value="Sub">
+							</form>
 
-												<tr>
-													<td>f1</td>
-												</tr>
-											</thead>
+						  </div>
+						  <div id="tabs1fragment-2">
 
-											<tbody>
-											{% for contact in contacts %}
+						  </div>
+						  <div id="tabs1fragment-3">
+								<select class="selection" table="tblprefaceforquotation" fieldname="prefaceidforquotation_tblprefaceforquotation" companyid="{{ particularcompany.0.0}}">
+										<option value="" disabled selected>{{ selecteddefaultprefacetextforquotation }}</option>
+									{% for defaultprefacechoiceforquotation in defaultprefacechoicesforquotation %}
+										<option value="{{ defaultprefaceforquotation.0 }}">{{ defaultprefacechoiceforquotation.1}}</option>
+									{% endfor %}
+								</select>
+						  </div>
 
-
-												<tr>
-													<td>{{ contact.1}}</td>
-												</tr>
-
-
-
-											{% endfor %}
-											</tbody>
-
-										</table>
-							</div>
+				</div>
 
 							{% for contact in contacts %}
 								<input type="text" value="{{ contact.0}}" name="id1"><input type="text" value="{{ contact.1}}" name="firstname"><input type="text" value="{{ contact.2}}" name="lastname">
 								<br>
-
-
-
-
 							{% endfor %}
+				<script type="text/javascript" src="{% static 'js/companyedit.js' %}"></script>
 
 	{% endblock %}

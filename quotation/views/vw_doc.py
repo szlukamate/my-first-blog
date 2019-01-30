@@ -23,9 +23,59 @@ def docadd(request):
     if request.method == "POST":
         dockindidfornewdoc = request.POST['dockindidfornewdoc']
         contactidfornewdoc = request.POST['contactidfornewdoc']
+        cursor1 = connection.cursor()
+        cursor1.execute(
+            "SELECT contactid_tblcontacts, companyname_tblcompanies, Companyid_tblCompanies, "
+            "Firstname_tblcontacts, lastname_tblcontacts "
+            "FROM quotation_tblcontacts "
+            "JOIN quotation_tblcompanies "
+            "ON quotation_tblcompanies.companyid_tblcompanies = quotation_tblcontacts.companyid_tblcontacts_id "
+            "WHERE contactid_tblcontacts =%s", [contactidfornewdoc])
+        companyandcontactdata = cursor1.fetchall()
+        for instancesingle in companyandcontactdata:
+            companynameclone = instancesingle[1]
+            companyid = instancesingle[2] # for the lookup the default values in the tblcompanies (i.e. defaultpreface)
+            firstnameclone = instancesingle[3]
+            lastnameclone = instancesingle[4]
+
+        cursor5 = connection.cursor()
+        cursor5.execute(
+            "SELECT defaultbackpageidforquotation_tblcompanies, defaultprefaceidforquotation_tblcompanies "
+            "FROM quotation_tblcompanies "
+            "WHERE Companyid_tblCompanies = %s", [companyid])
+        defaultsfromtblcompanies = cursor5.fetchall()
+        for instancesingle in defaultsfromtblcompanies:
+            defaultbackpageidforquotation = instancesingle[0]
+            defaultprefaceidforquotation = instancesingle[1]
+
+        cursor6 = connection.cursor()
+        cursor6.execute(
+            "SELECT backpagetextforquotation_tblbackpageforquotation "
+            "FROM quotation_tblbackpageforquotation "
+            "WHERE backpageidforquotation_tblbackpageforquotation = %s", [defaultbackpageidforquotation])
+        backpageset = cursor6.fetchall()
+        for instancesingle in backpageset:
+            backpagecloneforquotation = instancesingle[0]
+
+        cursor7 = connection.cursor()
+        cursor7.execute(
+            "SELECT prefacetextforquotation_tblprefaceforquotation "
+            "FROM quotation_tblprefaceforquotation "
+            "WHERE prefaceidforquotation_tblprefaceforquotation = %s", [defaultprefaceidforquotation])
+        prefaceset = cursor7.fetchall()
+        for instancesingle in prefaceset:
+            prefacecloneforquotation = instancesingle[0]
+
         cursor2 = connection.cursor()
-        cursor2.execute("INSERT INTO quotation_tbldoc ( Doc_kindid_tblDoc_id, Contactid_tblDoc_id) VALUES (%s,%s)",
-                        [dockindidfornewdoc, contactidfornewdoc])
+        cursor2.execute("INSERT INTO quotation_tbldoc "
+                        "( Doc_kindid_tblDoc_id, "
+                        "Contactid_tblDoc_id,"
+                        "companyname_tblcompanies_ctbldoc, "
+                        "firstname_tblcontacts_ctbldoc, "
+                        "lastname_tblcontacts_ctbldoc, "
+                        "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
+                        "backpagetextforquotation_tblbackpageforquotation_ctbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+                        [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone, prefacecloneforquotation, backpagecloneforquotation])
 
         cursor3 = connection.cursor()
         cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc")

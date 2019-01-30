@@ -33,29 +33,83 @@ def companyremove(request,pk):
 
 def companyedit(request, pk):
 
+        if request.method == "POST":
+            companyname = request.POST['companyname']
+            cursor2 = connection.cursor()
+            cursor2.execute(
+                "UPDATE quotation_tblcompanies "
+                "SET companyname_tblcompanies = %s "
+                "WHERE companyid_tblcompanies = %s", [companyname, pk])
 
+            #else:
+        cursor0 = connection.cursor()
+        cursor0.execute(
+            "SELECT companyid_tblcompanies, "
+            "companyname_tblcompanies, "
+            "defaultprefaceidforquotation_tblcompanies, "
+            "defaultbackpageidforquotation_tblcompanies "
+            "FROM quotation_tblcompanies "
+            "WHERE companyid_tblcompanies=%s ",
+            [pk])
+        particularcompany = cursor0.fetchall()
+        for instancesingle in particularcompany:
+            selecteddefaultprefaceidforquotation = instancesingle[2]
 
-                if request.method == "POST":
-                    companyname = request.POST['companyname']
-                    cursor2 = connection.cursor()
-                    cursor2.execute(
-                        "UPDATE quotation_tblcompanies "
-                        "SET companyname_tblcompanies = %s "
-                        "WHERE companyid_tblcompanies = %s", [companyname, pk])
+        cursor3 = connection.cursor()
+        cursor3.execute(
+            "SELECT "
+            "prefaceidforquotation_tblprefaceforquotation, "
+            "prefacetextforquotation_tblprefaceforquotation "
+            "FROM quotation_tblprefaceforquotation "
+            "WHERE prefaceidforquotation_tblprefaceforquotation=%s ",
+            [selecteddefaultprefaceidforquotation])
+        selecteddefaultprefacetextforquotationset = cursor3.fetchall()
+        for instancesingle in selecteddefaultprefacetextforquotationset:
+            selecteddefaultprefacetextforquotation = instancesingle[1]
 
-                    #else:
-                cursor0 = connection.cursor()
-                cursor0.execute(
-                    "SELECT companyid_tblcompanies, companyname_tblcompanies FROM quotation_tblcompanies WHERE companyid_tblcompanies=%s ",
-                    [pk])
-                particularcompany = cursor0.fetchall()
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            "SELECT "
+            "prefaceidforquotation_tblprefaceforquotation, "
+            "prefacetextforquotation_tblprefaceforquotation "
+            "FROM quotation_tblprefaceforquotation")
+        defaultprefacechoicesforquotation = cursor2.fetchall()
 
+        cursor1 = connection.cursor()
+        cursor1.execute(
+            "SELECT contactid_tblcontacts, firstname_tblcontacts, lastname_tblcontacts FROM quotation_tblcontacts WHERE companyid_tblcontacts_id=%s ",
+            [pk])
+        contacts = cursor1.fetchall()
 
-                cursor1 = connection.cursor()
-                cursor1.execute(
-                    "SELECT contactid_tblcontacts, firstname_tblcontacts, lastname_tblcontacts FROM quotation_tblcontacts WHERE companyid_tblcontacts_id=%s ",
-                    [pk])
-                contacts = cursor1.fetchall()
-                #    form = quotationroweditForm(instance=quotationrow)
+        return render(request, 'quotation/companyedit.html', {'particularcompany': particularcompany, 'defaultprefacechoicesforquotation': defaultprefacechoicesforquotation, 'selecteddefaultprefacetextforquotation': selecteddefaultprefacetextforquotation, 'contacts': contacts })
+def companyuniversalselections (request):
+    if request.method == 'POST':
+        productidinjs = request.POST['productidinjs']
+        currencyidinjs = request.POST['currencyidinjs']
 
-                return render(request, 'quotation/companyedit.html', {'particularcompany': particularcompany, 'contacts': contacts })
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT currencyisocode_tblcurrency "
+        "FROM quotation_tblproduct "
+        "JOIN quotation_tblcurrency "
+        "ON currencyid_tblcurrency = currencyid_tblcurrency_fktblproduct "
+        "WHERE currencyid_tblcurrency= %s ", [currencyidinjs])
+    currencyisocoderecords = cursor0.fetchall()
+    for instancesingle in currencyisocoderecords:
+        currencyisocodeforrow= instancesingle[0]
+
+    cursor2 = connection.cursor()
+    cursor2.execute("UPDATE quotation_tblproduct SET "
+                    "currencyisocode_tblcurrency_ctblproduct= %s "
+                    "WHERE productid_tblproduct =%s ", [currencyisocodeforrow, productidinjs])
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT currencyisocode_tblcurrency_ctblproduct "
+        "FROM quotation_tblproduct "
+        "WHERE productid_tblproduct= %s ", [productidinjs])
+    results = cursor3.fetchall()
+
+    json_data = json.dumps(results)
+
+    return HttpResponse(json_data, content_type="application/json")

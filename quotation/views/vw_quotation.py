@@ -56,7 +56,8 @@ def quotationform(request, pk):
                     "companyname_tblcompanies_ctbldoc, "
                     "firstname_tblcontacts_ctbldoc, "
                     "lastname_tblcontacts_ctbldoc,"
-                    "prefacetext_tbldoc "
+                    "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
+                    "backpagetextforquotation_tblbackpageforquotation_ctbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
@@ -71,6 +72,9 @@ def quotationform(request, pk):
     companyid = cursor4.fetchall()
 
     cursor3 = connection.cursor()
+    cursor3 = connection.cursor()
+    # if there is not such product already not show goto
+
     cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
                     "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details`, "
                     "purchase_price_tblproduct_ctblDoc_details, salesprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
@@ -144,6 +148,8 @@ def quotationrowedit(request, pk):
             form = quotationroweditForm(instance=quotationrow)
         return render(request, 'quotation/quotationrowedit.html', {'form': form})
 '''
+
+
 
 
 def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml ):
@@ -328,52 +334,3 @@ def quotationprint (request, docid):
 
 
     return render(request, 'quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails, 'docdetailscount':docdetailscount})
-def quotationprintpre (request, docid):
-    cursor1 = connection.cursor()
-    cursor1.execute("SELECT "
-                    "Docid_tblDoc, "
-                    "Contactid_tblDoc_id, "
-                    "Doc_kindid_tblDoc_id, "
-                    "companyname_tblcompanies_ctbldoc, "
-                    "firstname_tblcontacts_ctbldoc, "
-                    "lastname_tblcontacts_ctbldoc "
-                    "FROM quotation_tbldoc "
-                    "WHERE docid_tbldoc=%s "
-                    "order by docid_tbldoc desc",
-                    [docid])
-    doc = cursor1.fetchall()
-
-    cursor3 = connection.cursor()
-    cursor3.execute(
-        "SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
-        "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details`, "
-        "purchase_price_tblproduct_ctblDoc_details, salesprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
-        "Doc_detailsid_tblDoc_details, COALESCE(Productid_tblProduct, 0) "
-        "FROM quotation_tbldoc_details "
-        "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
-        "ON "
-        "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
-        "WHERE docid_tbldoc_details_id=%s "
-        "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
-        [docid])
-    docdetails = cursor3.fetchall()
-
-    cursor4 = connection.cursor()
-    cursor4.execute(
-        "SELECT  COUNT(Doc_detailsid_tblDoc_details) AS numberofrows "
-        "FROM quotation_tbldoc_details "
-        "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
-        "ON "
-        "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
-        "WHERE docid_tbldoc_details_id=%s "
-        "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
-        [docid])
-    results = cursor4.fetchall()
-
-    for instancesingle in results:
-        docdetailscount = instancesingle[0]
-
-#    import pdb;
-#    pdb.set_trace()
-
-    return render(request, 'quotation/quotationprintpre.html', {'doc': doc, 'docdetails': docdetails, 'docdetailscount':docdetailscount})

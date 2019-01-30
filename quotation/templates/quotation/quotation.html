@@ -4,18 +4,18 @@
           
 				<span id="quotationtemplate"></span>
 				<p align="center" id="title" style="font-size:173%;">Quotation Form</p>{% csrf_token %}
-						<div id="tabs2">
+						<div id="tabs1">
 						  <ul>
-							<li><a href="#tabs2fragment-1">Company</a></li>
-							<li><a href="#tabs2fragment-2">New Docs</a></li>
+							<li><a href="#tabs1fragment-1">Company</a></li>
+							<li><a href="#tabs1fragment-2">New Docs</a></li>
 
 						  </ul>
-						  <div id="tabs2fragment-1">
+						  <div id="tabs1fragment-1">
 								<p>Companyname:{{ doc.0.3}} Companyid:{{ companyid.0.0}}<a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a></p>
 								<p>Firstname:{{ doc.0.4}} </p>
 								<p>Lastname:{{ doc.0.5}} </p>
 						  </div>
-						  <div id="tabs2fragment-2">
+						  <div id="tabs1fragment-2">
 								<p>Lastname:{{ doc.0.5}} </p>
 						  </div>
 						</div>
@@ -35,19 +35,20 @@
 				<p>Contactid:{{ doc.0.1}} </p>
 				<p><span>Docid:</span><span id="quotationdocid">{{ doc.0.0}}</span></p>
 
-						<div id="tabs1">
+						<div id="tabs2">
 						  <ul>
-							<li><a href="#tabs1fragment-1">Quotation</a></li>
-							<li><a href="#tabs1fragment-2">Items</a></li>
+							<li><a href="#tabs2fragment-1">Quotation</a></li>
+							<li><a href="#tabs2fragment-2">Items</a></li>
+						    <li><a href="#tabs2fragment-3">Backpage</a></li>
 
 						  </ul>
-						  <div id="tabs1fragment-1">
-							  <label for="preface_tbldoc" >Preface</label>
+						  <div id="tabs2fragment-1">
+							  <label for="prefacetext_tbldoc" >Preface</label>
 							  <textarea rows="8" cols="50" class="updateabletbldoc" name="preface_tbldoc">
 									{{ doc.0.6}}
 							  </textarea>
 						  </div>
-						  <div id="tabs1fragment-2">
+						  <div id="tabs2fragment-2">
 
 
 							  <p  align="right">
@@ -99,6 +100,11 @@
 											{% endfor %}
 
 						  </div>
+						  <div id="tabs2fragment-3">
+							  <label for="backpagetext_tbldoc" >Backpage</label>
+							  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetext_tbldoc">
+									{{ doc.0.7}}
+							  </textarea>
 
 						</div>
 

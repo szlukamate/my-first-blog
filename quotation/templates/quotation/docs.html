@@ -36,7 +36,7 @@
 														<td>{{ tblDoc.1}}</td>
 														<td>{{ tblDoc.2}}</td>
 														<td>{{ tblDoc.3}}</td>
-														<td>{{ tblDoc.7|date:"M.d.Y" }}</td>
+														<td>{{ tblDoc.7|date:"M.d.Y" }} {{ tblDoc.7|time:"H:i" }}</td>
 														<td><a href="{% url 'docremove' pk=tblDoc.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
 
 													</tr>
