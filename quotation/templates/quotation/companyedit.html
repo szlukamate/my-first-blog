@@ -4,6 +4,10 @@
           
 
 				<p align="center" style="font-size:160%;" id="title" >Companyedit Form</p>
+				<p align="center" style="font-size:100%;" id="companyid" companyid="{{ particularcompany.0.0 }}" >Companyid: {{ particularcompany.0.0 }}</p>
+				<div id="sqlsaving">
+				</div><br>
+
 				<div id="tabs1">
 						  <ul>
 							<li><a href="#tabs1fragment-1">Company</a></li>
@@ -22,12 +26,22 @@
 
 						  </div>
 						  <div id="tabs1fragment-3">
-								<select class="selection" table="tblprefaceforquotation" fieldname="prefaceidforquotation_tblprefaceforquotation" companyid="{{ particularcompany.0.0}}">
-										<option value="" disabled selected>{{ selecteddefaultprefacetextforquotation }}</option>
+							  	<label >Prefaceforquotation</label>
+								<select class="selection" fieldnamefromname = "prefacenameforquotation_tblprefaceforquotation" fieldnamefromid = "prefaceidforquotation_tblprefaceforquotation" tablenamefrom="quotation_tblprefaceforquotation" fieldnameto="defaultprefaceidforquotation_tblcompanies" >
+										<option value="" disabled selected>{{ selecteddefaultprefacenameforquotation }}</option>
 									{% for defaultprefacechoiceforquotation in defaultprefacechoicesforquotation %}
-										<option value="{{ defaultprefaceforquotation.0 }}">{{ defaultprefacechoiceforquotation.1}}</option>
+										<option value="{{ defaultprefacechoiceforquotation.0 }}">{{ defaultprefacechoiceforquotation.1}}</option>
+									{% endfor %}
+								</select><br>
+							  	<label >Backpageforquotation</label>
+								<select class="selection" fieldnamefromname = "backpagenameforquotation_tblbackpageforquotation" fieldnamefromid = "backpageidforquotation_tblbackpageforquotation" tablenamefrom="quotation_tblbackpageforquotation" fieldnameto="defaultbackpageidforquotation_tblcompanies" >
+										<option value="" disabled selected>{{ selecteddefaultbackpagenameforquotation }}</option>
+									{% for defaultbackpagechoiceforquotation in defaultbackpagechoicesforquotation %}
+										<option value="{{ defaultbackpageforquotation.0 }}">{{ defaultbackpagechoiceforquotation.1}}</option>
 									{% endfor %}
 								</select>
+
+
 						  </div>
 
 				</div>

@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^quotationrowremove/(?P<pk>[0-9]+)/$', views.quotationrowremove, name='quotationrowremove'),
     url('searchquotationcontacts', views.searchquotationcontacts, name='searchquotationcontacts'),
     url('productsalespricefieldupdate', views.productsalespricefieldupdate, name='productsalespricefieldupdate'),
+    url('companyuniversalselections', views.companyuniversalselections, name='companyuniversalselections'),
 
 ]
