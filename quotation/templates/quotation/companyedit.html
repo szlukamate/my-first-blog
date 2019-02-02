@@ -37,7 +37,7 @@
 								<select class="selection" fieldnamefromname = "backpagenameforquotation_tblbackpageforquotation" fieldnamefromid = "backpageidforquotation_tblbackpageforquotation" tablenamefrom="quotation_tblbackpageforquotation" fieldnameto="defaultbackpageidforquotation_tblcompanies" >
 										<option value="" disabled selected>{{ selecteddefaultbackpagenameforquotation }}</option>
 									{% for defaultbackpagechoiceforquotation in defaultbackpagechoicesforquotation %}
-										<option value="{{ defaultbackpageforquotation.0 }}">{{ defaultbackpagechoiceforquotation.1}}</option>
+										<option value="{{ defaultbackpagechoiceforquotation.0 }}">{{ defaultbackpagechoiceforquotation.1}}</option>
 									{% endfor %}
 								</select>
 

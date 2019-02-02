@@ -6,6 +6,8 @@ quotation.js
                     console.log(msg);
 $(function () {
 
+    $('a[href="/quotation/products/0/"]').parent().addClass('active'); //activate products tab on navbar
+
     $('#title').click(function() {
         $('#title').hide();
 

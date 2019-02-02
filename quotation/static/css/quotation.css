@@ -32,15 +32,16 @@ body {
     background-color: #fff5e8;
     height:3000px;
     width: 100%;
- //   position: absolute;
- //   top: 0px;
+
 }
 .page-header {
-    background-color: #a5ff84;
+    //background-color: #a5ff84;
     margin-top: 0;
+    right: 0;
     padding: 0px 20px 0px 3px;
     height: 30px;
-    //position: fixed;
+    position: absolute;
+    z-index: 100;
 }
 
 .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
@@ -71,9 +72,9 @@ h1, h2, h3, h4 {
 }
 
 .top-menu, .top-menu:hover, .top-menu:visited {
-    color: #ffffff;
+    color: #000000;
     float: right;
-    font-size: 16pt;
+    font-size: 12pt;
     margin-right: 20px;
 }
 
@@ -92,4 +93,10 @@ h1, h2, h3, h4 {
 }
 #tabs2 {
     width: 350mm;
+}
+#mainmenu {
+padding-left: 0;
+margin-left:0;
+max-width: 550px;
+}
 }
