@@ -1,0 +1,21 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+ 	{% block content %}
+	                    <div class="post">
+						   <p align="center" style="font-size:260%">Prefaces</p>
+
+								{% for prefaceforquotation in  prefacesforquotation %}
+							<form action="{% url 'coredata_prefaceforquotation' %}" method="post">{% csrf_token %}
+								<label for="Productid_tblDoc_details_id" >Preface id and name:</label>
+								<input type="text"  value="{{ prefaceforquotation.0 }}" name="prefaceid" size="3" readonly="readonly">
+								<input type="text"  value="{{ prefaceforquotation.1 }}" name="prefacename" >
+								<br>
+								<textarea rows="4" cols="50" name="prefacetext" style="white-space: pre-wrap;">{{ prefaceforquotation.2 }}</textarea>
+
+                                <input type="submit" value="Save preface">
+
+							</form>
+								{% endfor %}
+
+
+	{% endblock %}  

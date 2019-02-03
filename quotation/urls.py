@@ -26,5 +26,6 @@ urlpatterns = [
     url('searchquotationcontacts', views.searchquotationcontacts, name='searchquotationcontacts'),
     url('productsalespricefieldupdate', views.productsalespricefieldupdate, name='productsalespricefieldupdate'),
     url('companyuniversalselections', views.companyuniversalselections, name='companyuniversalselections'),
+    url(r'coredata_prefaceforquotation/$', views.coredata_prefaceforquotation, name='coredata_prefaceforquotation'),
 
 ]
