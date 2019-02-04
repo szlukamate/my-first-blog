@@ -54,6 +54,9 @@ main();
 
             wrapphrase= wrapphrase + "span[name=\"htmlinsertbefore\"][rowid=\"" + towrap[j] + "\"], div[class=\"item-container\"][rowid=\"" + towrap[j] + "\"], span[name=\"htmlinsertafter\"][rowid=\"" + towrap[j] + "\"], "
             }
+        if (pagenumber == 2 ) { // wrap prefacespec textarea top of second page
+            addprefacespectowrapphrase();
+        }
         wrapphrase = wrapphrase.slice(0, -2); // remove comma from end (-2 cause there is an adding space)
         jQuery.globalEval( "$('" + wrapphrase + "').wrapAll('<div class=\"page\"> </div>');" );
         sumheight=0;
@@ -62,6 +65,9 @@ main();
         headerinsert(minitemwrapped); // which item insertbefore
         footerinsert(maxitemwrapped, pagenumber);
 
+    }
+    function addprefacespectowrapphrase(){
+            wrapphrase= "#prefacespec, " + wrapphrase;
     }
     function headerinsert(rowid){
     $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 40mm" >Description</span><span style="margin-left: 60mm" >Qty</span></div></div>');

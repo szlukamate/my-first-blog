@@ -39,14 +39,15 @@
 						  <ul>
 							<li><a href="#tabs2fragment-1">Quotation</a></li>
 							<li><a href="#tabs2fragment-2">Items</a></li>
-						    <li><a href="#tabs2fragment-3">Backpage</a></li>
+						    <li><a href="#tabs2fragment-3">Preface</a></li>
+							<li><a href="#tabs2fragment-4">Backpage</a></li>
 
 						  </ul>
 						  <div id="tabs2fragment-1">
-							  <label for="prefacetext_tbldoc" >Preface</label>
-							  <textarea rows="8" cols="50" class="updateabletbldoc" name="preface_tbldoc">
-									{{ doc.0.6}}
-							  </textarea>
+							  <label for="prefacespecforquotation_tbldoc" >Prefacespec</label>
+							  <textarea rows="10" cols="60" class="updateabletbldoc" name="prefacespecforquotation_tbldoc">{{ doc.0.8}}</textarea>
+							  <label for="subject_tbldoc" >Subject</label>
+							  <input type="text" class="updateabletbldoc" value="{{ doc.0.9}}" name="subject_tbldoc" >
 						  </div>
 						  <div id="tabs2fragment-2">
 
@@ -101,12 +102,14 @@
 
 						  </div>
 						  <div id="tabs2fragment-3">
-							  <label for="backpagetext_tbldoc" >Backpage</label>
-							  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetext_tbldoc">
-									{{ doc.0.7}}
-							  </textarea>
+							  <label for="prefacetextforquotation_tblprefaceforquotation_ctbldoc" >Preface</label>
+							  <textarea rows="8" cols="50" class="updateabletbldoc" name="prefacetextforquotation_tblprefaceforquotation_ctbldoc">{{ doc.0.6}}</textarea>
 
-						</div>
+						  </div>
+						  <div id="tabs2fragment-4">
+							  <label for="backpagetext_tbldoc" >Backpage</label>
+							  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetext_tbldoc">{{ doc.0.7}}</textarea>
+						  </div>
 
 				<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
 

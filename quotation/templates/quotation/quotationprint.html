@@ -13,10 +13,14 @@
 				<img id="logo" src="{% static "pic/abstract-logos.png" %}" alt="Logo header template" ">
 				<p class="companyname">{{ doc.0.3}} </p>
 				<p class="contactname">To: {{ doc.0.4}} {{ doc.0.5}} </p>
+				<p class="subject">Subject: Technical and cost quotation
+					{% if doc.0.8 != "" %}
+						 -
+
+					{% endif %}
+					{{ doc.0.8 }}</p>
 				<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
-				  <textarea rows="8" cols="50" class="preface" name="preface_tbldoc" wrap="off" disabled>
-					{{ doc.0.6}}
-				  </textarea>
+				<p><textarea class="preface" rows="18" cols="70" wrap="off" disabled>{{ doc.0.6}}</textarea></p>
 				<div class="footerdiv" >
 					<hr>
 					<span class="footerspan1">Please see the conditions in details on the last page<br></span>
@@ -24,7 +28,12 @@
 				</div>
 		</div>
 						{% for tblDoc_details in docdetails %}
+						{% if forloop.counter0 == 0 %}
+
+							<div class="prefacespec" id="prefacespec" contentEditable="true">{{ doc.0.7}}</div>
+						{% endif %}
 						<span name="htmlinsertbefore" rowid="{{ forloop.counter0 }}"></span>
+
 						<div rowid="{{ forloop.counter0 }}" class="item-container">
 
 									<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{tblDoc_details.4}}.</span>
@@ -51,9 +60,9 @@
 						</div>
 						<span name="htmlinsertafter" rowid="{{ forloop.counter0 }}"></span>
 						{% endfor %}
+		<div class="page">
 
-
-
+		</div>
 
 
 		<script type="text/javascript" src="{% static 'js/quotationprint.js' %}"></script>

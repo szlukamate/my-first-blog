@@ -26,10 +26,30 @@ def coredata_prefaceforquotation(request):
                 "SELECT "
                 "prefaceidforquotation_tblprefaceforquotation, "
                 "prefacenameforquotation_tblprefaceforquotation, "
-                "prefacetextforquotation_tblprefaceforquotation "
-                "FROM quotation_tblprefaceforquotation ")
+                "prefacetextforquotation_tblprefaceforquotation, "
+                "creationtime_tblprefaceforquotation "
+                "FROM quotation_tblprefaceforquotation "
+                "WHERE obsolete_tblprefaceforquotation =0")
 
 
         prefacesforquotation = cursor3.fetchall()
 
         return render(request, 'quotation/prefaceforquotation.html', {'prefacesforquotation': prefacesforquotation })
+
+def coredata_prefaceforquotationadd(request):
+        cursor1 = connection.cursor()
+        cursor1.execute(
+                "INSERT INTO quotation_tblprefaceforquotation (prefacenameforquotation_tblprefaceforquotation) VALUES ('New')")
+        transaction.commit()
+
+        return redirect('coredata_prefaceforquotation')
+def coredata_prefaceforquotationremove(request, pk):
+        cursor1 = connection.cursor()
+        cursor1.execute(
+                "UPDATE quotation_tblprefaceforquotation SET "
+                "obsolete_tblprefaceforquotation=1 "
+                "WHERE prefaceidforquotation_tblprefaceforquotation =%s ", [pk])
+
+        transaction.commit()
+
+        return redirect('coredata_prefaceforquotation')

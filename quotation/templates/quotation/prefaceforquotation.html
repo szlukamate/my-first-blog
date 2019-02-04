@@ -2,17 +2,20 @@
 {% load staticfiles%}
  	{% block content %}
 	                    <div class="post">
-						   <p align="center" style="font-size:260%">Prefaces</p>
+						   	<p align="center" style="font-size:260%">Prefaces</p>
+							<p align="right"><a href="{% url 'coredata_prefaceforquotationadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 
 								{% for prefaceforquotation in  prefacesforquotation %}
 							<form action="{% url 'coredata_prefaceforquotation' %}" method="post">{% csrf_token %}
-								<label for="Productid_tblDoc_details_id" >Preface id and name:</label>
+								<label for="Productid_tblDoc_details_id" >Preface id and name and created:</label>
 								<input type="text"  value="{{ prefaceforquotation.0 }}" name="prefaceid" size="3" readonly="readonly">
 								<input type="text"  value="{{ prefaceforquotation.1 }}" name="prefacename" >
-								<br>
-								<textarea rows="4" cols="50" name="prefacetext" style="white-space: pre-wrap;">{{ prefaceforquotation.2 }}</textarea>
+								<input type="text"  value="{{ prefaceforquotation.3|date:'M.d.Y' }} {{ prefaceforquotation.3|time:'H:i' }}" name="creationtime" readonly="readonly">
 
-                                <input type="submit" value="Save preface">
+								<br>
+								<textarea rows="4" cols="100" name="prefacetext" wrap="physical" style="white-space: pre-wrap;">{{ prefaceforquotation.2 }}</textarea>
+
+                               	<input type="submit" value="Save preface"><a href="{% url 'coredata_prefaceforquotationremove' pk=prefaceforquotation.0 %}"><span class="glyphicon glyphicon-remove"></span></a>
 
 							</form>
 								{% endfor %}

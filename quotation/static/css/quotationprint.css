@@ -87,7 +87,7 @@ border-top: 3px double #8c8b8b;
 }
 .header {
 
-      position: absolute;
+      position: relative;
       top: 20mm;
       width: 170mm;
       height: 10mm;
@@ -122,8 +122,10 @@ border-top: 3px double #8c8b8b;
       margin-left: 20mm;
 }
 .preface {
+        position: relative;
+        top: 10mm;
         font-family: "Arial", Times, serif;
-        font-size: 20px;
+        font-size: 14px;
         margin-left: 20mm;
         overflow: auto;
         resize: none;
@@ -131,5 +133,31 @@ border-top: 3px double #8c8b8b;
         border: none;
         background-color: white;
         color: #000;
+        line-height: 20px; /* 4px +12px + 4px */
+
+}
+.subject {
+        position: relative;
+        top: 7mm;
+        font-family: "Arial", Times, serif;
+        font-size: 17px;
+        margin-left: 20mm;
+        text-decoration: underline;
+}
+#prefacespec {
+        position: relative;
+        top: 20mm;
+        font-family: "Arial", Times, serif;
+        font-size: 14px;
+        margin-left: 20mm;
+        overflow: hidden;
+        resize: none;
+        outline: none;
+        border: none;
+        background-color: white;
+        color: #000;
+        line-height: 20px; /* 4px +12px + 4px */
+        display:block;
+        white-space: pre;
 
 }

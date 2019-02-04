@@ -27,5 +27,7 @@ urlpatterns = [
     url('productsalespricefieldupdate', views.productsalespricefieldupdate, name='productsalespricefieldupdate'),
     url('companyuniversalselections', views.companyuniversalselections, name='companyuniversalselections'),
     url(r'coredata_prefaceforquotation/$', views.coredata_prefaceforquotation, name='coredata_prefaceforquotation'),
+    url(r'coredata_prefaceforquotationadd/$', views.coredata_prefaceforquotationadd, name='coredata_prefaceforquotationadd'),
+    url(r'coredata_prefaceforquotationremove/(?P<pk>[0-9]+)/$', views.coredata_prefaceforquotationremove, name='coredata_prefaceforquotationremove'),
 
 ]
