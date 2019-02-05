@@ -23,6 +23,8 @@ def docadd(request):
     if request.method == "POST":
         dockindidfornewdoc = request.POST['dockindidfornewdoc']
         contactidfornewdoc = request.POST['contactidfornewdoc']
+
+        creatorid=request.user.id
         cursor1 = connection.cursor()
         cursor1.execute(
             "SELECT contactid_tblcontacts, companyname_tblcompanies, Companyid_tblCompanies, "
@@ -55,7 +57,7 @@ def docadd(request):
             "WHERE backpageidforquotation_tblbackpageforquotation = %s", [defaultbackpageidforquotation])
         backpageset = cursor6.fetchall()
         for instancesingle in backpageset:
-            backpagecloneforquotation = instancesingle[0]
+            backpagetextcloneforquotation = instancesingle[0]
 
         cursor7 = connection.cursor()
         cursor7.execute(
@@ -66,6 +68,14 @@ def docadd(request):
         for instancesingle in prefaceset:
             prefacecloneforquotation = instancesingle[0]
 
+        cursor8 = connection.cursor()
+        cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
+                        "WHERE Doc_kindid_tblDoc_id = %s", [dockindidfornewdoc])
+        results = cursor8.fetchall()
+        for x in results:
+            docnumber = x[0]
+            docnumber += 1
+
         cursor2 = connection.cursor()
         cursor2.execute("INSERT INTO quotation_tbldoc "
                         "( Doc_kindid_tblDoc_id, "
@@ -74,8 +84,11 @@ def docadd(request):
                         "firstname_tblcontacts_ctbldoc, "
                         "lastname_tblcontacts_ctbldoc, "
                         "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
-                        "backpagetextforquotation_tblbackpageforquotation_ctbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s)",
-                        [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone, prefacecloneforquotation, backpagecloneforquotation])
+                        "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
+                        "docnumber_tblDoc, "
+                        "creatorid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone, prefacecloneforquotation, backpagetextcloneforquotation,
+                         docnumber, creatorid])
 
         cursor3 = connection.cursor()
         cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc")

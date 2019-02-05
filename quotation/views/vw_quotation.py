@@ -59,7 +59,10 @@ def quotationform(request, pk):
                     "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
                     "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
                     "prefacespecforquotation_tbldoc, "
-                    "subject_tbldoc "
+                    "subject_tbldoc, "
+                    "docnumber_tbldoc, "
+                    "creatorid_tbldoc, "
+                    "creationtime_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
@@ -67,6 +70,8 @@ def quotationform(request, pk):
     doc = cursor1.fetchall()
     for x in doc:
         contactid = x[1]
+        creatorid = x[11]
+
     cursor4 = connection.cursor()
     cursor4.execute("SELECT companyid_tblcontacts_id "
                     "FROM quotation_tblcontacts "
@@ -89,6 +94,16 @@ def quotationform(request, pk):
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                     [pk])
     docdetails = cursor3.fetchall()
+
+    cursor10 = connection.cursor()
+    cursor10.execute("SELECT id, "
+                     "first_name, "
+                     "last_name, "
+                     "email, "
+                     "subscriptiontext_tblauth_user "
+                     "FROM auth_user "
+                    "WHERE id=%s ", [creatorid])
+    creatordata = cursor10.fetchall()
 
     cursor5 = connection.cursor()
     cursor5.execute("SELECT `firstnum_tblDoc_details`, "
@@ -123,7 +138,8 @@ def quotationform(request, pk):
     else:
         nextchapternums[3]=nextchapternums[3]+1
 
-    return render(request, 'quotation/quotation.html', {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums' : nextchapternums})
+    return render(request, 'quotation/quotation.html', {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums' : nextchapternums,
+                                                        'creatordata': creatordata})
 
 
 '''

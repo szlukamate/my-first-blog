@@ -17,8 +17,11 @@
 						  <div id="tabs1fragment-1">
 							<form action="{% url 'companyedit' pk=particularcompany.0.0 %}" method="post">{% csrf_token %}
 								<input type="text" value="{{ particularcompany.0.0}}" name="companyid" size="3" disabled><br>
-								<input type="text" value="{{ particularcompany.0.1}}" name="companyname">
-								<input type="submit" value="Sub">
+								<input type="text" value="{{ particularcompany.0.1}}" name="companyname"><br>
+								<input type="text" value="{{ particularcompany.0.4}}" name="pcd"><br>
+								<input type="text" value="{{ particularcompany.0.5}}" name="town"><br>
+								<input type="text" value="{{ particularcompany.0.6}}" name="address"><br>
+
 							</form>
 
 						  </div>
@@ -45,11 +48,14 @@
 						  </div>
 
 				</div>
-
+				<div class="contactsdiv">
 							{% for contact in contacts %}
 								<input type="text" value="{{ contact.0}}" name="id1"><input type="text" value="{{ contact.1}}" name="firstname"><input type="text" value="{{ contact.2}}" name="lastname">
+                                <input type="text" value="{{ contact.3}}" name="title"><input type="text" value="{{ contact.4}}" name="mobile"><input type="text" value="{{ contact.5}}" name="email">
 								<br>
 							{% endfor %}
+				</div>
 				<script type="text/javascript" src="{% static 'js/companyedit.js' %}"></script>
+				<link rel="stylesheet" href="{% static 'css/companyedit.css' %}">
 
 	{% endblock %}

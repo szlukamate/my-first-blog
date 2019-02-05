@@ -4,6 +4,11 @@
           
 				<span id="quotationtemplate"></span>
 				<p align="center" id="title" style="font-size:173%;">Quotation Form</p>{% csrf_token %}
+						<div id="infoframe">
+							<p >Number of Quotation: CQ-{{ doc.0.10 }}</p>
+							<p >Creator: {{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
+							<p >Time of Creation: {{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
+						</div>
 						<div id="tabs1">
 						  <ul>
 							<li><a href="#tabs1fragment-1">Company</a></li>
@@ -112,5 +117,6 @@
 						  </div>
 
 				<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
+                <link rel="stylesheet" href="{% static 'css/quotation.css' %}">
 
 	{% endblock %}

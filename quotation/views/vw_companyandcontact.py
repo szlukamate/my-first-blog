@@ -44,13 +44,16 @@ def companyedit(request, pk):
                 "SET companyname_tblcompanies = %s "
                 "WHERE companyid_tblcompanies = %s", [companyname, pk])
 
-        #default staff
+
         cursor0 = connection.cursor()
         cursor0.execute(
             "SELECT companyid_tblcompanies, "
             "companyname_tblcompanies, "
             "defaultprefaceidforquotation_tblcompanies, "
-            "defaultbackpageidforquotation_tblcompanies "
+            "defaultbackpageidforquotation_tblcompanies, "
+            "pcd_tblcompanies, "
+            "town_tblcompanies, "
+            "address_tblcompanies "
             "FROM quotation_tblcompanies "
             "WHERE companyid_tblcompanies=%s ",
             [pk])
@@ -59,6 +62,7 @@ def companyedit(request, pk):
             selecteddefaultprefaceidforquotation = instancesingle[2]
             selecteddefaultbackpageidforquotation = instancesingle[3]
 
+        # default staff
         # tblprefaceforquotation staff
         cursor3 = connection.cursor()
         cursor3.execute(
@@ -104,16 +108,23 @@ def companyedit(request, pk):
 
         cursor1 = connection.cursor()
         cursor1.execute(
-            "SELECT contactid_tblcontacts, firstname_tblcontacts, lastname_tblcontacts FROM quotation_tblcontacts WHERE companyid_tblcontacts_id=%s ",
+            "SELECT contactid_tblcontacts, "
+            "firstname_tblcontacts, "
+            "lastname_tblcontacts, "
+            "title_tblcontacts, "
+            "mobile_tblcontacts, "
+            "email_tblcontacts "
+            "FROM quotation_tblcontacts "
+            "WHERE companyid_tblcontacts_id=%s ",
             [pk])
         contacts = cursor1.fetchall()
 
         return render(request, 'quotation/companyedit.html', {'particularcompany': particularcompany,
+                                                              'contacts': contacts,
                                                               'defaultprefacechoicesforquotation': defaultprefacechoicesforquotation,
                                                               'selecteddefaultprefacenameforquotation': selecteddefaultprefacenameforquotation,
                                                               'defaultbackpagechoicesforquotation': defaultbackpagechoicesforquotation,
-                                                              'selecteddefaultbackpagenameforquotation': selecteddefaultbackpagenameforquotation,
-                                                              'contacts': contacts })
+                                                              'selecteddefaultbackpagenameforquotation': selecteddefaultbackpagenameforquotation})
 def companyuniversalselections (request):
 
     fieldvalue = request.POST['fieldvalue']
