@@ -28,7 +28,13 @@ def docadd(request):
         cursor1 = connection.cursor()
         cursor1.execute(
             "SELECT contactid_tblcontacts, companyname_tblcompanies, Companyid_tblCompanies, "
-            "Firstname_tblcontacts, lastname_tblcontacts "
+            "Firstname_tblcontacts, lastname_tblcontacts, "
+            "title_tblcontacts, "
+            "mobile_tblcontacts, "
+            "email_tblcontacts, "
+            "pcd_tblcompanies, "
+            "town_tblcompanies, "
+            "address_tblcompanies "
             "FROM quotation_tblcontacts "
             "JOIN quotation_tblcompanies "
             "ON quotation_tblcompanies.companyid_tblcompanies = quotation_tblcontacts.companyid_tblcontacts_id "
@@ -39,6 +45,12 @@ def docadd(request):
             companyid = instancesingle[2] # for the lookup the default values in the tblcompanies (i.e. defaultpreface)
             firstnameclone = instancesingle[3]
             lastnameclone = instancesingle[4]
+            titleclone = instancesingle[5]
+            mobileclone = instancesingle[6]
+            emailclone = instancesingle[7]
+            pcdclone = instancesingle[8]
+            townclone = instancesingle[9]
+            addressclone = instancesingle[10]
 
         cursor5 = connection.cursor()
         cursor5.execute(
@@ -86,9 +98,20 @@ def docadd(request):
                         "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
                         "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
                         "docnumber_tblDoc, "
-                        "creatorid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                        [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone, prefacecloneforquotation, backpagetextcloneforquotation,
-                         docnumber, creatorid])
+                        "creatorid_tbldoc, "
+                        "title_tblcontacts_ctbldoc, "
+                        "mobile_tblcontacts_ctbldoc, "
+                        "email_tblcontacts_ctbldoc, "
+                        "pcd_tblcompanies_ctbldoc, "
+                        "town_tblcompanies_ctbldoc, "
+                        "address_tblcompanies_ctbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone, prefacecloneforquotation, backpagetextcloneforquotation, docnumber, creatorid,
+                        titleclone,
+                        mobileclone,
+                        emailclone,
+                        pcdclone,
+                        townclone,
+                        addressclone])
 
         cursor3 = connection.cursor()
         cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc")

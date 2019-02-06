@@ -109,23 +109,61 @@ border-top: 3px double #8c8b8b;
       width:170mm;
       height:30mm;
 }
-.companyname {
-      font-family: "Times New Roman", Times, serif;
+
+
+
+#companyname {
+      font-family: "Arial", Times, serif;
       font-size: 20px;
       font-weight: bold;
       margin-left: 20mm;
 }
-.contactname {
-      font-family: "Times New Roman", Times, serif;
+#contactname {
+      font-family: "Arial", Times, serif;
       font-size: 20px;
       font-weight: bold;
       margin-left: 20mm;
 }
-.preface {
+#pcdandtown {
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#address {
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#mobile {
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#email {
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#subject {
+        position: relative;
+        top: 7mm;
+        font-family: "Arial", Times, serif;
+        font-size: 16px;
+        margin-left: 20mm;
+
+ }
+#salutation {
+        position: relative;
+        top: 8mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#preface {
         position: relative;
         top: 10mm;
         font-family: "Arial", Times, serif;
-        font-size: 14px;
+        font-size: 16px;
         margin-left: 20mm;
         overflow: auto;
         resize: none;
@@ -136,19 +174,84 @@ border-top: 3px double #8c8b8b;
         line-height: 20px; /* 4px +12px + 4px */
 
 }
-.subject {
-        position: relative;
-        top: 7mm;
-        font-family: "Arial", Times, serif;
-        font-size: 17px;
-        margin-left: 20mm;
-        text-decoration: underline;
+
+#numberofquotationlabel {
+      position: absolute;
+      top:72mm;
+      left:100mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+}
+#numberofquotation {
+      position: absolute;
+      top:72mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+}
+#ourcontactlabel {
+      position: absolute;
+      top:82mm;
+      left:100mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+}
+#ourcontact {
+      position: absolute;
+      top:82mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+}
+#subscriptiontext {
+      position: absolute;
+      top:91mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      white-space: pre;
+}
+#creationtimelabel {
+      position: absolute;
+      top:108mm;
+      left:100mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+}
+#creationtime {
+      position: absolute;
+      top:108mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+}
+#pageslabel {
+      position: absolute;
+      top:118mm;
+      left:100mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+}
+#pages {
+      position: absolute;
+      top:118mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
 }
 #prefacespec {
         position: relative;
-        top: 20mm;
+        top: 21mm;
         font-family: "Arial", Times, serif;
-        font-size: 14px;
+        font-size: 16px;
         margin-left: 20mm;
         overflow: hidden;
         resize: none;

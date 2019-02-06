@@ -261,5 +261,49 @@ $('#title').click(function() {
 
 
     });
+    $('.selection').change(function() {
+
+        var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
+        var fieldvalue = $(this).val();
+        var quotationdocid = $('#quotationdocid').text();
+        var fieldname = $(this).attr( "fieldname" );
+        console.log('quotationdocid:' + quotationdocid);
+            $.ajax({
+            type: 'POST',
+            url: 'quotationuniversalselections/',
+
+            data: {
+           'fieldvalue': fieldvalue,
+           'quotationdocid' : quotationdocid,
+           'fieldname': fieldname,
+           'csrfmiddlewaretoken': CSRFtoken,
+           },
+           success: updatesuccess,
+           error: updateerror,
+           datatype: 'html'
+          });
+
+        function updatesuccess (data, textStatus, jqXHR){
+            console.log('datafromsql:' + data);
+            var fromsql= data[0]
+
+            $('select[class="selection"][fieldname="' + fieldname + '"] option:selected').html(fromsql);
+
+
+            $('#sqlsaving').html('<span  class="glyphicon glyphicon-hdd"></span>');
+
+            setTimeout(
+              function()
+              {
+                $('#sqlsaving').html("");
+
+              }, 500);
+
+        };
+        function updateerror (){
+            console.log('Failure in saving');
+        };
+
+   });
 
 });

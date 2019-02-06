@@ -11,16 +11,34 @@
 
 		<div class="page">
 				<img id="logo" src="{% static "pic/abstract-logos.png" %}" alt="Logo header template" ">
-				<p class="companyname">{{ doc.0.3}} </p>
-				<p class="contactname">To: {{ doc.0.4}} {{ doc.0.5}} </p>
-				<p class="subject">Subject: Technical and cost quotation
+				<p id="companyname">{{ doc.0.3}} </p>
+				<p id="contactname">To: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}} </p>
+				<p id="pcdandtown">{{ doc.0.16}} {{ doc.0.17}}</p>
+				<p id="address">{{ doc.0.18}}</p>
+				<p id="mobile">{{ doc.0.14}}</p>
+				<p id="email">{{ doc.0.15}}</p>
+
+				<p id="numberofquotationlabel">Number of Quotation:</p>
+				<p id="numberofquotation">CQ-{{ doc.0.10}}</p>
+				<p id="ourcontactlabel">Our Contact:</p>
+				<p id="ourcontact">{{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
+				<p id="subscriptiontext">{{ creatordata.0.4 }}</p>
+				<p id="creationtimelabel">Time of Creation:</p>
+				<p id="creationtime">{{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
+				<p id="pageslabel">Pages:</p>
+				<p id="pages">4</p>
+
+
+				<p id="subject">Subject: Technical and cost quotation
 					{% if doc.0.8 != "" %}
 						 -
 
 					{% endif %}
 					{{ doc.0.8 }}</p>
+				<p id="salutation"> Dear {{ doc.0.13}} {{ doc.0.5}},</p>
+
 				<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
-				<p><textarea class="preface" rows="18" cols="70" wrap="off" disabled>{{ doc.0.6}}</textarea></p>
+				<p><textarea id="preface" rows="18" cols="70" wrap="off" disabled>{{ doc.0.6}}</textarea></p>
 				<div class="footerdiv" >
 					<hr>
 					<span class="footerspan1">Please see the conditions in details on the last page<br></span>

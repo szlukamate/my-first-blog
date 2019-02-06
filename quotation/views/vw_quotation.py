@@ -62,7 +62,14 @@ def quotationform(request, pk):
                     "subject_tbldoc, "
                     "docnumber_tbldoc, "
                     "creatorid_tbldoc, "
-                    "creationtime_tbldoc "
+                    "creationtime_tbldoc, "
+                    "title_tblcontacts_ctbldoc, "
+                    "mobile_tblcontacts_ctbldoc, "
+                    "email_tblcontacts_ctbldoc, "
+                    "pcd_tblcompanies_ctbldoc, "
+                    "town_tblcompanies_ctbldoc, "
+                    "address_tblcompanies_ctbldoc, "
+                    "total_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
@@ -185,8 +192,6 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
 
         marginfromproducttable=instancesingle[3]
         salespricecomputed=round((100*purchase_priceclone)/(100-marginfromproducttable),2)
-    #import pdb;
-    #pdb.set_trace()
     #pkdocdetailsid=3
 
     if int(pkdocdetailsid) != 0:
@@ -265,7 +270,7 @@ def searchquotationcontacts(request):
     cursor0 = connection.cursor()
     cursor0.execute(
         "SELECT quotation_tblcontacts.contactid_tblcontacts, quotation_tblcompanies.companyname_tblcompanies,"
-        "quotation_tblcontacts.Firstname_tblcontacts, quotation_tblcontacts.lastname_tblcontacts "
+        "quotation_tblcontacts.firstname_tblcontacts, quotation_tblcontacts.lastname_tblcontacts "
         "FROM quotation_tblcontacts "
         "JOIN quotation_tblcompanies "
         "ON quotation_tblcompanies.companyid_tblcompanies = quotation_tblcontacts.companyid_tblcontacts_id "
@@ -278,11 +283,17 @@ def searchquotationcontacts(request):
     rownmbs=len(results)
 
     return render(request, 'quotation/ajax_search_quotation_contacts.html', {'results': results, 'rownmbs': rownmbs, 'docidinquotationjs': docidinquotationjs})
-def quotationupdatecontact(request,pkdocid, pkcontactid):
+def quotationupdatecontact(request, pkdocid, pkcontactid):
     cursor0 = connection.cursor()
     cursor0.execute(
         "SELECT quotation_tblcontacts.contactid_tblcontacts, quotation_tblcompanies.companyname_tblcompanies,"
-        "quotation_tblcontacts.Firstname_tblcontacts, quotation_tblcontacts.lastname_tblcontacts "
+        "quotation_tblcontacts.Firstname_tblcontacts, quotation_tblcontacts.lastname_tblcontacts, "
+        "title_tblcontacts, "
+        "mobile_tblcontacts, "
+        "email_tblcontacts, "
+        "pcd_tblcompanies, "
+        "town_tblcompanies, "
+        "address_tblcompanies "
         "FROM quotation_tblcontacts "
         "JOIN quotation_tblcompanies "
         "ON quotation_tblcompanies.companyid_tblcompanies = quotation_tblcontacts.companyid_tblcontacts_id "
@@ -293,14 +304,33 @@ def quotationupdatecontact(request,pkdocid, pkcontactid):
         companynameclone = instancesingle[1]
         firstnameclone = instancesingle[2]
         lastnameclone = instancesingle[3]
+        titleclone = instancesingle[4]
+        mobileclone = instancesingle[5]
+        emailclone = instancesingle[6]
+        pcdclone = instancesingle[7]
+        townclone = instancesingle[8]
+        addressclone = instancesingle[9]
 
     cursor2 = connection.cursor()
     cursor2.execute("UPDATE quotation_tbldoc SET "
                     "Contactid_tblDoc_id= %s, "
                     "companyname_tblcompanies_ctbldoc=%s, "
                     "firstname_tblcontacts_ctbldoc=%s, "
-                    "lastname_tblcontacts_ctbldoc=%s "
-                    "WHERE Docid_tblDoc =%s ", [pkcontactid, companynameclone, firstnameclone, lastnameclone, pkdocid])
+                    "lastname_tblcontacts_ctbldoc=%s, "
+                    "title_tblcontacts_ctbldoc=%s, "
+                    "mobile_tblcontacts_ctbldoc=%s, "
+                    "email_tblcontacts_ctbldoc=%s, "
+                    "pcd_tblcompanies_ctbldoc=%s, "
+                    "town_tblcompanies_ctbldoc=%s, "
+                    "address_tblcompanies_ctbldoc=%s "
+                    "WHERE Docid_tblDoc =%s ", [pkcontactid, companynameclone, firstnameclone, lastnameclone,
+                                                titleclone,
+                                                mobileclone,
+                                                emailclone,
+                                                pcdclone,
+                                                townclone,
+                                                addressclone,
+                                                pkdocid,])
 
     return redirect('quotationform', pk=pkdocid)
 
@@ -314,13 +344,25 @@ def quotationprint (request, docid):
                     "firstname_tblcontacts_ctbldoc, "
                     "lastname_tblcontacts_ctbldoc, "
                     "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
+                    "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
                     "prefacespecforquotation_tbldoc, "
-                    "subject_tbldoc "
+                    "subject_tbldoc, "
+                    "docnumber_tbldoc, "
+                    "creatorid_tbldoc, "
+                    "creationtime_tbldoc, "
+                    "title_tblcontacts_ctbldoc, "
+                    "mobile_tblcontacts_ctbldoc, "
+                    "email_tblcontacts_ctbldoc, "
+                    "pcd_tblcompanies_ctbldoc, "
+                    "town_tblcompanies_ctbldoc, "
+                    "address_tblcompanies_ctbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
                     [docid])
     doc = cursor1.fetchall()
+    for x in doc:
+        creatorid = x[11]
 
     cursor3 = connection.cursor()
     cursor3.execute(
@@ -352,5 +394,39 @@ def quotationprint (request, docid):
     for instancesingle in results:
         docdetailscount = instancesingle[0]
 
+    cursor5 = connection.cursor()
+    cursor5.execute("SELECT id, "
+                     "first_name, "
+                     "last_name, "
+                     "email, "
+                     "subscriptiontext_tblauth_user "
+                     "FROM auth_user "
+                     "WHERE id=%s ", [creatorid])
+    creatordata = cursor5.fetchall()
 
-    return render(request, 'quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails, 'docdetailscount':docdetailscount})
+
+    return render(request, 'quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails,
+                                                             'docdetailscount':docdetailscount,
+                                                             'creatordata': creatordata})
+def quotationuniversalselections (request):
+
+    fieldvalue = request.POST['fieldvalue']
+    quotationdocid = request.POST['quotationdocid']
+    fieldname = request.POST['fieldname']
+
+    cursor2 = connection.cursor()
+
+    cursor2.execute("UPDATE quotation_tbldoc SET "
+                    "" + fieldname + "= %s "
+                    "WHERE Docid_tblDoc =%s ", [fieldvalue, quotationdocid])
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT " + fieldname + " "
+        "FROM quotation_tbldoc "
+        "WHERE Docid_tblDoc =%s ", [quotationdocid])
+    results = cursor3.fetchall()
+
+    json_data = json.dumps(results)
+
+    return HttpResponse(json_data, content_type="application/json")

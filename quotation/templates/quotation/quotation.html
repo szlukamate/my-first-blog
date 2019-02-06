@@ -16,9 +16,12 @@
 
 						  </ul>
 						  <div id="tabs1fragment-1">
-								<p>Companyname:{{ doc.0.3}} Companyid:{{ companyid.0.0}}<a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a></p>
-								<p>Firstname:{{ doc.0.4}} </p>
-								<p>Lastname:{{ doc.0.5}} </p>
+								<p>Company:{{ doc.0.3}} Companyid:{{ companyid.0.0}}<a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a></p>
+								<p>{{ doc.0.16}} {{ doc.0.17}} {{ doc.0.18}}</p>
+								<p>Contact: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}}</p>
+								<p>Mobile: {{ doc.0.14}} Email: {{ doc.0.15}}</p>
+
+
 						  </div>
 						  <div id="tabs1fragment-2">
 								<p>Lastname:{{ doc.0.5}} </p>
@@ -53,6 +56,13 @@
 							  <textarea rows="10" cols="60" class="updateabletbldoc" name="prefacespecforquotation_tbldoc">{{ doc.0.8}}</textarea>
 							  <label for="subject_tbldoc" >Subject</label>
 							  <input type="text" class="updateabletbldoc" value="{{ doc.0.9}}" name="subject_tbldoc" >
+							  <div id="total">
+								  	<select class="selection" fieldname="total_tbldoc" >
+										<option value="" disabled selected>{{ doc.0.19}}</option>
+										<option value="Total_Off">Total_Off</option>
+										<option value="Total_On">Total_On</option>
+									</select>
+							  </div>
 						  </div>
 						  <div id="tabs2fragment-2">
 
