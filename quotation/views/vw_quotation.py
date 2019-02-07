@@ -355,7 +355,8 @@ def quotationprint (request, docid):
                     "email_tblcontacts_ctbldoc, "
                     "pcd_tblcompanies_ctbldoc, "
                     "town_tblcompanies_ctbldoc, "
-                    "address_tblcompanies_ctbldoc "
+                    "address_tblcompanies_ctbldoc, "
+                    "total_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",

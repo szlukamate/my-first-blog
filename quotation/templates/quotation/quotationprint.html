@@ -8,7 +8,8 @@
 
 	   </head>
     <body>
-
+		<p id="total" >Total:{{ doc.0.19}} hidden</p>
+		<!-- wrap first page ˇ-->
 		<div class="page">
 				<img id="logo" src="{% static "pic/abstract-logos.png" %}" alt="Logo header template" ">
 				<p id="companyname">{{ doc.0.3}} </p>
@@ -45,38 +46,53 @@
 					<span class="footerspan1" pagenumber="1">Description2</span>
 				</div>
 		</div>
+		<!-- first page wrapping end^ -->
+
 						{% for tblDoc_details in docdetails %}
-						{% if forloop.counter0 == 0 %}
+						<div class="item-container-for-measure" rowid="{{ forloop.counter0 }}">
+						{% if forloop.counter0 == 0 %} <!-- only at first item -->
 
-							<div class="prefacespec" id="prefacespec" contentEditable="true">{{ doc.0.7}}</div>
+							<div id="prefacespec" contentEditable="true">{{ doc.0.8}}</div>
 						{% endif %}
-						<span name="htmlinsertbefore" rowid="{{ forloop.counter0 }}"></span>
 
-						<div rowid="{{ forloop.counter0 }}" class="item-container">
+							<span name="htmlinsertbefore" rowid="{{ forloop.counter0 }}"></span>
 
-									<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{tblDoc_details.4}}.</span>
+								<div class="item-container-frame" rowid="{{ forloop.counter0 }}">
 
-									{% if tblDoc_details.6 > 0 or tblDoc_details.7 > 0 or tblDoc_details.5 > 0%}
-									<span  class="chapternumbersspan" name="secondnum_tblDoc_details">{{tblDoc_details.6}}.</span>
-									{% endif %}
+									<div rowid="{{ forloop.counter0 }}" class="item-container">
 
-									{% if tblDoc_details.7 > 0 or tblDoc_details.5 > 0 %}
-									<span class="chapternumbersspan" name="thirdnum_tblDoc_details">{{tblDoc_details.7}}.</span>
-									{% endif %}
+												<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{tblDoc_details.4}}.</span>
 
-									{% if tblDoc_details.5 > 0 %}
-									<span class="chapternumbersspan" name="fourthnum_tblDoc_details">{{tblDoc_details.5}}.</span>
-									{% endif %}
-									<br>
-										<div  class="descriptiondiv">
-												<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
-										</div>
-										<div  class="qtydiv">
-												<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}}</p>
-										</div>
+												{% if tblDoc_details.6 > 0 or tblDoc_details.7 > 0 or tblDoc_details.5 > 0%}
+												<span  class="chapternumbersspan" name="secondnum_tblDoc_details">{{tblDoc_details.6}}.</span>
+												{% endif %}
 
+												{% if tblDoc_details.7 > 0 or tblDoc_details.5 > 0 %}
+												<span class="chapternumbersspan" name="thirdnum_tblDoc_details">{{tblDoc_details.7}}.</span>
+												{% endif %}
+
+												{% if tblDoc_details.5 > 0 %}
+												<span class="chapternumbersspan" name="fourthnum_tblDoc_details">{{tblDoc_details.5}}.</span>
+												{% endif %}
+												<br>
+													<div  class="descriptiondiv">
+															<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
+													</div>
+													<div  class="qtydiv">
+															<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}}</p>
+													</div>
+													<div  class="salespricediv">
+															<p   name="salesprice_tblDoc_details" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.11}}</p>
+													</div>
+
+													<div  class="totalhtmlinsertdiv">
+															<span name="totalhtmlinsertspan" rowid="{{ forloop.counter0 }}"></span>
+													</div>
+
+									</div>
+								</div>
+							<span name="htmlinsertafter" rowid="{{ forloop.counter0 }}"></span>
 						</div>
-						<span name="htmlinsertafter" rowid="{{ forloop.counter0 }}"></span>
 						{% endfor %}
 		<div class="page">
 

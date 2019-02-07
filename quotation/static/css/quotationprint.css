@@ -18,12 +18,18 @@ body {
 
 
 .item-container{
-      position: relative;
-      top: 35mm;
-    left: 20.6mm;
+      //position: relative;
+      // top: 35mm;
+    //left: 20.6mm;
 
 }
+.item-container-frame{
+      position: relative;
+       top:30mm;
+    left: 20.6mm;
+    //color: red;
 
+}
 
 .chapternumbersdiv {
       position: relative;
@@ -52,9 +58,18 @@ body {
 }
 .qtydiv {
       position: absolute;
-      top: 4mm;
+      top: 0mm;
     left: 100mm;
     width: 10mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+}
+.salespricediv {
+      position: absolute;
+      top: 0mm;
+    left: 110mm;
+    width: 200mm;
    font-family: "Arial", Times, serif;
    font-size: 12px;
    overflow-wrap: break-word;
@@ -88,7 +103,7 @@ border-top: 3px double #8c8b8b;
 .header {
 
       position: relative;
-      top: 20mm;
+      top: 23mm;
       width: 170mm;
       height: 10mm;
       left: 20mm;
@@ -97,6 +112,8 @@ border-top: 3px double #8c8b8b;
       font-size: 14px;
       font-style: italic;
       font-weight: bold;
+      //margin-bottom: 10mm;
+      //margin-top:20mm;
 
 }
 .headerlabels {
@@ -249,7 +266,7 @@ border-top: 3px double #8c8b8b;
 }
 #prefacespec {
         position: relative;
-        top: 21mm;
+        top: 20mm;
         font-family: "Arial", Times, serif;
         font-size: 16px;
         margin-left: 20mm;

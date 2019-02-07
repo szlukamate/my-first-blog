@@ -1,8 +1,11 @@
 {% extends 'quotation/base.html' %}
 {% load staticfiles%}
 	{% block content %}
-          
-				<span id="quotationtemplate"></span>
+          		<p><span>Docid:</span><span id="quotationdocid">{{ doc.0.0}}</span></p>
+				<span id="quotationtemplate" hidden></span>
+				<p>Contactid:{{ doc.0.1}} hidden</p>
+
+
 				<p align="center" id="title" style="font-size:173%;">Quotation Form</p>{% csrf_token %}
 						<div id="infoframe">
 							<p >Number of Quotation: CQ-{{ doc.0.10 }}</p>
@@ -40,8 +43,7 @@
 					<form action="{% url 'quotationprint' docid=doc.0.0 %}">
 						<input type="submit" value="Print" />
 					</form>
-				<p>Contactid:{{ doc.0.1}} </p>
-				<p><span>Docid:</span><span id="quotationdocid">{{ doc.0.0}}</span></p>
+
 
 						<div id="tabs2">
 						  <ul>
