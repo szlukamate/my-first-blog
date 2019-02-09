@@ -26,7 +26,8 @@ body {
 .item-container-frame{
       position: relative;
        top:30mm;
-    left: 20.6mm;
+       left: 20mm;
+       right_20mm;
     //color: red;
 
 }
@@ -100,6 +101,7 @@ top 0;
 margin: 20mm;
 border-top: 3px double #8c8b8b;
 }
+
 .header {
 
       position: relative;
@@ -278,6 +280,29 @@ border-top: 3px double #8c8b8b;
         color: #000;
         line-height: 20px; /* 4px +12px + 4px */
         display:block;
+        white-space: pre;
+
+}
+.totalhr {
+//position:static;
+//top 0;
+margin: 0mm;
+margin-left:20mm;
+margin-right:20mm;
+color: blue;
+right: 21mm;
+}
+.totallabel {
+        position: relative;
+        left: 91mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#backpagetexthtml {
+
         white-space: pre;
 
 }

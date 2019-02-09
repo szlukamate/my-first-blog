@@ -33,7 +33,7 @@ def products(request, pkproductid):
     if int(pkproductid) == 0:
         cursor = connection.cursor()
         cursor.execute("SELECT Productid_tblProduct, purchase_price_tblproduct, Product_description_tblProduct, "
-                       "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice "
+                       "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice "
                        "FROM quotation_tblproduct "
                        "WHERE obsolete_tblproduct=0 "
                        )
@@ -44,7 +44,7 @@ def products(request, pkproductid):
     else:
         cursor = connection.cursor()
         cursor.execute("SELECT Productid_tblProduct, purchase_price_tblproduct, Product_description_tblProduct, "
-                       "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice "
+                       "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice "
                         "FROM quotation_tblproduct "
                         "WHERE productid_tblproduct= %s and obsolete_tblproduct=0", [pkproductid])
 
@@ -92,12 +92,12 @@ def productupdatecurrencyisocode(request):
     return HttpResponse(json_data, content_type="application/json")
 
 
-def productsalespricefieldupdate(request):
+def productlistpricefieldupdate(request):
     if request.method == 'POST':
         postselector = request.POST['postselector']
         productidinproductjs = request.POST['productidinproductjs']
 
-        if postselector=='salespriceupdaterequestwithpassingmarginrequired':
+        if postselector=='listpriceupdaterequestwithpassingmarginrequired':
 
             marginrequired = request.POST['marginrequired']
 
@@ -106,11 +106,11 @@ def productsalespricefieldupdate(request):
                             "margin_tblproduct= %s "
                             "WHERE productid_tblproduct =%s ", [marginrequired, productidinproductjs])
 
-        elif postselector=='salespriceupdaterequestonly':
+        elif postselector=='listpriceupdaterequestonly':
             pass
     cursor0 = connection.cursor()
     cursor0.execute(
-        "SELECT purchase_price_tblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice "
+        "SELECT purchase_price_tblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice "
         "FROM quotation_tblproduct "
         "WHERE productid_tblproduct= %s ", [productidinproductjs])
     results = cursor0.fetchall()

@@ -59,15 +59,15 @@ $(function () {
                             };
 
 
-                 if ((fieldname=='purchase_price_tblproduct') || (fieldname=='margin_tblproduct')){ // if price related field changed then an additional salespriceupdate
+                 if ((fieldname=='purchase_price_tblproduct') || (fieldname=='margin_tblproduct')){ // if price related field changed then an additional listpriceupdate
 
                     setTimeout(function(){
                     $.ajax({
                     type: 'POST',
-                    url: 'productsalespricefieldupdate/',
+                    url: 'productlistpricefieldupdate/',
 
                     data: {
-                        'postselector' : 'salespriceupdaterequestonly',
+                        'postselector' : 'listpriceupdaterequestonly',
                         'productidinproductjs' : productid,
                         'csrfmiddlewaretoken': CSRFtoken
                         },
@@ -80,8 +80,8 @@ $(function () {
 
                     function requerysuccess (data, textStatus, jqXHR){
                     console.log('Success requery!!!');
-                    var salespricefromsql=data[0][2];
-                    $('input[name="salesprice"][productid="' + productid + '"').val(salespricefromsql);
+                    var listpricefromsql=data[0][2];
+                    $('input[name="listprice"][productid="' + productid + '"').val(listpricefromsql);
 
                     };
                     function requeryerror (){
@@ -103,21 +103,21 @@ $(function () {
 
 
    });
-    $('.salespricechangerbutton').click(function() {
+    $('.listpricechangerbutton').click(function() {
         var productid=$(this).attr( "productid" );
 
-                    salespricefieldstate(this);
-                    var salesprice=$('input[name="salesprice"][productid="' + productid + '"').val();
+                    listpricefieldstate(this);
+                    var listprice=$('input[name="listprice"][productid="' + productid + '"').val();
                     var purchaseprice=$('input[name="purchase_price_tblproduct"][productid="' + productid + '"').val();
-                    var marginrequired=((salesprice-purchaseprice)/salesprice)*100
+                    var marginrequired=((listprice-purchaseprice)/listprice)*100
 
 
                         $.ajax({
                         type: 'POST',
-                        url: 'productsalespricefieldupdate/',
+                        url: 'productlistpricefieldupdate/',
 
                         data: {
-                        'postselector' : 'salespriceupdaterequestwithpassingmarginrequired',
+                        'postselector' : 'listpriceupdaterequestwithpassingmarginrequired',
                         'marginrequired' : marginrequired,
                         'productidinproductjs' : productid,
                         'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
@@ -133,27 +133,27 @@ $(function () {
 
 
 
-    function salespricefieldstate(that){
+    function listpricefieldstate(that){
 
-        if ($('input[name="salesprice"][productid="' + productid + '"').is(':disabled')){ // Salesprice is disabled
-                setsalespricebuttontext('toenabled', that);
+        if ($('input[name="listprice"][productid="' + productid + '"').is(':disabled')){ // listprice is disabled
+                setlistpricebuttontext('toenabled', that);
 
-             } else { // Salesprice is enabled
-                setsalespricebuttontext('todisabled', that);
+             } else { // listprice is enabled
+                setlistpricebuttontext('todisabled', that);
 
 
         }
     }
-    function setsalespricebuttontext(salespricebuttonstate, that2){
+    function setlistpricebuttontext(listpricebuttonstate, that2){
 
-            switch(salespricebuttonstate) {
+            switch(listpricebuttonstate) {
               case 'toenabled':
-                $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', false)
+                $('input[name="listprice"][productid="' + productid + '"').prop('disabled', false)
                 $(that2).attr('value', 'Confirm');
                 break;
               case 'todisabled':
-                $('input[name="salesprice"][productid="' + productid + '"').prop('disabled', true)
-                $(that2).attr('value', 'Change sales price');
+                $('input[name="listprice"][productid="' + productid + '"').prop('disabled', true)
+                $(that2).attr('value', 'Change list price');
                 break;
               default:
                 // code block

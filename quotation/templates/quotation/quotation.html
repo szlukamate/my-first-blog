@@ -1,8 +1,10 @@
 {% extends 'quotation/base.html' %}
 {% load staticfiles%}
 	{% block content %}
+
           		<p><span>Docid:</span><span id="quotationdocid">{{ doc.0.0}}</span></p>
-				<span id="quotationtemplate" hidden></span>
+				<span id="quotationtemplate" ></span>
+
 				<p>Contactid:{{ doc.0.1}} hidden</p>
 
 
@@ -89,7 +91,7 @@
 											<label for="Productid_tblDoc_details_id" style="padding-left: 24px;">Description</label>
 											<label for="Note_tblDoc_details" style="padding-left: 21px;">Note</label>
 											<label for="purchase_price_tblproduct_ctblDoc_details" style="padding-left: 19px;">Purchaseprice</label>
-											<label for="salesprice_tblDoc_details" style="padding-left: 9px;">Salesprice</label>
+											<label for="listprice_tblDoc_details" style="padding-left: 9px;">listprice</label>
 											<label for="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" style="padding-left: 33px;">Currencycode</label><br>
 
 											{% for tblDoc_details in  docdetails %}
@@ -103,7 +105,7 @@
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.3}}" name="Product_description_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.8}}"  name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
-											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.11}}" name="salesprice_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
+											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.11}}" name="listprice_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.12}}" name="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9" disabled>
 											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
 
@@ -125,7 +127,7 @@
 						  </div>
 						  <div id="tabs2fragment-4">
 							  <label for="backpagetext_tbldoc" >Backpage</label>
-							  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetext_tbldoc">{{ doc.0.7}}</textarea>
+							  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetextforquotation_tblbackpageforquotation_ctbldoc">{{ doc.0.7}}</textarea>
 						  </div>
 
 				<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>

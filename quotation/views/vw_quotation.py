@@ -91,7 +91,7 @@ def quotationform(request, pk):
 
     cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
                     "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details`, "
-                    "purchase_price_tblproduct_ctblDoc_details, salesprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
+                    "purchase_price_tblproduct_ctblDoc_details, listprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
                     "Doc_detailsid_tblDoc_details, COALESCE(Productid_tblProduct, 0) "
                     "FROM quotation_tbldoc_details "
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
@@ -148,35 +148,6 @@ def quotationform(request, pk):
     return render(request, 'quotation/quotation.html', {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums' : nextchapternums,
                                                         'creatordata': creatordata})
 
-
-'''
-def quotationrowedit(request, pk):
-        quotationrow = get_object_or_404(tblDoc_details, pk=pk)
-        if request.method == "POST":
-            form = quotationroweditForm(request.POST, instance=quotationrow)
-            if form.is_valid():
-                quotationrow.save()
-
-                cursor = connection.cursor()
-
-                cursor.execute("SELECT Docid_tblDoc_details_id FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [pk])
-                results = cursor.fetchall()
-
-                for x in results:
-                    na=x[0]
-
-                transaction.commit()
-
-                return redirect('quotationform', pk=na)
-
-        else:
-            form = quotationroweditForm(instance=quotationrow)
-        return render(request, 'quotation/quotationrowedit.html', {'form': form})
-'''
-
-
-
-
 def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml ):
     cursor0 = connection.cursor()
     cursor0.execute(
@@ -191,7 +162,7 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
         currencyisocodeclone = instancesingle[4]
 
         marginfromproducttable=instancesingle[3]
-        salespricecomputed=round((100*purchase_priceclone)/(100-marginfromproducttable),2)
+        listpricecomputed=round((100*purchase_priceclone)/(100-marginfromproducttable),2)
     #pkdocdetailsid=3
 
     if int(pkdocdetailsid) != 0:
@@ -206,8 +177,8 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
             "purchase_price_tblproduct_ctblDoc_details=%s, "
             "Product_description_tblProduct_ctblDoc_details=%s, "
             "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details=%s, "
-            "salesprice_tblDoc_details=%s "
-            "WHERE doc_detailsid_tbldoc_details =%s ", [pkproductid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml, purchase_priceclone,  productdescriptionclone, currencyisocodeclone, salespricecomputed, pkdocdetailsid])
+            "listprice_tblDoc_details=%s "
+            "WHERE doc_detailsid_tbldoc_details =%s ", [pkproductid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml, purchase_priceclone,  productdescriptionclone, currencyisocodeclone, listpricecomputed, pkdocdetailsid])
 
     else:
         cursor1 = connection.cursor()
@@ -215,9 +186,9 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
             "INSERT INTO quotation_tbldoc_details "
             "(`Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Productid_tblDoc_details_id`, `firstnum_tblDoc_details`, `fourthnum_tblDoc_details`, "
             "`secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `purchase_price_tblproduct_ctblDoc_details`, "
-            "`Product_description_tblProduct_ctblDoc_details`, `currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`, salesprice_tblDoc_details) "
+            "`Product_description_tblProduct_ctblDoc_details`, `currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`, listprice_tblDoc_details) "
             "VALUES (1, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s)",
-            [pkdocid, pkproductid, nextfirstnumonhtml, nextfourthnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, purchase_priceclone, productdescriptionclone, currencyisocodeclone, salespricecomputed])
+            [pkdocid, pkproductid, nextfirstnumonhtml, nextfourthnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, purchase_priceclone, productdescriptionclone, currencyisocodeclone, listpricecomputed])
         transaction.commit()
 
     return redirect('quotationform', pk=pkdocid)
@@ -235,7 +206,7 @@ def quotationnewrowadd(request):
 
     cursor1 = connection.cursor()
     cursor1.execute(
-        "SELECT Productid_tblProduct, purchase_price_tblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as salesprice, "
+        "SELECT Productid_tblProduct, purchase_price_tblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
         "Product_description_tblProduct, currencyisocode_tblcurrency_ctblproduct "
         "FROM quotation_tblproduct "
         "WHERE obsolete_tblproduct=0 ")
@@ -261,6 +232,8 @@ def quotationrowremove(request, pk):
 
     return redirect('quotationform', pk=na)
 def searchquotationcontacts(request):
+    quotationbackpage
+
     if request.method == 'POST':
         search_text = request.POST['search_text']
         docidinquotationjs = request.POST['docidinquotationjs']
@@ -369,7 +342,7 @@ def quotationprint (request, docid):
     cursor3.execute(
         "SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
         "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details`, "
-        "purchase_price_tblproduct_ctblDoc_details, salesprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
+        "purchase_price_tblproduct_ctblDoc_details, listprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
         "Doc_detailsid_tblDoc_details, COALESCE(Productid_tblProduct, 0) "
         "FROM quotation_tbldoc_details "
         "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
@@ -431,3 +404,34 @@ def quotationuniversalselections (request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+def quotationbackpage(request):
+
+
+    if request.method == 'POST':
+        quotationid = request.POST['quotationid']
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT "
+        "Docid_tblDoc, "
+        "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
+        "docnumber_tbldoc, "
+        "creatorid_tbldoc "
+        "FROM quotation_tbldoc "
+        "WHERE docid_tbldoc=%s ",
+        [quotationid])
+    doc = cursor0.fetchall()
+    for x in doc:
+        creatorid = x[3]
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT id, "
+                    "first_name, "
+                    "last_name, "
+                    "email, "
+                    "subscriptiontext_tblauth_user "
+                    "FROM auth_user "
+                    "WHERE id=%s ", [creatorid])
+    creatordata = cursor1.fetchall()
+    return render(request, 'quotation/quotationbackpage.html', {'doc': doc,
+                                                                'creatordata': creatordata})
+

@@ -8,7 +8,9 @@
 
 	   </head>
     <body>
-		<p id="total" >Total:{{ doc.0.19}} hidden</p>
+	<p id="quotationid" hidden>{{ doc.0.0}}</p>
+	<p id="total" >{{ doc.0.19}}</p>{% csrf_token %}
+
 		<!-- wrap first page ˇ-->
 		<div class="page">
 				<img id="logo" src="{% static "pic/abstract-logos.png" %}" alt="Logo header template" ">
@@ -95,7 +97,7 @@
 						</div>
 						{% endfor %}
 		<div class="page">
-
+            <span id="backpagetexthtml"></span>
 		</div>
 
 

@@ -24,11 +24,12 @@ urlpatterns = [
     url(r'^productremove/(?P<pkproductid>[0-9]+)/$', views.productremove, name='productremove'),
     url(r'^quotationrowremove/(?P<pk>[0-9]+)/$', views.quotationrowremove, name='quotationrowremove'),
     url('searchquotationcontacts', views.searchquotationcontacts, name='searchquotationcontacts'),
-    url('productsalespricefieldupdate', views.productsalespricefieldupdate, name='productsalespricefieldupdate'),
+    url('productlistpricefieldupdate', views.productlistpricefieldupdate, name='productlistpricefieldupdate'),
     url('companyuniversalselections', views.companyuniversalselections, name='companyuniversalselections'),
     url(r'coredata_prefaceforquotation/$', views.coredata_prefaceforquotation, name='coredata_prefaceforquotation'),
     url(r'coredata_prefaceforquotationadd/$', views.coredata_prefaceforquotationadd, name='coredata_prefaceforquotationadd'),
     url(r'coredata_prefaceforquotationremove/(?P<pk>[0-9]+)/$', views.coredata_prefaceforquotationremove, name='coredata_prefaceforquotationremove'),
     url('quotationuniversalselections', views.quotationuniversalselections, name='quotationuniversalselections'),
+    url('quotationbackpage', views.quotationbackpage, name='quotationbackpage'),
 
 ]

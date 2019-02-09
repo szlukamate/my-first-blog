@@ -22,12 +22,14 @@ var minitemwrapped;
 var maxitemwrapped;
 var pagenumber=1;
 var total=0;
+var totalflag="Total_Off"
 main();
 
 
 
 
     function main(){
+        backpagehtmlinsert();
         for (i = 0; i <= itemnumbers; i++) {
             measureitemcontainer();
             totalcount(i);
@@ -39,6 +41,7 @@ main();
             towrap.push(i); //last record to wrap we put to array and wrap
             wrap();
             pagenumberer();
+            totalprint();
             return;
             }
             towrap.push(i); //if there is room on page only goes to wrap array
@@ -46,13 +49,47 @@ main();
         }
 
     }
+    function backpagehtmlinsert(){
+
+            var quotationid = $('#quotationid').text();
+            $.ajax({
+                type: 'POST',
+                url: 'quotationbackpage/',
+
+                data: {
+                'quotationid' : quotationid,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: SearchSuccess,
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
+            function SearchSuccess(data, textStatus, jqXHR)
+            {
+
+            $('#backpagetexthtml').html(data);
+                    console.log(data);
+
+            }
+    }
+
+
     function totalprint(){
-         $('span[name="totalhtmlinsertspan"][rowid="' + itemnumbers + '"').html('<div >totalprobe</div>');
+        totalflag=$('#total').text();
+        if (totalflag == "Total_On") {
+         $('span[name="totalhtmlinsertspan"][rowid="' + itemnumbers + '"').html('<hr class=\"totalhr\" ><div ><span class="totallabel" >Total: ' + total + '</span></div>');
+        }
+        console.log(totalflag);
     }
     function totalcount(i){
         var val=$('p[name="salesprice_tblDoc_details"][rowid="' + i + '"').text();
         total=total + Number(val);
-        console.log(total);
+
 
     }
 
@@ -96,3 +133,6 @@ main();
 
     }
 });
+
+
+

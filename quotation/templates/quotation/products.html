@@ -22,9 +22,9 @@
 				{% endfor %}
 			</select>
 			<input type="text" class="updateable" value="{{product.4}}" name="margin_tblproduct" maxlength="3" productid="{{product.0}}" size="3"/>
-			<input type="text" value="{{product.5}}" name="salesprice" maxlength="10" size="8" productid="{{product.0}}" disabled/>
+			<input type="text" value="{{product.5}}" name="listprice" maxlength="10" size="8" productid="{{product.0}}" disabled/>
 
-			<input type="button" name="salespricechangerbutton" value="Change Sales Price" class="salespricechangerbutton" productid="{{product.0}}" style="width:200px">
+			<input type="button" name="listpricechangerbutton" value="Change list Price" class="listpricechangerbutton" productid="{{product.0}}" style="width:200px">
 
 			<input type="text" class="updateable" value="{{product.2}}" name="Product_description_tblProduct" maxlength="200" productid="{{product.0}}" size="8">
 			<a href="{% url 'productremove' pkproductid=product.0 %}"><span class="glyphicon glyphicon-remove"></span></a><br>
