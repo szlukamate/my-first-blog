@@ -1,0 +1,24 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+ 	{% block content %}
+	                    <div class="post">
+						   	<p align="center" style="font-size:260%">backpages</p>
+							<p align="right"><a href="{% url 'coredata_backpageforquotationadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+								{% for backpageforquotation in  backpagesforquotation %}
+							<form action="{% url 'coredata_backpageforquotation' %}" method="post">{% csrf_token %}
+								<label for="Productid_tblDoc_details_id" >backpage id and name and created:</label>
+								<input type="text"  value="{{ backpageforquotation.0 }}" name="backpageid" size="3" readonly="readonly">
+								<input type="text"  value="{{ backpageforquotation.1 }}" name="backpagename" >
+								<input type="text"  value="{{ backpageforquotation.3|date:'M.d.Y' }} {{ backpageforquotation.3|time:'H:i' }}" name="creationtime" readonly="readonly">
+
+								<br>
+								<textarea rows="4" cols="100" name="backpagetext" wrap="physical" style="white-space: back-wrap;">{{ backpageforquotation.2 }}</textarea>
+
+                               	<input type="submit" value="Save backpage"><a href="{% url 'coredata_backpageforquotationremove' pk=backpageforquotation.0 %}"><span class="glyphicon glyphicon-remove"></span></a>
+
+							</form>
+								{% endfor %}
+
+
+	{% endblock %}  

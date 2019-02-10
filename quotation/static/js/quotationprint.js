@@ -99,7 +99,7 @@ main();
         maxitemwrapped=towrap[towrap.length-1];
           for (j = 0; j < towrap.length; j++) {
 
-            wrapphrase= wrapphrase + "div[class=\"item-container-for-measure\"][rowid=\"" + towrap[j] + "\"], " //"div[class=\"item-container-withhtmlinserts\"][rowid=\"" + towrap[j] + "\"], " //span[name=\"htmlinsertbefore\"][rowid=\"" + towrap[j] + "\"], div[class=\"item-container\"][rowid=\"" + towrap[j] + "\"], span[name=\"htmlinsertafter\"][rowid=\"" + towrap[j] + "\"], " //span[name=\"totalhtmlinsert\"][rowid=\"" + towrap[j] + "\"], "
+            wrapphrase= wrapphrase + "div[class=\"item-container-for-measure\"][rowid=\"" + towrap[j] + "\"], "
             }
         wrapphrase = wrapphrase.slice(0, -2); // remove comma from end (-2 cause there is an adding space)
         jQuery.globalEval( "$('" + wrapphrase + "').wrapAll('<div class=\"page\"> </div>');" );
@@ -114,7 +114,7 @@ main();
     $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 40mm" >Description</span><span style="margin-left: 60mm" >Qty</span></div></div>');
     }
     function footerinsert(rowid, pagenumber){
-    $('span[name="htmlinsertafter"][rowid="' + rowid + '"').html('<div class="footerdiv" ><hr><span class="footerspan1">Please see the conditions in details on the last page<br></span><span pagenumber=\"' + pagenumber + '\" class="footerspan1">Description2</span></div>');
+    $('span[name="htmlinsertafter"][rowid="' + rowid + '"').html('<div class="footerdiv" ><hr><span class="footerspan1">Please see the conditions in details on the last page<br></span><span pagenumber=\"' + pagenumber + '\" class="footerspan2">Description2</span></div>');
     }
     function measureitemcontainer(){
     height=$('div[class="item-container-for-measure"][rowid="' + i + '"').outerHeight();
@@ -125,11 +125,14 @@ main();
     itemnumbers--;
     }
     function pagenumberer(){
+            $('#pages').text((pagenumber+1)); // pagenumbers on firstpage
+            $('span[class="firstpagefooterspan2"]').text( "page 1/" + (pagenumber+1)); // firstpage footer filling
             for (k = 1; k != pagenumber+1; k++) {
-            $('span[class="footerspan1"][pagenumber="' + k + '"').text( "page " + k + "/" + pagenumber);
+            $('span[class="footerspan2"][pagenumber="' + k + '"').text( "page " + k + "/" + (pagenumber+1));
 
 
             }
+            $('span[class="backpagefooterspan2"]').text( "page " + k + "/" + (pagenumber+1)); // backpage footer filling
 
     }
 });

@@ -94,6 +94,12 @@ body {
       bottom: 20mm;
 
  }
+.footerspan2{
+      position:relative;
+      width: 180mm;
+      bottom: 20mm;
+
+ }
 
 hr {
 position:relative;
@@ -306,3 +312,26 @@ right: 21mm;
         white-space: pre;
 
 }
+.backpagefooterdiv{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      text-align:Center;
+      height:20mm;
+      font-family: "Arial", Times, serif;
+      font-size: 19px;
+}
+.backpagefooterspan2{
+      position:relative;
+      width: 180mm;
+      bottom: 0mm;
+
+ }
+.firstpagefooterspan2{
+      position:relative;
+      width: 180mm;
+      bottom: 20mm;
+
+ }

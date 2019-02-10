@@ -31,5 +31,8 @@ urlpatterns = [
     url(r'coredata_prefaceforquotationremove/(?P<pk>[0-9]+)/$', views.coredata_prefaceforquotationremove, name='coredata_prefaceforquotationremove'),
     url('quotationuniversalselections', views.quotationuniversalselections, name='quotationuniversalselections'),
     url('quotationbackpage', views.quotationbackpage, name='quotationbackpage'),
+    url(r'coredata_backpageforquotation/$', views.coredata_backpageforquotation, name='coredata_backpageforquotation'),
+    url(r'coredata_backpageforquotationadd/$', views.coredata_backpageforquotationadd, name='coredata_backpageforquotationadd'),
+    url(r'coredata_backpageforquotationremove/(?P<pk>[0-9]+)/$', views.coredata_backpageforquotationremove, name='coredata_backpageforquotationremove'),
 
 ]

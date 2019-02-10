@@ -53,3 +53,47 @@ def coredata_prefaceforquotationremove(request, pk):
         transaction.commit()
 
         return redirect('coredata_prefaceforquotation')
+def coredata_backpageforquotation(request):
+        if request.method == "POST":
+                backpageid = request.POST['backpageid']
+                backpagename = request.POST['backpagename']
+                backpagetext = request.POST['backpagetext']
+                cursor1 = connection.cursor()
+                cursor1.execute(
+
+                "UPDATE quotation_tblbackpageforquotation SET "
+                "backpagenameforquotation_tblbackpageforquotation=%s, "
+                "backpagetextforquotation_tblbackpageforquotation=%s "
+                "WHERE backpageidforquotation_tblbackpageforquotation =%s ", [backpagename, backpagetext, backpageid])
+
+        cursor3 = connection.cursor()
+        cursor3.execute(
+                "SELECT "
+                "backpageidforquotation_tblbackpageforquotation, "
+                "backpagenameforquotation_tblbackpageforquotation, "
+                "backpagetextforquotation_tblbackpageforquotation, "
+                "creationtime_tblbackpageforquotation "
+                "FROM quotation_tblbackpageforquotation "
+                "WHERE obsolete_tblbackpageforquotation =0")
+
+
+        backpagesforquotation = cursor3.fetchall()
+
+        return render(request, 'quotation/backpageforquotation.html', {'backpagesforquotation': backpagesforquotation })
+def coredata_backpageforquotationadd(request):
+        cursor1 = connection.cursor()
+        cursor1.execute(
+                "INSERT INTO quotation_tblbackpageforquotation (backpagenameforquotation_tblbackpageforquotation) VALUES ('New')")
+        transaction.commit()
+
+        return redirect('coredata_backpageforquotation')
+def coredata_backpageforquotationremove(request, pk):
+        cursor1 = connection.cursor()
+        cursor1.execute(
+                "UPDATE quotation_tblbackpageforquotation SET "
+                "obsolete_tblbackpageforquotation=1 "
+                "WHERE backpageidforquotation_tblbackpageforquotation =%s ", [pk])
+
+        transaction.commit()
+
+        return redirect('coredata_backpageforquotation')
