@@ -44,8 +44,10 @@
 				<p><textarea id="preface" rows="18" cols="70" wrap="off" disabled>{{ doc.0.6}}</textarea></p>
 				<div class="footerdiv" >
 					<hr>
-					<span class="footerspan1">Please see the conditions in details on the last page<br></span>
+					<span class="firstpagefooterspan1">Please see the conditions in details on the last page<br></span>
 					<span class="firstpagefooterspan2" >Description2</span>
+					<span class="firstpagefooterspan3" >Description3</span>
+
 				</div>
 		</div>
 		<!-- first page wrapping end^ -->
@@ -97,8 +99,17 @@
 						</div>
 						{% endfor %}
 		<div class="page">
-            <span id="backpagetexthtml"></span>
-			<div class="backpagefooterdiv" ></span><span class="backpagefooterspan2" pagenumber="1">Description2</span></div>
+			<div class="backpagetextcontainer">{{doc.0.7|safe}}
+
+
+			</div>
+			<div id="backpagesignature" >
+				<p>{{creatordata.0.1}} {{creatordata.0.2}}</p>
+				<p>{{creatordata.0.4}}</p>
+
+			</div>
+				<div class="backpagefooterdiv" ></span><span class="backpagefooterspan2" pagenumber="1">Description2</span></div>
+
 		</div>
 
 

@@ -29,7 +29,7 @@ main();
 
 
     function main(){
-        backpagehtmlinsert();
+        backpagehandling();
         for (i = 0; i <= itemnumbers; i++) {
             measureitemcontainer();
             totalcount(i);
@@ -42,6 +42,9 @@ main();
             wrap();
             pagenumberer();
             totalprint();
+            var x= $('#foo').val()
+            console.log(x);
+
             return;
             }
             towrap.push(i); //if there is room on page only goes to wrap array
@@ -49,7 +52,7 @@ main();
         }
 
     }
-    function backpagehtmlinsert(){
+    function backpagehandling(){
 
             var quotationid = $('#quotationid').text();
             $.ajax({
@@ -71,9 +74,10 @@ main();
 
             function SearchSuccess(data, textStatus, jqXHR)
             {
+                $(".backpagetextcontainer").html(function () {
+                    return $(this).html().replace("data1", "hello everyone");
+                });
 
-            $('#backpagetexthtml').html(data);
-                    console.log(data);
 
             }
     }
@@ -114,7 +118,7 @@ main();
     $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 40mm" >Description</span><span style="margin-left: 60mm" >Qty</span></div></div>');
     }
     function footerinsert(rowid, pagenumber){
-    $('span[name="htmlinsertafter"][rowid="' + rowid + '"').html('<div class="footerdiv" ><hr><span class="footerspan1">Please see the conditions in details on the last page<br></span><span pagenumber=\"' + pagenumber + '\" class="footerspan2">Description2</span></div>');
+    $('span[name="htmlinsertafter"][rowid="' + rowid + '"').html('<div class="middlepagesfooterdiv" ><hr><span class="middlepagesfooterspan1">Please see the conditions in details on the last page<br></span><span pagenumber=\"' + pagenumber + '\" class="middlepagesfooterspan2">Description2</span><span class="middlepagesfooterspan3">Description3</span></div>');
     }
     function measureitemcontainer(){
     height=$('div[class="item-container-for-measure"][rowid="' + i + '"').outerHeight();
@@ -127,12 +131,15 @@ main();
     function pagenumberer(){
             $('#pages').text((pagenumber+1)); // pagenumbers on firstpage
             $('span[class="firstpagefooterspan2"]').text( "page 1/" + (pagenumber+1)); // firstpage footer filling
-            for (k = 1; k != pagenumber+1; k++) {
-            $('span[class="footerspan2"][pagenumber="' + k + '"').text( "page " + k + "/" + (pagenumber+1));
+            $('span[class="firstpagefooterspan3"]').text( "Number of Quotation: " + $('#numberofquotation').text()); // firstpage footer filling
 
+            for (k = 1; k != (pagenumber+1); k++) {
+            $('span[class="middlepagesfooterspan2"][pagenumber="' + k + '"').text( "page " + k + "/" + (pagenumber+1));
 
             }
-            $('span[class="backpagefooterspan2"]').text( "page " + k + "/" + (pagenumber+1)); // backpage footer filling
+            $('span[class="middlepagesfooterspan3"]').text( "Number of Quotation: " + $('#numberofquotation').text());
+
+            $('span[class="backpagefooterspan2"]').text( "page " + (pagenumber+1) + "/" + (pagenumber+1)); // backpage footer filling
 
     }
 });

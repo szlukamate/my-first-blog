@@ -82,10 +82,9 @@ body {
       left: 0;
       width: 100%;
       background-color: white;
-      text-align:Center;
       height:45mm;
       font-family: "Arial", Times, serif;
-      font-size: 19px;
+      font-size: 14px;
 }
 
 .footerspan1{
@@ -100,6 +99,63 @@ body {
       bottom: 20mm;
 
  }
+ .firstpagefooterspan1{
+      position:relative;
+      width: 180mm;
+      bottom: 20mm;
+      left:60mm;
+
+ }
+
+ .firstpagefooterspan2{
+      position:relative;
+      width: 180mm;
+      bottom: 18mm;
+      left:90mm;
+      font-style: italic;
+ }
+
+.firstpagefooterspan3{
+      position:relative;
+      width: 180mm;
+      bottom: 18mm;
+      left: 125mm;
+      font-style: italic;
+
+ }
+.middlepagesfooterdiv{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      height:45mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+}
+ .middlepagesfooterspan1{
+      position:relative;
+      width: 180mm;
+      bottom: 20mm;
+      left:60mm;
+
+ }
+.middlepagesfooterspan2{
+      position:relative;
+      width: 180mm;
+      bottom: 18mm;
+      left:90mm;
+      font-style: italic;
+ }
+.middlepagesfooterspan3{
+      position:relative;
+      width: 180mm;
+      bottom: 18mm;
+      left: 125mm;
+      font-style: italic;
+
+ }
+
 
 hr {
 position:relative;
@@ -321,7 +377,7 @@ right: 21mm;
       text-align:Center;
       height:20mm;
       font-family: "Arial", Times, serif;
-      font-size: 19px;
+      font-size: 14px;
 }
 .backpagefooterspan2{
       position:relative;
@@ -329,9 +385,23 @@ right: 21mm;
       bottom: 0mm;
 
  }
-.firstpagefooterspan2{
-      position:relative;
-      width: 180mm;
-      bottom: 20mm;
+.backpagetextcontainer{
+      position: relative;
+       top:30mm;
+       left: 20mm;
+       right_20mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   white-space: pre;
 
- }
+}
+#backpagesignature{
+      position: absolute;
+       bottom:70mm;
+       left: 120mm;
+       right_20mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   white-space: pre;
+
+}

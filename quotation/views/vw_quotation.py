@@ -69,7 +69,8 @@ def quotationform(request, pk):
                     "pcd_tblcompanies_ctbldoc, "
                     "town_tblcompanies_ctbldoc, "
                     "address_tblcompanies_ctbldoc, "
-                    "total_tbldoc "
+                    "total_tbldoc, "
+                    "deliverydays_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
@@ -415,7 +416,8 @@ def quotationbackpage(request):
         "Docid_tblDoc, "
         "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
         "docnumber_tbldoc, "
-        "creatorid_tbldoc "
+        "creatorid_tbldoc, "
+        "deliverydays_tbldoc "
         "FROM quotation_tbldoc "
         "WHERE docid_tbldoc=%s ",
         [quotationid])
@@ -432,6 +434,8 @@ def quotationbackpage(request):
                     "FROM auth_user "
                     "WHERE id=%s ", [creatorid])
     creatordata = cursor1.fetchall()
-    return render(request, 'quotation/quotationbackpage.html', {'doc': doc,
-                                                                'creatordata': creatordata})
+
+    json_data = json.dumps(doc)
+
+    return HttpResponse(json_data, content_type="application/json")
 
