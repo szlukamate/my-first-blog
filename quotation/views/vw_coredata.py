@@ -97,3 +97,47 @@ def coredata_backpageforquotationremove(request, pk):
         transaction.commit()
 
         return redirect('coredata_backpageforquotation')
+def coredata_payment(request):
+        if request.method == "POST":
+                paymentid = request.POST['paymentid']
+                paymentname = request.POST['paymentname']
+                paymenttext = request.POST['paymenttext']
+                cursor1 = connection.cursor()
+                cursor1.execute(
+
+                "UPDATE quotation_tblpayment SET "
+                "paymentname_tblpayment=%s, "
+                "paymenttextforquotation_tblpayment=%s "
+                "WHERE paymentid_tblpayment =%s ", [paymentname, paymenttext, paymentid])
+
+        cursor3 = connection.cursor()
+        cursor3.execute(
+                "SELECT "
+                "paymentid_tblpayment, "
+                "paymentname_tblpayment, "
+                "paymenttextforquotation_tblpayment, "
+                "creationtime_tblpayment "
+                "FROM quotation_tblpayment "
+                "WHERE obsolete_tblpayment =0")
+
+
+        payments = cursor3.fetchall()
+
+        return render(request, 'quotation/payment.html', {'payments': payments })
+def coredata_paymentadd(request):
+        cursor1 = connection.cursor()
+        cursor1.execute(
+                "INSERT INTO quotation_tblpayment (paymentname_tblpayment) VALUES ('New')")
+        transaction.commit()
+
+        return redirect('coredata_payment')
+def coredata_paymentremove(request, pk):
+        cursor1 = connection.cursor()
+        cursor1.execute(
+                "UPDATE quotation_tblpayment SET "
+                "obsolete_tblpayment=1 "
+                "WHERE paymentid_tblpayment =%s ", [pk])
+
+        transaction.commit()
+
+        return redirect('coredata_payment')

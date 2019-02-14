@@ -42,6 +42,13 @@
 									{% for defaultbackpagechoiceforquotation in defaultbackpagechoicesforquotation %}
 										<option value="{{ defaultbackpagechoiceforquotation.0 }}">{{ defaultbackpagechoiceforquotation.1}}</option>
 									{% endfor %}
+								</select><br>
+							  	<label >Payment</label>
+								<select class="selection" fieldnamefromname = "paymentname_tblpayment" fieldnamefromid = "paymentid_tblpayment" tablenamefrom="quotation_tblpayment" fieldnameto="defaultpaymentid_tblcompanies" >
+										<option value="" disabled selected>{{ selecteddefaultpaymentname }}</option>
+									{% for defaultpaymentchoice in defaultpaymentchoices %}
+										<option value="{{ defaultpaymentchoice.0 }}">{{ defaultpaymentchoice.1}}</option>
+									{% endfor %}
 								</select>
 
 

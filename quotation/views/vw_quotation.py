@@ -70,7 +70,8 @@ def quotationform(request, pk):
                     "town_tblcompanies_ctbldoc, "
                     "address_tblcompanies_ctbldoc, "
                     "total_tbldoc, "
-                    "deliverydays_tbldoc "
+                    "deliverydays_tbldoc, "
+                    "paymenttextforquotation_tblpayment_ctbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",

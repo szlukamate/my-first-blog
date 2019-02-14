@@ -54,13 +54,25 @@ def docadd(request):
 
         cursor5 = connection.cursor()
         cursor5.execute(
-            "SELECT defaultbackpageidforquotation_tblcompanies, defaultprefaceidforquotation_tblcompanies "
+            "SELECT defaultbackpageidforquotation_tblcompanies, "
+            "defaultprefaceidforquotation_tblcompanies, "
+            "defaultpaymentid_tblcompanies "
             "FROM quotation_tblcompanies "
             "WHERE Companyid_tblCompanies = %s", [companyid])
         defaultsfromtblcompanies = cursor5.fetchall()
         for instancesingle in defaultsfromtblcompanies:
             defaultbackpageidforquotation = instancesingle[0]
             defaultprefaceidforquotation = instancesingle[1]
+            defaultpaymentid = instancesingle[2]
+
+        cursor6 = connection.cursor()
+        cursor6.execute(
+            "SELECT paymenttextforquotation_tblpayment "
+            "FROM quotation_tblpayment "
+            "WHERE paymentid_tblpayment = %s", [defaultpaymentid])
+        paymentset = cursor6.fetchall()
+        for instancesingle in paymentset:
+            paymenttextcloneforquotation = instancesingle[0]
 
         cursor6 = connection.cursor()
         cursor6.execute(
@@ -104,14 +116,16 @@ def docadd(request):
                         "email_tblcontacts_ctbldoc, "
                         "pcd_tblcompanies_ctbldoc, "
                         "town_tblcompanies_ctbldoc, "
-                        "address_tblcompanies_ctbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        "address_tblcompanies_ctbldoc, "
+                        "paymenttextforquotation_tblpayment_ctbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone, prefacecloneforquotation, backpagetextcloneforquotation, docnumber, creatorid,
                         titleclone,
                         mobileclone,
                         emailclone,
                         pcdclone,
                         townclone,
-                        addressclone])
+                        addressclone,
+                        paymenttextcloneforquotation ])
 
         cursor3 = connection.cursor()
         cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc")

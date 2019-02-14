@@ -25,9 +25,6 @@ var total=0;
 var totalflag="Total_Off"
 main();
 
-
-
-
     function main(){
         backpagehandling();
         for (i = 0; i <= itemnumbers; i++) {
@@ -35,7 +32,6 @@ main();
             totalcount(i);
             if (sumheight > 600 ) { // sumheight: sum height of items inspected via cycle
                 wrap();
-
             }
             if (i == itemnumbers) { //last page
             towrap.push(i); //last record to wrap we put to array and wrap
@@ -77,11 +73,8 @@ main();
                 $(".backpagetextcontainer").html(function () {
                     return $(this).html().replace("data1", "hello everyone");
                 });
-
-
             }
     }
-
 
     function totalprint(){
         totalflag=$('#total').text();
@@ -93,8 +86,6 @@ main();
     function totalcount(i){
         var val=$('p[name="salesprice_tblDoc_details"][rowid="' + i + '"').text();
         total=total + Number(val);
-
-
     }
 
     function wrap(){
@@ -126,18 +117,18 @@ main();
     }
     function itemnumbers(){
     itemnumbers=$('#itemnumberp').attr( "itemnumber" ); //number of products
-    itemnumbers--;
+    itemnumbers--; // convert 1-x -> 0-(x-1)
     }
     function pagenumberer(){
             $('#pages').text((pagenumber+1)); // pagenumbers on firstpage
             $('span[class="firstpagefooterspan2"]').text( "page 1/" + (pagenumber+1)); // firstpage footer filling
             $('span[class="firstpagefooterspan3"]').text( "Number of Quotation: " + $('#numberofquotation').text()); // firstpage footer filling
 
-            for (k = 1; k != (pagenumber+1); k++) {
+            for (k = 1; k != (pagenumber+1); k++) { // for cycle for middlepage numbers
             $('span[class="middlepagesfooterspan2"][pagenumber="' + k + '"').text( "page " + k + "/" + (pagenumber+1));
 
             }
-            $('span[class="middlepagesfooterspan3"]').text( "Number of Quotation: " + $('#numberofquotation').text());
+            $('span[class="middlepagesfooterspan3"]').text( "Number of Quotation: " + $('#numberofquotation').text()); // middlepages number of quotation filling
 
             $('span[class="backpagefooterspan2"]').text( "page " + (pagenumber+1) + "/" + (pagenumber+1)); // backpage footer filling
 

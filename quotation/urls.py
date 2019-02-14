@@ -34,5 +34,8 @@ urlpatterns = [
     url(r'coredata_backpageforquotation/$', views.coredata_backpageforquotation, name='coredata_backpageforquotation'),
     url(r'coredata_backpageforquotationadd/$', views.coredata_backpageforquotationadd, name='coredata_backpageforquotationadd'),
     url(r'coredata_backpageforquotationremove/(?P<pk>[0-9]+)/$', views.coredata_backpageforquotationremove, name='coredata_backpageforquotationremove'),
+    url(r'coredata_payment/$', views.coredata_payment, name='coredata_payment'),
+    url(r'coredata_paymentadd/$', views.coredata_paymentadd, name='coredata_paymentadd'),
+    url(r'coredata_paymentremove/(?P<pk>[0-9]+)/$', views.coredata_paymentremove, name='coredata_paymentremove'),
 
 ]

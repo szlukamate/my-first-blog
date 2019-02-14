@@ -53,7 +53,8 @@ def companyedit(request, pk):
             "defaultbackpageidforquotation_tblcompanies, "
             "pcd_tblcompanies, "
             "town_tblcompanies, "
-            "address_tblcompanies "
+            "address_tblcompanies, "
+            "defaultpaymentid_tblcompanies "
             "FROM quotation_tblcompanies "
             "WHERE companyid_tblcompanies=%s ",
             [pk])
@@ -61,6 +62,7 @@ def companyedit(request, pk):
         for instancesingle in particularcompany:
             selecteddefaultprefaceidforquotation = instancesingle[2]
             selecteddefaultbackpageidforquotation = instancesingle[3]
+            selecteddefaultpaymentid = instancesingle[7]
 
         # default staff
         # tblprefaceforquotation staff
@@ -104,6 +106,27 @@ def companyedit(request, pk):
             "backpagenameforquotation_tblbackpageforquotation "
             "FROM quotation_tblbackpageforquotation")
         defaultbackpagechoicesforquotation = cursor2.fetchall()
+
+        # tblpayment staff
+        cursor4 = connection.cursor()
+        cursor4.execute(
+            "SELECT "
+            "paymentid_tblpayment, "
+            "paymentname_tblpayment "
+            "FROM quotation_tblpayment "
+            "WHERE paymentid_tblpayment=%s ",
+            [selecteddefaultpaymentid])
+        selecteddefaultpaymentset = cursor4.fetchall()
+        for instancesingle in selecteddefaultpaymentset:
+            selecteddefaultpaymentname = instancesingle[1]
+
+        cursor5 = connection.cursor()
+        cursor5.execute(
+            "SELECT "
+            "paymentid_tblpayment, "
+            "paymentname_tblpayment "
+            "FROM quotation_tblpayment")
+        defaultpaymentchoices = cursor5.fetchall()
         # default staff end
 
         cursor1 = connection.cursor()
@@ -124,7 +147,10 @@ def companyedit(request, pk):
                                                               'defaultprefacechoicesforquotation': defaultprefacechoicesforquotation,
                                                               'selecteddefaultprefacenameforquotation': selecteddefaultprefacenameforquotation,
                                                               'defaultbackpagechoicesforquotation': defaultbackpagechoicesforquotation,
-                                                              'selecteddefaultbackpagenameforquotation': selecteddefaultbackpagenameforquotation})
+                                                              'selecteddefaultbackpagenameforquotation': selecteddefaultbackpagenameforquotation,
+                                                                'defaultpaymentchoices': defaultpaymentchoices,
+                                                                'selecteddefaultpaymentname': selecteddefaultpaymentname})
+
 def companyuniversalselections (request):
 
     fieldvalue = request.POST['fieldvalue']
