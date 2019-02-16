@@ -70,9 +70,17 @@ main();
 
             function SearchSuccess(data, textStatus, jqXHR)
             {
+                var deliverydays= $('#deliverydays').text();
+                var payment= $('#payment').text();
+
+
                 $(".backpagetextcontainer").html(function () {
-                    return $(this).html().replace("data1", "hello everyone");
+                    return $(this).html().replace("data1", deliverydays);
                 });
+                $(".backpagetextcontainer").html(function () {
+                    return $(this).html().replace("data2", payment);
+                });
+
             }
     }
 
@@ -106,7 +114,7 @@ main();
 
     }
     function headerinsert(rowid){
-    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 40mm" >Description</span><span style="margin-left: 60mm" >Qty</span></div></div>');
+    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 35mm" >Description</span><span style="margin-left: 44mm" >Qty</span></div></div>');
     }
     function footerinsert(rowid, pagenumber){
     $('span[name="htmlinsertafter"][rowid="' + rowid + '"').html('<div class="middlepagesfooterdiv" ><hr><span class="middlepagesfooterspan1">Please see the conditions in details on the last page<br></span><span pagenumber=\"' + pagenumber + '\" class="middlepagesfooterspan2">Description2</span><span class="middlepagesfooterspan3">Description3</span></div>');
@@ -131,6 +139,7 @@ main();
             $('span[class="middlepagesfooterspan3"]').text( "Number of Quotation: " + $('#numberofquotation').text()); // middlepages number of quotation filling
 
             $('span[class="backpagefooterspan2"]').text( "page " + (pagenumber+1) + "/" + (pagenumber+1)); // backpage footer filling
+            $('span[class="backpagefooterspan3"]').text( "Number of Quotation: " + $('#numberofquotation').text()); // backpage footer filling
 
     }
 });

@@ -42,9 +42,9 @@
 
 				<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
 				<p><textarea id="preface" rows="18" cols="70" wrap="off" disabled>{{ doc.0.6}}</textarea></p>
-				<div class="footerdiv" >
+				<div class="firstpagefooterdiv" >
 					<hr>
-					<span class="firstpagefooterspan1">Please see the conditions in details on the last page<br></span>
+					<span class="firstpagefooterspan1" >Please see the conditions in details on the last page<br></span>
 					<span class="firstpagefooterspan2" >Description2</span>
 					<span class="firstpagefooterspan3" >Description3</span>
 
@@ -99,16 +99,22 @@
 						</div>
 						{% endfor %}
 		<div class="page">
+			<p id="deliverydays" hidden>{{ doc.0.20}}</p>
+			<p id="payment" hidden>{{ doc.0.21}}</p>
+
 			<div class="backpagetextcontainer">{{doc.0.7|safe}}
 
 
 			</div>
-			<div id="backpagesignature" >
+			<div class="backpagesignature" >
 				<p>{{creatordata.0.1}} {{creatordata.0.2}}</p>
 				<p>{{creatordata.0.4}}</p>
 
 			</div>
-				<div class="backpagefooterdiv" ></span><span class="backpagefooterspan2" pagenumber="1">Description2</span></div>
+			<div class="backpagefooterdiv" >
+				<span class="backpagefooterspan2" pagenumber="1">Description2</span>
+				<span class="backpagefooterspan3" >Description3</span>
+			</div>
 
 		</div>
 

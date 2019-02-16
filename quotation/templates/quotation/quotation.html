@@ -106,7 +106,8 @@
 											<label for="Note_tblDoc_details" style="padding-left: 21px;">Note</label>
 											<label for="purchase_price_tblproduct_ctblDoc_details" style="padding-left: 19px;">Purchaseprice</label>
 											<label for="listprice_tblDoc_details" style="padding-left: 9px;">listprice</label>
-											<label for="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" style="padding-left: 33px;">Currencycode</label><br>
+											<label for="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" style="padding-left: 33px;">Currencycode</label>
+							  				<label for="currencyrate_tblcurrency_ctblDoc_details" style="padding-left: 33px;">Currencyrate</label><br>
 
 											{% for tblDoc_details in  docdetails %}
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.13}}" name="Productid_tblDoc_details_id" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
@@ -118,9 +119,10 @@
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="2">
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.3}}" name="Product_description_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.8}}"  name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
-											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
-											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.11}}" name="listprice_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
+											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="10" disabled>
+											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.11}}" name="listprice_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10" disabled >
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.12}}" name="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9" disabled>
+							  				<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.16}}" name="currencyirate_tblcurrency_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9" disabled>
 											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
 
 											<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->

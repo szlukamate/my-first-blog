@@ -1,0 +1,25 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+ 	{% block content %}
+	                    <div class="post">
+						   	<p align="center" style="font-size:260%">currencys</p>
+							<p align="right"><a href="{% url 'coredata_currencyadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+								{% for currency in  currencys %}
+							<form action="{% url 'coredata_currency' %}" method="post">{% csrf_token %}
+								<label for="Productid_tblDoc_details_id" >currency id and code and actual rate and created:</label>
+								<input type="text"  value="{{ currency.0 }}" name="currencyid" size="3" readonly="readonly">
+								<input type="text"  value="{{ currency.1 }}" name="currencyisocode" >
+								<input type="text"  value="{{ currency.2 }}" name="currencydescription" >
+								<input type="text"  value="{{ currency.3 }}" name="currencyrate" >
+								<input type="text"  value="{{ currency.4|date:'M.d.Y' }} {{ currency.3|time:'H:i' }}" name="creationtime" readonly="readonly">
+
+
+
+                               	<input type="submit" value="Save currency"><a href="{% url 'coredata_currencyremove' pk=currency.0 %}"><span class="glyphicon glyphicon-remove"></span></a>
+
+							</form>
+								{% endfor %}
+
+
+	{% endblock %}  

@@ -76,7 +76,7 @@ body {
    overflow-wrap: break-word;
 }
 
-.footerdiv{
+.firstpagefooterdiv{
       position: absolute;
       bottom: 0;
       left: 0;
@@ -86,24 +86,19 @@ body {
       font-family: "Arial", Times, serif;
       font-size: 14px;
 }
+.firstpagefooterdiv hr {
+position:relative;
+top 0;
+margin-left: 20mm;
+margin-right: 20mm;
+border-top: 3px double #8c8b8b;
+}
 
-.footerspan1{
-      position:relative;
-      width: 180mm;
-      bottom: 20mm;
-
- }
-.footerspan2{
-      position:relative;
-      width: 180mm;
-      bottom: 20mm;
-
- }
  .firstpagefooterspan1{
       position:relative;
       width: 180mm;
-      bottom: 20mm;
       left:60mm;
+      bottom: 18mm;
 
  }
 
@@ -119,7 +114,7 @@ body {
       position:relative;
       width: 180mm;
       bottom: 18mm;
-      left: 125mm;
+      left: 110mm;
       font-style: italic;
 
  }
@@ -151,7 +146,7 @@ body {
       position:relative;
       width: 180mm;
       bottom: 18mm;
-      left: 125mm;
+      left: 110mm;
       font-style: italic;
 
  }
@@ -374,28 +369,40 @@ right: 21mm;
       left: 0;
       width: 100%;
       background-color: white;
-      text-align:Center;
+//      text-align:Center;
       height:20mm;
       font-family: "Arial", Times, serif;
       font-size: 14px;
+
 }
 .backpagefooterspan2{
       position:relative;
       width: 180mm;
       bottom: 0mm;
+      left: 90mm;
+      font-style: italic;
+  }
+ .backpagefooterspan3{
+      position:relative;
+      width: 180mm;
+      bottom: 0mm;
+      left: 110mm;
+      font-style: italic;
+
 
  }
+
 .backpagetextcontainer{
       position: relative;
        top:30mm;
        left: 20mm;
        right_20mm;
    font-family: "Arial", Times, serif;
-   font-size: 12px;
+   font-size: 14px;
    white-space: pre;
 
 }
-#backpagesignature{
+.backpagesignature{
       position: absolute;
        bottom:70mm;
        left: 120mm;
@@ -403,5 +410,14 @@ right: 21mm;
    font-family: "Arial", Times, serif;
    font-size: 12px;
    white-space: pre;
+
+}
+.backpagesignature p {
+   margin: 0;
+    padding: 0;
+}
+
+.backpagetextcontainer p {
+      margin: 15;
 
 }

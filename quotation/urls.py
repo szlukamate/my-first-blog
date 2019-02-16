@@ -37,5 +37,8 @@ urlpatterns = [
     url(r'coredata_payment/$', views.coredata_payment, name='coredata_payment'),
     url(r'coredata_paymentadd/$', views.coredata_paymentadd, name='coredata_paymentadd'),
     url(r'coredata_paymentremove/(?P<pk>[0-9]+)/$', views.coredata_paymentremove, name='coredata_paymentremove'),
+    url(r'coredata_currency/$', views.coredata_currency, name='coredata_currency'),
+    url(r'coredata_currencyadd/$', views.coredata_currencyadd, name='coredata_currencyadd'),
+    url(r'coredata_currencyremove/(?P<pk>[0-9]+)/$', views.coredata_currencyremove, name='coredata_currencyremove'),
 
 ]

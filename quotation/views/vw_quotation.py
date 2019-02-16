@@ -91,10 +91,23 @@ def quotationform(request, pk):
     cursor3 = connection.cursor()
     # if there is not such product already not show goto
 
-    cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
-                    "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details`, "
-                    "purchase_price_tblproduct_ctblDoc_details, listprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
-                    "Doc_detailsid_tblDoc_details, COALESCE(Productid_tblProduct, 0) "
+    cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
+                    "`Qty_tblDoc_details`, "
+                    "`Docid_tblDoc_details_id`, "
+                    "`Product_description_tblProduct_ctblDoc_details`, "
+                    "`firstnum_tblDoc_details`, "
+                    "`fourthnum_tblDoc_details`, "
+                    "`secondnum_tblDoc_details`, "
+                    "`thirdnum_tblDoc_details`, "
+                    "`Note_tblDoc_details`, "
+                    "`creationtime_tblDoc_details`, "
+                    "purchase_price_tblproduct_ctblDoc_details, "
+                    "listprice_tblDoc_details, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                    "Productid_tblDoc_details_id, "
+                    "Doc_detailsid_tblDoc_details, "
+                    "COALESCE(Productid_tblProduct, 0), "
+                    "currencyrate_tblcurrency_ctblDoc_details "
                     "FROM quotation_tbldoc_details "
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                     "ON "
@@ -153,10 +166,16 @@ def quotationform(request, pk):
 def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml ):
     cursor0 = connection.cursor()
     cursor0.execute(
-        "SELECT `Productid_tblProduct`, `purchase_price_tblproduct`, `Product_description_tblProduct`, "
-        "`margin_tblproduct`,`currencyisocode_tblcurrency_ctblproduct` "
-        "FROM `quotation_tblproduct` WHERE Productid_tblProduct= %s", [pkproductid])
-
+        "SELECT `Productid_tblProduct`, "
+        "`purchase_price_tblproduct`, `"
+        "Product_description_tblProduct`, "
+        "`margin_tblproduct`, "
+        "`currencyisocode_tblcurrency_ctblproduct`, "
+        "currencyrate_tblcurrency "
+        "FROM `quotation_tblproduct` "
+        "LEFT JOIN quotation_tblcurrency "
+        "ON quotation_tblproduct.currencyisocode_tblcurrency_ctblproduct=quotation_tblcurrency.currencyisocode_tblcurrency "
+        "WHERE Productid_tblProduct= %s", [pkproductid])
     results = cursor0.fetchall()
     for instancesingle in results:
         purchase_priceclone = instancesingle[1]
@@ -165,9 +184,10 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
 
         marginfromproducttable=instancesingle[3]
         listpricecomputed=round((100*purchase_priceclone)/(100-marginfromproducttable),2)
+        currencyrateclone=instancesingle[5]
     #pkdocdetailsid=3
 
-    if int(pkdocdetailsid) != 0:
+    if int(pkdocdetailsid) != 0: # only modifying row
         cursor2 = connection.cursor()
         cursor2.execute(
             "UPDATE quotation_tbldoc_details SET "
@@ -179,18 +199,33 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
             "purchase_price_tblproduct_ctblDoc_details=%s, "
             "Product_description_tblProduct_ctblDoc_details=%s, "
             "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details=%s, "
-            "listprice_tblDoc_details=%s "
-            "WHERE doc_detailsid_tbldoc_details =%s ", [pkproductid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml, purchase_priceclone,  productdescriptionclone, currencyisocodeclone, listpricecomputed, pkdocdetailsid])
+            "listprice_tblDoc_details=%s, "
+            "currencyrate_tblcurrency_ctblDoc_details=%s "
+            "WHERE doc_detailsid_tbldoc_details =%s ", [pkproductid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml,
+                                                        purchase_priceclone,  productdescriptionclone, currencyisocodeclone, listpricecomputed, currencyrateclone,
+                                                        pkdocdetailsid])
 
     else:
-        cursor1 = connection.cursor()
+        cursor1 = connection.cursor() # new row needed
         cursor1.execute(
             "INSERT INTO quotation_tbldoc_details "
-            "(`Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Productid_tblDoc_details_id`, `firstnum_tblDoc_details`, `fourthnum_tblDoc_details`, "
-            "`secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `purchase_price_tblproduct_ctblDoc_details`, "
-            "`Product_description_tblProduct_ctblDoc_details`, `currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`, listprice_tblDoc_details) "
-            "VALUES (1, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s)",
-            [pkdocid, pkproductid, nextfirstnumonhtml, nextfourthnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, purchase_priceclone, productdescriptionclone, currencyisocodeclone, listpricecomputed])
+            "(`Qty_tblDoc_details`, "
+            "`Docid_tblDoc_details_id`, "
+            "`Productid_tblDoc_details_id`, "
+            "`firstnum_tblDoc_details`, "
+            "`fourthnum_tblDoc_details`, "
+            "`secondnum_tblDoc_details`, "
+            "`thirdnum_tblDoc_details`, "
+            "`Note_tblDoc_details`, "
+            "`purchase_price_tblproduct_ctblDoc_details`, "
+            "`Product_description_tblProduct_ctblDoc_details`, "
+            "`currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`, "
+            "listprice_tblDoc_details, "
+            "currencyrate_tblcurrency_ctblDoc_details)"
+            "VALUES (1, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s)",
+            [pkdocid, pkproductid, nextfirstnumonhtml, nextfourthnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, purchase_priceclone, productdescriptionclone, currencyisocodeclone,
+             listpricecomputed,
+             currencyrateclone])
         transaction.commit()
 
     return redirect('quotationform', pk=pkdocid)
@@ -331,7 +366,9 @@ def quotationprint (request, docid):
                     "pcd_tblcompanies_ctbldoc, "
                     "town_tblcompanies_ctbldoc, "
                     "address_tblcompanies_ctbldoc, "
-                    "total_tbldoc "
+                    "total_tbldoc, "
+                    "deliverydays_tbldoc, "
+                    "paymenttextforquotation_tblpayment_ctbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
@@ -422,20 +459,8 @@ def quotationbackpage(request):
         "FROM quotation_tbldoc "
         "WHERE docid_tbldoc=%s ",
         [quotationid])
+
     doc = cursor0.fetchall()
-    for x in doc:
-        creatorid = x[3]
-
-    cursor1 = connection.cursor()
-    cursor1.execute("SELECT id, "
-                    "first_name, "
-                    "last_name, "
-                    "email, "
-                    "subscriptiontext_tblauth_user "
-                    "FROM auth_user "
-                    "WHERE id=%s ", [creatorid])
-    creatordata = cursor1.fetchall()
-
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")

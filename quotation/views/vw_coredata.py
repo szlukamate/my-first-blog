@@ -141,3 +141,51 @@ def coredata_paymentremove(request, pk):
         transaction.commit()
 
         return redirect('coredata_payment')
+def coredata_currency(request):
+        if request.method == "POST":
+                currencyid = request.POST['currencyid']
+                currencyisocode = request.POST['currencyisocode']
+                currencydescription = request.POST['currencydescription']
+                currencyrate = request.POST['currencyrate']
+
+                cursor1 = connection.cursor()
+                cursor1.execute(
+
+                "UPDATE quotation_tblcurrency SET "
+                "currencyisocode_tblcurrency=%s, "
+                "currencydescription_tblcurrency=%s, "
+                "currencyrate_tblcurrency=%s "
+                "WHERE currencyid_tblcurrency =%s ", [currencyisocode, currencydescription, currencyrate, currencyid])
+
+        cursor3 = connection.cursor()
+        cursor3.execute(
+                "SELECT "
+                "currencyid_tblcurrency, "
+                "currencyisocode_tblcurrency, "
+                "currencydescription_tblcurrency, "
+                "currencyrate_tblcurrency, "
+                "creationtime_tblcurrency "
+                "FROM quotation_tblcurrency "
+                "WHERE obsolete_tblcurrency =0")
+
+
+        currencys = cursor3.fetchall()
+
+        return render(request, 'quotation/currency.html', {'currencys': currencys })
+def coredata_currencyadd(request):
+        cursor1 = connection.cursor()
+        cursor1.execute(
+                "INSERT INTO quotation_tblcurrency (currencydescription_tblcurrency) VALUES ('New')")
+        transaction.commit()
+
+        return redirect('coredata_currency')
+def coredata_currencyremove(request, pk):
+        cursor1 = connection.cursor()
+        cursor1.execute(
+                "UPDATE quotation_tblcurrency SET "
+                "obsolete_tblcurrency=1 "
+                "WHERE currencyid_tblcurrency =%s ", [pk])
+
+        transaction.commit()
+
+        return redirect('coredata_currency')
