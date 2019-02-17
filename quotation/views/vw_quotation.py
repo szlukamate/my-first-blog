@@ -71,7 +71,9 @@ def quotationform(request, pk):
                     "address_tblcompanies_ctbldoc, "
                     "total_tbldoc, "
                     "deliverydays_tbldoc, "
-                    "paymenttextforquotation_tblpayment_ctbldoc "
+                    "paymenttextforquotation_tblpayment_ctbldoc, "
+                    "currencycodeinreport_tbldoc, "
+                    "currencyrateinreport_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
@@ -107,7 +109,14 @@ def quotationform(request, pk):
                     "Productid_tblDoc_details_id, "
                     "Doc_detailsid_tblDoc_details, "
                     "COALESCE(Productid_tblProduct, 0), "
-                    "currencyrate_tblcurrency_ctblDoc_details "
+                    "currencyrate_tblcurrency_ctblDoc_details, "
+                    "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
+                    "salespriceHUF_tblDoc_details, "
+                    "purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details as purchasepriceHUF, "
+                    "round((((salespriceHUF_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(salespriceHUF_tblDoc_details))*100),1) as salespricemargin, "
+                    "listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details as listpriceHUF, "
+                    "(100-round(((salespriceHUF_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
+                    "unit_tbldocdetails "
                     "FROM quotation_tbldoc_details "
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                     "ON "
@@ -126,6 +135,13 @@ def quotationform(request, pk):
                      "FROM auth_user "
                     "WHERE id=%s ", [creatorid])
     creatordata = cursor10.fetchall()
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT currencyid_tblcurrency, currencyisocode_tblcurrency FROM quotation_tblcurrency")
+    currencycodes = cursor3.fetchall()
+    transaction.commit()
+
 
     cursor5 = connection.cursor()
     cursor5.execute("SELECT `firstnum_tblDoc_details`, "
@@ -161,7 +177,8 @@ def quotationform(request, pk):
         nextchapternums[3]=nextchapternums[3]+1
 
     return render(request, 'quotation/quotation.html', {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums' : nextchapternums,
-                                                        'creatordata': creatordata})
+                                                        'creatordata': creatordata,
+                                                        'currencycodes': currencycodes})
 
 def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml ):
     cursor0 = connection.cursor()
@@ -185,7 +202,8 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
         marginfromproducttable=instancesingle[3]
         listpricecomputed=round((100*purchase_priceclone)/(100-marginfromproducttable),2)
         currencyrateclone=instancesingle[5]
-    #pkdocdetailsid=3
+
+        salespriceHUF=listpricecomputed * currencyrateclone
 
     if int(pkdocdetailsid) != 0: # only modifying row
         cursor2 = connection.cursor()
@@ -200,10 +218,11 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
             "Product_description_tblProduct_ctblDoc_details=%s, "
             "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details=%s, "
             "listprice_tblDoc_details=%s, "
-            "currencyrate_tblcurrency_ctblDoc_details=%s "
+            "currencyrate_tblcurrency_ctblDoc_details=%s, "
+            "salespriceHUF_tblDoc_details=%s "
             "WHERE doc_detailsid_tbldoc_details =%s ", [pkproductid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml,
                                                         purchase_priceclone,  productdescriptionclone, currencyisocodeclone, listpricecomputed, currencyrateclone,
-                                                        pkdocdetailsid])
+                                                        salespriceHUF, pkdocdetailsid,])
 
     else:
         cursor1 = connection.cursor() # new row needed
@@ -221,11 +240,13 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
             "`Product_description_tblProduct_ctblDoc_details`, "
             "`currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`, "
             "listprice_tblDoc_details, "
-            "currencyrate_tblcurrency_ctblDoc_details)"
-            "VALUES (1, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s)",
+            "currencyrate_tblcurrency_ctblDoc_details, "
+            "salespriceHUF_tblDoc_details)"
+            "VALUES (1, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s)",
             [pkdocid, pkproductid, nextfirstnumonhtml, nextfourthnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, purchase_priceclone, productdescriptionclone, currencyisocodeclone,
              listpricecomputed,
-             currencyrateclone])
+             currencyrateclone,
+             salespriceHUF])
         transaction.commit()
 
     return redirect('quotationform', pk=pkdocid)
@@ -379,10 +400,23 @@ def quotationprint (request, docid):
 
     cursor3 = connection.cursor()
     cursor3.execute(
-        "SELECT  `Doc_detailsid_tblDoc_details`, `Qty_tblDoc_details`, `Docid_tblDoc_details_id`, `Product_description_tblProduct_ctblDoc_details`, `firstnum_tblDoc_details`, "
-        "`fourthnum_tblDoc_details`, `secondnum_tblDoc_details`, `thirdnum_tblDoc_details`, `Note_tblDoc_details`, `creationtime_tblDoc_details`, "
-        "purchase_price_tblproduct_ctblDoc_details, listprice_tblDoc_details, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, Productid_tblDoc_details_id, "
-        "Doc_detailsid_tblDoc_details, COALESCE(Productid_tblProduct, 0) "
+        "SELECT  `Doc_detailsid_tblDoc_details`, "
+        "`Qty_tblDoc_details`, "
+        "`Docid_tblDoc_details_id`, "
+        "`Product_description_tblProduct_ctblDoc_details`, "
+        "`firstnum_tblDoc_details`, "
+        "`fourthnum_tblDoc_details`, "
+        "`secondnum_tblDoc_details`, "
+        "`thirdnum_tblDoc_details`, "
+        "`Note_tblDoc_details`, "
+        "`creationtime_tblDoc_details`, "
+        "purchase_price_tblproduct_ctblDoc_details, "
+        "listprice_tblDoc_details, "
+        "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+        "Productid_tblDoc_details_id, "
+        "Doc_detailsid_tblDoc_details, "
+        "COALESCE(Productid_tblProduct, 0), "
+        "unit_tbldocdetails "
         "FROM quotation_tbldoc_details "
         "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
         "ON "

@@ -114,7 +114,7 @@ main();
 
     }
     function headerinsert(rowid){
-    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 35mm" >Description</span><span style="margin-left: 44mm" >Qty</span></div></div>');
+    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 35mm" >Description</span><span style="margin-left: 44mm" >Qty</span><div style="margin-left: 10mm"><span>Unit Price</span><br><span>in HUF</span></div><span style="margin-left: 10mm" >Sales Price</span></div></div>');
     }
     function footerinsert(rowid, pagenumber){
     $('span[name="htmlinsertafter"][rowid="' + rowid + '"').html('<div class="middlepagesfooterdiv" ><hr><span class="middlepagesfooterspan1">Please see the conditions in details on the last page<br></span><span pagenumber=\"' + pagenumber + '\" class="middlepagesfooterspan2">Description2</span><span class="middlepagesfooterspan3">Description3</span></div>');

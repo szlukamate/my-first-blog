@@ -3,7 +3,7 @@
     width: 150mm;
 }
 #tabs2 {
-    width: 350mm;
+    width: 450mm;
 }
 
 #infoframe {
@@ -24,5 +24,10 @@ left:200mm;
 #payment {
 position: absolute;
 top: 35mm;
+left:200mm;
+}
+#currencyinreport {
+position: absolute;
+top: 45mm;
 left:200mm;
 }

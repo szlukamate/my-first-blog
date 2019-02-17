@@ -61,7 +61,7 @@ body {
       position: absolute;
       top: 0mm;
     left: 100mm;
-    width: 10mm;
+    width: 20mm;
    font-family: "Arial", Times, serif;
    font-size: 12px;
    overflow-wrap: break-word;
@@ -164,7 +164,7 @@ border-top: 3px double #8c8b8b;
       position: relative;
       top: 23mm;
       width: 170mm;
-      height: 10mm;
+      height: 20mm;
       left: 20mm;
       border:2px solid #000;
       font-family: "Times New Roman", Times, serif;
