@@ -23,6 +23,7 @@ var maxitemwrapped;
 var pagenumber=1;
 var total=0;
 var totalflag="Total_Off"
+var currencycode=$('#currencycodeinreport_tbldoc').text();
 main();
 
     function main(){
@@ -87,12 +88,12 @@ main();
     function totalprint(){
         totalflag=$('#total').text();
         if (totalflag == "Total_On") {
-         $('span[name="totalhtmlinsertspan"][rowid="' + itemnumbers + '"').html('<hr class=\"totalhr\" ><div ><span class="totallabel" >Total: ' + total + '</span></div>');
+         $('span[name="totalhtmlinsertspan"][rowid="' + itemnumbers + '"').html('<hr class=\"totalhr\" ><div ><span class="totallabel" >Total: ' + total + ' ' + currencycode + '+VAT</span></div>');
         }
         console.log(totalflag);
     }
     function totalcount(i){
-        var val=$('p[name="salesprice_tblDoc_details"][rowid="' + i + '"').text();
+        var val=$('p[name="salesprice"][rowid="' + i + '"').text();
         total=total + Number(val);
     }
 
@@ -114,7 +115,8 @@ main();
 
     }
     function headerinsert(rowid){
-    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 35mm" >Description</span><span style="margin-left: 44mm" >Qty</span><div style="margin-left: 10mm"><span>Unit Price</span><br><span>in HUF</span></div><span style="margin-left: 10mm" >Sales Price</span></div></div>');
+
+    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 35mm" >Description</span><span style="margin-left: 44mm" >Qty</span><span class="headerlabelunitprice" >Unit Price</span><span class="headerlabelscurrencycodespanforunitprice">in ' + currencycode + '</span><span class="headerlabelsalesprice" >Sales Price</span><span class="headerlabelscurrencycodespanforsalesprice">in ' + currencycode + '</span></div></div>');
     }
     function footerinsert(rowid, pagenumber){
     $('span[name="htmlinsertafter"][rowid="' + rowid + '"').html('<div class="middlepagesfooterdiv" ><hr><span class="middlepagesfooterspan1">Please see the conditions in details on the last page<br></span><span pagenumber=\"' + pagenumber + '\" class="middlepagesfooterspan2">Description2</span><span class="middlepagesfooterspan3">Description3</span></div>');

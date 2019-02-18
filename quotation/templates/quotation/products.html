@@ -25,9 +25,10 @@
 			<input type="text" value="{{product.5}}" name="listprice" maxlength="10" size="8" productid="{{product.0}}" disabled/>
 
 			<input type="button" name="listpricechangerbutton" value="Change list Price" class="listpricechangerbutton" productid="{{product.0}}" style="width:200px">
+<textarea rows="2" cols="60" class="updateable" name="Product_description_tblProduct" productid="{{product.0}}">{{ product.2}}</textarea>
+			<input type="text" class="updateable" value="{{product.6}}" name="unit_tblproduct" maxlength="10" size="8" productid="{{product.0}}"/>
 
-			<input type="text" class="updateable" value="{{product.2}}" name="Product_description_tblProduct" maxlength="200" productid="{{product.0}}" size="8">
-			<a href="{% url 'productremove' pkproductid=product.0 %}"><span class="glyphicon glyphicon-remove"></span></a><br>
+			<a href="{% url 'productremove' pkproductid=product.0 %}"><span class="glyphicon glyphicon-remove"></span></a><hr>
 			{% endfor %}
 			<script type="text/javascript" src="{% static 'js/products.js' %}"></script>
 

@@ -40,5 +40,6 @@ urlpatterns = [
     url(r'coredata_currency/$', views.coredata_currency, name='coredata_currency'),
     url(r'coredata_currencyadd/$', views.coredata_currencyadd, name='coredata_currencyadd'),
     url(r'coredata_currencyremove/(?P<pk>[0-9]+)/$', views.coredata_currencyremove, name='coredata_currencyremove'),
+    url(r'^doclink/(?P<docid>[0-9]+)/$', views.doclink, name='doclink'),
 
 ]

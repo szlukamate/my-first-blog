@@ -10,6 +10,8 @@
     <body>
 	<p id="quotationid" hidden>{{ doc.0.0}}</p>
 	<p id="total" >{{ doc.0.19}}</p>{% csrf_token %}
+	<p id="currencycodeinreport_tbldoc" >{{ doc.0.22}}</p>
+	<p id="currencyrateinreport_tbldoc" >{{ doc.0.23}}</p>
 
 		<!-- wrap first page ˇ-->
 		<div class="page">
@@ -83,10 +85,13 @@
 															<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
 													</div>
 													<div  class="qtydiv">
-															<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}} {{ tblDoc_details.16}}</p>
+															<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}} {{ tblDoc_details.15}}</p>
+													</div>
+													<div  class="unitsalespricediv">
+															<p   name="unitsalesprice" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.17}}</p>
 													</div>
 													<div  class="salespricediv">
-															<p   name="salesprice_tblDoc_details" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.11}}</p>
+															<p   name="salesprice" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.18}}</p>
 													</div>
 
 													<div  class="totalhtmlinsertdiv">

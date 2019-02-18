@@ -32,8 +32,13 @@ def products(request, pkproductid):
     # pkproductid == 0 if the request not asks a particular product
     if int(pkproductid) == 0:
         cursor = connection.cursor()
-        cursor.execute("SELECT Productid_tblProduct, purchase_price_tblproduct, Product_description_tblProduct, "
-                       "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice "
+        cursor.execute("SELECT Productid_tblProduct, "
+                       "purchase_price_tblproduct, "
+                       "Product_description_tblProduct, "
+                       "currencyisocode_tblcurrency_ctblproduct, "
+                       "margin_tblproduct, "
+                       "round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
+                       "unit_tblproduct "
                        "FROM quotation_tblproduct "
                        "WHERE obsolete_tblproduct=0 "
                        )
@@ -43,10 +48,14 @@ def products(request, pkproductid):
 
     else:
         cursor = connection.cursor()
-        cursor.execute("SELECT Productid_tblProduct, purchase_price_tblproduct, Product_description_tblProduct, "
-                       "currencyisocode_tblcurrency_ctblproduct, margin_tblproduct, round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice "
-                        "FROM quotation_tblproduct "
-                        "WHERE productid_tblproduct= %s and obsolete_tblproduct=0", [pkproductid])
+        cursor.execute("SELECT Productid_tblProduct, "
+                       "purchase_price_tblproduct, Product_description_tblProduct, "
+                       "currencyisocode_tblcurrency_ctblproduct, "
+                       "margin_tblproduct, "
+                       "round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
+                       "unit_tblproduct "
+                       "FROM quotation_tblproduct "
+                       "WHERE productid_tblproduct= %s and obsolete_tblproduct=0", [pkproductid])
 
         products = cursor.fetchall()
         transaction.commit()

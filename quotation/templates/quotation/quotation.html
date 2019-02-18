@@ -46,7 +46,9 @@
 						<input type="submit" value="Print" />
 					</form>
 
-
+					<form action="{% url 'doclink' docid=doc.0.0 %}">
+						<input type="submit" value="Doclink" />
+					</form>
 						<div id="tabs2">
 						  <ul>
 							<li><a href="#tabs2fragment-1">Quotation</a></li>
@@ -122,8 +124,8 @@
 							  				<label for="listprice_tblDoc_details" style="padding-left: 9px;">ListpriceHUF</label>
 											<label for="currencyrate_tblcurrency_ctblDoc_details" style="padding-left: 13px;">Rate</label>
 							  				<label for="purchasepriceHUF" style="padding-left: 13px;">PurchasepriceHUF</label>
-							  				<label for="Salespricemargin" style="padding-left: 13px;">Salespricemargin</label>
-							  				<label for="SalespriceHUF" style="padding-left: 13px;">SalespriceHUF</label><br>
+							  				<label for="unitsalespricemargin" style="padding-left: 13px;">Unitsalespricemargin</label>
+							  				<label for="unitsalespriceHUF" style="padding-left: 13px;">UnitsalespriceHUF</label><br>
 											<label for="Discount" style="padding-left: 13px;">Discount</label><br>
 
 
@@ -145,8 +147,8 @@
 							  				<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.21}}" name="listpriceHUF" size="10" disabled >
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.16}}" name="currencyirate_tblcurrency_ctblDoc_details" size="3" disabled>
 							  				<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.19}}" name="purchasepriceHUF" size="10" disabled>
-											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.20}}" name="Salespricemargin" size="3" disabled>
-											<input type="text" style="color:white; background-color: Green;" class="updateabletbldocdetails" value="{{ tblDoc_details.18}}"  name="salespriceHUF_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
+											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.20}}" name="unitsalespricemargin" size="3" disabled>
+											<input type="text" style="color:white; background-color: Green;" class="updateabletbldocdetails" value="{{ tblDoc_details.18}}"  name="unitsalespriceHUF_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.22}}" name="Discount" size="3" disabled>
 											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
 

@@ -1,0 +1,21 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+
+
+
+							<p align="center" style="font-size:160%;">Docs Form</p>
+							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+
+							<p>Docid: {{ docid }}</p>
+							{% for doc in docs %}
+							<p>{{ doc.0 }}</p>
+							{% endfor %}
+
+
+		<script type="text/javascript" src="{% static 'js/doclink.js' %}"></script>
+		<link rel="stylesheet" href="{% static 'css/doclink.css' %}">
+
+	{% endblock %}

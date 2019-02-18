@@ -183,6 +183,15 @@ def docremove(request, pk):
     transaction.commit()
 
     return redirect('docs')
+def doclink(request, docid):
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT docid_tbldoc, Pcd_tblDoc, Town_tblDoc, Doc_kindid_tblDoc_id, companyname_tblcompanies_ctbldoc, firstname_tblcontacts_ctbldoc, lastname_tblcontacts_ctbldoc, creationtime_tbldoc "
+                    "FROM quotation_tbldoc "
+                    "WHERE doclinkparentid_tbldoc = %s ", [docid])
+
+    docs = cursor1.fetchall()
+    # docs = tblDoc.objects.all()
+    return render(request, 'quotation/doclink.html', {'docs': docs, 'docid': docid})
 
 
 

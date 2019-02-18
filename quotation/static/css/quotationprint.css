@@ -56,6 +56,8 @@ body {
    font-size: 12px;
    overflow-wrap: break-word;
     margin-left: -4px;
+    white-space: pre-line;
+
 }
 .qtydiv {
       position: absolute;
@@ -66,10 +68,19 @@ body {
    font-size: 12px;
    overflow-wrap: break-word;
 }
+.unitsalespricediv {
+      position: absolute;
+      top: 0mm;
+    left: 115mm;
+    width: 200mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+}
 .salespricediv {
       position: absolute;
       top: 0mm;
-    left: 110mm;
+    left: 142mm;
     width: 200mm;
    font-family: "Arial", Times, serif;
    font-size: 12px;
@@ -164,7 +175,7 @@ border-top: 3px double #8c8b8b;
       position: relative;
       top: 23mm;
       width: 170mm;
-      height: 20mm;
+      height: 11mm;
       left: 20mm;
       border:2px solid #000;
       font-family: "Times New Roman", Times, serif;
@@ -179,6 +190,30 @@ border-top: 3px double #8c8b8b;
       position: relative;
       top: 3mm;
 }
+.headerlabelunitprice {
+        position: absolute;
+        top: -2mm;
+        left: 115mm;
+
+}
+
+.headerlabelsalesprice {
+        position: absolute;
+        top: -2mm;
+        left: 142mm;
+
+}
+.headerlabelscurrencycodespanforunitprice{
+        position: absolute;
+        top: 2mm;
+        left: 115mm;
+}
+.headerlabelscurrencycodespanforsalesprice{
+        position: absolute;
+        top: 2mm;
+        left: 142mm;
+}
+
 #logo {
       position: relative;
       margin: 20mm;
@@ -351,7 +386,7 @@ right: 21mm;
 }
 .totallabel {
         position: relative;
-        left: 91mm;
+        left: 110mm;
       font-family: "Times New Roman", Times, serif;
       font-size: 16px;
       font-style: italic;
