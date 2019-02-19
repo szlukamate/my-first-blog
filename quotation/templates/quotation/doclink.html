@@ -9,11 +9,14 @@
 							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 
 
-							<p>Docid: {{ docid }}</p>
-							{% for doc in docs %}
-							<p>{{ doc.0 }}</p>
+							<p>Doclevel0: {{ doclevel0 }}</p>
+							{% for doclevel1 in docslevel1 %}
+							<span>{{ doclevel1.0 }}:{{ doclevel1.1 }}</span>
 							{% endfor %}
-
+                            <br>
+                            {% for doclevel2 in docslevel2 %}
+							<span>{{ doclevel2.0 }}:{{ doclevel2.1 }}</span>
+							{% endfor %}
 
 		<script type="text/javascript" src="{% static 'js/doclink.js' %}"></script>
 		<link rel="stylesheet" href="{% static 'css/doclink.css' %}">

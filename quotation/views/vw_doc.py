@@ -184,14 +184,51 @@ def docremove(request, pk):
 
     return redirect('docs')
 def doclink(request, docid):
+#docslevel0 start
     cursor1 = connection.cursor()
-    cursor1.execute("SELECT docid_tbldoc, Pcd_tblDoc, Town_tblDoc, Doc_kindid_tblDoc_id, companyname_tblcompanies_ctbldoc, firstname_tblcontacts_ctbldoc, lastname_tblcontacts_ctbldoc, creationtime_tbldoc "
+    cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                     "FROM quotation_tbldoc "
-                    "WHERE doclinkparentid_tbldoc = %s ", [docid])
+                    "WHERE docid_tbldoc = %s ", [docid])
+    results = cursor1.fetchall()
+    for x in results:
+        doclevel0 = x[0]
+#docslevel1 start
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
+                    "FROM quotation_tbldoc "
+                    "WHERE doclinkparentid_tbldoc = %s ", [doclevel0])
+    docslevel1 = cursor1.fetchall()
 
-    docs = cursor1.fetchall()
-    # docs = tblDoc.objects.all()
-    return render(request, 'quotation/doclink.html', {'docs': docs, 'docid': docid})
+#    import pdb;
+#    pdb.set_trace()
+
+#docslevel2 start
+    docscountlevel1 = len(docslevel1)
 
 
+    docslevel2 = ()
 
+    for x in range(docscountlevel1):
+
+        cursor2 = connection.cursor()
+        cursor2.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
+                        "FROM quotation_tbldoc "
+                        "WHERE doclinkparentid_tbldoc = %s ", [docslevel1[x][1]])
+        docstolevel2 = cursor2.fetchall()
+#        import pdb;
+#        pdb.set_trace()
+
+#        partcountlevel2 = len(docstolevel2)
+
+#        def appendtolevel2list():
+#            docslevel2 = "global"
+#       docslevel2=docslevel2+docstolevel2
+#            return
+
+#        for y in range(partcountlevel2):
+        docslevel2 = docslevel2 + docstolevel2
+
+    return render(request, 'quotation/doclink.html', {'doclevel0': doclevel0,
+                                                      'docslevel1': docslevel1,
+                                                      'docslevel2': docslevel2,
+                                                      'docid': docid})
