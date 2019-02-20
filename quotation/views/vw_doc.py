@@ -184,14 +184,16 @@ def docremove(request, pk):
 
     return redirect('docs')
 def doclink(request, docid):
-#docslevel0 start
+#doclevel-1 start
     cursor1 = connection.cursor()
     cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc = %s ", [docid])
     results = cursor1.fetchall()
     for x in results:
-        doclevel0 = x[0]
+        doclevelminus1 = x[0]
+#docslevel0 start
+    doclevel0=docid
 #docslevel1 start
     cursor1 = connection.cursor()
     cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
@@ -207,7 +209,7 @@ def doclink(request, docid):
 
 
     docslevel2 = ()
-
+    templevel2tuple=()
     for x in range(docscountlevel1):
 
         cursor2 = connection.cursor()
@@ -215,20 +217,32 @@ def doclink(request, docid):
                         "FROM quotation_tbldoc "
                         "WHERE doclinkparentid_tbldoc = %s ", [docslevel1[x][1]])
         docstolevel2 = cursor2.fetchall()
-#        import pdb;
-#        pdb.set_trace()
+        docstolevel2len=len(docstolevel2)
+        for z in range(docstolevel2len): #order number to the tuple for template lines
+            templevel2tuple= (docstolevel2[z][0],docstolevel2[z][1],x)
+       # docstolevel2[z][2]=x
+            #import pdb;
+            #pdb.set_trace()
 
-#        partcountlevel2 = len(docstolevel2)
-
-#        def appendtolevel2list():
-#            docslevel2 = "global"
-#       docslevel2=docslevel2+docstolevel2
-#            return
-
-#        for y in range(partcountlevel2):
         docslevel2 = docslevel2 + docstolevel2
 
-    return render(request, 'quotation/doclink.html', {'doclevel0': doclevel0,
+#docslevel3 start
+    docscountlevel2 = len(docslevel2)
+
+
+    docslevel3 = ()
+
+    return render(request, 'quotation/doclink.html', {'doclevelminus1': doclevelminus1,
+                                                      'doclevel0': doclevel0,
                                                       'docslevel1': docslevel1,
-                                                      'docslevel2': docslevel2,
-                                                      'docid': docid})
+                                                      'docslevel2': docslevel2})
+                                                 #     'docslevel3': docslevel3,})
+'''
+    for y in range(docscountlevel2):
+        cursor2 = connection.cursor()
+        cursor2.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
+                        "FROM quotation_tbldoc "
+                        "WHERE doclinkparentid_tbldoc = %s ", [docslevel2[y][1]])
+        docstolevel3 = cursor2.fetchall()
+        docslevel3 = docslevel3 + docstolevel3
+'''

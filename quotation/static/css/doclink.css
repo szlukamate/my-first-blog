@@ -1,15 +1,5 @@
 
-.doc {
-position: relative;
-      top: 0mm;
-      width: 70mm;
-      height: 70mm;
-      left: 20mm;
-      border:2px solid #000;
-      font-family: "Times New Roman", Times, serif;
-      font-size: 14px;
-      //font-style: italic;
-      font-weight: bold;
-      background-color: green;
-      color: white;
-      }
+rect {
+stroke-width:3;
+stroke:rgb(0,0,0);
+}

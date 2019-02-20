@@ -5,18 +5,64 @@
 
 
 
-							<p align="center" style="font-size:160%;">Docs Form</p>
-							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+							<p align="center" style="font-size:160%;">Doclinks</p>
+							<!-- doclevelminus1-->
+							<svg height="38" width="200">
+							  <g>
+								<rect x="0" y="0" width="75" height="35" fill="yellow"></rect>
+								<text x="0" y="15" font-family="Arial" font-size="16" fill="black">Level: -1</text>
+			    				{% if doclevelminus1 != None %}
+								<text x="0" y="30" font-family="Arial" font-size="16" fill="black"><a href="{% url 'doclink' docid=doclevelminus1 %}">{{ doclevelminus1 }}</a></text>
 
+								{% else %}
+							  	<text x="0" y="30" font-family="Arial" font-size="16" fill="black">Top</text>
 
-							<p>Doclevel0: {{ doclevel0 }}</p>
+								{% endif %}
+
+							  </g>
+							</svg><br>
+							<!-- doclevel0-->
+								<svg height="30" width="100">
+								  <line x1="37" y1="0" x2="37" y2="30" style="stroke:rgb(0,0,0);stroke-width:2" />
+								</svg><br>
+
+							<svg height="40" width="200">
+							  <g>
+								<rect x="0" y="0" width="75" height="35" fill="green"></rect>
+								<text x="0" y="15" font-family="Arial" font-size="16" fill="white">Level: 0</text>
+								<text x="0" y="30" font-family="Arial" font-size="16" fill="white">{{ doclevel0 }}</text>
+							  </g>
+							</svg>
+							<!-- doclevel1-->
+							<p>
 							{% for doclevel1 in docslevel1 %}
-							<span>{{ doclevel1.0 }}:{{ doclevel1.1 }}</span>
+							<svg height="80" width="100">
+							  <g>
+								<line x1="37" y1="0" x2="37" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
+								<rect x="0" y="35" width="75" height="35" fill="red"></rect>
+								<text x="0" y="50" font-family="Arial" font-size="16" fill="white">Level: 1</text>
+								<text x="0" y="65" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel1.1 %}">{{ doclevel1.0 }}:{{ doclevel1.1 }}</a></text>
+							  </g>
+
+							</svg>
 							{% endfor %}
-                            <br>
-                            {% for doclevel2 in docslevel2 %}
-							<span>{{ doclevel2.0 }}:{{ doclevel2.1 }}</span>
+							</p>
+                            <p>
+							{% for doclevel2 in docslevel2 %}
+							<svg height="80" width="100">
+							  <g>
+								<rect x="0" y="0" width="75" height="35" fill="purple"></rect>
+								<text x="0" y="15" font-family="Arial" font-size="16" fill="white">Level: 2</text>
+								<text x="0" y="30" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel2.1 %}">{{ doclevel2.0 }}:{{ doclevel2.1 }}</a></text>
+							  </g>
+							</svg>
 							{% endfor %}
+							</p>
+							<p>Doclevel3
+							{% for doclevel3 in docslevel3 %}
+							<span>{{ doclevel3.0 }}:{{ doclevel3.1 }}</span>
+							{% endfor %}
+							</p>
 
 		<script type="text/javascript" src="{% static 'js/doclink.js' %}"></script>
 		<link rel="stylesheet" href="{% static 'css/doclink.css' %}">
