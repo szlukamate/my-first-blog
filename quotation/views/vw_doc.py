@@ -199,7 +199,27 @@ def doclink(request, docid):
     cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                     "FROM quotation_tbldoc "
                     "WHERE doclinkparentid_tbldoc = %s ", [doclevel0])
-    docslevel1 = cursor1.fetchall()
+    docstolevel1 = cursor1.fetchall()
+
+
+    docslevel1 = ()
+    docstolevel1withparentpointerlist = []
+
+    docstolevel1len=len(docstolevel1)
+    docstolevel1list = list(docstolevel1)
+    docstolevel1withparentpointerlist = []
+    for z in range(docstolevel1len): #order number to the tuple for template lines
+        firstfield = docstolevel1list[z][0]
+        secondfield = docstolevel1list[z][1]
+        fourthfield = 90*z #rect x coordinate
+        fifthfield = fourthfield + z*11 + 37 #line x coordinate roor of rect
+        appendvar= (firstfield, secondfield, x, fourthfield, fifthfield)
+        docstolevel1withparentpointerlist.append(appendvar)
+    docstolevel1 = tuple(docstolevel1withparentpointerlist)
+
+    docslevel1 = docslevel1 + docstolevel1
+
+
 
 #    import pdb;
 #    pdb.set_trace()
@@ -209,7 +229,8 @@ def doclink(request, docid):
 
 
     docslevel2 = ()
-    templevel2tuple=()
+    levelmembernumber=0
+    docstolevel2withparentpointerlist = []
     for x in range(docscountlevel1):
 
         cursor2 = connection.cursor()
@@ -218,16 +239,23 @@ def doclink(request, docid):
                         "WHERE doclinkparentid_tbldoc = %s ", [docslevel1[x][1]])
         docstolevel2 = cursor2.fetchall()
         docstolevel2len=len(docstolevel2)
+        docstolevel2list = list(docstolevel2)
+        docstolevel2withparentpointerlist = []
         for z in range(docstolevel2len): #order number to the tuple for template lines
-            templevel2tuple= (docstolevel2[z][0],docstolevel2[z][1],x)
-       # docstolevel2[z][2]=x
-            #import pdb;
-            #pdb.set_trace()
+            firstfield = docstolevel2list[z][0]
+            secondfield = docstolevel2list[z][1]
+            fourthfield = 90 * levelmembernumber   # rect x coordinate
+            fifthfield = fourthfield + levelmembernumber * 11 + 37  # line x coordinate roor of rect
+            levelmembernumber = levelmembernumber + 1
+            appendvar = (firstfield, secondfield, x, fourthfield, fifthfield)
+            docstolevel2withparentpointerlist.append(appendvar)
+        docstolevel2 = tuple(docstolevel2withparentpointerlist)
 
         docslevel2 = docslevel2 + docstolevel2
-
 #docslevel3 start
     docscountlevel2 = len(docslevel2)
+    #import pdb;
+    #pdb.set_trace()
 
 
     docslevel3 = ()
