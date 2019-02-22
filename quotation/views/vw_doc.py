@@ -184,7 +184,26 @@ def docremove(request, pk):
 
     return redirect('docs')
 def doclink(request, docid):
-#doclevel-1 start
+    def docdata(dociddata, fieldindex):
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT docid_tbldoc, "
+                        "companyname_tblcompanies_ctbldoc, "
+                        "firstname_tblcontacts_ctbldoc, "
+                        "lastname_tblcontacts_ctbldoc, "
+                        "Doc_kind_name_tblDoc_kind, "
+                        "pretag_tbldockind, "
+                        "docnumber_tbldoc, "
+                        "creationtime_tbldoc, "
+                        "subject_tbldoc "
+                        "FROM quotation_tbldoc "
+                        "JOIN quotation_tbldoc_kind "
+                        "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                        "WHERE docid_tbldoc = %s ", [dociddata])
+        results = cursor1.fetchall()
+        for x in results:
+            result = x[fieldindex]
+        return result
+    #doclevel-1 start
     cursor1 = connection.cursor()
     cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                     "FROM quotation_tbldoc "
@@ -206,13 +225,14 @@ def doclink(request, docid):
     docstolevel1withparentpointerlist = []
 
     docstolevel1len=len(docstolevel1)
+    docslevel1widthforsvg=111 * docstolevel1len
     docstolevel1list = list(docstolevel1)
     docstolevel1withparentpointerlist = []
     for z in range(docstolevel1len): #order number to the tuple for template lines
         firstfield = docstolevel1list[z][0]
         secondfield = docstolevel1list[z][1]
         fourthfield = 90*z #rect x coordinate
-        fifthfield = fourthfield + z*11 + 37 #line x coordinate roor of rect
+        fifthfield = fourthfield + z*11 + 37 #line x coordinate roof of rect
         appendvar= (firstfield, secondfield, x, fourthfield, fifthfield)
         docstolevel1withparentpointerlist.append(appendvar)
     docstolevel1 = tuple(docstolevel1withparentpointerlist)
@@ -221,8 +241,6 @@ def doclink(request, docid):
 
 
 
-#    import pdb;
-#    pdb.set_trace()
 
 #docslevel2 start
     docscountlevel1 = len(docslevel1)
@@ -244,33 +262,67 @@ def doclink(request, docid):
         for z in range(docstolevel2len): #order number to the tuple for template lines
             firstfield = docstolevel2list[z][0]
             secondfield = docstolevel2list[z][1]
+            thirdfield = x
             fourthfield = 90 * levelmembernumber   # rect x coordinate
-            fifthfield = fourthfield + levelmembernumber * 11 + 37  # line x coordinate roor of rect
+            fifthfield = fourthfield + levelmembernumber * 5 + 37  # line x coordinate roor of rect
+            sixthfield = 37 + 90 * thirdfield
             levelmembernumber = levelmembernumber + 1
-            appendvar = (firstfield, secondfield, x, fourthfield, fifthfield)
+            appendvar = (firstfield, secondfield, thirdfield, fourthfield, fifthfield, sixthfield)
             docstolevel2withparentpointerlist.append(appendvar)
         docstolevel2 = tuple(docstolevel2withparentpointerlist)
 
         docslevel2 = docslevel2 + docstolevel2
-#docslevel3 start
+        docslevel2widthforsvg = 111 * levelmembernumber
+    #docslevel3 start
     docscountlevel2 = len(docslevel2)
+
+    docslevel3 = ()
+    levelmembernumber = 0
+    docstolevel3withparentpointerlist = []
+    for x in range(docscountlevel2):
+
+        cursor2 = connection.cursor()
+        cursor2.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
+                        "FROM quotation_tbldoc "
+                        "WHERE doclinkparentid_tbldoc = %s ", [docslevel2[x][1]])
+        docstolevel3 = cursor2.fetchall()
+        docstolevel3len = len(docstolevel3)
+        docstolevel3list = list(docstolevel3)
+        docstolevel3withparentpointerlist = []
+        for z in range(docstolevel3len):  # order number to the tuple for template lines
+            firstfield = docstolevel3list[z][0]
+            secondfield = docstolevel3list[z][1]
+            thirdfield = x
+            fourthfield = 200 * levelmembernumber  # rect x coordinate
+            fifthfield = fourthfield + levelmembernumber * 5 + 100  # line x coordinate roor of rect
+            sixthfield = 37 + 90 * thirdfield
+            seventhfield = docdata(secondfield,1) #companyname
+            eigthfield = docdata(secondfield, 2) #firstname
+            ninethfield = docdata(secondfield, 3) #lastname
+            tenthfield = docdata(secondfield, 4) #dockindname
+            eleventhfield = docdata(secondfield, 5) #pretag
+            twelvethfield = docdata(secondfield, 6) #docnumber
+            thirteenthfield = docdata(secondfield, 7) #creationtime
+            fourteenfield = docdata(secondfield, 8) #subject
+            levelmembernumber = levelmembernumber + 1
+            appendvar = (firstfield, secondfield, thirdfield, fourthfield, fifthfield, sixthfield, seventhfield, eigthfield, ninethfield, tenthfield, eleventhfield, twelvethfield, thirteenthfield, fourteenfield)
+            docstolevel3withparentpointerlist.append(appendvar)
+        docstolevel3 = tuple(docstolevel3withparentpointerlist)
+
+        docslevel3 = docslevel3 + docstolevel3
+        docslevel3widthforsvg = 222 * levelmembernumber
+
     #import pdb;
     #pdb.set_trace()
 
 
-    docslevel3 = ()
+
 
     return render(request, 'quotation/doclink.html', {'doclevelminus1': doclevelminus1,
                                                       'doclevel0': doclevel0,
                                                       'docslevel1': docslevel1,
-                                                      'docslevel2': docslevel2})
-                                                 #     'docslevel3': docslevel3,})
-'''
-    for y in range(docscountlevel2):
-        cursor2 = connection.cursor()
-        cursor2.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
-                        "FROM quotation_tbldoc "
-                        "WHERE doclinkparentid_tbldoc = %s ", [docslevel2[y][1]])
-        docstolevel3 = cursor2.fetchall()
-        docslevel3 = docslevel3 + docstolevel3
-'''
+                                                      'docslevel1widthforsvg': docslevel1widthforsvg,
+                                                      'docslevel2': docslevel2,
+                                                      'docslevel2widthforsvg': docslevel2widthforsvg,
+                                                      'docslevel3': docslevel3,
+                                                      'docslevel3widthforsvg': docslevel3widthforsvg})

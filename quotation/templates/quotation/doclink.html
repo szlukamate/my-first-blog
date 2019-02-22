@@ -36,7 +36,7 @@
 							<!-- doclevel1-->
 							<p>
 
-							<svg height="73" width="1000">
+							<svg height="71" width="{{ docslevel1widthforsvg }}">
 							  <g>
 							  	{% for doclevel1 in docslevel1 %}
 
@@ -54,23 +54,46 @@
 							<!-- doclevel2-->
 							<p>
 
-							<svg height="80" width="1000">
+							<svg height="71" width="{{ docslevel2widthforsvg }}">
 							  <g>
 							  	{% for doclevel2 in docslevel2 %}
 
-								<line x1="37" y1="0" x2="{{ doclevel2.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
+								<line x1="{{ doclevel2.5 }}" y1="0" x2="{{ doclevel2.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
 								<rect x="{{ doclevel2.3 }}" y="35" width="75" height="35" fill="purple"></rect>
 								<text x="{{ doclevel2.3 }}" y="50" font-family="Arial" font-size="16" fill="white">Level: 2</text>
-								<text x="{{ doclevel2.3 }}" y="65" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel2.1 %}">{{ doclevel2.0 }}:{{ doclevel2.1 }}</a></text>
+								<text x="{{ doclevel2.3 }}" y="65" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel2.1 %}">{{ doclevel2.0 }}:{{ doclevel2.1 }}:{{ doclevel2.2 }}</a></text>
 								{% endfor %}
 
 							  </g>
 
 							</svg></p>
-							<p>Doclevel3
-							{% for doclevel3 in docslevel3 %}
-							<span>{{ doclevel3.0 }}:{{ doclevel3.1 }}</span>
-							{% endfor %}
+							<p><svg height="300" width="{{ docslevel3widthforsvg }}">
+							  <g>
+							  	{% for doclevel3 in docslevel3 %}
+
+								<line x1="{{ doclevel3.5 }}" y1="0" x2="{{ doclevel3.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
+								<rect x="{{ doclevel3.3 }}" y="35" width="175" height="150" fill="brown"></rect>
+								<text x="{{ doclevel3.3 }}" y="95" font-family="Arial" font-size="10" fill="white">Level: 3 {{ doclevel3.0 }}:{{ doclevel3.1 }}</text>
+								<text x="{{ doclevel3.3 }}" y="65" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.6 }}</a></text>
+								<text x="{{ doclevel3.3 }}" y="80" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.7 }}{{ doclevel3.8 }}</a></text>
+								<text x="{{ doclevel3.3 }}" y="50" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.10 }}{{ doclevel3.11 }}</a></text>
+								<text x="{{ doclevel3.3 }}" y="110" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.13 }}</a></text>
+								<text x="{{ doclevel3.3 }}" y="125" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.12 }}</a></text>
+
+								{% endfor %}
+
+					  "companyname_tblcompanies_ctbldoc, "
+                        "firstname_tblcontacts_ctbldoc, "
+                        "lastname_tblcontacts_ctbldoc, "
+                        "Doc_kind_name_tblDoc_kind, "
+                        "pretag_tbldockind, "
+                        "docnumber_tbldoc, "
+                        "creationtime_tbldoc, "
+                        "subject_tbldoc "
+
+							  </g>
+
+							</svg>
 							</p>
 
 		<script type="text/javascript" src="{% static 'js/doclink.js' %}"></script>
