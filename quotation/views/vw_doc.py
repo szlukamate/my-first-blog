@@ -149,8 +149,6 @@ def docadd(request):
         "ORDER BY companyname_tblcompanies")
     contacts = cursor0.fetchall()
     transaction.commit()
-    # import pdb;
-    # pdb.set_trace()
     cursor = connection.cursor()
     cursor.execute("SELECT doc_kindid_tbldoc_kind, doc_kind_name_tbldoc_kind FROM quotation_tbldoc_kind")
     dockinds = cursor.fetchall()
@@ -184,6 +182,14 @@ def docremove(request, pk):
 
     return redirect('docs')
 def doclink(request, docid):
+    fixstate = request.session.get('fixstate','0')
+
+    #onfix='1'
+    if fixstate == '1':
+        docid2 = request.session.get('fixtothis', '0')
+    else:
+        docid2=docid
+
     def docdata(dociddata, fieldindex):
         cursor1 = connection.cursor()
         cursor1.execute("SELECT docid_tbldoc, "
@@ -201,23 +207,89 @@ def doclink(request, docid):
                         "WHERE docid_tbldoc = %s ", [dociddata])
         results = cursor1.fetchall()
         for x in results:
+
+            # Ensure variable is defined
+            try:
+                x[fieldindex]
+            except NameError:
+                result = None
+
+            # Test whether variable is defined to be None
+        if result is None:
+            result=''
+        else:
             result = x[fieldindex]
+        import pdb;
+        pdb.set_trace()
+
         return result
     #doclevel-1 start
     cursor1 = connection.cursor()
     cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                     "FROM quotation_tbldoc "
-                    "WHERE docid_tbldoc = %s ", [docid])
+                    "WHERE docid_tbldoc = %s ", [docid2])
     results = cursor1.fetchall()
     for x in results:
         doclevelminus1 = x[0]
-#docslevel0 start
-    doclevel0=docid
-#docslevel1 start
+    levelmembernumber = 0
+    x = 0
+    firstfield = doclevelminus1
+    secondfield = doclevelminus1  # docid
+    thirdfield = x
+    fourthfield = 200 * levelmembernumber  # rect x coordinate
+    fifthfield = fourthfield + levelmembernumber * 15 + 100  # line x coordinate lower point
+    sixthfield = 37 + 90 * thirdfield  # line x coordinate upper point
+    seventhfield = docdata(secondfield, 1)  # companyname
+    eigthfield = docdata(secondfield, 2)  # firstname
+    ninethfield = docdata(secondfield, 3)  # lastname
+    tenthfield = docdata(secondfield, 4)  # dockindname
+    eleventhfield = docdata(secondfield, 5)  # pretag
+    twelvethfield = docdata(secondfield, 6)  # docnumber
+    thirteenthfield = docdata(secondfield, 7)  # creationtime
+    fourteenfield = docdata(secondfield, 8)  # subject
+    levelmembernumber = levelmembernumber + 1
+    appendvar = (
+    firstfield, secondfield, thirdfield, fourthfield, fifthfield, sixthfield, seventhfield, eigthfield, ninethfield,
+    tenthfield, eleventhfield, twelvethfield, thirteenthfield, fourteenfield)
+    docstolevel0withparentpointerlist = []
+    docstolevel0withparentpointerlist.append(appendvar)
+    doctolevel0 = tuple(docstolevel0withparentpointerlist)
+    doclevel0 = ()
+    doclevel0 = doclevel0 + doctolevel0
+
+    #docslevel0 start
+
+    levelmembernumber=0
+    x=0
+    firstfield = doclevelminus1
+    secondfield = docid2  # docid
+    thirdfield = x
+    fourthfield = 200 * levelmembernumber  # rect x coordinate
+    fifthfield = fourthfield + levelmembernumber * 15 + 100  # line x coordinate lower point
+    sixthfield = 37 + 90 * thirdfield  # line x coordinate upper point
+    seventhfield = docdata(secondfield, 1)  # companyname
+    eigthfield = docdata(secondfield, 2)  # firstname
+    ninethfield = docdata(secondfield, 3)  # lastname
+    tenthfield = docdata(secondfield, 4)  # dockindname
+    eleventhfield = docdata(secondfield, 5)  # pretag
+    twelvethfield = docdata(secondfield, 6)  # docnumber
+    thirteenthfield = docdata(secondfield, 7)  # creationtime
+    fourteenfield = docdata(secondfield, 8)  # subject
+    levelmembernumber = levelmembernumber + 1
+    appendvar = (firstfield, secondfield, thirdfield, fourthfield, fifthfield, sixthfield, seventhfield, eigthfield, ninethfield, tenthfield, eleventhfield, twelvethfield, thirteenthfield, fourteenfield)
+    docstolevel0withparentpointerlist = []
+    docstolevel0withparentpointerlist.append(appendvar)
+    doctolevel0 = tuple(docstolevel0withparentpointerlist)
+    doclevel0 = ()
+    doclevel0 = doclevel0 + doctolevel0
+    #import pdb;
+    #pdb.set_trace()
+
+    #docslevel1 start
     cursor1 = connection.cursor()
     cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                     "FROM quotation_tbldoc "
-                    "WHERE doclinkparentid_tbldoc = %s ", [doclevel0])
+                    "WHERE doclinkparentid_tbldoc = %s ", [docid2])
     docstolevel1 = cursor1.fetchall()
 
 
@@ -225,24 +297,37 @@ def doclink(request, docid):
     docstolevel1withparentpointerlist = []
 
     docstolevel1len=len(docstolevel1)
-    docslevel1widthforsvg=111 * docstolevel1len
+    docslevel1widthforsvg=222 * docstolevel1len
     docstolevel1list = list(docstolevel1)
     docstolevel1withparentpointerlist = []
+    #import pdb;
+    #pdb.set_trace()
+
+    x=0
     for z in range(docstolevel1len): #order number to the tuple for template lines
+        levelmembernumber = z
         firstfield = docstolevel1list[z][0]
-        secondfield = docstolevel1list[z][1]
-        fourthfield = 90*z #rect x coordinate
-        fifthfield = fourthfield + z*11 + 37 #line x coordinate roof of rect
-        appendvar= (firstfield, secondfield, x, fourthfield, fifthfield)
+        secondfield = docstolevel1list[z][1]  # docid
+        thirdfield = x
+        fourthfield = 200 * levelmembernumber  # rect x coordinate
+        fifthfield = fourthfield + levelmembernumber * 15 + 88  # line x coordinate lower point
+        sixthfield = 88 + 90 * thirdfield # line x coordinate upper point
+        seventhfield = docdata(secondfield, 1)  # companyname
+        eigthfield = docdata(secondfield, 2)  # firstname
+        ninethfield = docdata(secondfield, 3)  # lastname
+        tenthfield = docdata(secondfield, 4)  # dockindname
+        eleventhfield = docdata(secondfield, 5)  # pretag
+        twelvethfield = docdata(secondfield, 6)  # docnumber
+        thirteenthfield = docdata(secondfield, 7)  # creationtime
+        fourteenfield = docdata(secondfield, 8)  # subject
+        levelmembernumber = levelmembernumber + 1
+        appendvar = (firstfield, secondfield, thirdfield, fourthfield, fifthfield, sixthfield, seventhfield, eigthfield, ninethfield, tenthfield, eleventhfield, twelvethfield, thirteenthfield, fourteenfield)
         docstolevel1withparentpointerlist.append(appendvar)
     docstolevel1 = tuple(docstolevel1withparentpointerlist)
 
     docslevel1 = docslevel1 + docstolevel1
 
-
-
-
-#docslevel2 start
+    #docslevel2 start
     docscountlevel1 = len(docslevel1)
 
 
@@ -261,18 +346,26 @@ def doclink(request, docid):
         docstolevel2withparentpointerlist = []
         for z in range(docstolevel2len): #order number to the tuple for template lines
             firstfield = docstolevel2list[z][0]
-            secondfield = docstolevel2list[z][1]
+            secondfield = docstolevel2list[z][1] #docid
             thirdfield = x
-            fourthfield = 90 * levelmembernumber   # rect x coordinate
-            fifthfield = fourthfield + levelmembernumber * 5 + 37  # line x coordinate roor of rect
-            sixthfield = 37 + 90 * thirdfield
+            fourthfield = 200 * levelmembernumber  # rect x coordinate
+            fifthfield = fourthfield + levelmembernumber * 15 + 88  # line x coordinate lower point
+            sixthfield = 88 + 197 * thirdfield # line x coordinate upper point
+            seventhfield = docdata(secondfield,1) #companyname
+            eigthfield = docdata(secondfield, 2) #firstname
+            ninethfield = docdata(secondfield, 3) #lastname
+            tenthfield = docdata(secondfield, 4) #dockindname
+            eleventhfield = docdata(secondfield, 5) #pretag
+            twelvethfield = docdata(secondfield, 6) #docnumber
+            thirteenthfield = docdata(secondfield, 7) #creationtime
+            fourteenfield = docdata(secondfield, 8) #subject
             levelmembernumber = levelmembernumber + 1
-            appendvar = (firstfield, secondfield, thirdfield, fourthfield, fifthfield, sixthfield)
+            appendvar = (firstfield, secondfield, thirdfield, fourthfield, fifthfield, sixthfield, seventhfield, eigthfield, ninethfield, tenthfield, eleventhfield, twelvethfield, thirteenthfield, fourteenfield)
             docstolevel2withparentpointerlist.append(appendvar)
         docstolevel2 = tuple(docstolevel2withparentpointerlist)
 
         docslevel2 = docslevel2 + docstolevel2
-        docslevel2widthforsvg = 111 * levelmembernumber
+    docslevel2widthforsvg = 222 * levelmembernumber
     #docslevel3 start
     docscountlevel2 = len(docslevel2)
 
@@ -291,11 +384,11 @@ def doclink(request, docid):
         docstolevel3withparentpointerlist = []
         for z in range(docstolevel3len):  # order number to the tuple for template lines
             firstfield = docstolevel3list[z][0]
-            secondfield = docstolevel3list[z][1]
+            secondfield = docstolevel3list[z][1] #docid
             thirdfield = x
             fourthfield = 200 * levelmembernumber  # rect x coordinate
-            fifthfield = fourthfield + levelmembernumber * 5 + 100  # line x coordinate roor of rect
-            sixthfield = 37 + 90 * thirdfield
+            fifthfield = fourthfield + levelmembernumber * 11 + 88  # line x coordinate lower point
+            sixthfield = 88 + 197 * thirdfield # line x coordinate upper point
             seventhfield = docdata(secondfield,1) #companyname
             eigthfield = docdata(secondfield, 2) #firstname
             ninethfield = docdata(secondfield, 3) #lastname
@@ -310,7 +403,7 @@ def doclink(request, docid):
         docstolevel3 = tuple(docstolevel3withparentpointerlist)
 
         docslevel3 = docslevel3 + docstolevel3
-        docslevel3widthforsvg = 222 * levelmembernumber
+    docslevel3widthforsvg = 222 * levelmembernumber
 
     #import pdb;
     #pdb.set_trace()
@@ -325,4 +418,10 @@ def doclink(request, docid):
                                                       'docslevel2': docslevel2,
                                                       'docslevel2widthforsvg': docslevel2widthforsvg,
                                                       'docslevel3': docslevel3,
-                                                      'docslevel3widthforsvg': docslevel3widthforsvg})
+                                                      'docslevel3widthforsvg': docslevel3widthforsvg,
+                                                      'fixstate': fixstate})
+def doclinkfix(request, docid, fixstate):
+    request.session['fixstate'] = fixstate  # set turn on/off fix
+    request.session['fixtothis'] = docid #set
+
+    return redirect('doclink', docid=docid)

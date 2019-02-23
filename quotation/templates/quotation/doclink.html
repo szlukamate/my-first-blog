@@ -6,13 +6,33 @@
 
 
 							<p align="center" style="font-size:160%;">Doclinks</p>
+							<div id="fix">
+								<form action="{% url 'doclinkfix' docid=60 fixstate=1 %}">
+									<input type="submit" value="Fix" />
+								</form>
+								<form action="{% url 'doclinkfix' docid=60 fixstate=0 %}">
+									<input type="submit" value="Dont Fix" />
+								</form>
+
+								{% if fixstate == '1' %}
+									<span style="color: red">Fixed!!!</span>
+								{% else %}
+							  		<span style="color: green">Not Fixed</span>
+								{% endif %}
+							</div>
 							<!-- doclevelminus1-->
 							<svg height="35" width="200">
 							  <g>
-								<rect x="0" y="0" width="75" height="35" fill="yellow"></rect>
-								<text x="0" y="15" font-family="Arial" font-size="16" fill="black">Level: -1</text>
-			    				{% if doclevelminus1 != None %}
-								<text x="0" y="30" font-family="Arial" font-size="16" fill="black"><a href="{% url 'doclink' docid=doclevelminus1 %}">{{ doclevelminus1 }}</a></text>
+								<line x1="{{ doclevelminus1.0.5 }}" y1="0" x2="{{ doclevelminus1.0.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
+								<rect x="{{ doclevelminus1.0.3 }}" y="35" width="175" height="150" fill="green"></rect>
+								<text x="{{ doclevelminus1.0.3 }}" y="95" font-family="Arial" font-size="10" fill="white">Level: -1 {{ doclevelminus1.0.0 }}:{{ doclevelminus1.0.1 }}</text>
+								<text x="{{ doclevelminus1.0.3 }}" y="65" font-family="Arial" font-size="16" fill="white">{{ doclevelminus1.0.6 }}</text>
+								<text x="{{ doclevelminus1.0.3 }}" y="80" font-family="Arial" font-size="16" fill="white">{{ doclevelminus1.0.7 }}{{ doclevelminus1.0.8 }}</text>
+								<text x="{{ doclevelminus1.0.3 }}" y="50" font-family="Arial" font-size="16" fill="white">{{ doclevelminus1.0.10 }}{{ doclevelminus1.0.11 }}<a href="{% url 'quotationform' pk=doclevelminus1.0.1 %}"> O </a><a href="{% url 'doclink' docid=doclevelminus1.0.1 %}">C</a></text>
+								<text x="{{ doclevelminus1.0.3 }}" y="110" font-family="Arial" font-size="10" fill="white">{{ doclevelminus1.0.13 }}</text>
+								<text x="{{ doclevelminus1.0.3 }}" y="125" font-family="Arial" font-size="10" fill="white">{{ doclevelminus1.0.12 }}</text>
+								{% if doclevelminus1 != None %}
+								<text x="0" y="30" font-family="Arial" font-size="16" fill="black"><a href="{% url 'doclink' docid=doclevelminus1.0.1 %}">{{ doclevelminus1 }}</a></text>
 
 								{% else %}
 							  	<text x="0" y="30" font-family="Arial" font-size="16" fill="black">Top</text>
@@ -22,28 +42,37 @@
 							  </g>
 							</svg><br>
 							<!-- doclevel0-->
-								<svg height="30" width="100">
-								  <line x1="37" y1="0" x2="37" y2="30" style="stroke:rgb(0,0,0);stroke-width:2" />
-								</svg><br>
-
-							<svg height="35" width="200">
+							<svg height="186" width="222">
 							  <g>
-								<rect x="0" y="0" width="75" height="35" fill="green"></rect>
-								<text x="0" y="15" font-family="Arial" font-size="16" fill="white">Level: 0</text>
-								<text x="0" y="30" font-family="Arial" font-size="16" fill="white">{{ doclevel0 }}</text>
+
+								<line x1="{{ doclevel0.0.5 }}" y1="0" x2="{{ doclevel0.0.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
+								<rect x="{{ doclevel0.0.3 }}" y="35" width="175" height="150" fill="green"></rect>
+								<text x="{{ doclevel0.0.3 }}" y="95" font-family="Arial" font-size="10" fill="white">Level: 0 {{ doclevel0.0.0 }}:{{ doclevel0.0.1 }}</text>
+								<text x="{{ doclevel0.0.3 }}" y="65" font-family="Arial" font-size="16" fill="white">{{ doclevel0.0.6 }}</text>
+								<text x="{{ doclevel0.0.3 }}" y="80" font-family="Arial" font-size="16" fill="white">{{ doclevel0.0.7 }}{{ doclevel0.0.8 }}</text>
+								<text x="{{ doclevel0.0.3 }}" y="50" font-family="Arial" font-size="16" fill="white">{{ doclevel0.0.10 }}{{ doclevel0.0.11 }}<a href="{% url 'quotationform' pk=doclevel0.0.1 %}"> O </a><a href="{% url 'doclink' docid=doclevel0.0.1 %}">C</a></text>
+								<text x="{{ doclevel0.0.3 }}" y="110" font-family="Arial" font-size="10" fill="white">{{ doclevel0.0.13 }}</text>
+								<text x="{{ doclevel0.0.3 }}" y="125" font-family="Arial" font-size="10" fill="white">{{ doclevel0.0.12 }}</text>
+
 							  </g>
+
 							</svg>
+
 							<!-- doclevel1-->
 							<p>
 
-							<svg height="71" width="{{ docslevel1widthforsvg }}">
+							<svg height="186" width="{{ docslevel1widthforsvg }}">
 							  <g>
 							  	{% for doclevel1 in docslevel1 %}
 
-								<line x1="37" y1="0" x2="{{ doclevel1.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
-								<rect x="{{ doclevel1.3 }}" y="35" width="75" height="35" fill="red"></rect>
-								<text x="{{ doclevel1.3 }}" y="50" font-family="Arial" font-size="16" fill="white">Level: 1</text>
-								<text x="{{ doclevel1.3 }}" y="65" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel1.1 %}">{{ doclevel1.0 }}:{{ doclevel1.1 }}</a></text>
+								<line x1="{{ doclevel1.5 }}" y1="0" x2="{{ doclevel1.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
+								<rect x="{{ doclevel1.3 }}" y="35" width="175" height="150" fill="red"></rect>
+								<text x="{{ doclevel1.3 }}" y="95" font-family="Arial" font-size="10" fill="white">Level: 1 {{ doclevel1.0 }}:{{ doclevel1.1 }}</text>
+								<text x="{{ doclevel1.3 }}" y="65" font-family="Arial" font-size="16" fill="white">{{ doclevel1.6 }}</text>
+								<text x="{{ doclevel1.3 }}" y="80" font-family="Arial" font-size="16" fill="white">{{ doclevel1.7 }}{{ doclevel1.8 }}</text>
+								<text x="{{ doclevel1.3 }}" y="50" font-family="Arial" font-size="16" fill="white">{{ doclevel1.10 }}{{ doclevel1.11 }}<a href="{% url 'quotationform' pk=doclevel1.1 %}"> O </a><a href="{% url 'doclink' docid=doclevel1.1 %}">C</a></text>
+								<text x="{{ doclevel1.3 }}" y="110" font-family="Arial" font-size="10" fill="white">{{ doclevel1.13 }}</text>
+								<text x="{{ doclevel1.3 }}" y="125" font-family="Arial" font-size="10" fill="white">{{ doclevel1.12 }}</text>
 								{% endfor %}
 
 							  </g>
@@ -54,14 +83,18 @@
 							<!-- doclevel2-->
 							<p>
 
-							<svg height="71" width="{{ docslevel2widthforsvg }}">
+							<svg height="186" width="{{ docslevel2widthforsvg }}">
 							  <g>
 							  	{% for doclevel2 in docslevel2 %}
 
 								<line x1="{{ doclevel2.5 }}" y1="0" x2="{{ doclevel2.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
-								<rect x="{{ doclevel2.3 }}" y="35" width="75" height="35" fill="purple"></rect>
-								<text x="{{ doclevel2.3 }}" y="50" font-family="Arial" font-size="16" fill="white">Level: 2</text>
-								<text x="{{ doclevel2.3 }}" y="65" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel2.1 %}">{{ doclevel2.0 }}:{{ doclevel2.1 }}:{{ doclevel2.2 }}</a></text>
+								<rect x="{{ doclevel2.3 }}" y="35" width="175" height="150" fill="purple"></rect>
+								<text x="{{ doclevel2.3 }}" y="95" font-family="Arial" font-size="10" fill="white">Level: 2 {{ doclevel2.0 }}:{{ doclevel2.1 }}</text>
+								<text x="{{ doclevel2.3 }}" y="65" font-family="Arial" font-size="16" fill="white">{{ doclevel2.6 }}</text>
+								<text x="{{ doclevel2.3 }}" y="80" font-family="Arial" font-size="16" fill="white">{{ doclevel2.7 }}{{ doclevel2.8 }}</text>
+								<text x="{{ doclevel2.3 }}" y="50" font-family="Arial" font-size="16" fill="white">{{ doclevel2.10 }}{{ doclevel2.11 }}<a href="{% url 'quotationform' pk=doclevel2.1 %}"> O </a><a href="{% url 'doclink' docid=doclevel2.1 %}">C</a></text>
+								<text x="{{ doclevel2.3 }}" y="110" font-family="Arial" font-size="10" fill="white">{{ doclevel2.13 }}</text>
+								<text x="{{ doclevel2.3 }}" y="125" font-family="Arial" font-size="10" fill="white">{{ doclevel2.12 }}</text>
 								{% endfor %}
 
 							  </g>
@@ -74,11 +107,11 @@
 								<line x1="{{ doclevel3.5 }}" y1="0" x2="{{ doclevel3.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
 								<rect x="{{ doclevel3.3 }}" y="35" width="175" height="150" fill="brown"></rect>
 								<text x="{{ doclevel3.3 }}" y="95" font-family="Arial" font-size="10" fill="white">Level: 3 {{ doclevel3.0 }}:{{ doclevel3.1 }}</text>
-								<text x="{{ doclevel3.3 }}" y="65" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.6 }}</a></text>
-								<text x="{{ doclevel3.3 }}" y="80" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.7 }}{{ doclevel3.8 }}</a></text>
-								<text x="{{ doclevel3.3 }}" y="50" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.10 }}{{ doclevel3.11 }}</a></text>
-								<text x="{{ doclevel3.3 }}" y="110" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.13 }}</a></text>
-								<text x="{{ doclevel3.3 }}" y="125" font-family="Arial" font-size="16" fill="white"><a href="{% url 'doclink' docid=doclevel3.1 %}">{{ doclevel3.12 }}</a></text>
+								<text x="{{ doclevel3.3 }}" y="65" font-family="Arial" font-size="16" fill="white">{{ doclevel3.6 }}</text>
+								<text x="{{ doclevel3.3 }}" y="80" font-family="Arial" font-size="16" fill="white">{{ doclevel3.7 }}{{ doclevel3.8 }}</text>
+								<text x="{{ doclevel3.3 }}" y="50" font-family="Arial" font-size="16" fill="white">{{ doclevel3.10 }}{{ doclevel3.11 }}<a href="{% url 'quotationform' pk=doclevel3.1 %}"> O </a><a href="{% url 'doclink' docid=doclevel3.1 %}">C</a></text>
+								<text x="{{ doclevel3.3 }}" y="110" font-family="Arial" font-size="10" fill="white">{{ doclevel3.13 }}</text>
+								<text x="{{ doclevel3.3 }}" y="125" font-family="Arial" font-size="10" fill="white">{{ doclevel3.12 }}</text>
 
 								{% endfor %}
 
