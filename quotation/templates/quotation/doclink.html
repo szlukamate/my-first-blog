@@ -21,21 +21,19 @@
 								{% endif %}
 							</div>
 							<!-- doclevelminus1-->
-							<svg height="35" width="200">
+							<svg height="186" width="222">
 							  <g>
-								<line x1="{{ doclevelminus1.0.5 }}" y1="0" x2="{{ doclevelminus1.0.4 }}" y2="38" style="stroke:rgb(0,0,0);stroke-width:2" />
-								<rect x="{{ doclevelminus1.0.3 }}" y="35" width="175" height="150" fill="green"></rect>
-								<text x="{{ doclevelminus1.0.3 }}" y="95" font-family="Arial" font-size="10" fill="white">Level: -1 {{ doclevelminus1.0.0 }}:{{ doclevelminus1.0.1 }}</text>
-								<text x="{{ doclevelminus1.0.3 }}" y="65" font-family="Arial" font-size="16" fill="white">{{ doclevelminus1.0.6 }}</text>
-								<text x="{{ doclevelminus1.0.3 }}" y="80" font-family="Arial" font-size="16" fill="white">{{ doclevelminus1.0.7 }}{{ doclevelminus1.0.8 }}</text>
-								<text x="{{ doclevelminus1.0.3 }}" y="50" font-family="Arial" font-size="16" fill="white">{{ doclevelminus1.0.10 }}{{ doclevelminus1.0.11 }}<a href="{% url 'quotationform' pk=doclevelminus1.0.1 %}"> O </a><a href="{% url 'doclink' docid=doclevelminus1.0.1 %}">C</a></text>
-								<text x="{{ doclevelminus1.0.3 }}" y="110" font-family="Arial" font-size="10" fill="white">{{ doclevelminus1.0.13 }}</text>
-								<text x="{{ doclevelminus1.0.3 }}" y="125" font-family="Arial" font-size="10" fill="white">{{ doclevelminus1.0.12 }}</text>
-								{% if doclevelminus1 != None %}
-								<text x="0" y="30" font-family="Arial" font-size="16" fill="black"><a href="{% url 'doclink' docid=doclevelminus1.0.1 %}">{{ doclevelminus1 }}</a></text>
+								<rect x="{{ doclevelminus1.0.3 }}" y="35" width="175" height="150" fill="yellow"></rect>
+								{% if doclevelminus1.0.1 != 0 %}
+								<text x="{{ doclevelminus1.0.14 }}" y="95" font-family="Arial" font-size="10" fill="black">Level: -1 {{ doclevelminus1.0.0 }}:{{ doclevelminus1.0.1 }}</text>
+								<text x="{{ doclevelminus1.0.14 }}" y="65" font-family="Arial" font-size="16" fill="black">{{ doclevelminus1.0.6 }}</text>
+								<text x="{{ doclevelminus1.0.14 }}" y="80" font-family="Arial" font-size="16" fill="black">{{ doclevelminus1.0.7 }}{{ doclevelminus1.0.8 }}</text>
+								<text x="{{ doclevelminus1.0.14 }}" y="50" font-family="Arial" font-size="16" fill="black">{{ doclevelminus1.0.10 }}{{ doclevelminus1.0.11 }}<a href="{% url 'quotationform' pk=doclevelminus1.0.1 %}"> O </a><a href="{% url 'doclink' docid=doclevelminus1.0.1 %}">C</a></text>
+								<text x="{{ doclevelminus1.0.14 }}" y="110" font-family="Arial" font-size="10" fill="black">{{ doclevelminus1.0.13 }}</text>
+								<text x="{{ doclevelminus1.0.14 }}" y="125" font-family="Arial" font-size="10" fill="black">{{ doclevelminus1.0.12 }}</text>
 
 								{% else %}
-							  	<text x="0" y="30" font-family="Arial" font-size="16" fill="black">Top</text>
+							  	<text x="0" y="70" font-family="Arial" font-size="16" fill="black">Top</text>
 
 								{% endif %}
 
@@ -50,7 +48,7 @@
 								<text x="{{ doclevel0.0.3 }}" y="95" font-family="Arial" font-size="10" fill="white">Level: 0 {{ doclevel0.0.0 }}:{{ doclevel0.0.1 }}</text>
 								<text x="{{ doclevel0.0.3 }}" y="65" font-family="Arial" font-size="16" fill="white">{{ doclevel0.0.6 }}</text>
 								<text x="{{ doclevel0.0.3 }}" y="80" font-family="Arial" font-size="16" fill="white">{{ doclevel0.0.7 }}{{ doclevel0.0.8 }}</text>
-								<text x="{{ doclevel0.0.3 }}" y="50" font-family="Arial" font-size="16" fill="white">{{ doclevel0.0.10 }}{{ doclevel0.0.11 }}<a href="{% url 'quotationform' pk=doclevel0.0.1 %}"> O </a><a href="{% url 'doclink' docid=doclevel0.0.1 %}">C</a></text>
+								<text x="{{ doclevel0.0.3 }}" y="50" font-family="Arial" font-size="16" fill="white">{{ doclevel0.0.10 }}{{ doclevel0.0.11 }}<a href="{% url 'quotationform' pk=doclevel0.0.1 %}"> O </a></text>
 								<text x="{{ doclevel0.0.3 }}" y="110" font-family="Arial" font-size="10" fill="white">{{ doclevel0.0.13 }}</text>
 								<text x="{{ doclevel0.0.3 }}" y="125" font-family="Arial" font-size="10" fill="white">{{ doclevel0.0.12 }}</text>
 
