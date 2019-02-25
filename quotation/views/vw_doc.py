@@ -23,8 +23,8 @@ def docadd(request):
     if request.method == "POST":
         dockindidfornewdoc = request.POST['dockindidfornewdoc']
         contactidfornewdoc = request.POST['contactidfornewdoc']
-
         creatorid=request.user.id
+
         cursor1 = connection.cursor()
         cursor1.execute(
             "SELECT contactid_tblcontacts, companyname_tblcompanies, Companyid_tblCompanies, "
@@ -96,9 +96,16 @@ def docadd(request):
         cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
                         "WHERE Doc_kindid_tblDoc_id = %s", [dockindidfornewdoc])
         results = cursor8.fetchall()
-        for x in results:
-            docnumber = x[0]
-            docnumber += 1
+        resultslen = len(results)
+        #import pdb;
+        #pdb.set_trace()
+
+        if results[0][0] is not None: # only if there is not doc yet (this would be the first instance)
+            for x in results:
+                docnumber = x[0]
+                docnumber += 1
+        else:
+                docnumber = 80 # arbitrary number
 
         cursor2 = connection.cursor()
         cursor2.execute("INSERT INTO quotation_tbldoc "
@@ -171,6 +178,9 @@ def docselector(request, pk):
         return redirect('quotationform', pk=pk)
     elif dockind == 2:  # Order
         return redirect('orderform', pk=pk)
+    elif dockind == 4:  # Job Number
+        return redirect('jobnumberform', pk=pk)
+
 def docremove(request, pk):
     cursor1 = connection.cursor()
     cursor1.execute(
@@ -242,15 +252,26 @@ def doclink(request, docid):
         return result
     #doclevel-1 start
     cursor1 = connection.cursor()
+    '''
     cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                     "FROM quotation_tbldoc "
-                    "WHERE docid_tbldoc = %s ", [docid2])
-    results2 = cursor1.fetchall()
+                    "WHERE (docid_tbldoc = %s AND obsolete_tbldoc = 0)", [docid2])
+    '''
 
-    if results2[0][0] is not None:
+    cursor1.execute("SELECT " # self join if parentdoc is obsolete -> 0 length results2
+                    "p.Docid_tblDoc as parent, "
+                    "d.Docid_tblDoc as doc "
+                    "FROM quotation_tbldoc d "
+                    "LEFT JOIN quotation_tbldoc p "
+                    "ON d.doclinkparentid_tblDoc = p.docid_tbldoc "
+                    "WHERE p.obsolete_tbldoc = 0 and d.Docid_tblDoc = %s", [docid2])
+    results2 = cursor1.fetchall()
+    results2len = len(results2)
+    if results2len != 0:
         for x in results2:
             doclevelminus1id = x[0]
     else:
+
         doclevelminus1id = 0
 
     levelmembernumber = 0
@@ -275,7 +296,7 @@ def doclink(request, docid):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                     "FROM quotation_tbldoc "
-                    "WHERE doclinkparentid_tbldoc = %s ", [docid2])
+                    "WHERE doclinkparentid_tbldoc = %s and obsolete_tbldoc = 0", [docid2])
     docstolevel1 = cursor1.fetchall()
 
     docslevel1 = ()
@@ -300,7 +321,7 @@ def doclink(request, docid):
         cursor2 = connection.cursor()
         cursor2.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                         "FROM quotation_tbldoc "
-                        "WHERE doclinkparentid_tbldoc = %s ", [docslevel1[x][1]])
+                        "WHERE doclinkparentid_tbldoc = %s and obsolete_tbldoc = 0", [docslevel1[x][1]])
         docstolevel2 = cursor2.fetchall()
         docstolevel2len=len(docstolevel2)
         docstolevel2list = list(docstolevel2)
@@ -328,7 +349,7 @@ def doclink(request, docid):
         cursor2 = connection.cursor()
         cursor2.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
                         "FROM quotation_tbldoc "
-                        "WHERE doclinkparentid_tbldoc = %s ", [docslevel2[x][1]])
+                        "WHERE doclinkparentid_tbldoc = %s and obsolete_tbldoc = 0", [docslevel2[x][1]])
         docstolevel3 = cursor2.fetchall()
         docstolevel3len = len(docstolevel3)
         docstolevel3list = list(docstolevel3)

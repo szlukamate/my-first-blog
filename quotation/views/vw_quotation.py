@@ -11,6 +11,7 @@ from django.http import HttpResponse
 # import pdb;
 # pdb.set_trace()
 def quotationform(request, pk):
+
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
         rowid = request.POST['rowid']
