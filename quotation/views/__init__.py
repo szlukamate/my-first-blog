@@ -6,3 +6,5 @@ from .vw_doc import *
 from .vw_order import *
 from .vw_coredata import *
 from .vw_jobnumber import *
+from .vw_entry import *
+

@@ -31,3 +31,65 @@ position: absolute;
 top: 45mm;
 left:200mm;
 }
+
+#labels{
+font-size: 9pt;
+}
+
+
+#Purchasepricelabel{
+position: absolute;
+top: 12mm;
+left:160mm;
+
+}
+#newquotationrowsdiv{
+position: absolute;
+right: 5mm;
+top: 1.7mm;
+}
+#listpricemarginlabel{
+position: absolute;
+top: 18mm;
+left:189mm;
+}
+#listpricelabel{
+position: absolute;
+top: 12mm;
+left: 203mm;
+}
+#currencycodelabel{
+position: absolute;
+top: 18mm;
+left: 230mm;
+}
+#purchasepriceACUlabel{
+position: absolute;
+top: 12mm;
+left: 244mm;
+}
+#currencyratelabel{
+position: absolute;
+top: 18mm;
+left: 273mm;
+}
+#unitsalespricemarginlabel{
+position: absolute;
+top: 12mm;
+left: 286mm;
+}
+#listpriceACUlabel{
+position: absolute;
+top: 18mm;
+left: 300mm;
+}
+#unitsalespriceACUlabel{
+position: absolute;
+top: 12mm;
+left: 328mm;
+}
+#discountlabel{
+position: absolute;
+top: 18mm;
+left: 358mm;
+}

@@ -92,6 +92,16 @@ def docadd(request):
         for instancesingle in prefaceset:
             prefacecloneforquotation = instancesingle[0]
 
+        cursor7 = connection.cursor()
+        cursor7.execute(
+            "SELECT currencyisocode_tblcurrency "
+            "FROM quotation_tblcurrency "
+            "WHERE accountcurrency_tblcurrency = 1")
+        results = cursor7.fetchall()
+        for instancesingle in results:
+            accountcurrencycodeclone = instancesingle[0]
+
+
         cursor8 = connection.cursor()
         cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
                         "WHERE Doc_kindid_tblDoc_id = %s", [dockindidfornewdoc])
@@ -124,7 +134,8 @@ def docadd(request):
                         "pcd_tblcompanies_ctbldoc, "
                         "town_tblcompanies_ctbldoc, "
                         "address_tblcompanies_ctbldoc, "
-                        "paymenttextforquotation_tblpayment_ctbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        "paymenttextforquotation_tblpayment_ctbldoc, "
+                        "accountcurrencycode_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone, prefacecloneforquotation, backpagetextcloneforquotation, docnumber, creatorid,
                         titleclone,
                         mobileclone,
@@ -132,7 +143,8 @@ def docadd(request):
                         pcdclone,
                         townclone,
                         addressclone,
-                        paymenttextcloneforquotation ])
+                        paymenttextcloneforquotation,
+                        accountcurrencycodeclone])
 
         cursor3 = connection.cursor()
         cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc")
@@ -180,6 +192,8 @@ def docselector(request, pk):
         return redirect('orderform', pk=pk)
     elif dockind == 4:  # Job Number
         return redirect('jobnumberform', pk=pk)
+    elif dockind == 6:  # Accounting Entry
+        return redirect('entryform', pk=pk)
 
 def docremove(request, pk):
     cursor1 = connection.cursor()
