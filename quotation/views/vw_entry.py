@@ -66,7 +66,13 @@ def entryform(request, pk):
                         "paymenttextforquotation_tblpayment_ctbldoc, "
                         "currencycodeinreport_tbldoc, "
                         "currencyrateinreport_tbldoc, "
-                        "pretag_tbldockind "
+                        "pretag_tbldockind, "
+                        "debitaccountid_tbldoc, "
+                        "creditaccountid_tbldoc, "
+                        "debit_nameHU_tblchartofaccounts_ctbldoc, "
+                        "credit_nameHU_tblchartofaccounts_ctbldoc, "
+                        "accountvalue_tbldoc, "
+                        "accountduedate_tbldoc "
                         "FROM quotation_tbldoc "
                         "JOIN quotation_tbldoc_kind "
                         "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
@@ -87,5 +93,49 @@ def entryform(request, pk):
                          "WHERE id=%s ", [creatorid])
         creatordata = cursor10.fetchall()
 
+        cursor10 = connection.cursor()
+        cursor10.execute("SELECT accountid_tblchartofaccounts, "
+                         "nameHU_tblchartofaccounts "
+                         "FROM quotation_tblchartofaccounts")
+        chartofaccounts = cursor10.fetchall()
+
         return render(request, 'quotation/entry.html', {'doc': doc,
+                                                        'chartofaccounts': chartofaccounts,
                                                             'creatordata': creatordata})
+def entryuniversalselections (request):
+
+    fieldvalue = request.POST['fieldvalue']
+    docid = request.POST['entrydocid']
+    fieldnamefromname = request.POST['fieldnamefromname'] # i.e. prefecetextforquotation_tblprefaceforquotation
+    fieldnamefromid = request.POST['fieldnamefromid'] # i.e. prefeceidforquotation_tblprefaceidforquotation
+    tablenamefrom = request.POST['tablenamefrom'] #i.e. tblprefaceforquotation or tblbackpageforquotation
+    fieldnameto = request.POST['fieldnameto'] # i.e. defaultprefaceidforquotation_tblcompanies
+
+    cursor2 = connection.cursor()
+
+    cursor2.execute("UPDATE quotation_tbldoc SET "
+                    "%s = %s "
+                    "WHERE docid_tbldoc =%s ", [fieldnameto, fieldvalue, docid])
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT " + fieldnameto + " "
+        "FROM quotation_tbldoc "
+        "WHERE docid_tbldoc= %s ", [docid])
+    results0 = cursor3.fetchall()
+    '''
+    for instancesingle in results0:
+        fieldvaluefromsqlverified= instancesingle[0]
+    #import pdb;
+    #pdb.set_trace()
+    
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT " + fieldnamefromname + " "
+        "FROM " + tablenamefrom + " "
+        "WHERE " + fieldnamefromid + "= %s ", [fieldvaluefromsqlverified])
+    results = cursor0.fetchall()
+    '''
+    json_data = json.dumps(results0)
+
+    return HttpResponse(json_data, content_type="application/json")

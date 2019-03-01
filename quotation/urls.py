@@ -44,5 +44,6 @@ urlpatterns = [
     url(r'^doclink/(?P<docid>[0-9]+)/$', views.doclink, name='doclink'),
     url(r'^jobnumberform/(?P<pk>[0-9]+)/$', views.jobnumberform, name='jobnumberform'),
     url(r'^entryform/(?P<pk>[0-9]+)/$', views.entryform, name='entryform'),
+    url('entryuniversalselections', views.entryuniversalselections, name='entryuniversalselections'),
 
 ]

@@ -11,6 +11,15 @@
 							<p >Creator: {{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
 							<p >Time of Creation: {{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
 						</div>
+						<div id="debitselect">
+								<label >Debit:</label><br>
+								<select class="selection" fieldnamefromname = "debitaccountid_tbldoc" fieldnamefromid = "docid_tbldoc" tablenamefrom="quotation_tbldoc" fieldnameto="debitaccountid_tbldoc" >
+										<option value="" disabled selected>{{ doc.0.25 }}</option>
+									{% for account in chartofaccounts %}
+										<option value="{{ account.0 }}">{{ account.0 }} {{ account.1}}</option>
+									{% endfor %}
+								</select><br>
+						</div>
 
 					<form action="{% url 'doclink' docid=doc.0.0 %}">
 						<input type="submit" value="Doclink" />

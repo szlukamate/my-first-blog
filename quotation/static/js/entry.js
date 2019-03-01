@@ -61,5 +61,55 @@ $(function () {
 
 
    });
+   $('.selection').change(function() {
+
+        var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
+        var fieldvalue = $(this).val();
+        var entrydocid = $('#entrydocid').text();
+        var fieldnamefromname = $(this).attr( "fieldnamefromname" );
+        var fieldnamefromid = $(this).attr( "fieldnamefromid" );
+        var tablenamefrom = $(this).attr( "tablenamefrom" );
+        var fieldnameto = $(this).attr( "fieldnameto" );
+
+            $.ajax({
+            type: 'POST',
+            url: 'entryuniversalselections/',
+
+            data: {
+           'fieldvalue': fieldvalue,
+           'entrydocid' : entrydocid,
+           'fieldnamefromname': fieldnamefromname,
+           'fieldnamefromid': fieldnamefromid,
+           'tablenamefrom': tablenamefrom,
+           'fieldnameto': fieldnameto,
+           'csrfmiddlewaretoken': CSRFtoken,
+           },
+           success: updatesuccess,
+           error: updateerror,
+           datatype: 'html'
+          });
+
+        function updatesuccess (data, textStatus, jqXHR){
+            console.log('datafromsql:' + data);
+            var fromsql= data[0]
+
+            $('select[class="selection"][fieldnameto="' + fieldnameto + '"] option:selected').html(fromsql);
+
+
+            $('#sqlsaving').html('<span  class="glyphicon glyphicon-hdd"></span>');
+
+            setTimeout(
+              function()
+              {
+                $('#sqlsaving').html("");
+
+              }, 500);
+
+        };
+        function updateerror (){
+            console.log('Failure in saving');
+        };
+
+   });
 
 });
