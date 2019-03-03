@@ -112,10 +112,18 @@ def entryuniversalselections (request):
     fieldnameto = request.POST['fieldnameto'] # i.e. defaultprefaceidforquotation_tblcompanies
 
     cursor2 = connection.cursor()
-
     cursor2.execute("UPDATE quotation_tbldoc SET "
-                    "%s = %s "
-                    "WHERE docid_tbldoc =%s ", [fieldnameto, fieldvalue, docid])
+                    "" + fieldnameto + " = %s "
+                    "WHERE docid_tbldoc =%s ", [fieldvalue, docid])
+
+
+
+    cursor22 = connection.cursor()
+    results22=cursor22.callproc("proba1")
+    results23 = cursor22.fetchall()
+    print(results23)
+
+
 
     cursor3 = connection.cursor()
     cursor3.execute(
