@@ -111,39 +111,11 @@ def entryuniversalselections (request):
     tablenamefrom = request.POST['tablenamefrom'] #i.e. tblprefaceforquotation or tblbackpageforquotation
     fieldnameto = request.POST['fieldnameto'] # i.e. defaultprefaceidforquotation_tblcompanies
 
-    cursor2 = connection.cursor()
-    cursor2.execute("UPDATE quotation_tbldoc SET "
-                    "" + fieldnameto + " = %s "
-                    "WHERE docid_tbldoc =%s ", [fieldvalue, docid])
-
-
-
     cursor22 = connection.cursor()
-    results22=cursor22.callproc("proba1")
+    cursor22.callproc("proba1",[fieldnameto,fieldvalue,docid])
     results23 = cursor22.fetchall()
     print(results23)
 
-
-
-    cursor3 = connection.cursor()
-    cursor3.execute(
-        "SELECT " + fieldnameto + " "
-        "FROM quotation_tbldoc "
-        "WHERE docid_tbldoc= %s ", [docid])
-    results0 = cursor3.fetchall()
-    '''
-    for instancesingle in results0:
-        fieldvaluefromsqlverified= instancesingle[0]
-    #import pdb;
-    #pdb.set_trace()
-    
-    cursor0 = connection.cursor()
-    cursor0.execute(
-        "SELECT " + fieldnamefromname + " "
-        "FROM " + tablenamefrom + " "
-        "WHERE " + fieldnamefromid + "= %s ", [fieldvaluefromsqlverified])
-    results = cursor0.fetchall()
-    '''
-    json_data = json.dumps(results0)
+    json_data = json.dumps(results23)
 
     return HttpResponse(json_data, content_type="application/json")
