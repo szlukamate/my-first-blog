@@ -118,10 +118,10 @@ def entryuniversalselections (request):
 
 
 
-    #cursor22 = connection.cursor()
-    #results22=cursor22.callproc("proba1")
-    #results23 = cursor22.fetchall()
-    #print(results23)
+    cursor22 = connection.cursor()
+    results22=cursor22.callproc("proba1")
+    results23 = cursor22.fetchall()
+    print(results23)
 
 
 

@@ -158,7 +158,7 @@ if DEBUG:
        'INTERCEPT_REDIRECTS': False,
    }
 
-
+print ("base dir path", BASE_DIR)
 
 
 
