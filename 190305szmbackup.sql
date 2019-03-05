@@ -873,6 +873,30 @@ LOCK TABLES `quotation_tblproduct` WRITE;
 INSERT INTO `quotation_tblproduct` VALUES (1,6,'Setup AWS EC2 Ubuntu server',1,84.2105,'2018-12-17 09:54:39','USD',0,'pc(s)'),(2,2553,'Something',2,15,'2018-12-17 09:54:39','HUF',1,'pc(s)'),(4,80,'Pr5e',3,22,'2018-12-17 09:54:39','HUF',1,'pc(s)'),(5,9,'Pr66',2,50,'2018-12-17 09:54:39','USD',0,'pc(s)'),(6,7,'Django scripting',2,76.6667,'2018-12-17 09:54:39','USD',0,'hour'),(7,0,'DefaultDescription',1,0,'2019-01-05 13:24:50','USD',0,'pc(s)'),(8,0,'DefaultDescription',1,0,'2019-01-05 13:25:16',NULL,0,'pc(s)'),(9,0,'DefaultDescription',1,0,'2019-01-05 13:25:17',NULL,0,'pc(s)'),(10,0,'DefaultDescription',1,0,'2019-01-05 13:25:18',NULL,0,'pc(s)'),(11,0,'DefaultDescription',1,0,'2019-01-05 13:25:20',NULL,0,'pc(s)'),(12,0,'DefaultDescription',1,0,'2019-01-05 13:25:21',NULL,0,'pc(s)'),(13,0,'DefaultDescription',1,0,'2019-01-05 13:25:21',NULL,0,'pc(s)'),(14,0,'DefaultDescription',1,0,'2019-01-05 13:25:23',NULL,0,'pc(s)'),(15,0,'DefaultDescription',1,0,'2019-01-05 13:25:26',NULL,0,'pc(s)'),(16,0,'DefaultDescription',1,0,'2019-01-05 13:25:27',NULL,0,'pc(s)'),(17,0,'DefaultDescription',1,0,'2019-01-05 13:25:28',NULL,0,'pc(s)'),(18,0,'DefaultDescription',1,0,'2019-01-05 13:25:29',NULL,0,'pc(s)'),(19,0,'DefaultDescription',1,0,'2019-01-05 13:25:30',NULL,0,'pc(s)'),(20,0,'DefaultDescription',1,0,'2019-01-05 13:25:32',NULL,0,'pc(s)'),(21,0,'DefaultDescription',1,0,'2019-01-05 13:25:33',NULL,0,'pc(s)'),(22,0,'DefaultDescription',1,0,'2019-01-05 13:25:33',NULL,0,'pc(s)'),(23,0,'DefaultDescription',1,0,'2019-01-05 13:25:34',NULL,0,'pc(s)'),(24,0,'DefaultDescription',1,0,'2019-01-05 13:25:36',NULL,0,'pc(s)'),(25,10,'DefaultDescription',1,30,'2019-01-05 13:25:36','USD',0,'pc(s)'),(26,0,'DefaultDescription',1,0,'2019-01-05 13:25:38','USD',0,'pc(s)'),(27,0,'DefaultDescription',1,0,'2019-01-05 13:25:45',NULL,0,'pc(s)'),(28,0,'DefaultDescription',1,0,'2019-01-05 13:25:48','USD',0,'pc(s)');
 /*!40000 ALTER TABLE `quotation_tblproduct` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'szlukamate$default'
+--
+/*!50003 DROP PROCEDURE IF EXISTS `proba1` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `proba1`()
+    NO SQL
+BEGIN
+	SELECT * FROM quotation_tblcurrency;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -883,4 +907,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-05 15:11:35
+-- Dump completed on 2019-03-05 16:36:31
