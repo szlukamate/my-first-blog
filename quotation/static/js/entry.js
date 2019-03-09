@@ -66,9 +66,7 @@ $(function () {
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var fieldvalue = $(this).val();
         var entrydocid = $('#entrydocid').text();
-        var fieldnamefromname = $(this).attr( "fieldnamefromname" );
-        var fieldnamefromid = $(this).attr( "fieldnamefromid" );
-        var tablenamefrom = $(this).attr( "tablenamefrom" );
+        var fieldnameclone = $(this).attr( "fieldnameclone" );
         var fieldnameto = $(this).attr( "fieldnameto" );
 
             $.ajax({
@@ -78,9 +76,6 @@ $(function () {
             data: {
            'fieldvalue': fieldvalue,
            'entrydocid' : entrydocid,
-           'fieldnamefromname': fieldnamefromname,
-           'fieldnamefromid': fieldnamefromid,
-           'tablenamefrom': tablenamefrom,
            'fieldnameto': fieldnameto,
            'csrfmiddlewaretoken': CSRFtoken,
            },

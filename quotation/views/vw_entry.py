@@ -69,8 +69,6 @@ def entryform(request, pk):
                         "pretag_tbldockind, "
                         "debitaccountid_tbldoc, "
                         "creditaccountid_tbldoc, "
-                        "debit_nameHU_tblchartofaccounts_ctbldoc, "
-                        "credit_nameHU_tblchartofaccounts_ctbldoc, "
                         "accountvalue_tbldoc, "
                         "accountduedate_tbldoc "
                         "FROM quotation_tbldoc "
@@ -82,6 +80,8 @@ def entryform(request, pk):
         doc = cursor1.fetchall()
         for x in doc:
                 creatorid = x[11]
+                debitaccountid = x[25]
+                creditaccountid = x[26]
 
         cursor10 = connection.cursor()
         cursor10.execute("SELECT id, "
@@ -99,20 +99,36 @@ def entryform(request, pk):
                          "FROM quotation_tblchartofaccounts")
         chartofaccounts = cursor10.fetchall()
 
+        cursor10 = connection.cursor()
+        cursor10.execute("SELECT "
+                         "nameHU_tblchartofaccounts "
+                         "FROM quotation_tblchartofaccounts "
+                         "WHERE accountid_tblchartofaccounts=%s",
+                         [debitaccountid])
+        debitaccountname = cursor10.fetchall()
+
+        cursor10 = connection.cursor()
+        cursor10.execute("SELECT "
+                         "nameHU_tblchartofaccounts "
+                         "FROM quotation_tblchartofaccounts "
+                         "WHERE accountid_tblchartofaccounts=%s",
+                         [creditaccountid])
+        creditaccountname = cursor10.fetchall()
+
+
         return render(request, 'quotation/entry.html', {'doc': doc,
                                                         'chartofaccounts': chartofaccounts,
-                                                            'creatordata': creatordata})
+                                                        'debitaccountname': debitaccountname,
+                                                        'creditaccountname': creditaccountname,
+                                                        'creatordata': creatordata})
 def entryuniversalselections (request):
 
     fieldvalue = request.POST['fieldvalue']
     docid = request.POST['entrydocid']
-    fieldnamefromname = request.POST['fieldnamefromname'] # i.e. prefecetextforquotation_tblprefaceforquotation
-    fieldnamefromid = request.POST['fieldnamefromid'] # i.e. prefeceidforquotation_tblprefaceidforquotation
-    tablenamefrom = request.POST['tablenamefrom'] #i.e. tblprefaceforquotation or tblbackpageforquotation
     fieldnameto = request.POST['fieldnameto'] # i.e. defaultprefaceidforquotation_tblcompanies
 
     cursor22 = connection.cursor()
-    cursor22.callproc("proba1",[fieldnameto,fieldvalue,docid])
+    cursor22.callproc("spentryuniversalselections",[fieldnameto,fieldvalue,docid])
     results23 = cursor22.fetchall()
     print(results23)
 

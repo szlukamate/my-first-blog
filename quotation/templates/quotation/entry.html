@@ -10,16 +10,29 @@
 							<p >Number of Entry: {{ doc.0.24 }}{{ doc.0.10 }}</p>
 							<p >Creator: {{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
 							<p >Time of Creation: {{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
+							<p>
+								<label for="accountvalue" >Accountvalue:</label>
+								<input type="text" class="updateabletbldoc" value="{{ doc.0.27}}" name="accountvalue_tbldoc" size="7">
+							</p>
 						</div>
 						<div id="debitselect">
 								<label >Debit:</label><br>
-								<select class="selection" fieldnamefromname = "debitaccountid_tbldoc" fieldnamefromid = "docid_tbldoc" tablenamefrom="quotation_tbldoc" fieldnameto="debitaccountid_tbldoc" >
-										<option value="" disabled selected>{{ doc.0.25 }}</option>
+								<select class="selection" fieldnameto="debitaccountid_tbldoc" >
+										<option value="" disabled selected>{{ doc.0.25 }} {{ debitaccountname.0.0 }}</option>
 									{% for account in chartofaccounts %}
 										<option value="{{ account.0 }}">{{ account.0 }} {{ account.1}}</option>
 									{% endfor %}
-								</select><br>
-								<input type="text"  value="{{ doc.0.27}}" >
+								</select>
+
+						</div>
+						<div id="creditselect">
+								<label >Credit:</label><br>
+								<select class="selection" fieldnameto="creditaccountid_tbldoc" >
+										<option value="" disabled selected>{{ doc.0.26 }} {{ creditaccountname.0.0 }}</option>
+									{% for account in chartofaccounts %}
+										<option value="{{ account.0 }}">{{ account.0 }} {{ account.1}}</option>
+									{% endfor %}
+								</select>
 
 						</div>
 

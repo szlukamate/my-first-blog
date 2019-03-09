@@ -6,5 +6,10 @@ left:200mm;
 #debitselect{
 position: absolute;
 top: 100mm;
-left:100mm;
+left:20mm;
+}
+#creditselect{
+position: absolute;
+top: 100mm;
+left:150mm;
 }
