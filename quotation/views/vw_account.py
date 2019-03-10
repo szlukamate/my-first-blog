@@ -12,7 +12,7 @@ from django.http import HttpResponse
 # import pdb;
 # pdb.set_trace()
 
-def entryform(request, pk):
+def accountentryform(request, pk):
         if request.method == "POST":
                 fieldvalue = request.POST['fieldvalue']
                 rowid = request.POST['rowid']
@@ -116,12 +116,12 @@ def entryform(request, pk):
         creditaccountname = cursor10.fetchall()
 
 
-        return render(request, 'quotation/entry.html', {'doc': doc,
+        return render(request, 'quotation/accountentry.html', {'doc': doc,
                                                         'chartofaccounts': chartofaccounts,
                                                         'debitaccountname': debitaccountname,
                                                         'creditaccountname': creditaccountname,
                                                         'creatordata': creatordata})
-def entryuniversalselections (request):
+def accountentryuniversalselections (request):
 
     fieldvalue = request.POST['fieldvalue']
     docid = request.POST['entrydocid']
@@ -135,3 +135,71 @@ def entryuniversalselections (request):
     json_data = json.dumps(results23)
 
     return HttpResponse(json_data, content_type="application/json")
+def accountincomestatement (request):
+    accountnumberinitial="9"
+
+    cursor22 = connection.cursor()
+    cursor22.execute("SELECT "
+                     "debitaccountid_tbldoc, "
+                    "accountvalue_tbldoc "
+                     "FROM quotation_tbldoc "
+                     "WHERE `Doc_kindid_tblDoc_id`=6 and obsolete_tbldoc=0 and debitaccountid_tbldoc LIKE '" + accountnumberinitial + "%'" )
+    results23 = cursor22.fetchall()
+
+    #Income Statement preparetion
+
+    cursor22 = connection.cursor()
+    cursor22.execute("SELECT "
+                     "rowid_tblincomestatement, "
+                     "order_tblincomestatement, "
+                     "rowname_tblincomestatement "
+                     "FROM quotation_tblincomestatement ")
+
+    incomestatementrows = cursor22.fetchall()
+    incomestatementrowslist = []
+    incomestatementrowslen = len(incomestatementrows)
+
+    for i in range(incomestatementrowslen):
+        cursor32 = connection.cursor()
+        cursor32.execute("SELECT "
+                         "rowid_tblincomestatementdetails, "
+                         "operationsign_tblincomestatementdetails, "
+                         "operationkind_tblincomestatementdetails, "
+                         "side_tblincomestatementdetails, "
+                         "generalledgeraccount_tblincomestatementdetails "
+                         "FROM quotation_tblincomestatementdetails "
+                         "WHERE incomestatementrowid_tblincomestatementdetails=%s ", [incomestatementrows[i][0]])
+
+        incomestatementdetailsrows = cursor32.fetchall()
+        incomestatementdetailsrowslen = len(incomestatementdetailsrows)
+        #import pdb;
+        #pdb.set_trace()
+
+        firstfield = incomestatementrows[i][0]
+        secondfield = incomestatementrows[i][1]
+        thirdfield = incomestatementrows[i][2]
+        fourthfieldappendable = ''
+        for j in range(incomestatementdetailsrowslen):
+                if incomestatementdetailsrows[j][1] == '+':
+                    operationsigntoform='+'
+                elif incomestatementdetailsrows[j][1] == '-':
+                    operationsigntoform = '-'
+                if incomestatementdetailsrows[j][2] == 'Account':
+                    operationkindtoform = 'GL'
+                elif incomestatementdetailsrows[j][2] == 'Row':
+                    operationkindtoform = 'ISROW'
+                if incomestatementdetailsrows[j][3] == 'Debit':
+                    sidetoform = 'DB'
+                elif incomestatementdetailsrows[j][3] == 'Credit':
+                    sidetoform = 'CB'
+                generalledgeraccounttoform = incomestatementdetailsrows[j][4]
+
+                fourthfieldappendable = "(" + operationsigntoform + operationkindtoform + sidetoform + generalledgeraccounttoform + ")"
+
+        fourthfield = fourthfieldappendable
+        appendvar = (firstfield, secondfield, thirdfield, fourthfield)
+        incomestatementrowslist.append(appendvar)
+    incomestatementrows2 = tuple (incomestatementrowslist)
+
+
+    return render(request, 'quotation/accountincomestatement.html', {'incomestatementrows2': incomestatementrows2})

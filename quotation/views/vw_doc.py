@@ -193,7 +193,7 @@ def docselector(request, pk):
     elif dockind == 4:  # Job Number
         return redirect('jobnumberform', pk=pk)
     elif dockind == 6:  # Accounting Entry
-        return redirect('entryform', pk=pk)
+        return redirect('accountentryform', pk=pk)
 
 def docremove(request, pk):
     cursor1 = connection.cursor()

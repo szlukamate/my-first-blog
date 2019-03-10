@@ -1,0 +1,45 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+
+
+
+							<p align="center" style="font-size:160%;">Income Statement</p>
+							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>Id</td>
+													<td>Order</td>
+													<td>Name</td>
+													<td>Formula</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												{%  for row in  incomestatementrows2 %}
+
+
+													<tr>
+														<td>{{ row.0 }}</a></td>
+														<td>{{ row.1}}</td>
+														<td>{{ row.2}}</td>
+														<td>{{ row.3}}</td>
+
+														<td><span class="glyphicon glyphicon-remove"></span></a></td>
+
+													</tr>
+
+
+
+												{% endfor %}
+											</tbody>
+
+										</table>
+							</div>
+		<script type="text/javascript" src="{% static 'js/docs.js' %}"></script>
+	{% endblock %}

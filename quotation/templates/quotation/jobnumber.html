@@ -15,6 +15,10 @@
 					<form action="{% url 'doclink' docid=doc.0.0 %}">
 						<input type="submit" value="Doclink" />
 					</form>
+					<form action="{% url 'accountincomestatement' %}">
+						<input type="submit" value="Income Statement" />
+					</form>
+
 							  <label for="subject_tbldoc" >Subject</label>
 							  <input type="text" class="updateabletbldoc" value="{{ doc.0.9}}" name="subject_tbldoc" >
 

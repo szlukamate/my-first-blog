@@ -71,7 +71,7 @@ $(function () {
 
             $.ajax({
             type: 'POST',
-            url: 'entryuniversalselections/',
+            url: 'accountentryuniversalselections/',
 
             data: {
            'fieldvalue': fieldvalue,
