@@ -46,6 +46,20 @@
 						<input type="submit" value="Print" />
 					</form>
 
+					<form action="{% url 'quotationviewpdf' docid=doc.0.0 %}">
+						<input type="submit" value="View Pdf" />
+					</form>
+
+					<form action="{% url 'quotationwritepdf' docid=doc.0.0 %}">
+						<input type="submit" value="Write Pdf" />
+					</form>
+					<form action="{% url 'quotationwritepdf2' docid=doc.0.0 %}">
+						<input type="submit" value="Write Pdf2" />
+					</form>
+					<form action="{% url 'quotationwritepdfweasyprint' docid=doc.0.0 %}">
+						<input type="submit" value="Write Pdfweasyprint" />
+					</form>
+
 					<form action="{% url 'doclink' docid=doc.0.0 %}">
 						<input type="submit" value="Doclink" />
 					</form>

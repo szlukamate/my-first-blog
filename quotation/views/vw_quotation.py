@@ -7,7 +7,16 @@ from collections import namedtuple
 from django.db import connection, transaction
 from array import *
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
+from django.core.files.storage import FileSystemStorage
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+from django.template.loader import render_to_string
+from weasyprint import HTML
+
 # import pdb;
 # pdb.set_trace()
 def quotationform(request, pk):
@@ -470,6 +479,11 @@ def quotationprint (request, docid):
                      "WHERE id=%s ", [creatorid])
     creatordata = cursor5.fetchall()
 
+    html_string = render_to_string('quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails,
+                                                             'docdetailscount':docdetailscount,
+                                                             'creatordata': creatordata})
+    html = HTML(string=html_string)
+    html.write_pdf(target='/tmp/mypdf444.pdf');
 
     return render(request, 'quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount':docdetailscount,
@@ -517,4 +531,66 @@ def quotationbackpage(request):
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")
+def quotationviewpdf(request, docid):
+    fs = FileSystemStorage()
+    filename = 'mypdf2.pdf'
+    if fs.exists(filename):
+        with fs.open(filename) as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
+            return response
+    else:
+        return HttpResponseNotFound('The requested pdf was not found in our server.')
 
+def quotationwritepdf(request, docid):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="mypdf2.pdf"'
+
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer)
+
+    # Start writing the PDF here
+    p.drawString(100, 100, 'Hello world.')
+    # End writing
+
+    p.showPage()
+    p.save()
+
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+
+    return response
+def quotationwritepdf2(request, docid):
+    doc = SimpleDocTemplate("/tmp/somefilename.pdf")
+    styles = getSampleStyleSheet()
+    Story = [Spacer(1,2*inch)]
+    style = styles["Normal"]
+    for i in range(100):
+       bogustext = ("This is Paragraph number %s.  " % i) * 20
+       p = Paragraph(bogustext, style)
+       Story.append(p)
+       Story.append(Spacer(1,0.2*inch))
+    doc.build(Story)
+
+    fs = FileSystemStorage("/tmp")
+    with fs.open("somefilename.pdf") as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="somefilename.pdf"'
+        return response
+
+    return response
+def quotationwritepdfweasyprint(request, docid):
+    paragraphs = ['first paragraph', 'second paragraph', 'third paragraph']
+    html_string = render_to_string('quotation/pdf_template.html', {'paragraphs': paragraphs})
+
+    html = HTML(string=html_string)
+    html.write_pdf(target='/tmp/mypdf333.pdf');
+
+    fs = FileSystemStorage('/tmp')
+    with fs.open('mypdf333.pdf') as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="mypdf333.pdf"'
+        return response
+
+    return response

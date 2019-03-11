@@ -136,15 +136,20 @@ def accountentryuniversalselections (request):
 
     return HttpResponse(json_data, content_type="application/json")
 def accountincomestatement (request):
-    accountnumberinitial="9"
+    def accountsum(accountnumberinitial):
+        cursor22 = connection.cursor()
+        cursor22.execute("SELECT "
+                         "sum(accountvalue_tbldoc) "
+                         "FROM quotation_tbldoc "
+                         "WHERE `Doc_kindid_tblDoc_id`=6 and obsolete_tbldoc=0 and debitaccountid_tbldoc LIKE '" + accountnumberinitial + "%'")
+        results23 = cursor22.fetchall()
+        for x in results23:
+            sum = x[0]
+     #       import pdb;
+     #       pdb.set_trace()
 
-    cursor22 = connection.cursor()
-    cursor22.execute("SELECT "
-                     "debitaccountid_tbldoc, "
-                    "accountvalue_tbldoc "
-                     "FROM quotation_tbldoc "
-                     "WHERE `Doc_kindid_tblDoc_id`=6 and obsolete_tbldoc=0 and debitaccountid_tbldoc LIKE '" + accountnumberinitial + "%'" )
-    results23 = cursor22.fetchall()
+        return sum
+
 
     #Income Statement preparetion
 
@@ -172,32 +177,33 @@ def accountincomestatement (request):
 
         incomestatementdetailsrows = cursor32.fetchall()
         incomestatementdetailsrowslen = len(incomestatementdetailsrows)
-        #import pdb;
-        #pdb.set_trace()
 
         firstfield = incomestatementrows[i][0]
         secondfield = incomestatementrows[i][1]
         thirdfield = incomestatementrows[i][2]
         fourthfieldappendable = ''
+        fifthfieldappendable = 0.0
         for j in range(incomestatementdetailsrowslen):
-                if incomestatementdetailsrows[j][1] == '+':
+
+            if incomestatementdetailsrows[j][1] == '+':
                     operationsigntoform='+'
-                elif incomestatementdetailsrows[j][1] == '-':
-                    operationsigntoform = '-'
-                if incomestatementdetailsrows[j][2] == 'Account':
-                    operationkindtoform = 'GL'
-                elif incomestatementdetailsrows[j][2] == 'Row':
-                    operationkindtoform = 'ISROW'
-                if incomestatementdetailsrows[j][3] == 'Debit':
-                    sidetoform = 'DB'
-                elif incomestatementdetailsrows[j][3] == 'Credit':
-                    sidetoform = 'CB'
-                generalledgeraccounttoform = incomestatementdetailsrows[j][4]
+                    fifthfieldappendable = fifthfieldappendable + accountsum(incomestatementdetailsrows[j][4])
 
-                fourthfieldappendable = "(" + operationsigntoform + operationkindtoform + sidetoform + generalledgeraccounttoform + ")"
-
+            elif incomestatementdetailsrows[j][1] == '-':
+                operationsigntoform = '-'
+            if incomestatementdetailsrows[j][2] == 'Account':
+                operationkindtoform = 'GL'
+            elif incomestatementdetailsrows[j][2] == 'Row':
+                operationkindtoform = 'ISROW'
+            if incomestatementdetailsrows[j][3] == 'Debit':
+                sidetoform = 'DB'
+            elif incomestatementdetailsrows[j][3] == 'Credit':
+                sidetoform = 'CB'
+            generalledgeraccounttoform = incomestatementdetailsrows[j][4]
+            fourthfieldappendable = fourthfieldappendable + "(" + operationsigntoform + operationkindtoform + sidetoform + generalledgeraccounttoform + ")"
+        fifthfield = fifthfieldappendable
         fourthfield = fourthfieldappendable
-        appendvar = (firstfield, secondfield, thirdfield, fourthfield)
+        appendvar = (firstfield, secondfield, thirdfield, fourthfield, fifthfield)
         incomestatementrowslist.append(appendvar)
     incomestatementrows2 = tuple (incomestatementrowslist)
 
