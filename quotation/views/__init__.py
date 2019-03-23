@@ -7,4 +7,4 @@ from .vw_order import *
 from .vw_coredata import *
 from .vw_jobnumber import *
 from .vw_account import *
-
+from .vw_email import *

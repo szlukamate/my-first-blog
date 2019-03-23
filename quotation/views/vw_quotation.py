@@ -15,7 +15,10 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from django.template.loader import render_to_string
-from weasyprint import HTML
+from weasyprint import HTML, CSS
+from django.conf import settings
+import subprocess
+import os
 
 # import pdb;
 # pdb.set_trace()
@@ -479,11 +482,7 @@ def quotationprint (request, docid):
                      "WHERE id=%s ", [creatorid])
     creatordata = cursor5.fetchall()
 
-    html_string = render_to_string('quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails,
-                                                             'docdetailscount':docdetailscount,
-                                                             'creatordata': creatordata})
-    html = HTML(string=html_string)
-    html.write_pdf(target='/tmp/mypdf444.pdf');
+
 
     return render(request, 'quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount':docdetailscount,
@@ -532,35 +531,46 @@ def quotationbackpage(request):
 
     return HttpResponse(json_data, content_type="application/json")
 def quotationviewpdf(request, docid):
+    os.system('google-chrome --headless --print-to-pdf=/home/szluka/djangogirls/quotation/output3.pdf http://127.0.0.1:8000/quotation/quotationprint/60/')
     fs = FileSystemStorage()
-    filename = 'mypdf2.pdf'
+    filename = 'output.pdf'
     if fs.exists(filename):
         with fs.open(filename) as pdf:
             response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
+            response['Content-Disposition'] = 'inline; filename="output.pdf"'
             return response
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
 
-def quotationwritepdf(request, docid):
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="mypdf2.pdf"'
 
-    buffer = BytesIO()
-    p = canvas.Canvas(buffer)
 
-    # Start writing the PDF here
-    p.drawString(100, 100, 'Hello world.')
-    # End writing
+def quotationemail(request, docid):
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "docid_tbldoc, "
+                    "email_tblcontacts_ctbldoc, "
+                    "creatorid_tbldoc "
+                    "FROM quotation_tbldoc "
+                    "WHERE docid_tbldoc=%s ",
+                    [docid])
+    doc = cursor1.fetchall()
+    for x in doc:
+        creatorid = x[2]
 
-    p.showPage()
-    p.save()
+    cursor10 = connection.cursor()
+    cursor10.execute("SELECT id, "
+                     "first_name, "
+                     "last_name, "
+                     "email, "
+                     "subscriptiontext_tblauth_user "
+                     "FROM auth_user "
+                    "WHERE id=%s ", [creatorid])
+    creatordata = cursor10.fetchall()
 
-    pdf = buffer.getvalue()
-    buffer.close()
-    response.write(pdf)
+    return render(request, 'quotation/emailadd.html', {'doc': doc,
+                                                       'creatordata': creatordata
+                                                       })
 
-    return response
 def quotationwritepdf2(request, docid):
     doc = SimpleDocTemplate("/tmp/somefilename.pdf")
     styles = getSampleStyleSheet()
@@ -581,16 +591,6 @@ def quotationwritepdf2(request, docid):
 
     return response
 def quotationwritepdfweasyprint(request, docid):
-    paragraphs = ['first paragraph', 'second paragraph', 'third paragraph']
-    html_string = render_to_string('quotation/pdf_template.html', {'paragraphs': paragraphs})
+    os.system('google-chrome --headless --print-to-pdf http://127.0.0.1:8000/quotation/quotationprint/60/')
 
-    html = HTML(string=html_string)
-    html.write_pdf(target='/tmp/mypdf333.pdf');
-
-    fs = FileSystemStorage('/tmp')
-    with fs.open('mypdf333.pdf') as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="mypdf333.pdf"'
-        return response
-
-    return response
+    return redirect('quotationform', pk=docid)

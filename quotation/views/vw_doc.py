@@ -15,7 +15,6 @@ def docs(request):
                     "WHERE obsolete_tbldoc = 0 "
                     "order by docid_tbldoc desc ")
     docs = cursor1.fetchall()
-    # docs = tblDoc.objects.all()
     return render(request, 'quotation/docs.html', {'docs': docs})
 
 

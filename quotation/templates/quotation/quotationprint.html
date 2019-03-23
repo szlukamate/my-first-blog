@@ -9,9 +9,9 @@
 	   </head>
     <body>
 	<p id="quotationid" hidden>{{ doc.0.0}}</p>
-	<p id="total" >{{ doc.0.19}}</p>{% csrf_token %}
-	<p id="currencycodeinreport_tbldoc" >{{ doc.0.22}}</p>
-	<p id="currencyrateinreport_tbldoc" >{{ doc.0.23}}</p>
+	<p id="total" hidden>{{ doc.0.19}}</p>{% csrf_token %}
+	<p id="currencycodeinreport_tbldoc" hidden>{{ doc.0.22}}</p>
+	<p id="currencyrateinreport_tbldoc" hidden>{{ doc.0.23}}</p>
 
 		<!-- wrap first page ˇ-->
 		<div class="page">

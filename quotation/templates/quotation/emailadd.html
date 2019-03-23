@@ -1,0 +1,23 @@
+{% extends 'quotation/base.html' %}
+ 	{% block content %}
+
+				    <p id="formtitle" align="center" style="font-size:260%">Emailadd Form</p>
+
+                    <p onclick="$(this).hide();"> This is an inner jq</p>
+                    <p id="para" > This is an external jq</p>
+
+
+                            <form action="{% url 'emailadd' %}" method="post">{% csrf_token %}
+								<label for="addressee" >Addressee Email</label>
+								<input type="text" value="{{ doc.0.1 }}" name="addresseeemail" maxlength="30" size="20"><br>
+
+
+								<label for="creator" >Creator Email</label>
+								<input type="text" value="{{ creatordata.0.3 }}" name="creatoremail" maxlength="30" size="20">
+
+
+                                <input type="submit" value="Send">
+				            </form>
+
+	{% endblock %}
+
