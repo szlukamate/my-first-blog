@@ -10,12 +10,7 @@ import json
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core.files.storage import FileSystemStorage
 from io import BytesIO
-from reportlab.pdfgen import canvas
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.units import inch
 from django.template.loader import render_to_string
-from weasyprint import HTML, CSS
 from django.conf import settings
 import subprocess
 import os
@@ -531,7 +526,9 @@ def quotationbackpage(request):
 
     return HttpResponse(json_data, content_type="application/json")
 def quotationviewpdf(request, docid):
-    os.system('google-chrome --headless --print-to-pdf=/home/szluka/djangogirls/quotation/output3.pdf http://127.0.0.1:8000/quotation/quotationprint/60/')
+    #os.system('google-chrome --headless --print-to-pdf http://127.0.0.1:8000/quotation/quotationprint/60/')
+
+    os.system('google-chrome --headless --print-to-pdf=output.pdf http://127.0.0.1:8000/quotation/quotationprint/60/')
     fs = FileSystemStorage()
     filename = 'output.pdf'
     if fs.exists(filename):
@@ -591,6 +588,15 @@ def quotationwritepdf2(request, docid):
 
     return response
 def quotationwritepdfweasyprint(request, docid):
-    os.system('google-chrome --headless --print-to-pdf http://127.0.0.1:8000/quotation/quotationprint/60/')
+    os.system('google-chrome --headless --print-to-pdf http://127.0.0.1:8000/quotation/quotationform/60/')
+    fs = FileSystemStorage()
+    filename = 'output.pdf'
+    if fs.exists(filename):
+        with fs.open(filename) as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="output.pdf"'
+            return response
+    else:
+        return HttpResponseNotFound('The requested pdf was not found in our server.')
 
     return redirect('quotationform', pk=docid)
