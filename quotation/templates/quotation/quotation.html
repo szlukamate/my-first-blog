@@ -53,13 +53,6 @@
 					<form action="{% url 'quotationemail' docid=doc.0.0 %}">
 						<input type="submit" value="Email" />
 					</form>
-					<form action="127.0.0.1/output.pdf">
-						<input type="submit" value="Write Pdf2" />
-					</form>
-					<a href="127.0.0.1/output.pdf">Link Text Here</a>
-					<form action="{% url 'quotationwritepdfweasyprint' docid=doc.0.0 %}">
-						<input type="submit" value="Write Pdfweasyprint" />
-					</form>
 
 					<form action="{% url 'doclink' docid=doc.0.0 %}">
 						<input type="submit" value="Doclink" />
