@@ -1,23 +1,31 @@
 {% extends 'quotation/base.html' %}
+{% load staticfiles%}
  	{% block content %}
 
 				    <p id="formtitle" align="center" style="font-size:260%">Emailadd Form</p>
+					<p id="title_tblcontacts_ctbldoc" hidden>{{ doc.0.7}}</p>
+					<p id="lastname_tblcontacts_ctbldoc" hidden>{{ doc.0.8}}</p>
 
                     <p onclick="$(this).hide();"> This is an inner jq</p>
                     <p id="para" > This is an external jq</p>
 
 
-                            <form action="{% url 'emailadd' %}" method="post">{% csrf_token %}
+                            <form action="{% url 'emailadd' pk=doc.0.0 %}" method="post">{% csrf_token %}
 								<label for="addressee" >Addressee Email</label>
-								<input type="text" value="{{ doc.0.1 }}" name="addresseeemail" maxlength="30" size="20"><br>
+								<input type="text" value="{{ doc.0.1 }}" name="addresseeemail" maxlength="50" size="40"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a><br>
 
+								<label for="cc" >Cc</label>
+								<input type="text" value="{{ creatordata.0.3 }}" name="cc" maxlength="200" size="40"><br>
 
-								<label for="creator" >Creator Email</label>
-								<input type="text" value="{{ creatordata.0.3 }}" name="creatoremail" maxlength="30" size="20">
+								<label for="pdf" >Pdf</label>
+								<input type="text" value="{{ pdffilename }}" name="pdffilename" maxlength="200" size="60"><br>
 
+								<label for="emailbodytext" >Body</label>
+							    <textarea rows="20" cols="60" id="emailbodytext" name="emailbodytext">{{ emailbodytext }}</textarea>
 
                                 <input type="submit" value="Send">
 				            </form>
+				<script type="text/javascript" src="{% static 'js/emailadd.js' %}"></script>
 
 	{% endblock %}
 

@@ -10,8 +10,18 @@ from django.db import connection, transaction
 
 def docs(request):
     cursor1 = connection.cursor()
-    cursor1.execute("SELECT docid_tbldoc, Pcd_tblDoc, Town_tblDoc, Doc_kindid_tblDoc_id, companyname_tblcompanies_ctbldoc, firstname_tblcontacts_ctbldoc, lastname_tblcontacts_ctbldoc, creationtime_tbldoc "
+    cursor1.execute("SELECT docid_tbldoc, Pcd_tblDoc, Town_tblDoc, "
+                    "Doc_kindid_tblDoc_id, "
+                    "companyname_tblcompanies_ctbldoc, "
+                    "firstname_tblcontacts_ctbldoc, "
+                    "lastname_tblcontacts_ctbldoc, "
+                    "creationtime_tbldoc,"
+                    "Doc_kind_name_tblDoc_kind, "
+                    "pretag_tbldockind,"
+                    "docnumber_tbldoc "
                     "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
                     "WHERE obsolete_tbldoc = 0 "
                     "order by docid_tbldoc desc ")
     docs = cursor1.fetchall()
@@ -157,6 +167,7 @@ def docadd(request):
             [maxdocid])
 
         return redirect('docselector', pk=maxdocid)
+
     cursor0 = connection.cursor()
     cursor0.execute(
         "SELECT quotation_tblcontacts.contactid_tblcontacts, quotation_tblcompanies.companyname_tblcompanies,"
@@ -167,10 +178,12 @@ def docadd(request):
         "ORDER BY companyname_tblcompanies")
     contacts = cursor0.fetchall()
     transaction.commit()
+
     cursor = connection.cursor()
     cursor.execute("SELECT doc_kindid_tbldoc_kind, doc_kind_name_tbldoc_kind FROM quotation_tbldoc_kind")
     dockinds = cursor.fetchall()
     transaction.commit()
+
     return render(request, 'quotation/docadd.html', {'dockinds': dockinds, 'contacts': contacts})
 
 
@@ -184,13 +197,15 @@ def docselector(request, pk):
     results = cursor.fetchall()
     for x in results:
         dockind = x[0]
-    transaction.commit()
+
     if dockind == 1:  # Quotation
         return redirect('quotationform', pk=pk)
     elif dockind == 2:  # Order
         return redirect('orderform', pk=pk)
     elif dockind == 4:  # Job Number
         return redirect('jobnumberform', pk=pk)
+    elif dockind == 5:  # Email
+        return redirect('emailform', pk=pk)
     elif dockind == 6:  # Accounting Entry
         return redirect('accountentryform', pk=pk)
 

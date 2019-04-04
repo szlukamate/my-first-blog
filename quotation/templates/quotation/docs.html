@@ -19,7 +19,7 @@
 													<td>Lastname</td>
 													<td>PCD</td>
 													<td>Town</td>
-													<td>Doc Kind</td>
+													<td>Docnumber</td>
 													<td>Created</td>
 												</tr>
 											</thead>
@@ -36,7 +36,7 @@
 
 														<td>{{ tblDoc.1}}</td>
 														<td>{{ tblDoc.2}}</td>
-														<td>{{ tblDoc.3}}</td>
+														<td>{{ tblDoc.9}}{{ tblDoc.10}}</td>
 														<td>{{ tblDoc.7|date:"M.d.Y" }} {{ tblDoc.7|time:"H:i" }}</td>
 														<td><a href="{% url 'docremove' pk=tblDoc.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
 

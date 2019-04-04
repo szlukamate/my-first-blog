@@ -48,8 +48,7 @@ urlpatterns = [
     url(r'^accountincomestatement/$', views.accountincomestatement, name='accountincomestatement'),
     url(r'^quotationviewpdf/(?P<docid>[0-9]+)/$', views.quotationviewpdf, name='quotationviewpdf'),
     url(r'^quotationemail/(?P<docid>[0-9]+)/$', views.quotationemail, name='quotationemail'),
-    url(r'^quotationwritepdf2/(?P<docid>[0-9]+)/$', views.quotationwritepdf2, name='quotationwritepdf2'),
-    url(r'^quotationwritepdfweasyprint/(?P<docid>[0-9]+)/$', views.quotationwritepdfweasyprint, name='quotationwritepdfweasyprint'),
-    url(r'emailadd/$', views.emailadd, name='emailadd'),
+    url(r'^emailadd/(?P<pk>[0-9]+)/$', views.emailadd, name='emailadd'),
+    url(r'^emailform/(?P<pk>[0-9]+)/$', views.emailform, name='emailform'),
 
 ]

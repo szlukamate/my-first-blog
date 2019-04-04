@@ -539,64 +539,53 @@ def quotationviewpdf(request, docid):
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
 
-
-
 def quotationemail(request, docid):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
                     "docid_tbldoc, "
                     "email_tblcontacts_ctbldoc, "
-                    "creatorid_tbldoc "
+                    "creatorid_tbldoc, "
+                    "pretag_tbldockind, "
+                    "Doc_kind_name_tblDoc_kind, "
+                    "docnumber_tbldoc, "
+                    "subject_tbldoc, "
+                    "title_tblcontacts_ctbldoc, "
+                    "lastname_tblcontacts_ctbldoc, "
+                    "emailbodytextmodifiedbyuser_tbldoc "
                     "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
                     "WHERE docid_tbldoc=%s ",
                     [docid])
     doc = cursor1.fetchall()
     for x in doc:
         creatorid = x[2]
+        pretag = x[3]
+        dockindname = x[4]
+        docnumber = x[5]
+        subject = x[6]
+#    import pdb;
+#    pdb.set_trace()
 
     cursor10 = connection.cursor()
     cursor10.execute("SELECT id, "
                      "first_name, "
                      "last_name, "
                      "email, "
-                     "subscriptiontext_tblauth_user "
+                     "subscriptiontext_tblauth_user, "
+                     "emailbodytext_tblauth_user "
                      "FROM auth_user "
                     "WHERE id=%s ", [creatorid])
     creatordata = cursor10.fetchall()
+    for x in creatordata:
+        emailbodytext = x[5]
+
+    pdffilename = dockindname + '_' + pretag + str(docnumber) + '_Subject:_' + subject + '.pdf'
+    os.system('google-chrome --headless --print-to-pdf='+ pdffilename + ' http://127.0.0.1:8000/quotation/quotationprint/' + docid + '/')
 
     return render(request, 'quotation/emailadd.html', {'doc': doc,
+                                                       'pdffilename': pdffilename,
+                                                       'emailbodytext': emailbodytext,
                                                        'creatordata': creatordata
                                                        })
 
-def quotationwritepdf2(request, docid):
-    doc = SimpleDocTemplate("/tmp/somefilename.pdf")
-    styles = getSampleStyleSheet()
-    Story = [Spacer(1,2*inch)]
-    style = styles["Normal"]
-    for i in range(100):
-       bogustext = ("This is Paragraph number %s.  " % i) * 20
-       p = Paragraph(bogustext, style)
-       Story.append(p)
-       Story.append(Spacer(1,0.2*inch))
-    doc.build(Story)
-
-    fs = FileSystemStorage("/tmp")
-    with fs.open("somefilename.pdf") as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="somefilename.pdf"'
-        return response
-
-    return response
-def quotationwritepdfweasyprint(request, docid):
-    os.system('google-chrome --headless --print-to-pdf http://127.0.0.1:8000/quotation/quotationform/60/')
-    fs = FileSystemStorage()
-    filename = 'output.pdf'
-    if fs.exists(filename):
-        with fs.open(filename) as pdf:
-            response = HttpResponse(pdf, content_type='application/pdf')
-            response['Content-Disposition'] = 'inline; filename="output.pdf"'
-            return response
-    else:
-        return HttpResponseNotFound('The requested pdf was not found in our server.')
-
-    return redirect('quotationform', pk=docid)

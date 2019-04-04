@@ -39,6 +39,8 @@ $(function () {
             } catch(e) {}
         }
     });
+
+
     var index2 = 'qpsstats-active-tab2';
     //  Define friendly data store name
     var dataStore2 = window.sessionStorage;
