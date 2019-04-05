@@ -23,7 +23,25 @@
 							  <input type="text" class="updateabletbldoc" value="{{ doc.0.9}}" name="subject_tbldoc" size="60"><br>
 
 								<label for="emailbodytextmodifiedbyuser" >Body</label>
-							    <textarea rows="20" cols="60" id="emailbodytextmodifiedbyuser" name="emailbodytextmodifiedbyuser">{{ doc.0.29 }}</textarea>
+							    <textarea rows="20" cols="60" id="emailbodytextmodifiedbyuser" name="emailbodytextmodifiedbyuser">{{ doc.0.29 }}</textarea><br>
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
+												<tr>
+													<td>Attachmentname</td>
+												</tr>
+											</thead>
+
+												{%  for docdetail in  docdetails %}
+													<tbody>
+															<tr>
+																<td><a href="{% url 'emailviewattachment' pk=docdetail.0 %}">{{ docdetail.1 }}</a></td>
+															</tr>
+													</tbody>
+												{% endfor %}
+
+										</table>
+							</div>
 
 
 				<script type="text/javascript" src="{% static 'js/accountentry.js' %}"></script>

@@ -50,5 +50,6 @@ urlpatterns = [
     url(r'^quotationemail/(?P<docid>[0-9]+)/$', views.quotationemail, name='quotationemail'),
     url(r'^emailadd/(?P<pk>[0-9]+)/$', views.emailadd, name='emailadd'),
     url(r'^emailform/(?P<pk>[0-9]+)/$', views.emailform, name='emailform'),
+    url(r'^emailviewattachment/(?P<pk>[0-9]+)/$', views.emailviewattachment, name='emailviewattachment'),
 
 ]

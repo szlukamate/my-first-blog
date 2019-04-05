@@ -10,6 +10,8 @@ import json
 from django.http import HttpResponse
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
 # import pdb;
 # pdb.set_trace()
 
@@ -135,10 +137,20 @@ def emailadd (request, pk):
         for x in results:
             maxdocid = x[0]
 
+        with open('/home/szluka/djangogirls/' + pdffilename, 'rb') as file:
+            attachmentcontent = file.read()
+
+
         cursor4 = connection.cursor()
         cursor4.execute(
-            "INSERT INTO quotation_tbldoc_details ( Docid_tblDoc_details_id) VALUES (%s)",
-            [maxdocid])
+            "INSERT INTO quotation_tbldoc_details "
+            "( Docid_tblDoc_details_id, "
+            "attachmentname_tbldocdetails,"
+            "attachmentcontent_tbldocdetails) VALUES (%s,%s,%s)",
+            [maxdocid,
+            pdffilename,
+            attachmentcontent])
+
 
         #import pdb;
         #pdb.set_trace()
@@ -221,6 +233,19 @@ def emailform(request, pk):
             debitaccountid = x[25]
             creditaccountid = x[26]
 
+        cursor3 = connection.cursor()
+        cursor3.execute(
+            "SELECT  `Doc_detailsid_tblDoc_details`, "
+            "`attachmentname_tbldocdetails` "
+            "FROM quotation_tbldoc_details "
+            "LEFT JOIN quotation_tbldoc "
+            "ON "
+            "quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+            "WHERE docid_tbldoc_details_id=%s "
+            "order by firstnum_tblDoc_details",
+            [pk])
+        docdetails = cursor3.fetchall()
+
         cursor10 = connection.cursor()
         cursor10.execute("SELECT id, "
                          "first_name, "
@@ -232,4 +257,34 @@ def emailform(request, pk):
         creatordata = cursor10.fetchall()
 
         return render(request, 'quotation/email.html', {'doc': doc,
-                                                               'creatordata': creatordata})
+                                                        'docdetails': docdetails,
+                                                        'creatordata': creatordata})
+
+def emailviewattachment(request, pk):
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT  `Doc_detailsid_tblDoc_details`, "
+        "attachmentname_tbldocdetails, "
+        "attachmentcontent_tbldocdetails "
+        "FROM quotation_tbldoc_details "
+        "WHERE Doc_detailsid_tblDoc_details=%s ",
+        [pk])
+    docdetails = cursor3.fetchall()
+    for x in docdetails:
+        attachmentname = x[1]
+        attachmentcontent = x[2]
+    #import pdb;
+    #pdb.set_trace()
+
+    with open(attachmentname, 'wb') as file:
+        file.write(attachmentcontent)
+
+    fs = FileSystemStorage()
+ #   filename = 'output.pdf'
+    if fs.exists(attachmentname):
+        with fs.open(attachmentname) as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="output.pdf"'
+            return response
+    else:
+        return HttpResponseNotFound('The requested pdf was not found in our server.')

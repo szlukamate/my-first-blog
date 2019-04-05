@@ -564,8 +564,9 @@ def quotationemail(request, docid):
         dockindname = x[4]
         docnumber = x[5]
         subject = x[6]
-#    import pdb;
-#    pdb.set_trace()
+
+    #import pdb;
+    #pdb.set_trace()
 
     cursor10 = connection.cursor()
     cursor10.execute("SELECT id, "
