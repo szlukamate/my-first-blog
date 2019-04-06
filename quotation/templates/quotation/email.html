@@ -32,13 +32,14 @@
 												</tr>
 											</thead>
 
+											<tbody>
 												{%  for docdetail in  docdetails %}
-													<tbody>
+
 															<tr>
 																<td><a href="{% url 'emailviewattachment' pk=docdetail.0 %}">{{ docdetail.1 }}</a></td>
 															</tr>
-													</tbody>
 												{% endfor %}
+											</tbody>
 
 										</table>
 							</div>

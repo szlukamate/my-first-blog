@@ -16,7 +16,7 @@ from django.core.files.storage import FileSystemStorage
 # pdb.set_trace()
 
 def emailadd (request, pk):
-
+    creatorid = request.user.id
 
     cursor0 = connection.cursor()
     cursor0.execute("SELECT "
@@ -64,82 +64,91 @@ def emailadd (request, pk):
         townclone = instancesingle[17]
         addressclone = instancesingle[18]
 
-        #import pdb;
-        #pdb.set_trace()
+    #import pdb;
+    #pdb.set_trace()
 
-        cursor8 = connection.cursor()
-        cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
-                        "WHERE Doc_kindid_tblDoc_id = 5")
-        results = cursor8.fetchall()
+    cursor8 = connection.cursor()
+    cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
+                    "WHERE Doc_kindid_tblDoc_id = 5")
+    results = cursor8.fetchall()
 
-        if results[0][0] is not None: # only if there is not doc yet (this would be the first instance)
-            for x in results:
-                docnumber = x[0]
-                docnumber += 1
-        else:
-                docnumber = 80 # arbitrary number
-
-        cursor = connection.cursor()
-        cursor.execute("SELECT  quotation_tbldoc_kind.Doc_kindid_tbldoc_kind, "
-                       "quotation_tbldoc_kind.Doc_kind_name_tblDoc_kind, "
-                       "quotation_tbldoc_kind.pretag_tbldockind, "
-                       "quotation_tbldoc.subject_tbldoc, "
-                       "quotation_tbldoc.docnumber_tbldoc "
-                       "FROM quotation_tbldoc "
-                       "JOIN quotation_tbldoc_kind "
-                       "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
-                       "WHERE quotation_tbldoc.docid_tbldoc=%s ", [pk])
-        results = cursor.fetchall()
+    if results[0][0] is not None: # only if there is not doc yet (this would be the first instance)
         for x in results:
-            dockindname = x[1]
-            pretag = x[2]
-            originaldocsubject = x[3]
-            originaldocnumber = x[4]
+            docnumber = x[0]
+            docnumber += 1
+    else:
+            docnumber = 80 # arbitrary number
 
-        emailsubject="Customer Quotation - Subject: " + originaldocsubject + " - Ref.: " + pretag + str(originaldocnumber) + " EMAIL-" + str(docnumber)
-        addresseeemail = request.POST['addresseeemail']
-        cc = request.POST['cc']
-        pdffilename = request.POST['pdffilename']
-        emailbodytextmodifiedbyuser = request.POST['emailbodytext']
+    cursor = connection.cursor()
+    cursor.execute("SELECT  quotation_tbldoc_kind.Doc_kindid_tbldoc_kind, "
+                   "quotation_tbldoc_kind.Doc_kind_name_tblDoc_kind, "
+                   "quotation_tbldoc_kind.pretag_tbldockind, "
+                   "quotation_tbldoc.subject_tbldoc, "
+                   "quotation_tbldoc.docnumber_tbldoc "
+                   "FROM quotation_tbldoc "
+                   "JOIN quotation_tbldoc_kind "
+                   "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                   "WHERE quotation_tbldoc.docid_tbldoc=%s ", [pk])
+    results = cursor.fetchall()
+    for x in results:
+        dockindname = x[1]
+        pretag = x[2]
+        originaldocsubject = x[3]
+        originaldocnumber = x[4]
 
-        cursor2 = connection.cursor()
-        cursor2.execute("INSERT INTO quotation_tbldoc "
-                        "( Doc_kindid_tblDoc_id, "
-                        "Contactid_tblDoc_id,"
-                        "companyname_tblcompanies_ctbldoc, "
-                        "firstname_tblcontacts_ctbldoc, "
-                        "lastname_tblcontacts_ctbldoc, "
-                        "docnumber_tblDoc, "
-                        "creatorid_tbldoc, "
-                        "title_tblcontacts_ctbldoc, "
-                        "mobile_tblcontacts_ctbldoc, "
-                        "email_tblcontacts_ctbldoc, "
-                        "pcd_tblcompanies_ctbldoc, "
-                        "town_tblcompanies_ctbldoc, "
-                        "address_tblcompanies_ctbldoc, "
-                        "doclinkparentid_tbldoc, "
-                        "subject_tbldoc, "
-                        "emailbodytextmodifiedbyuser_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                        [5, contactidclone, companynameclone, firstnameclone, lastnameclone, docnumber, creatoridclone,
-                        titleclone,
-                        mobileclone,
-                        emailclone,
-                        pcdclone,
-                        townclone,
-                        addressclone,
-                        pk,
-                        emailsubject,
-                        emailbodytextmodifiedbyuser])
 
-        cursor3 = connection.cursor()
-        cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc")
-        results = cursor3.fetchall()
-        for x in results:
-            maxdocid = x[0]
 
+
+    #import pdb;
+    #pdb.set_trace()
+
+    emailsubject="Customer Quotation - Subject: " + originaldocsubject + " - Ref.: " + pretag + str(originaldocnumber) + " EMAIL-" + str(docnumber)
+    addresseeemail = request.POST['addresseeemail']
+    cc = request.POST['cc']
+    pdffilename = request.POST['pdffilename']
+    emailbodytextmodifiedbyuser = request.POST['emailbodytext']
+
+    cursor2 = connection.cursor()
+    cursor2.execute("INSERT INTO quotation_tbldoc "
+                    "( Doc_kindid_tblDoc_id, "
+                    "Contactid_tblDoc_id,"
+                    "companyname_tblcompanies_ctbldoc, "
+                    "firstname_tblcontacts_ctbldoc, "
+                    "lastname_tblcontacts_ctbldoc, "
+                    "docnumber_tblDoc, "
+                    "creatorid_tbldoc, "
+                    "title_tblcontacts_ctbldoc, "
+                    "mobile_tblcontacts_ctbldoc, "
+                    "email_tblcontacts_ctbldoc, "
+                    "pcd_tblcompanies_ctbldoc, "
+                    "town_tblcompanies_ctbldoc, "
+                    "address_tblcompanies_ctbldoc, "
+                    "doclinkparentid_tbldoc, "
+                    "subject_tbldoc, "
+                    "emailbodytextmodifiedbyuser_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    [5, contactidclone, companynameclone, firstnameclone, lastnameclone, docnumber, creatorid,
+                    titleclone,
+                    mobileclone,
+                    emailclone,
+                    pcdclone,
+                    townclone,
+                    addressclone,
+                    pk,
+                    emailsubject,
+                    emailbodytextmodifiedbyuser])
+
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
+    results = cursor3.fetchall()
+    for x in results:
+        maxdocid = x[0]
+
+
+    def pdfeddocattachmentwrite(maxdocid, pdffilename):
         with open('/home/szluka/djangogirls/' + pdffilename, 'rb') as file:
             attachmentcontent = file.read()
-
+        fs = FileSystemStorage()
+        #fs.delete(pdffilename)
 
         cursor4 = connection.cursor()
         cursor4.execute(
@@ -148,17 +157,95 @@ def emailadd (request, pk):
             "attachmentname_tbldocdetails,"
             "attachmentcontent_tbldocdetails) VALUES (%s,%s,%s)",
             [maxdocid,
-            pdffilename,
-            attachmentcontent])
+             pdffilename,
+             attachmentcontent])
 
+        return
+    def attachment1write(maxdocid):
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        if fs.exists(myfile.name):
+            fs.delete(myfile.name)
+        global filename
+        filename = fs.save(myfile.name, myfile)
 
-        #import pdb;
-        #pdb.set_trace()
+        with open('/home/szluka/djangogirls/' + filename, 'rb') as file:
+            attachmentcontent = file.read()
+        #fs.delete(myfile.name)
 
-        email = EmailMessage(
-            emailsubject, emailbodytextmodifiedbyuser, 'from@me.com', [addresseeemail], cc=[cc])
-        email.attach_file('/home/szluka/djangogirls/' + pdffilename)
-        email.send()
+        cursor4 = connection.cursor()
+        cursor4.execute(
+            "INSERT INTO quotation_tbldoc_details "
+            "( Docid_tblDoc_details_id, "
+            "attachmentname_tbldocdetails,"
+            "attachmentcontent_tbldocdetails) VALUES (%s,%s,%s)",
+            [maxdocid,
+             filename,
+             attachmentcontent])
+
+        return
+    def attachment2write(maxdocid):
+
+        myfile2 = request.FILES['myfile2']
+        fs2 = FileSystemStorage()
+        if fs2.exists(myfile2.name):
+            fs2.delete(myfile2.name)
+        global filename2
+        filename2 = fs2.save(myfile2.name, myfile2)
+        with open('/home/szluka/djangogirls/' + filename2, 'rb') as file:
+            attachmentcontent = file.read()
+        #fs2.delete(myfile2.name)
+
+        cursor4 = connection.cursor()
+        cursor4.execute(
+            "INSERT INTO quotation_tbldoc_details "
+            "( Docid_tblDoc_details_id, "
+            "attachmentname_tbldocdetails,"
+            "attachmentcontent_tbldocdetails) VALUES (%s,%s,%s)",
+            [maxdocid,
+             filename2,
+             attachmentcontent])
+
+        return
+
+    #import pdb;
+    #pdb.set_trace()
+
+    howmanyattachedfiles=0
+    for x in request.FILES:
+        howmanyattachedfiles=howmanyattachedfiles+1
+    if howmanyattachedfiles==0: #only doc as pdf attached
+        pdfeddocattachmentwrite(maxdocid, pdffilename)
+    elif howmanyattachedfiles==1: #doc as pdf +1 attachment
+        pdfeddocattachmentwrite(maxdocid, pdffilename)
+        attachment1write(maxdocid)
+
+    elif howmanyattachedfiles == 2: #doc as pdf +2 attachments
+        pdfeddocattachmentwrite(maxdocid, pdffilename)
+        attachment1write(maxdocid)
+        attachment2write(maxdocid)
+
+    #import pdb;
+    #pdb.set_trace()
+
+    email = EmailMessage(
+        emailsubject, emailbodytextmodifiedbyuser, 'from@me.com', [addresseeemail], cc=[cc])
+    email.attach_file('/home/szluka/djangogirls/' + pdffilename)
+    if howmanyattachedfiles==1:
+        email.attach_file('/home/szluka/djangogirls/' + filename)
+    if howmanyattachedfiles == 2:
+        email.attach_file('/home/szluka/djangogirls/' + filename)
+        email.attach_file('/home/szluka/djangogirls/' + filename2)
+    email.send()
+
+    fs = FileSystemStorage()
+    if fs.exists(pdffilename):
+        fs.delete(pdffilename)
+    if fs.exists(filename):
+        fs.delete(filename)
+    if fs.exists(filename2):
+        fs.delete(filename2)
+
     return redirect('emailform', pk=maxdocid)
 
 def emailform(request, pk):

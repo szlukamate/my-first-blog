@@ -22,7 +22,9 @@ $(function () {
                 });
 
 
-
+sessionStorage.lastname = "Smith2";
+// Retrieve
+ console.log(sessionStorage.lastname)
 });
 
 
