@@ -29,7 +29,9 @@
 
 						  </div>
 						  <div id="tabs1fragment-2">
-								<p>Lastname:{{ doc.0.5}} </p>
+							<form action="{% url 'quotationsaveasmodern' pk=doc.0.0 %}">
+								<input type="submit" value="Quotation Save as Modern" />
+							</form>
 						  </div>
 						</div>
 					<div id="sqlsaving"></div><br>

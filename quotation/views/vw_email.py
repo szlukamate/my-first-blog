@@ -239,12 +239,30 @@ def emailadd (request, pk):
     email.send()
 
     fs = FileSystemStorage()
-    if fs.exists(pdffilename):
+    if fs.exists(pdffilename) :
         fs.delete(pdffilename)
-    if fs.exists(filename):
-        fs.delete(filename)
-    if fs.exists(filename2):
-        fs.delete(filename2)
+
+    try:
+        filename
+    except NameError:
+        print
+        "well, it WASN'T defined after all!"
+    else:
+        print
+        "sure, it was defined."
+        if fs.exists(filename):
+            fs.delete(filename)
+
+    try:
+        filename2
+    except NameError:
+        print
+        "well, it WASN'T defined after all!"
+    else:
+        print
+        "sure, it was defined."
+        if fs.exists(filename2):
+            fs.delete(filename2)
 
     return redirect('emailform', pk=maxdocid)
 
