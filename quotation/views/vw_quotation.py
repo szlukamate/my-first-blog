@@ -752,8 +752,8 @@ def quotationsaveasmodern(request, pk):
         secondnum = x[6]
         thirdnum = x[7]
         note = x[8]
-
-here to continue        productid = x[13]
+        productid = x[13]
+        currencyrate = x[16]
 
         cursor0 = connection.cursor()
         cursor0.execute(
@@ -794,7 +794,11 @@ here to continue        productid = x[13]
             "`Note_tblDoc_details`, "
             "purchase_price_tblproduct_ctblDoc_details, "
             "listprice_tblDoc_details, "
-            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+            "Productid_tblDoc_details_id, "
+            "currencyrate_tblcurrency_ctblDoc_details, "
+            "unitsalespriceACU_tblDoc_details, "
+            "unit_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
             [maxdocid,
              qty,
@@ -806,5 +810,9 @@ here to continue        productid = x[13]
              note,
              purchase_priceclone,
              listpricecomputed,
-             currencyisocodeclone])
+             currencyisocodeclone,
+             productid,
+             currencyrate,
+             unitsalespriceACU,
+             unitclone])
     return redirect('docselector', pk=maxdocid)

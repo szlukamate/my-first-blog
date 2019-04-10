@@ -37,13 +37,36 @@ def companyremove(request,pk):
 def companyedit(request, pk):
 
         if request.method == "POST":
+                fieldvalue = request.POST['fieldvalue']
+                rowid = request.POST['rowid']
+                #docid = request.POST['docid']
+                fieldname = request.POST['fieldname']
+                tbl = request.POST['tbl']
+
+                if tbl == "tblDoc_details":
+                        # not possible
+                        nop
+                elif tbl == "tblcontacts":
+                    cursor22 = connection.cursor()
+                    cursor22.callproc("spcompanyeditfieldupdate", [fieldname, fieldvalue, rowid])
+                    results23 = cursor22.fetchall()
+                    print(results23)
+
+                    json_data = json.dumps(results23)
+                    #import pdb;
+                    #pdb.set_trace()
+
+                    return HttpResponse(json_data, content_type="application/json")
+
+        '''
+        if request.method == "POST":
             companyname = request.POST['companyname']
             cursor2 = connection.cursor()
             cursor2.execute(
                 "UPDATE quotation_tblcompanies "
                 "SET companyname_tblcompanies = %s "
                 "WHERE companyid_tblcompanies = %s", [companyname, pk])
-
+        '''
 
         cursor0 = connection.cursor()
         cursor0.execute(
@@ -188,3 +211,12 @@ def companyuniversalselections (request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+def contactadd(request,pk):
+
+    cursor1 = connection.cursor()
+    cursor1.execute("INSERT INTO quotation_tblcontacts "
+                    "(Companyid_tblContacts_id, "
+                    "firstname_tblcontacts) VALUES (%s,'Defaultx')", [pk])
+    transaction.commit()
+
+    return redirect('companyedit', pk=pk)

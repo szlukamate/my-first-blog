@@ -56,9 +56,18 @@
 
 				</div>
 				<div class="contactsdiv">
+							<p ><a href="{% url 'contactadd' pk=particularcompany.0.0 %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
 							{% for contact in contacts %}
-								<input type="text" value="{{ contact.0}}" name="id1"><input type="text" value="{{ contact.1}}" name="firstname"><input type="text" value="{{ contact.2}}" name="lastname">
-                                <input type="text" value="{{ contact.3}}" name="title"><input type="text" value="{{ contact.4}}" name="mobile"><input type="text" value="{{ contact.5}}" name="email">
+								<input type="text" value="{{ contact.0}}" name="id1">
+								<input type="text" value="{{ contact.1}}" name="firstname">
+								<input type="text" value="{{ contact.2}}" name="lastname">
+                                <input type="text" value="{{ contact.3}}" name="title">
+								<input type="text" value="{{ contact.4}}" name="mobile">
+								<input type="text" class="updateabletblcontacts" value="{{ contact.5}}" name="email_tblcontacts" rowid="{{ contact.0}}">
+
+								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+
 								<br>
 							{% endfor %}
 				</div>
