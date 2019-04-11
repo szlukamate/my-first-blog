@@ -16,11 +16,11 @@
 						  </ul>
 						  <div id="tabs1fragment-1">
 							<form action="{% url 'companyedit' pk=particularcompany.0.0 %}" method="post">{% csrf_token %}
-								<input type="text" value="{{ particularcompany.0.0}}" name="companyid" size="3" disabled><br>
-								<input type="text" value="{{ particularcompany.0.1}}" name="companyname"><br>
-								<input type="text" value="{{ particularcompany.0.4}}" name="pcd"><br>
-								<input type="text" value="{{ particularcompany.0.5}}" name="town"><br>
-								<input type="text" value="{{ particularcompany.0.6}}" name="address"><br>
+								<input type="text"value="{{ particularcompany.0.0}}" name="companyid" size="3" disabled><br>
+								<input type="text" class="updateabletblcompanies" value="{{ particularcompany.0.1}}" name="companyname_tblcompanies" rowid="{{ particularcompany.0.0 }}"><br>
+								<input type="text" class="updateabletblcompanies" value="{{ particularcompany.0.4}}" name="pcd_tblcompanies" rowid="{{ particularcompany.0.0 }}"><br>
+								<input type="text" class="updateabletblcompanies" value="{{ particularcompany.0.5}}" name="town_tblcompanies" rowid="{{ particularcompany.0.0 }}"><br>
+								<input type="text" class="updateabletblcompanies" value="{{ particularcompany.0.6}}" name="address_tblcompanies" rowid="{{ particularcompany.0.0 }}"><br>
 
 							</form>
 
@@ -60,10 +60,10 @@
 
 							{% for contact in contacts %}
 								<input type="text" value="{{ contact.0}}" name="id1">
-								<input type="text" value="{{ contact.1}}" name="firstname">
-								<input type="text" value="{{ contact.2}}" name="lastname">
-                                <input type="text" value="{{ contact.3}}" name="title">
-								<input type="text" value="{{ contact.4}}" name="mobile">
+								<input type="text" class="updateabletblcontacts" value="{{ contact.1}}" name="firstname_tblcontacts" rowid="{{ contact.0}}">
+								<input type="text" class="updateabletblcontacts" value="{{ contact.2}}" name="lastname_tblcontacts" rowid="{{ contact.0}}">
+                                <input type="text" class="updateabletblcontacts" value="{{ contact.3}}" name="title_tblcontacts" rowid="{{ contact.0}}">
+								<input type="text" class="updateabletblcontacts" value="{{ contact.4}}" name="mobile_tblcontacts" rowid="{{ contact.0}}">
 								<input type="text" class="updateabletblcontacts" value="{{ contact.5}}" name="email_tblcontacts" rowid="{{ contact.0}}">
 
 								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">

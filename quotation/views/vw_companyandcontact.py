@@ -43,12 +43,20 @@ def companyedit(request, pk):
                 fieldname = request.POST['fieldname']
                 tbl = request.POST['tbl']
 
-                if tbl == "tblDoc_details":
-                        # not possible
-                        nop
+                if tbl == "tblcompanies":
+                    cursor22 = connection.cursor()
+                    cursor22.callproc("spcompanyeditcompanyfieldsupdate", [fieldname, fieldvalue, rowid])
+                    results23 = cursor22.fetchall()
+                    print(results23)
+
+                    json_data = json.dumps(results23)
+                    # import pdb;
+                    # pdb.set_trace()
+
+                    return HttpResponse(json_data, content_type="application/json")
                 elif tbl == "tblcontacts":
                     cursor22 = connection.cursor()
-                    cursor22.callproc("spcompanyeditfieldupdate", [fieldname, fieldvalue, rowid])
+                    cursor22.callproc("spcompanyeditcontactfieldsupdate", [fieldname, fieldvalue, rowid])
                     results23 = cursor22.fetchall()
                     print(results23)
 
