@@ -18,7 +18,7 @@
 								<input type="text" value="{{ creatordata.0.3 }}" name="cc" maxlength="200" size="40"><br>
 
 								<label for="docinpdf" >Doc in Pdf</label>
-								<input type="text" value="{{ pdffilename }}" name="pdffilename" maxlength="200" size="60"><br>
+								<a href="{% url 'emailviewattachmentcandidate' pdffilename=pdffilename %}">{{ pdffilename }}</a><br>
 
 								<input type="file" name="myfile">
 

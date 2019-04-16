@@ -212,5 +212,41 @@ $(function () {
                     }
 
     });
+    $('.supplierselection').change(function() {
+        var productid=$(this).attr( "productid" );
+                    $.ajax({
+                    type: 'POST',
+                    url: 'productupdatesupplier/',
+
+                    data: {
+
+                    'supplieridinjs' : $(this).val(),
+                    'productidinjs' : $(this).attr( "productid" ),
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                        console.log('ajax done');
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess(data, textStatus, jqXHR)
+                    {
+                    console.log(data);
+                    var supplieridsql= data[0]
+                    $('select[class="supplierselection"][productid="' + productid + '"] option:selected').html(supplieridsql);
+
+
+                    }
+
+    });
 
 });

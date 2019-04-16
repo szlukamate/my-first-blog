@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
+from datetime import datetime, timedelta
+
 # import pdb;
 # pdb.set_trace()
 
@@ -26,6 +28,103 @@ def docs(request):
                     "order by docid_tbldoc desc ")
     docs = cursor1.fetchall()
     return render(request, 'quotation/docs.html', {'docs': docs})
+
+def docsearch(request):
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "companyname_tblcompanies_ctbldoc "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE obsolete_tbldoc = 0 "
+                    "GROUP BY companyname_tblcompanies_ctbldoc ")
+    companies = cursor1.fetchall()
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Doc_kind_name_tblDoc_kind "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE obsolete_tbldoc = 0 "
+                    "GROUP BY Doc_kind_name_tblDoc_kind ")
+    dockindnames = cursor1.fetchall()
+
+    fromdate = datetime.today() - timedelta(365)
+    todate = datetime.today()
+
+
+    return render(request, 'quotation/docsearch.html', {'fromdate': fromdate,
+                                                        'todate': todate,
+                                                        'companies': companies,
+                                                        'dockindnames':dockindnames})
+
+def docsearchcontent(request):
+    docnumber = request.POST['docnumber']
+    dockindname = request.POST['dockindname']
+    fromdate = request.POST['fromdate']
+    todate = request.POST['todate']
+    company = request.POST['company']
+
+
+    if docnumber != '':
+        docnumber = "and docnumber_tbldoc='" + docnumber + "' "
+    if dockindname != '':
+        dockindname = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
+
+    datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
+    if company != '':
+        company = "and companyname_tblcompanies_ctbldoc='" + company + "'"
+
+    #import pdb;
+    #pdb.set_trace()
+    searchphrase= docnumber + dockindname + datephrase + company + " "
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT docid_tbldoc, "
+                    "Pcd_tblDoc, "
+                    "Town_tblDoc, "
+                    "Doc_kindid_tblDoc_id, "
+                    "companyname_tblcompanies_ctbldoc, "
+                    "firstname_tblcontacts_ctbldoc, "
+                    "lastname_tblcontacts_ctbldoc, "
+                    "creationtime_tbldoc,"
+                    "Doc_kind_name_tblDoc_kind, "
+                    "pretag_tbldockind, "
+                    "docnumber_tbldoc, "
+                    "Doc_kindid_tblDoc_kind "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE obsolete_tbldoc = 0 " + searchphrase + "" 
+                    "order by docid_tbldoc desc ")
+    docs = cursor1.fetchall()
+    #import pdb;
+    #pdb.set_trace()
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "companyname_tblcompanies_ctbldoc "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE obsolete_tbldoc = 0 " + searchphrase + ""
+                    "GROUP BY companyname_tblcompanies_ctbldoc ")
+    companiesrowsources = cursor1.fetchall()
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Doc_kind_name_tblDoc_kind "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE obsolete_tbldoc = 0 " + searchphrase + ""
+                    "GROUP BY Doc_kind_name_tblDoc_kind ")
+    dockindrowsources = cursor1.fetchall()
+
+    return render(request, 'quotation/docsearchcontent.html', {'docs': docs,
+                                                               'companiesrowsources': companiesrowsources,
+                                                               'dockindrowsources': dockindrowsources})
 
 
 def docadd(request):
@@ -200,8 +299,8 @@ def docselector(request, pk):
 
     if dockind == 1:  # Quotation
         return redirect('quotationform', pk=pk)
-    elif dockind == 2:  # Order
-        return redirect('orderform', pk=pk)
+    elif dockind == 2:  # CustomerOrder
+        return redirect('customerorderform', pk=pk)
     elif dockind == 4:  # Job Number
         return redirect('jobnumberform', pk=pk)
     elif dockind == 5:  # Email

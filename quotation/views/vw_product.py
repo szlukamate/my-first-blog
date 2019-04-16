@@ -34,13 +34,20 @@ def products(request, pkproductid):
         cursor = connection.cursor()
         cursor.execute("SELECT Productid_tblProduct, "
                        "purchase_price_tblproduct, "
-                       "Product_description_tblProduct, "
+                       "customerdescription_tblProduct, "
                        "currencyisocode_tblcurrency_ctblproduct, "
                        "margin_tblproduct, "
                        "round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
-                       "unit_tblproduct "
+                       "unit_tblproduct, "
+                       "suppliercompanyid_tblproduct, "
+                       "companyname_tblcompanies, "
+                       "supplierdescription_tblProduct "
                        "FROM quotation_tblproduct "
+                       "JOIN quotation_tblcompanies "
+                       "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
                        "WHERE obsolete_tblproduct=0 "
+                       "order by productid_tblproduct"
+
                        )
         products = cursor.fetchall()
         transaction.commit()
@@ -49,13 +56,20 @@ def products(request, pkproductid):
     else:
         cursor = connection.cursor()
         cursor.execute("SELECT Productid_tblProduct, "
-                       "purchase_price_tblproduct, Product_description_tblProduct, "
+                       "purchase_price_tblproduct, "
+                       "customerdescription_tblProduct, "
                        "currencyisocode_tblcurrency_ctblproduct, "
                        "margin_tblproduct, "
                        "round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
-                       "unit_tblproduct "
+                       "unit_tblproduct, "
+                       "suppliercompanyid_tblproduct, "
+                       "companyname_tblcompanies, "
+                       "supplierdescription_tblProduct "
                        "FROM quotation_tblproduct "
-                       "WHERE productid_tblproduct= %s and obsolete_tblproduct=0", [pkproductid])
+                       "JOIN quotation_tblcompanies "
+                       "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
+                       "WHERE productid_tblproduct= %s and obsolete_tblproduct=0 "
+                       "order by productid_tblproduct", [pkproductid])
 
         products = cursor.fetchall()
         transaction.commit()
@@ -66,7 +80,16 @@ def products(request, pkproductid):
     currencycodes = cursor3.fetchall()
     transaction.commit()
 
-    return render(request, 'quotation/products.html', {'products': products, 'currencycodes': currencycodes })
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT companyid_tblcompanies, companyname_tblcompanies FROM quotation_tblcompanies")
+    supplierlist = cursor3.fetchall()
+    transaction.commit()
+
+
+    return render(request, 'quotation/products.html', {'products': products,
+                                                       'currencycodes': currencycodes,
+                                                       'supplierlist': supplierlist})
 
 def productupdatecurrencyisocode(request):
     if request.method == 'POST':
@@ -146,3 +169,23 @@ def productremove(request,pkproductid):
     transaction.commit()
 
     return redirect('products', pkproductid=0)
+def productupdatesupplier(request):
+    if request.method == 'POST':
+        productidinjs = request.POST['productidinjs']
+        supplieridinjs = request.POST['supplieridinjs']
+
+    cursor2 = connection.cursor()
+    cursor2.execute("UPDATE quotation_tblproduct SET "
+                    "suppliercompanyid_tblproduct= %s "
+                    "WHERE productid_tblproduct =%s ", [supplieridinjs, productidinjs])
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT companyname_tblcompanies "
+        "FROM quotation_tblcompanies "
+        "WHERE companyid_tblcompanies= %s ", [supplieridinjs])
+    results = cursor3.fetchall()
+
+    json_data = json.dumps(results)
+
+    return HttpResponse(json_data, content_type="application/json")

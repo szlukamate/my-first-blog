@@ -393,3 +393,17 @@ def emailviewattachment(request, pk):
             return response
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
+
+def emailviewattachmentcandidate(request, pdffilename):
+    #import pdb;
+    #pdb.set_trace()
+
+    fs = FileSystemStorage()
+ #   filename = 'output.pdf'
+    if fs.exists(pdffilename):
+        with fs.open(pdffilename) as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="output.pdf"'
+            return response
+    else:
+        return HttpResponseNotFound('The requested pdf was not found in our server.')

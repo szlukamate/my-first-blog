@@ -1,0 +1,56 @@
+	{% block content %}
+							  <select id="companyswap" hidden>
+									<option value="" ></option>
+									{% for companiesrowsource in companiesrowsources %}
+										<option value="{{ companiesrowsource.0 }}">{{ companiesrowsource.0 }}</option>
+									{% endfor %}
+							  </select>
+							  <select id="dockindnameswap" hidden>
+									<option value="" ></option>
+									{% for dockindrowsource in dockindrowsources %}
+										<option value="{{ dockindrowsource.0 }}">{{ dockindrowsource.0 }}</option>
+									{% endfor %}
+							  </select>
+
+
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>Docid</td>
+													<td>Company</td>
+													<td>Firstname</td>
+													<td>Lastname</td>
+													<td>PCD</td>
+													<td>Town</td>
+													<td>Docnumber</td>
+													<td>Created</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												{%  for tblDoc in  docs %}
+
+
+													<tr>
+														<td><a href="{% url 'docselector' pk=tblDoc.0 %}">{{ tblDoc.0 }}</a></td>
+														<td>{{ tblDoc.4}}</td>
+														<td>{{ tblDoc.5}}</td>
+														<td>{{ tblDoc.6}}</td>
+														<td>{{ tblDoc.1}}</td>
+														<td>{{ tblDoc.2}}</td>
+														<td>{{ tblDoc.9}}{{ tblDoc.10}}</td>
+														<td>{{ tblDoc.7|date:"M.d.Y" }} {{ tblDoc.7|time:"H:i" }}</td>
+														<td><a href="{% url 'docremove' pk=tblDoc.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+
+													</tr>
+
+
+
+												{% endfor %}
+											</tbody>
+
+										</table>
+							</div>
+	{% endblock %}

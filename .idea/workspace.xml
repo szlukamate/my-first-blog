@@ -2,9 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/quotation/static/js/companyedit.js" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/static/js/companyedit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/companyedit.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/companyedit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_companyandcontact.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_companyandcontact.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datadump.json" beforeDir="false" afterPath="$PROJECT_DIR$/datadump.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/static/css/quotation.css" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/static/css/quotation.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/static/js/products.js" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/static/js/products.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/emailadd.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/emailadd.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/products.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/quotation.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/quotation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/quotationnewrowadd.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/quotationnewrowadd.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/quotationrowedit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_doc.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_doc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_email.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_email.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_order.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_product.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_product.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_quotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_quotation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,67 +29,60 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/static/js/companies.js">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/quotation/static/js/accountentry.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="28" column="25" lean-forward="true" selection-start-line="28" selection-start-column="25" selection-end-line="28" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docsearch.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="525">
+              <caret line="35" lean-forward="true" selection-start-line="29" selection-end-line="35" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/companyedit.html">
+        <entry file="file://$PROJECT_DIR$/quotation/static/js/docsearch.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="180" lean-forward="true" selection-start-line="21" selection-start-column="180" selection-end-line="21" selection-end-column="180" />
+            <state relative-caret-position="165">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/static/js/companyedit.js">
+        <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docsearchcontent.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="129" column="29" lean-forward="true" selection-start-line="129" selection-start-column="29" selection-end-line="129" selection-end-column="29" />
+            <state relative-caret-position="150">
+              <caret line="10" column="63" lean-forward="true" selection-start-line="10" selection-start-column="63" selection-end-line="10" selection-end-column="63" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/static/css/quotation.css">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/quotation/static/js/products.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="630">
+              <caret line="54" selection-start-line="48" selection-end-line="54" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/quotation.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2235">
-              <caret line="149" selection-start-line="148" selection-end-line="149" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/static/js/quotation.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1680">
-              <caret line="112" selection-start-line="69" selection-end-line="112" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/static/css/quotationmaker.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/views/vw_account.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1830">
-              <caret line="131" column="35" selection-start-line="131" selection-start-column="35" selection-end-line="131" selection-end-column="35" />
+            <state relative-caret-position="75">
+              <caret line="5" column="53" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="53" />
               <folding>
-                <element signature="e#0#64#0" expanded="true" />
+                <element signature="n#style#0;n#label#11;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#label#14;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#label#19;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#label#20;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -84,8 +91,32 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_companyandcontact.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="47" column="71" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="71" />
+            <state relative-caret-position="95">
+              <caret line="187" column="41" lean-forward="true" selection-start-line="187" selection-start-column="41" selection-end-line="187" selection-end-column="41" />
+              <folding>
+                <element signature="e#0#64#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="545">
+              <caret line="122" column="42" lean-forward="true" selection-start-line="122" selection-start-column="42" selection-end-line="122" selection-end-column="42" />
+              <folding>
+                <element signature="e#0#64#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/quotation/views/vw_product.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -96,16 +127,28 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_quotation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
-              <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
-              <folding>
-                <element signature="e#0#64#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="45">
+              <caret line="3" column="57" lean-forward="true" selection-start-line="3" selection-start-column="57" selection-end-line="3" selection-end-column="57" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>customerorder</find>
+      <find>Product_</find>
+      <find>Product_d</find>
+      <find>quotation</find>
+      <find>now</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>quotation</replace>
+      <replace>customer</replace>
+      <replace>customerd</replace>
+      <replace>customerorder</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -122,26 +165,38 @@
         <option value="$PROJECT_DIR$/quotation/static/js/accountentry.js" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/accountincomestatement.html" />
         <option value="$PROJECT_DIR$/quotation/views/vw_account.py" />
-        <option value="$PROJECT_DIR$/quotation/static/css/quotation.css" />
         <option value="$PROJECT_DIR$/quotation/static/css/quotationprint.css" />
         <option value="$PROJECT_DIR$/mysite/settings/base.py" />
-        <option value="$PROJECT_DIR$/quotation/templates/quotation/base.html" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/accountentry.html" />
         <option value="$PROJECT_DIR$/quotation/views/puppeteertest.js" />
         <option value="$PROJECT_DIR$/quotation/static/js/quotation.js" />
-        <option value="$PROJECT_DIR$/quotation/views/vw_doc.py" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/docs.html" />
         <option value="$PROJECT_DIR$/quotation/static/js/emailadd.js" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/email.html" />
-        <option value="$PROJECT_DIR$/quotation/templates/quotation/emailadd.html" />
-        <option value="$PROJECT_DIR$/quotation/views/vw_email.py" />
-        <option value="$PROJECT_DIR$/quotation/templates/quotation/quotation.html" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/quotationprint.html" />
-        <option value="$PROJECT_DIR$/quotation/views/vw_quotation.py" />
-        <option value="$PROJECT_DIR$/quotation/urls.py" />
-        <option value="$PROJECT_DIR$/quotation/views/vw_companyandcontact.py" />
         <option value="$PROJECT_DIR$/quotation/static/js/companyedit.js" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/companyedit.html" />
+        <option value="$PROJECT_DIR$/quotation/static/js/products.js" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_product.py" />
+        <option value="$PROJECT_DIR$/quotation/templates/quotation/products.html" />
+        <option value="$PROJECT_DIR$/quotation/templates/quotation/quotationnewrowadd.html" />
+        <option value="$PROJECT_DIR$/quotation/static/css/quotation.css" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_order.py" />
+        <option value="$PROJECT_DIR$/quotation/views/__init__.py" />
+        <option value="$PROJECT_DIR$/quotation/static/js/customerorder.js" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_customerorder.py" />
+        <option value="$PROJECT_DIR$/quotation/templates/quotation/customerorder.html" />
+        <option value="$PROJECT_DIR$/quotation/templates/quotation/quotation.html" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_quotation.py" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_email.py" />
+        <option value="$PROJECT_DIR$/quotation/templates/quotation/emailadd.html" />
+        <option value="$PROJECT_DIR$/quotation/templates/quotation/base.html" />
+        <option value="$PROJECT_DIR$/quotation/urls.py" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_companyandcontact.py" />
+        <option value="$PROJECT_DIR$/quotation/templates/quotation/docsearch.html" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_doc.py" />
+        <option value="$PROJECT_DIR$/quotation/templates/quotation/docsearchcontent.html" />
+        <option value="$PROJECT_DIR$/quotation/static/js/docsearch.js" />
       </list>
     </option>
   </component>
@@ -162,7 +217,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/quotation/static/js/emailadd.js" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/quotation/templates/quotation/docsearchcontent.html" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
   </component>
   <component name="RunDashboard">
@@ -214,10 +269,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/mysite/urls.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_entry.py" />
     <entry file="file://$PROJECT_DIR$/quotation/static/css/entry.css" />
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_jobnumber.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -231,13 +282,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/quotation/static/js/entry.js" />
     <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/entry.html" />
-    <entry file="file://$PROJECT_DIR$/quotation/static/js/accountentry.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1140">
-          <caret line="76" column="36" selection-start-line="76" selection-start-column="36" selection-end-line="76" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/accountincomestatement.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
@@ -263,13 +307,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="21" selection-start-line="11" selection-start-column="22" selection-end-line="12" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
         </state>
       </provider>
     </entry>
@@ -300,20 +337,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/email.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/emailadd.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/static/js/emailadd.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -331,60 +354,10 @@
     <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docadd.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docs.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" selection-start-line="8" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/quotationnewrowadd.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/static/js/quotationprint.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1155">
           <caret line="77" column="62" selection-start-line="77" selection-start-column="62" selection-end-line="77" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4860">
-          <caret line="330" column="4" selection-start-line="330" selection-start-column="4" selection-end-line="330" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="605">
-          <caret line="46" column="86" selection-start-line="46" selection-start-column="84" selection-end-line="46" selection-end-column="86" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_product.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret lean-forward="true" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_email.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="81" column="32" lean-forward="true" selection-start-line="81" selection-start-column="32" selection-end-line="81" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -394,20 +367,10 @@
     <entry file="file://$PROJECT_DIR$/quotation/static/js/companies.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/static/css/quotation.css">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/quotation.html">
+    <entry file="file://$PROJECT_DIR$/quotation/static/js/companyedit.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2235">
-          <caret line="149" selection-start-line="148" selection-end-line="149" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/static/js/quotation.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1680">
-          <caret line="112" selection-start-line="69" selection-end-line="112" />
+        <state relative-caret-position="1935">
+          <caret line="129" column="29" selection-start-line="129" selection-start-column="29" selection-end-line="129" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -418,20 +381,138 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_account.py">
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/companyedit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1830">
-          <caret line="131" column="35" selection-start-line="131" selection-start-column="35" selection-end-line="131" selection-end-column="35" />
+        <state relative-caret-position="315">
+          <caret line="21" column="62" lean-forward="true" selection-start-line="21" selection-start-column="62" selection-end-line="21" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/products.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="124" selection-start-line="29" selection-start-column="124" selection-end-line="29" selection-end-column="124" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_order.py" />
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/order.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/static/css/quotation.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="106" column="1" lean-forward="true" selection-start-line="106" selection-start-column="1" selection-end-line="106" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/static/css/customerorder.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1725">
+          <caret line="115" selection-start-line="115" selection-end-line="115" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/customerorder.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="61" selection-start-line="14" selection-start-column="61" selection-end-line="14" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/static/js/customerorder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3525">
+          <caret line="235" column="19" selection-start-line="235" selection-start-column="19" selection-end-line="235" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_customerorder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="590">
+          <caret line="88" selection-start-line="84" selection-end-line="88" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_quotation.py">
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/email.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
+        <state relative-caret-position="270">
+          <caret line="18" column="44" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_email.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="388" column="33" lean-forward="true" selection-start-line="388" selection-start-column="33" selection-end-line="388" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/static/js/docs.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="38" column="16" lean-forward="true" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docs.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="695">
+          <caret line="53" lean-forward="true" selection-start-line="52" selection-end-line="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/emailadd.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="31" selection-start-line="12" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/static/js/quotation.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2940">
+          <caret line="196" selection-start-line="195" selection-end-line="196" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/quotationnewrowadd.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="98" selection-start-line="4" selection-start-column="98" selection-end-line="4" selection-end-column="114" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="885">
+          <caret line="60" column="59" selection-start-line="60" selection-start-column="59" selection-end-line="60" selection-end-column="59" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_account.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="131" column="35" selection-start-line="131" selection-start-column="35" selection-end-line="131" selection-end-column="35" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
@@ -440,25 +521,86 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_companyandcontact.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="47" column="71" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="71" />
+        <state relative-caret-position="95">
+          <caret line="187" column="41" lean-forward="true" selection-start-line="187" selection-start-column="41" selection-end-line="187" selection-end-column="41" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/static/js/companyedit.js">
+    <entry file="file://$PROJECT_DIR$/quotation/static/js/accountentry.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="129" column="29" lean-forward="true" selection-start-line="129" selection-start-column="29" selection-end-line="129" selection-end-column="29" />
+        <state relative-caret-position="150">
+          <caret line="28" column="25" lean-forward="true" selection-start-line="28" selection-start-column="25" selection-end-line="28" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/companyedit.html">
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_quotation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="180" lean-forward="true" selection-start-line="21" selection-start-column="180" selection-end-line="21" selection-end-column="180" />
+        <state relative-caret-position="45">
+          <caret line="3" column="57" lean-forward="true" selection-start-line="3" selection-start-column="57" selection-end-line="3" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_product.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/quotation.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="53" lean-forward="true" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="53" />
+          <folding>
+            <element signature="n#style#0;n#label#11;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#label#14;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#label#19;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#label#20;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/static/js/products.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="54" selection-start-line="48" selection-end-line="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="545">
+          <caret line="122" column="42" lean-forward="true" selection-start-line="122" selection-start-column="42" selection-end-line="122" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docsearch.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="35" lean-forward="true" selection-start-line="29" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docsearchcontent.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="63" lean-forward="true" selection-start-line="10" selection-start-column="63" selection-end-line="10" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/static/js/docsearch.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
