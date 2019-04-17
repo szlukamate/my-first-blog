@@ -11,21 +11,21 @@
 										<option value="{{ dockindrowsource.0 }}">{{ dockindrowsource.0 }}</option>
 									{% endfor %}
 							  </select>
+							<button class="linkable" type="submit">
+							   <span class="glyphicon glyphicon-filter"></span>
+							</button>
 
 
-							<div class="container">
+							<div class="container" style="max-height: 600px; overflow:scroll;">
 										<table class="table table-striped"">
 											<thead>
 
 												<tr>
 													<td>Docid</td>
 													<td>Company</td>
-													<td>Firstname</td>
-													<td>Lastname</td>
-													<td>PCD</td>
-													<td>Town</td>
 													<td>Docnumber</td>
 													<td>Created</td>
+													<td>Subject</td>
 												</tr>
 											</thead>
 
@@ -34,15 +34,12 @@
 
 
 													<tr>
-														<td><a href="{% url 'docselector' pk=tblDoc.0 %}">{{ tblDoc.0 }}</a></td>
-														<td>{{ tblDoc.4}}</td>
-														<td>{{ tblDoc.5}}</td>
-														<td>{{ tblDoc.6}}</td>
-														<td>{{ tblDoc.1}}</td>
-														<td>{{ tblDoc.2}}</td>
-														<td>{{ tblDoc.9}}{{ tblDoc.10}}</td>
+														<td><a href="#" class="linkable" rowid="{{ tblDoc.0 }}">{{ tblDoc.0 }}</a></td>
+														<td>{{ tblDoc.4}} ({{ tblDoc.5}} {{ tblDoc.6}})</td>
+														<td><a href="{% url 'docselector' pk=tblDoc.0 %}" class="djangomadeurl" rowid="{{ tblDoc.0 }}">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})</td>
 														<td>{{ tblDoc.7|date:"M.d.Y" }} {{ tblDoc.7|time:"H:i" }}</td>
-														<td><a href="{% url 'docremove' pk=tblDoc.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+														<td>{{ tblDoc.12}}</td>
+													<td><a href="{% url 'docremove' pk=tblDoc.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
 
 													</tr>
 

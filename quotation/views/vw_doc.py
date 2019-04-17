@@ -82,8 +82,8 @@ def docsearchcontent(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT docid_tbldoc, "
-                    "Pcd_tblDoc, "
-                    "Town_tblDoc, "
+                    "pcd_tblcompanies_ctbldoc, "
+                    "town_tblcompanies_ctbldoc, "
                     "Doc_kindid_tblDoc_id, "
                     "companyname_tblcompanies_ctbldoc, "
                     "firstname_tblcontacts_ctbldoc, "
@@ -92,7 +92,8 @@ def docsearchcontent(request):
                     "Doc_kind_name_tblDoc_kind, "
                     "pretag_tbldockind, "
                     "docnumber_tbldoc, "
-                    "Doc_kindid_tblDoc_kind "
+                    "Doc_kindid_tblDoc_kind, "
+                    "subject_tbldoc "
                     "FROM quotation_tbldoc "
                     "JOIN quotation_tbldoc_kind "
                     "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "

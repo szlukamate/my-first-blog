@@ -1,13 +1,16 @@
 /*
-quotation.js
+docsearch.js
 */
-
             var msg="Hello Javascript2";
                     console.log(msg);
+
+
 
 $(function () {
 
 $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate products tab on navbar
+
+
     setTimeout(
       function()
       {
@@ -64,6 +67,18 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
         $('#company').val("");
 
         $('#searchbutton').trigger('click');
+
+        //console.log(rowid);
+
+    });
+    $('body').on("click", ".linkable", function() {
+        var rowid = $(this).attr( "rowid" );
+        var djangourl = $('a[class="djangomadeurl"][rowid="' + rowid + '"').attr('href');
+
+        console.log(djangourl);
+
+       window.location.href = djangourl;
     });
 
 });
+
