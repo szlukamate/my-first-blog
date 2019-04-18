@@ -50,13 +50,11 @@ def docsearch(request):
                     "GROUP BY Doc_kind_name_tblDoc_kind ")
     dockindnames = cursor1.fetchall()
 
-    fromdate = datetime.today() - timedelta(365)
-    todate = datetime.today()
+    #fromdate = datetime.today() - timedelta(365)
+    #todate = datetime.today()
 
 
-    return render(request, 'quotation/docsearch.html', {'fromdate': fromdate,
-                                                        'todate': todate,
-                                                        'companies': companies,
+    return render(request, 'quotation/docsearch.html', {'companies': companies,
                                                         'dockindnames':dockindnames})
 
 def docsearchcontent(request):

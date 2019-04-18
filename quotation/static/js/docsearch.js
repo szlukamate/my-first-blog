@@ -14,6 +14,52 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
     setTimeout(
       function()
       {
+            $('#docnumber').val(sessionStorage.docnumber);
+            $('#dockindname').val(sessionStorage.dockindname);
+
+            if (typeof sessionStorage.fromdate === 'undefined') {
+
+                var d = new Date();
+
+                var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
+                var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                var fromday = d.getDate();
+
+                var fromoutput = fromyear + '-' +
+                    (frommonth<10 ? '0' : '') + frommonth + '-' +
+                    (fromday<10 ? '0' : '') + fromday;
+                sessionStorage.fromdate = fromoutput;
+                $('#fromdate').val(fromoutput);
+                //console.log(sessionStorage.fromdate);
+
+            } else {
+            $('#fromdate').val(sessionStorage.fromdate);
+
+            }
+
+            if (typeof sessionStorage.todate === 'undefined') {
+
+                var d = new Date();
+
+                var toyear = d.getFullYear();
+                var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                var today = d.getDate();
+
+                var tooutput = toyear + '-' +
+                    (tomonth<10 ? '0' : '') + tomonth + '-' +
+                    (today<10 ? '0' : '') + today;
+                sessionStorage.todate = tooutput;
+                $('#todate').val(tooutput);
+                //console.log(sessionStorage.todate);
+
+            } else {
+            $('#todate').val(sessionStorage.todate);
+
+            }
+
+
+            $('#company').val(sessionStorage.company);
+
             $('#searchbutton').trigger('click');
 
       }, 500);
@@ -48,7 +94,7 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
                 setTimeout(
                   function()
                   {
-                    var companyvalueaccumulator=$('select#company').val();
+                    var companyvalueaccumulator=$('select#company').val(); // swap options of select element after html template refresh
                     var companyswap=$('select#companyswap').html();
                     $('select#company').html(companyswap);
                     $('select#company').val(companyvalueaccumulator);
@@ -63,19 +109,29 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
     });
     $('#searchoutbutton').click(function() {
         $('#docnumber').val("");
+        sessionStorage.docnumber = ""
+
         $('#dockindname').val("");
+        sessionStorage.dockindname = ""
+
         $('#company').val("");
+        sessionStorage.company = ""
 
         $('#searchbutton').trigger('click');
 
         //console.log(rowid);
 
     });
-    $('body').on("click", ".linkable", function() {
-        var rowid = $(this).attr( "rowid" );
-        var djangourl = $('a[class="djangomadeurl"][rowid="' + rowid + '"').attr('href');
+    $('body').on("click", ".linkable", function() { //save search conditions before jump
+        var djangourl = $(this).attr('hrefdjango');
 
-        console.log(djangourl);
+        sessionStorage.docnumber = $('#docnumber').val();
+        sessionStorage.dockindname = $('#dockindname').val();
+        sessionStorage.fromdate = $('#fromdate').val();
+        sessionStorage.todate = $('#todate').val();
+        sessionStorage.company = $('#company').val();
+
+        //console.log(sessionStorage.docnumber);
 
        window.location.href = djangourl;
     });

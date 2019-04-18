@@ -11,9 +11,6 @@
 										<option value="{{ dockindrowsource.0 }}">{{ dockindrowsource.0 }}</option>
 									{% endfor %}
 							  </select>
-							<button class="linkable" type="submit">
-							   <span class="glyphicon glyphicon-filter"></span>
-							</button>
 
 
 							<div class="container" style="max-height: 600px; overflow:scroll;">
@@ -34,9 +31,9 @@
 
 
 													<tr>
-														<td><a href="#" class="linkable" rowid="{{ tblDoc.0 }}">{{ tblDoc.0 }}</a></td>
+														<td>{{ tblDoc.0 }}</td>
 														<td>{{ tblDoc.4}} ({{ tblDoc.5}} {{ tblDoc.6}})</td>
-														<td><a href="{% url 'docselector' pk=tblDoc.0 %}" class="djangomadeurl" rowid="{{ tblDoc.0 }}">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})</td>
+														<td><a href="#" hrefdjango="{% url 'docselector' pk=tblDoc.0 %}" class="linkable">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})</td>
 														<td>{{ tblDoc.7|date:"M.d.Y" }} {{ tblDoc.7|time:"H:i" }}</td>
 														<td>{{ tblDoc.12}}</td>
 													<td><a href="{% url 'docremove' pk=tblDoc.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
