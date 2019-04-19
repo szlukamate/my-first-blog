@@ -70,7 +70,10 @@ def docsearchcontent(request):
     if dockindname != '':
         dockindname = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
 
-    datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
+    #datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
+    datephrase = "and DATE(creationtime_tbldoc) >= '" + fromdate + "' and DATE(creationtime_tbldoc) <= '" + todate + "' "
+    #datephrase = "and DATE(creationtime_tbldoc) = '2019-04-19'"
+
     if company != '':
         company = "and companyname_tblcompanies_ctbldoc='" + company + "'"
 
@@ -79,6 +82,9 @@ def docsearchcontent(request):
     searchphrase= docnumber + dockindname + datephrase + company + " "
 
     cursor1 = connection.cursor()
+#    import pdb;
+#    pdb.set_trace()
+
     cursor1.execute("SELECT docid_tbldoc, "
                     "pcd_tblcompanies_ctbldoc, "
                     "town_tblcompanies_ctbldoc, "
@@ -316,7 +322,7 @@ def docremove(request, pk):
 
     transaction.commit()
 
-    return redirect('docs')
+    return redirect('docsearch')
 def doclink(request, docid):
     fixstate = request.session.get('fixstate','0')
 

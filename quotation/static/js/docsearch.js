@@ -105,6 +105,11 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
                     $('select#dockindname').val(dockindnamevalueaccumulator);
 
                   }, 500);
+        sessionStorage.docnumber = $('#docnumber').val();
+        sessionStorage.dockindname = $('#dockindname').val();
+        sessionStorage.fromdate = $('#fromdate').val();
+        sessionStorage.todate = $('#todate').val();
+        sessionStorage.company = $('#company').val();
 
     });
     $('#searchoutbutton').click(function() {
@@ -124,7 +129,6 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
     });
     $('body').on("click", ".linkable", function() { //save search conditions before jump
         var djangourl = $(this).attr('hrefdjango');
-
         sessionStorage.docnumber = $('#docnumber').val();
         sessionStorage.dockindname = $('#dockindname').val();
         sessionStorage.fromdate = $('#fromdate').val();

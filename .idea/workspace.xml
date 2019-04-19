@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quotation/static/js/docsearch.js" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/static/js/docsearch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/docsearch.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/docsearch.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/docsearchcontent.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/docsearchcontent.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quotation/views/vw_doc.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_doc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_product.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_product.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_quotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_quotation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,20 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docsearch.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/quotation/static/js/docsearch.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="473">
-              <caret line="136" column="7" selection-start-line="136" selection-start-column="7" selection-end-line="136" selection-end-column="7" />
+            <state relative-caret-position="390">
+              <caret line="127" lean-forward="true" selection-start-line="127" selection-end-line="127" />
             </state>
           </provider>
         </entry>
@@ -37,8 +27,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docsearchcontent.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="35" column="74" selection-start-line="35" selection-start-column="74" selection-end-line="35" selection-end-column="74" />
+            <state relative-caret-position="155">
+              <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
               </folding>
@@ -47,9 +37,18 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/products.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="195">
+              <caret line="16" column="34" selection-start-line="16" selection-start-column="34" selection-end-line="16" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/quotation.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2295">
+            <state relative-caret-position="425">
               <caret line="153" selection-start-line="153" selection-end-line="153" />
               <folding>
                 <element signature="n#style#0;n#label#11;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
@@ -57,15 +56,6 @@
                 <element signature="n#style#0;n#label#19;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#label#20;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/static/js/quotation.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" selection-start-line="8" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -86,8 +76,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/static/js/quotationprint.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="41" column="34" lean-forward="true" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
+            <state relative-caret-position="615">
+              <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -107,8 +97,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="57" column="56" selection-start-line="57" selection-start-column="56" selection-end-line="57" selection-end-column="56" />
+            <state relative-caret-position="150">
+              <caret line="49" column="58" lean-forward="true" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
+              <folding>
+                <element signature="e#0#64#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/quotation/views/vw_product.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="155">
+              <caret line="145" column="36" lean-forward="true" selection-start-line="145" selection-start-column="36" selection-end-line="145" selection-end-column="36" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -119,8 +121,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_quotation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4545">
-              <caret line="318" column="32" selection-start-line="318" selection-start-column="32" selection-end-line="318" selection-end-column="32" />
+            <state relative-caret-position="41">
+              <caret line="980" column="25" lean-forward="true" selection-start-line="980" selection-start-column="25" selection-end-line="980" selection-end-column="25" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -138,6 +140,7 @@
       <find>quotation</find>
       <find>now</find>
       <find>from</find>
+      <find>instancesingle</find>
     </findStrings>
     <replaceStrings>
       <replace>quotation</replace>
@@ -145,6 +148,7 @@
       <replace>customerd</replace>
       <replace>customerorder</replace>
       <replace>to</replace>
+      <replace>x</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -174,7 +178,6 @@
         <option value="$PROJECT_DIR$/quotation/static/js/companyedit.js" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/companyedit.html" />
         <option value="$PROJECT_DIR$/quotation/static/js/products.js" />
-        <option value="$PROJECT_DIR$/quotation/views/vw_product.py" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/products.html" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/quotationnewrowadd.html" />
         <option value="$PROJECT_DIR$/quotation/static/css/quotation.css" />
@@ -189,11 +192,12 @@
         <option value="$PROJECT_DIR$/quotation/templates/quotation/base.html" />
         <option value="$PROJECT_DIR$/quotation/urls.py" />
         <option value="$PROJECT_DIR$/quotation/views/vw_companyandcontact.py" />
-        <option value="$PROJECT_DIR$/quotation/views/vw_quotation.py" />
-        <option value="$PROJECT_DIR$/quotation/views/vw_doc.py" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/docsearch.html" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/docsearchcontent.html" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_doc.py" />
         <option value="$PROJECT_DIR$/quotation/static/js/docsearch.js" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_quotation.py" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_product.py" />
       </list>
     </option>
   </component>
@@ -243,7 +247,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="64" y="-11" width="1297" height="780" extended-state="6" />
+    <frame x="64" y="-11" width="1287" height="667" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.16499737" />
@@ -377,13 +381,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/products.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="124" selection-start-line="29" selection-start-column="124" selection-end-line="29" selection-end-column="124" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_order.py" />
     <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/order.html">
       <provider selected="true" editor-type-id="text-editor" />
@@ -508,16 +505,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_product.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="27" selection-start-line="27" selection-end-line="27" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/ajax_search_quotation_contacts.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -525,16 +512,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/quotation.html">
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docsearch.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2295">
-          <caret line="153" selection-start-line="153" selection-end-line="153" />
-          <folding>
-            <element signature="n#style#0;n#label#11;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#label#14;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#label#19;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#label#20;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="405">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
         </state>
       </provider>
     </entry>
@@ -556,6 +537,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/static/js/quotationprint.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="705">
@@ -566,54 +554,70 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_quotation.py">
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/quotation.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4545">
-          <caret line="318" column="32" selection-start-line="318" selection-start-column="32" selection-end-line="318" selection-end-column="32" />
+        <state relative-caret-position="425">
+          <caret line="153" selection-start-line="153" selection-end-line="153" />
           <folding>
-            <element signature="e#0#64#0" expanded="true" />
+            <element signature="n#style#0;n#label#11;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#label#14;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#label#19;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#label#20;n#div#1;n#div#1;n#div#3;n#!!top" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/static/js/quotationprint.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="41" column="34" lean-forward="true" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="57" column="56" selection-start-line="57" selection-start-column="56" selection-end-line="57" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docsearch.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/docsearchcontent.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="35" column="74" selection-start-line="35" selection-start-column="74" selection-end-line="35" selection-end-column="74" />
+        <state relative-caret-position="155">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
           <folding>
             <element signature="n#style#0;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="49" column="58" lean-forward="true" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_quotation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="41">
+          <caret line="980" column="25" lean-forward="true" selection-start-line="980" selection-start-column="25" selection-end-line="980" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/products.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="16" column="34" selection-start-line="16" selection-start-column="34" selection-end-line="16" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_product.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="145" column="36" lean-forward="true" selection-start-line="145" selection-start-column="36" selection-end-line="145" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/static/js/docsearch.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="136" column="7" selection-start-line="136" selection-start-column="7" selection-end-line="136" selection-end-column="7" />
+        <state relative-caret-position="390">
+          <caret line="127" lean-forward="true" selection-start-line="127" selection-end-line="127" />
         </state>
       </provider>
     </entry>

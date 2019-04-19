@@ -982,31 +982,13 @@ def quotationsaveasorder(request, pk):
         currencyrate = x[16]
         suppliercompanyid = x[24]
 
-        cursor0 = connection.cursor()
-        cursor0.execute(
-            "SELECT `Productid_tblProduct`, "
-            "`purchase_price_tblproduct`, `"
-            "customerdescription_tblProduct`, "
-            "`margin_tblproduct`, "
-            "`currencyisocode_tblcurrency_ctblproduct`, "
-            "currencyrate_tblcurrency, "
-            "unit_tblproduct "
-            "FROM `quotation_tblproduct` "
-            "LEFT JOIN quotation_tblcurrency "
-            "ON quotation_tblproduct.currencyisocode_tblcurrency_ctblproduct=quotation_tblcurrency.currencyisocode_tblcurrency "
-            "WHERE Productid_tblProduct= %s", [productid])
-        results = cursor0.fetchall()
-        for instancesingle in results:
-            purchase_priceclone = instancesingle[1]
-            customerdescriptionclone = instancesingle[2]
-            currencyisocodeclone = instancesingle[4]
-
-            marginfromproducttable = instancesingle[3]
-            listpricecomputed = round((100 * purchase_priceclone) / (100 - marginfromproducttable), 2)
-            currencyrateclone = instancesingle[5]
-            unitclone = instancesingle[6]
-
-            unitsalespriceACU = listpricecomputed * currencyrateclone
+        purchase_priceclone = x[10]
+        customerdescriptionclone = x[3]
+        currencyisocodeclone = x[12]
+        listpricecomputed = x[11]
+        currencyrateclone = x[16]
+        unitclone = x[23]
+        unitsalespriceACU = x[18]
 
         cursor4 = connection.cursor()
         cursor4.execute(

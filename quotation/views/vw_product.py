@@ -154,7 +154,9 @@ def productlistpricefieldupdate(request):
 def productnew(request):
 
     cursor1 = connection.cursor()
-    cursor1.execute("INSERT INTO quotation_tblproduct (product_description_tblproduct) VALUES ('DefaultDescription')")
+    cursor1.execute("INSERT INTO quotation_tblproduct "
+                    "(customerdescription_tblproduct, "
+                    "suppliercompanyid_tblproduct) VALUES ('DefaultDescription', '1')")
     transaction.commit()
 
     return redirect('products', pkproductid=0)
