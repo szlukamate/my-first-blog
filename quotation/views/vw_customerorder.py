@@ -26,34 +26,24 @@ def customerorderform(request, pk):
         fieldname = request.POST['fieldname']
         tbl = request.POST['tbl']
         if tbl == "tblDoc_details":
-            cursor2 = connection.cursor()
-            sqlquery = "UPDATE quotation_tbldoc_details SET " + fieldname + "= '" + fieldvalue + "' WHERE Doc_detailsid_tblDoc_details =" + rowid
-            cursor2.execute(sqlquery)
+            cursor22 = connection.cursor()
+            cursor22.callproc("spcustomerordertbldocdetailsfieldsupdate", [fieldname, fieldvalue, rowid])
+            results23 = cursor22.fetchall()
+            print(results23)
 
-            cursor7 = connection.cursor()
-            cursor7.execute("SELECT " + fieldname + " "
-                                                    "FROM quotation_tbldoc_details "
-                                                    "WHERE Doc_detailsid_tblDoc_details = %s ", [rowid])
-            results = cursor7.fetchall()
-
-            json_data = json.dumps(results)
+            json_data = json.dumps(results23)
 
             return HttpResponse(json_data, content_type="application/json")
 
         elif tbl == "tblDoc":
-            cursor8 = connection.cursor()
-            sqlquery = "UPDATE quotation_tbldoc SET " + fieldname + "= '" + fieldvalue + "' WHERE Docid_tblDoc =" + docid
-            cursor8.execute(sqlquery)
+            cursor22 = connection.cursor()
+            cursor22.callproc("spcustomerordertbldocfieldsupdate", [fieldname, fieldvalue, docid])
+            results23 = cursor22.fetchall()
+            print(results23)
 
-            cursor9 = connection.cursor()
-            cursor9.execute("SELECT " + fieldname + " "
-                                                    "FROM quotation_tbldoc "
-                                                    "WHERE Docid_tblDoc = %s ", [docid])
-            results = cursor9.fetchall()
+            json_data = json.dumps(results23)
 
-            json_data = json.dumps(results)
-
-            return HttpResponse(json_data, content_type="application/json")
+        return HttpResponse(json_data, content_type="application/json")
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "

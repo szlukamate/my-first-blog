@@ -30,6 +30,12 @@
 			<ul class="nav navbar-nav" id="mainnavbar">
 				<li><a href="{% url 'docs' %}">Docs</a></li>
 				<li><a href="{% url 'docsearch' %}">Docsearch</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> <span class="nav-label">Queries</span> <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="{% url 'supplierorderpre' %}">Supplier Order Preparation</a></li>
+					</ul>
+				</li>
 				<li><a href="{% url 'companies' %}">Companies</a></li>
 				<li><a href="{% url 'products' pkproductid=0 %}">Products</a></li>
 				<li class="dropdown">

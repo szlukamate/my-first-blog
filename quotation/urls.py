@@ -60,5 +60,6 @@ urlpatterns = [
     url(r'^emailviewattachmentcandidate/(?P<pdffilename>[^/]+)/$', views.emailviewattachmentcandidate, name='emailviewattachmentcandidate'),
     url(r'docsearch/$', views.docsearch, name='docsearch'),
     url('docsearchcontent', views.docsearchcontent, name='docsearchcontent'),
+    url(r'supplierorderpre/$', views.supplierorderpre, name='supplierorderpre'),
 
 ]

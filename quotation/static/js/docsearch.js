@@ -139,6 +139,12 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
 
        window.location.href = djangourl;
     });
+    $('#docnumber').keypress(function(event) {
+        if (event.keyCode == 13) {
+            $('#searchbutton').trigger('click');
+        }
+    });
+
 
 });
 

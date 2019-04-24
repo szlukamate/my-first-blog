@@ -1,0 +1,54 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+
+
+
+							<p align="center" style="font-size:160%;">Supplier Order Preparation Form</p>
+							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>Docid</td>
+													<td>Company</td>
+													<td>Firstname</td>
+													<td>Lastname</td>
+													<td>PCD</td>
+													<td>Town</td>
+													<td>Docnumber</td>
+													<td>Created</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												<!-- {%  for tblDoc in  docs %}
+
+
+													<tr>
+														<td><a href="{% url 'docselector' pk=tblDoc.0 %}">{{ tblDoc.0 }}</a></td>
+														<td>{{ tblDoc.4}}</td>
+														<td>{{ tblDoc.5}}</td>
+														<td>{{ tblDoc.6}}</td>
+
+														<td>{{ tblDoc.1}}</td>
+														<td>{{ tblDoc.2}}</td>
+														<td>{{ tblDoc.9}}{{ tblDoc.10}}</td>
+														<td>{{ tblDoc.7|date:"M.d.Y" }} {{ tblDoc.7|time:"H:i" }}</td>
+														<td><a href="{% url 'docremove' pk=tblDoc.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+
+													</tr>
+
+
+
+												{% endfor %}
+												-->
+											</tbody>
+
+										</table>
+							</div>
+		<script type="text/javascript" src="{% static 'js/supplierorderpre.js' %}"></script>
+	{% endblock %}

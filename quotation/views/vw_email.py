@@ -107,6 +107,8 @@ def emailadd (request, pk):
     cc = request.POST['cc']
     pdffilename = request.POST['pdffilename']
     emailbodytextmodifiedbyuser = request.POST['emailbodytext']
+    #import pdb;
+    #pdb.set_trace()
 
     cursor2 = connection.cursor()
     cursor2.execute("INSERT INTO quotation_tbldoc "
@@ -125,17 +127,21 @@ def emailadd (request, pk):
                     "address_tblcompanies_ctbldoc, "
                     "doclinkparentid_tbldoc, "
                     "subject_tbldoc, "
-                    "emailbodytextmodifiedbyuser_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "emailbodytextmodifiedbyuser_tbldoc, "
+                    "cc_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [5, contactidclone, companynameclone, firstnameclone, lastnameclone, docnumber, creatorid,
                     titleclone,
                     mobileclone,
-                    emailclone,
+                    addresseeemail,
                     pcdclone,
                     townclone,
                     addressclone,
                     pk,
                     emailsubject,
-                    emailbodytextmodifiedbyuser])
+                    emailbodytextmodifiedbyuser,
+                    cc])
+    #import pdb;
+    #pdb.set_trace()
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
@@ -325,7 +331,8 @@ def emailform(request, pk):
                         "creditaccountid_tbldoc, "
                         "accountvalue_tbldoc, "
                         "accountduedate_tbldoc, "
-                        "emailbodytextmodifiedbyuser_tbldoc "
+                        "emailbodytextmodifiedbyuser_tbldoc, "
+                        "cc_tbldoc "
                         "FROM quotation_tbldoc "
                         "JOIN quotation_tbldoc_kind "
                         "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "

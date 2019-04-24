@@ -19,6 +19,12 @@
 					<form action="{% url 'doclink' docid=doc.0.0 %}">
 						<input type="submit" value="Doclink" />
 					</form>
+							  <label for="addresseeemail" >Addresseeemail</label>
+							  <input type="text" value="{{ doc.0.15}}" name="addresseeemail" size="60"><br>
+
+							  <label for="cc" >Cc</label>
+							  <input type="text" value="{{ doc.0.30}}" name="cc" size="60"><br>
+
 							  <label for="subject_tbldoc" >Subject</label>
 							  <input type="text" class="updateabletbldoc" value="{{ doc.0.9}}" name="subject_tbldoc" size="60"><br>
 
