@@ -13,39 +13,36 @@
 											<thead>
 
 												<tr>
+													<td>COR Number</td>
+													<td>C1</td>
+													<td>Date</td>
 													<td>Docid</td>
-													<td>Company</td>
-													<td>Firstname</td>
-													<td>Lastname</td>
-													<td>PCD</td>
-													<td>Town</td>
-													<td>Docnumber</td>
-													<td>Created</td>
+													<td>Customer</td>
+
+													<td>Supplier</td>
+													<td>Currency</td>
 												</tr>
 											</thead>
 
 											<tbody>
-												<!-- {%  for tblDoc in  docs %}
+												 {%  for customerorder in  customerorders %}
 
 
 													<tr>
-														<td><a href="{% url 'docselector' pk=tblDoc.0 %}">{{ tblDoc.0 }}</a></td>
-														<td>{{ tblDoc.4}}</td>
-														<td>{{ tblDoc.5}}</td>
-														<td>{{ tblDoc.6}}</td>
-
-														<td>{{ tblDoc.1}}</td>
-														<td>{{ tblDoc.2}}</td>
-														<td>{{ tblDoc.9}}{{ tblDoc.10}}</td>
-														<td>{{ tblDoc.7|date:"M.d.Y" }} {{ tblDoc.7|time:"H:i" }}</td>
-														<td><a href="{% url 'docremove' pk=tblDoc.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+														<td>{{ customerorder.25}}{{ customerorder.10}}</td>
+														<td>{{ customerorder.27}}</td>
+														<td>{{ customerorder.12|date:"M.d.Y"}}</td>
+														<td>{{ customerorder.0}}</td>
+														<td>{{ customerorder.3}}</td>
+														<td>{{ customerorder.40}}</td>
+														<td>{{ customerorder.36}}</td>
 
 													</tr>
 
 
 
 												{% endfor %}
-												-->
+
 											</tbody>
 
 										</table>
