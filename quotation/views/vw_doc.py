@@ -312,6 +312,9 @@ def docselector(request, pk):
         return redirect('emailform', pk=pk)
     elif dockind == 6:  # Accounting Entry
         return redirect('accountentryform', pk=pk)
+    elif dockind == 7:  # Supplier Order
+        return redirect('supplierorderform', pk=pk)
+
 
 def docremove(request, pk):
     cursor1 = connection.cursor()

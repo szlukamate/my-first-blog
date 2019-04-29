@@ -61,5 +61,7 @@ urlpatterns = [
     url(r'docsearch/$', views.docsearch, name='docsearch'),
     url('docsearchcontent', views.docsearchcontent, name='docsearchcontent'),
     url(r'supplierorderpre/$', views.supplierorderpre, name='supplierorderpre'),
+    url(r'^supplierorderform/(?P<pk>[0-9]+)/$', views.supplierorderform, name='supplierorderform'),
+    url(r'supplierordermake', views.supplierordermake, name='supplierordermake'),
 
 ]

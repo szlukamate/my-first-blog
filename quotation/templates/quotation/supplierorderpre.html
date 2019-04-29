@@ -3,7 +3,9 @@
 	{% block content %}
           
 
+				<p id="customerordersnumber" customerordersnumber="{{ customerordersnumber }}" hidden></p>
 
+							{% csrf_token %}
 
 							<p align="center" style="font-size:160%;">Supplier Order Preparation Form</p>
 							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
@@ -17,6 +19,7 @@
 													<td>C1</td>
 													<td>Date</td>
 													<td>Docid</td>
+													<td>Docdetailsid</td>
 													<td>Customer</td>
 
 													<td>Supplier</td>
@@ -30,12 +33,15 @@
 
 													<tr>
 														<td>{{ customerorder.25}}{{ customerorder.10}}</td>
-														<td>{{ customerorder.27}}</td>
-														<td>{{ customerorder.12|date:"M.d.Y"}}</td>
+														<td>{{ customerorder.30}}</td>
+														<td>{{ customerorder.12|date:"M.d.Y"}} {{ customerorder.12|time:"H:i" }}</td>
 														<td>{{ customerorder.0}}</td>
+														<td>{{ customerorder.26}}</td>
 														<td>{{ customerorder.3}}</td>
 														<td>{{ customerorder.40}}</td>
 														<td>{{ customerorder.36}}</td>
+														<td><label class="switch" "><input type="checkbox" rowid="{{ forloop.counter }}" docdetailsid="{{ customerorder.26}}"><span class="slider round"></span></label></td>
+
 
 													</tr>
 
@@ -46,6 +52,13 @@
 											</tbody>
 
 										</table>
+
 							</div>
+							<button id="supplierordermakebutton" type="submit">
+							   <span>Make Supplier Order</span>
+							</button>
+
 		<script type="text/javascript" src="{% static 'js/supplierorderpre.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/supplierorderpre.css' %}">
+
 	{% endblock %}
