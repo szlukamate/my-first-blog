@@ -62,14 +62,16 @@ def supplierorderpre(request):
                     "Doc_detailsid_tblDoc_details, "
                     "unit_tbldocdetails, "
                     "S.companyname_tblcompanies as supplier, "
+                    "suppliercompanyid_tbldocdetails, "
 
                     "supplierdescription_tblProduct_ctblDoc_details "
                     "FROM quotation_tbldoc_details as DD "
                     "JOIN quotation_tblcompanies as S ON DD.suppliercompanyid_tbldocdetails = S.companyid_tblcompanies "
                     "JOIN quotation_tbldoc as D ON D.Docid_tblDoc=DD.Docid_tblDoc_details_id "
                     "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
-                    "WHERE Doc_kindid_tblDoc_id=2 and obsolete_tbldoc=0 "
-                    "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
+                    "LEFT OUTER JOIN (SELECT cordetailslink_tbldocdetails FROM quotation_tbldoc_details JOIN quotation_tbldoc as D2 ON D2.Docid_tblDoc=quotation_tbldoc_details.Docid_tblDoc_details_id WHERE obsolete_tbldoc=0) as supplierorderset ON DD.Doc_detailsid_tblDoc_details=supplierorderset.cordetailslink_tbldocdetails "
+                    "WHERE Doc_kindid_tblDoc_id=2 and obsolete_tbldoc=0 and supplierorderset.cordetailslink_tbldocdetails is null "
+                    "order by docnumber_tbldoc,firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
     customerorders = cursor3.fetchall()
     customerordersnumber = len(customerorders)
 
@@ -80,60 +82,90 @@ def supplierordermake(request):
     if request.method == 'POST':
         docdetailslistraw = request.POST['docdetailslist']
         docdetailslist = json.loads(docdetailslistraw)
+    #import pdb;
+    #pdb.set_trace()
 
     creatorid = request.user.id
+
     pk=60
+    toinoperatordocdetails=""
+    for x in range(len(docdetailslist)):
+        print(x)
+        toinoperatordocdetails = toinoperatordocdetails + docdetailslist[x] + ","
+    toinoperatordocdetails = toinoperatordocdetails[: -1]
+
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
-                    "Docid_tblDoc, "
-                    "Contactid_tblDoc_id, "
-                    "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
-                    "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
-                    "prefacespecforquotation_tbldoc, "
-                    "subject_tbldoc, "
-                    "docnumber_tbldoc, "
-                    "total_tbldoc, "
-                    "deliverydays_tbldoc, "
-                    "paymenttextforquotation_tblpayment_ctbldoc, "
-                    "currencycodeinreport_tbldoc, "
-                    "currencyrateinreport_tbldoc, "
-                    "accountcurrencycode_tbldoc, "
-                    "companyname_tblcompanies_ctbldoc, "
-                    "firstname_tblcontacts_ctbldoc, "
-                    "lastname_tblcontacts_ctbldoc, "
-                    "title_tblcontacts_ctbldoc, "
-                    "mobile_tblcontacts_ctbldoc, "
-                    "email_tblcontacts_ctbldoc, "
-                    "pcd_tblcompanies_ctbldoc, "
-                    "town_tblcompanies_ctbldoc, "
-                    "address_tblcompanies_ctbldoc "
-                    "FROM quotation_tbldoc "
-                    "WHERE docid_tbldoc=%s "
-                    "order by docid_tbldoc desc",
-                    [pk])
-    doc = cursor1.fetchall()
-    for x in doc:
-        contactid = x[1]
-        prefacetext = x[2]
-        backpagetext = x[3]
-        prefacespectext = x[4]
-        subject = x[5]
-        total = x[7]
-        deliverydays = x[8]
-        paymenttext = x[9]
-        currencycodeinreport = x[10]
-        currencyrateinreport = x[11]
-        accountcurrencycode = x[12]
-        companynameclone = x[13]
-        firstnameclone = x[14]
-        lastnameclone = x[15]
-        titleclone = x[16]
-        mobileclone = x[17]
-        emailclone = x[18]
-        pcdclone = x[19]
-        townclone = x[20]
-        addressclone = x[21]
+                    "suppliercompanyid_tbldocdetails "
+                    "FROM quotation_tbldoc_details "
+                    "WHERE Doc_detailsid_tblDoc_details IN (" + toinoperatordocdetails + ") "
+                    "Group by suppliercompanyid_tbldocdetails ")
+    supplierorders = cursor1.fetchall()
 
+    for x in supplierorders:
+        suppliercompanyid = x[0]
+
+
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT "
+                        "Docid_tblDoc, "
+                        "Contactid_tblDoc_id, "
+                        "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
+                        "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
+                        "prefacespecforquotation_tbldoc, "
+                        "subject_tbldoc, "
+                        "docnumber_tbldoc, "
+                        "total_tbldoc, "
+                        "deliverydays_tbldoc, "
+                        "paymenttextforquotation_tblpayment_ctbldoc, "
+                        "currencycodeinreport_tbldoc, "
+                        "currencyrateinreport_tbldoc, "
+                        "accountcurrencycode_tbldoc "
+    
+                        "FROM quotation_tbldoc "
+                        "WHERE docid_tbldoc=%s "
+                        "order by docid_tbldoc desc",
+                        [pk])
+        doc = cursor1.fetchall()
+        for x in doc:
+            contactid = x[1]
+            prefacetext = x[2]
+            backpagetext = x[3]
+            prefacespectext = x[4]
+            subject = x[5]
+            total = x[7]
+            deliverydays = x[8]
+            paymenttext = x[9]
+            currencycodeinreport = x[10]
+            currencyrateinreport = x[11]
+            accountcurrencycode = x[12]
+
+        cursor1 = connection.cursor()
+        cursor1.execute(
+            "SELECT contactid_tblcontacts, companyname_tblcompanies, Companyid_tblCompanies, "
+            "Firstname_tblcontacts, lastname_tblcontacts, "
+            "title_tblcontacts, "
+            "mobile_tblcontacts, "
+            "email_tblcontacts, "
+            "pcd_tblcompanies, "
+            "town_tblcompanies, "
+            "address_tblcompanies "
+            "FROM quotation_tblcontacts "
+            "JOIN quotation_tblcompanies "
+            "ON quotation_tblcompanies.companyid_tblcompanies = quotation_tblcontacts.companyid_tblcontacts_id "
+            "WHERE Companyid_tblCompanies =%s", [suppliercompanyid])
+        companyandcontactdata = cursor1.fetchall()
+        for instancesingle in companyandcontactdata:
+            companynameclone = instancesingle[1]
+            companyid = instancesingle[2] # for the lookup the default values in the tblcompanies (i.e. defaultpreface)
+            firstnameclone = instancesingle[3]
+            lastnameclone = instancesingle[4]
+            titleclone = instancesingle[5]
+            mobileclone = instancesingle[6]
+            emailclone = instancesingle[7]
+            pcdclone = instancesingle[8]
+            townclone = instancesingle[9]
+            addressclone = instancesingle[10]
 
         cursor8 = connection.cursor()
         cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
@@ -193,8 +225,6 @@ def supplierordermake(request):
         results = cursor3.fetchall()
         for x in results:
             maxdocid = x[0]
-        #import pdb;
-        #pdb.set_trace()
 
         cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
                         "`Qty_tblDoc_details`, "
@@ -225,67 +255,73 @@ def supplierordermake(request):
                         "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                         "ON "
                         "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
-                        "WHERE docid_tbldoc_details_id=%s "
+                        "WHERE Doc_detailsid_tblDoc_details IN (" + toinoperatordocdetails + ") and suppliercompanyid_tbldocdetails=%s "
                         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
-                        [pk])
+                        [suppliercompanyid])
         docdetails = cursor3.fetchall()
-    for x in docdetails:
-        qty = x[1]
-        firstnum = x[4]
-        fourthnum = x[5]
-        secondnum = x[6]
-        thirdnum = x[7]
-        note = x[8]
-        productid = x[13]
-        currencyrate = x[16]
-        suppliercompanyid = x[24]
+    #import pdb;
+    #pdb.set_trace()
 
-        purchase_priceclone = x[10]
-        customerdescriptionclone = x[3]
-        currencyisocodeclone = x[12]
-        listpricecomputed = x[11]
-        currencyrateclone = x[16]
-        unitclone = x[23]
-        unitsalespriceACU = x[18]
+        for x in docdetails:
+            cordetailslink=x[0]
+            qty = x[1]
+            firstnum = x[4]
+            fourthnum = x[5]
+            secondnum = x[6]
+            thirdnum = x[7]
+            note = x[8]
+            productid = x[13]
+            currencyrate = x[16]
+            suppliercompanyid = x[24]
 
-        cursor4 = connection.cursor()
-        cursor4.execute(
-            "INSERT INTO quotation_tbldoc_details "
-            "( Docid_tblDoc_details_id, "
-            "`Qty_tblDoc_details`, "
-            "`customerdescription_tblProduct_ctblDoc_details`, "
-            "firstnum_tblDoc_details, "
-            "`fourthnum_tblDoc_details`, "
-            "`secondnum_tblDoc_details`, "
-            "`thirdnum_tblDoc_details`, "
-            "`Note_tblDoc_details`, "
-            "purchase_price_tblproduct_ctblDoc_details, "
-            "listprice_tblDoc_details, "
-            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-            "Productid_tblDoc_details_id, "
-            "currencyrate_tblcurrency_ctblDoc_details, "
-            "unitsalespriceACU_tblDoc_details, "
-            "unit_tbldocdetails, "
-            "suppliercompanyid_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            purchase_priceclone = x[10]
+            customerdescriptionclone = x[3]
+            currencyisocodeclone = x[12]
+            listpricecomputed = x[11]
+            currencyrateclone = x[16]
+            unitclone = x[23]
+            unitsalespriceACU = x[18]
 
-            [maxdocid,
-             qty,
-             customerdescriptionclone,
-             firstnum,
-             fourthnum,
-             secondnum,
-             thirdnum,
-             note,
-             purchase_priceclone,
-             listpricecomputed,
-             currencyisocodeclone,
-             productid,
-             currencyrate,
-             unitsalespriceACU,
-             unitclone,
-             suppliercompanyid])
+            cursor4 = connection.cursor()
+            cursor4.execute(
+                "INSERT INTO quotation_tbldoc_details "
+                "( Docid_tblDoc_details_id, "
+                "`Qty_tblDoc_details`, "
+                "`customerdescription_tblProduct_ctblDoc_details`, "
+                "firstnum_tblDoc_details, "
+                "`fourthnum_tblDoc_details`, "
+                "`secondnum_tblDoc_details`, "
+                "`thirdnum_tblDoc_details`, "
+                "`Note_tblDoc_details`, "
+                "purchase_price_tblproduct_ctblDoc_details, "
+                "listprice_tblDoc_details, "
+                "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                "Productid_tblDoc_details_id, "
+                "currencyrate_tblcurrency_ctblDoc_details, "
+                "unitsalespriceACU_tblDoc_details, "
+                "unit_tbldocdetails, "
+                "suppliercompanyid_tbldocdetails, "
+                "cordetailslink_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
-        return render(request, 'quotation/supplierorderpreredirecturl.html',
+                [maxdocid,
+                 qty,
+                 customerdescriptionclone,
+                 firstnum,
+                 fourthnum,
+                 secondnum,
+                 thirdnum,
+                 note,
+                 purchase_priceclone,
+                 listpricecomputed,
+                 currencyisocodeclone,
+                 productid,
+                 currencyrate,
+                 unitsalespriceACU,
+                 unitclone,
+                 suppliercompanyid,
+                 cordetailslink])
+
+    return render(request, 'quotation/supplierorderpreredirecturl.html',
                       {'maxdocid': maxdocid})
 
 
@@ -424,7 +460,11 @@ def supplierorderform(request, pk):
                     "order by firstnum_tblDoc_details desc,secondnum_tblDoc_details desc,thirdnum_tblDoc_details desc,fourthnum_tblDoc_details desc "
                     "LIMIT 1"
                     , [pk])
+
     maxchapternums = cursor5.fetchall()
+#    import pdb;
+#    pdb.set_trace()
+
     for x in maxchapternums:
         maxfirstnum = x[0]
         maxsecondnum = x[1]

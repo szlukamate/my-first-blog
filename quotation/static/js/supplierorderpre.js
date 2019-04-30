@@ -21,7 +21,7 @@ $(function () {
         var i;
         var docdetailslist=[];
         var docdetailslistmember;
-
+        //var suppliercompanyid;
         customerordersnumberfunc();
 
         main();
@@ -44,6 +44,8 @@ $(function () {
 
                     if ($('input[type="checkbox"][rowid="' + i + '"').is(":checked") ) {
                            docdetailslistmember=$('input[type="checkbox"][rowid="' + i + '"').attr( "docdetailsid" );
+                           //suppliercompanyid=$('input[type="checkbox"][rowid="' + i + '"').attr( "suppliercompanyid" );
+
                            docdetailslist.push(docdetailslistmember);
                            console.log('raw' + docdetailslist);
                     }
@@ -60,7 +62,7 @@ $(function () {
                 },
 
                 success: function(url){
-       //         window.location.href = url;
+                //window.location.href = url;
 
                 },
                 error: function(){
@@ -70,7 +72,7 @@ $(function () {
 
             });
 
-            //console.log('stringified' + JSON.stringify(docdetailslist));
+            console.log('stringified' + JSON.stringify(docdetailslist));
 
     });
 });
