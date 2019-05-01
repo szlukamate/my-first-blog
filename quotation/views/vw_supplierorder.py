@@ -6,7 +6,7 @@ from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
 from array import *
-import json
+import simplejson as json
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core.files.storage import FileSystemStorage
 from io import BytesIO
@@ -48,7 +48,7 @@ def supplierorderpre(request):
                     "pretag_tbldockind, "
 
                     "`Doc_detailsid_tblDoc_details`, "
-                    "`Qty_tblDoc_details`, "
+                    "`Qty_tblDoc_details` as customerqty, "
                     "`Docid_tblDoc_details_id`, "
                     "`customerdescription_tblProduct_ctblDoc_details`, "
                     "`firstnum_tblDoc_details`, "
@@ -63,14 +63,24 @@ def supplierorderpre(request):
                     "unit_tbldocdetails, "
                     "S.companyname_tblcompanies as supplier, "
                     "suppliercompanyid_tbldocdetails, "
-
-                    "supplierdescription_tblProduct_ctblDoc_details "
+                    "supplierdescription_tblProduct_ctblDoc_details, "
+                    "COALESCE(supplierorderset.supplierQty,0) as supplierqty2, "
+                    "obsolete_tbldoc, "
+                    "(Qty_tblDoc_details-COALESCE(supplierorderset.supplierQty,0)) as tosorqty "
                     "FROM quotation_tbldoc_details as DD "
                     "JOIN quotation_tblcompanies as S ON DD.suppliercompanyid_tbldocdetails = S.companyid_tblcompanies "
                     "JOIN quotation_tbldoc as D ON D.Docid_tblDoc=DD.Docid_tblDoc_details_id "
                     "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
-                    "LEFT OUTER JOIN (SELECT cordetailslink_tbldocdetails FROM quotation_tbldoc_details JOIN quotation_tbldoc as D2 ON D2.Docid_tblDoc=quotation_tbldoc_details.Docid_tblDoc_details_id WHERE obsolete_tbldoc=0) as supplierorderset ON DD.Doc_detailsid_tblDoc_details=supplierorderset.cordetailslink_tbldocdetails "
-                    "WHERE Doc_kindid_tblDoc_id=2 and obsolete_tbldoc=0 and supplierorderset.cordetailslink_tbldocdetails is null "
+                    
+                    "LEFT OUTER JOIN "
+                    "(SELECT sordetailslink_tbldocdetails, sum(Qty_tblDoc_details) as supplierqty "
+                    "FROM quotation_tbldoc_details "
+                    "JOIN quotation_tbldoc as D2 "
+                    "ON D2.Docid_tblDoc=quotation_tbldoc_details.Docid_tblDoc_details_id "
+                    "WHERE obsolete_tbldoc=0 " 
+                    "GROUP BY sordetailslink_tbldocdetails) as supplierorderset "
+                    "ON DD.Doc_detailsid_tblDoc_details=supplierorderset.sordetailslink_tbldocdetails "
+                    "HAVING Doc_kindid_tblDoc_id=2 and obsolete_tbldoc=0 and customerqty > COALESCE(supplierqty2, 0) "
                     "order by docnumber_tbldoc,firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
     customerorders = cursor3.fetchall()
     customerordersnumber = len(customerorders)
@@ -263,7 +273,7 @@ def supplierordermake(request):
     #pdb.set_trace()
 
         for x in docdetails:
-            cordetailslink=x[0]
+            sordetailslink=x[0]
             qty = x[1]
             firstnum = x[4]
             fourthnum = x[5]
@@ -301,7 +311,7 @@ def supplierordermake(request):
                 "unitsalespriceACU_tblDoc_details, "
                 "unit_tbldocdetails, "
                 "suppliercompanyid_tbldocdetails, "
-                "cordetailslink_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                "sordetailslink_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
                 [maxdocid,
                  qty,
@@ -319,7 +329,7 @@ def supplierordermake(request):
                  unitsalespriceACU,
                  unitclone,
                  suppliercompanyid,
-                 cordetailslink])
+                 sordetailslink])
 
     return render(request, 'quotation/supplierorderpreredirecturl.html',
                       {'maxdocid': maxdocid})

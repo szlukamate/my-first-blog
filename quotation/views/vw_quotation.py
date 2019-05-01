@@ -6,7 +6,7 @@ from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
 from array import *
-import json
+import simplejson as json
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core.files.storage import FileSystemStorage
 from io import BytesIO
@@ -30,6 +30,8 @@ def quotationform(request, pk):
             cursor22.callproc("spquotationdocdetailsfieldsupdate", [fieldname, fieldvalue, rowid])
             results23 = cursor22.fetchall()
             print(results23)
+            import pdb;
+            pdb.set_trace()
 
             json_data = json.dumps(results23)
 

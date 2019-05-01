@@ -62,7 +62,7 @@ $(function () {
                 },
 
                 success: function(url){
-                //window.location.href = url;
+                window.location.href = url;
 
                 },
                 error: function(){

@@ -6,7 +6,7 @@ from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
 from array import *
-import json
+import simplejson as json
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core.files.storage import FileSystemStorage
 from io import BytesIO

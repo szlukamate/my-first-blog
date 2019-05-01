@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
-import json
+import simplejson as json
 from django.http import HttpResponse
 
 # import pdb;

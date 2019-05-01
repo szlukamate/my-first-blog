@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from collections import namedtuple
 from django.db import connection, transaction
 from array import *
-import json
+import simplejson as json
 from django.http import HttpResponse
 
 # import pdb;
