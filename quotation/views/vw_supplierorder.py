@@ -99,10 +99,11 @@ def supplierordermake(request):
 
     pk=60
     toinoperatordocdetails=""
-    for x in range(len(docdetailslist)):
-        print(x)
+    for x in range(0,len(docdetailslist),2):
         toinoperatordocdetails = toinoperatordocdetails + docdetailslist[x] + ","
     toinoperatordocdetails = toinoperatordocdetails[: -1]
+    #import pdb;
+    #pdb.set_trace()
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -269,12 +270,15 @@ def supplierordermake(request):
                         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                         [suppliercompanyid])
         docdetails = cursor3.fetchall()
-    #import pdb;
-    #pdb.set_trace()
 
         for x in docdetails:
             sordetailslink=x[0]
-            qty = x[1]
+            for y in range(0, len(docdetailslist), 2):
+                if int(docdetailslist[y]) == sordetailslink:
+                    qty=docdetailslist[y+1]
+            #import pdb;
+            #pdb.set_trace()
+
             firstnum = x[4]
             fourthnum = x[5]
             secondnum = x[6]

@@ -21,7 +21,8 @@ $(function () {
         var i;
         var docdetailslist=[];
         var docdetailslistmember;
-        //var suppliercompanyid;
+        var tosorqtymember;
+
         customerordersnumberfunc();
 
         main();
@@ -44,13 +45,14 @@ $(function () {
 
                     if ($('input[type="checkbox"][rowid="' + i + '"').is(":checked") ) {
                            docdetailslistmember=$('input[type="checkbox"][rowid="' + i + '"').attr( "docdetailsid" );
-                           //suppliercompanyid=$('input[type="checkbox"][rowid="' + i + '"').attr( "suppliercompanyid" );
+                           tosorqtymember=$('input[type="checkbox"][rowid="' + i + '"').attr( "tosorqty" );
 
-                           docdetailslist.push(docdetailslistmember);
+                           docdetailslist.push(docdetailslistmember, tosorqtymember);
                            console.log('raw' + docdetailslist);
                     }
 
             }
+
             $.ajax({
                 type: 'POST',
                 url: 'supplierordermake',
