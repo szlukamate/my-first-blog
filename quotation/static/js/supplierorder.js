@@ -114,7 +114,7 @@ $('#title').click(function() {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var fieldvalue = $(this).val();
-        var docid = $('#quotationdocid').text();
+        var docid = $('#supplierorderdocid').text();
         var fieldname = $(this).attr( "name" );
         var tbl="tblDoc";
 
@@ -156,16 +156,16 @@ $('#title').click(function() {
    });
 
 
-    $('#newquotationrowsignonhtml').click(function() {
-        var quotationid=$('#quotationdocid').text();
+    $('#newsupplierorderrowsignonhtml').click(function() {
+        var supplierorderid=$('#supplierorderdocid').text();
 
             $.ajax({
                 type: 'POST',
-                url: 'quotationnewrowadd',
+                url: 'supplierordernewrowadd',
 
                 data: {
-                'quotationid' : quotationid,
-                'docdetailsid' : 0, // New row in docdetails the 0 shows it (the quotationnewrowadd def in vw_quotation.py recognizes it)
+                'supplierorderid' : supplierorderid,
+                'docdetailsid' : 0, // New row in docdetails the 0 shows it (the supplierordernewrowadd def in vw_supplierorder.py recognizes it)
                 'nextfirstnumonhtml' : $('#nextfirstnumonhtml').val(),
                 'nextsecondnumonhtml' : $('#nextsecondnumonhtml').val(),
                 'nextthirdnumonhtml' : $('#nextthirdnumonhtml').val(),
@@ -176,7 +176,7 @@ $('#title').click(function() {
 
                 success: function(data){
 
-                    $('#quotationtemplate').html(data);
+                    $('#supplierordertemplate').html(data);
                     console.log(data);
                 },
                 error: function(){
@@ -190,18 +190,18 @@ $('#title').click(function() {
 
     });
 
-    $('[name="quotationproductforrow"]').click(function() {
-        var quotationid=$('#quotationdocid').text();
+    $('[name="supplierorderproductforrow"]').click(function() {
+        var supplierorderid=$('#supplierorderdocid').text();
         var docdetailsid=$(this).attr( "rowid" );
         var productid=$('input[name="Productid_tblDoc_details_id"][rowid="' + docdetailsid + '"').val()
         console.log('in');
             $.ajax({
                 type: 'POST',
-                url: 'quotationnewrowadd',
+                url: 'supplierordernewrowadd',
 
                 data: {
-                'quotationid' : quotationid,
-                'docdetailsid' : docdetailsid, // Only product update the !0 shows it (the quotationnewrowadd def in vw_quotation.py recognizes it)
+                'supplierorderid' : supplierorderid,
+                'docdetailsid' : docdetailsid, // Only product update the !0 shows it (the supplierordernewrowadd def in vw_supplierorder.py recognizes it)
                 'nextfirstnumonhtml' :    $('input[name="firstnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
                 'nextsecondnumonhtml' : $('input[name="secondnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
                 'nextthirdnumonhtml' : $('input[name="thirdnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
@@ -212,7 +212,7 @@ $('#title').click(function() {
 
                 success: function(data){
 
-                    $('#quotationtemplate').html(data);
+                    $('#supplierordertemplate').html(data);
                     console.log(data);
                     location.href = "#" + productid;
                 },
@@ -226,6 +226,6 @@ $('#title').click(function() {
 
 
     });
-   });
+//   });
 
 });

@@ -107,14 +107,16 @@ def supplierordermake(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
-                    "suppliercompanyid_tbldocdetails "
+                    "suppliercompanyid_tbldocdetails, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details "
                     "FROM quotation_tbldoc_details "
                     "WHERE Doc_detailsid_tblDoc_details IN (" + toinoperatordocdetails + ") "
-                    "Group by suppliercompanyid_tbldocdetails ")
+                    "Group by suppliercompanyid_tbldocdetails, currencyisocode_tblcurrency_ctblproduct_ctblDoc_details ")
     supplierorders = cursor1.fetchall()
 
     for x in supplierorders:
         suppliercompanyid = x[0]
+        currencyisocode = x[1]
 
 
         cursor1 = connection.cursor()
@@ -147,7 +149,7 @@ def supplierordermake(request):
             total = x[7]
             deliverydays = x[8]
             paymenttext = x[9]
-            currencycodeinreport = x[10]
+            currencycodeinreport = currencyisocode
             currencyrateinreport = x[11]
             accountcurrencycode = x[12]
 
@@ -164,8 +166,10 @@ def supplierordermake(request):
             "FROM quotation_tblcontacts "
             "JOIN quotation_tblcompanies "
             "ON quotation_tblcompanies.companyid_tblcompanies = quotation_tblcontacts.companyid_tblcontacts_id "
-            "WHERE Companyid_tblCompanies =%s", [suppliercompanyid])
+            "WHERE Companyid_tblCompanies =%s and supplierordercontact_tblcontacts=1", [suppliercompanyid])
         companyandcontactdata = cursor1.fetchall()
+        if len(companyandcontactdata) == 0:
+            return HttpResponse("Is not default contact for supplier orders?")
         for instancesingle in companyandcontactdata:
             companynameclone = instancesingle[1]
             companyid = instancesingle[2] # for the lookup the default values in the tblcompanies (i.e. defaultpreface)
@@ -266,9 +270,9 @@ def supplierordermake(request):
                         "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                         "ON "
                         "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
-                        "WHERE Doc_detailsid_tblDoc_details IN (" + toinoperatordocdetails + ") and suppliercompanyid_tbldocdetails=%s "
+                        "WHERE Doc_detailsid_tblDoc_details IN (" + toinoperatordocdetails + ") and suppliercompanyid_tbldocdetails=%s and currencyisocode_tblcurrency_ctblproduct_ctblDoc_details=%s"
                         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
-                        [suppliercompanyid])
+                        [suppliercompanyid, currencyisocode])
         docdetails = cursor3.fetchall()
 
         for x in docdetails:
@@ -506,3 +510,189 @@ def supplierorderform(request, pk):
     return render(request, 'quotation/supplierorder.html', {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums' : nextchapternums,
                                                         'creatordata': creatordata,
                                                         'currencycodes': currencycodes})
+
+
+def supplierorderprint(request, docid):
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Docid_tblDoc, "
+                    "Contactid_tblDoc_id, "
+                    "Doc_kindid_tblDoc_id, "
+                    "companyname_tblcompanies_ctbldoc, "
+                    "firstname_tblcontacts_ctbldoc, "
+                    "lastname_tblcontacts_ctbldoc, "
+                    "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
+                    "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
+                    "prefacespecforquotation_tbldoc, "
+                    "subject_tbldoc, "
+                    "docnumber_tbldoc, "
+                    "creatorid_tbldoc, "
+                    "creationtime_tbldoc, "
+                    "title_tblcontacts_ctbldoc, "
+                    "mobile_tblcontacts_ctbldoc, "
+                    "email_tblcontacts_ctbldoc, "
+                    "pcd_tblcompanies_ctbldoc, "
+                    "town_tblcompanies_ctbldoc, "
+                    "address_tblcompanies_ctbldoc, "
+                    "total_tbldoc, "
+                    "deliverydays_tbldoc, "
+                    "paymenttextforquotation_tblpayment_ctbldoc, "
+                    "currencycodeinreport_tbldoc, "
+                    "currencyrateinreport_tbldoc "
+
+                    "FROM quotation_tbldoc "
+                    "WHERE docid_tbldoc=%s "
+                    "order by docid_tbldoc desc",
+                    [docid])
+    doc = cursor1.fetchall()
+    for x in doc:
+        creatorid = x[11]
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT  `Doc_detailsid_tblDoc_details`, "
+        "`Qty_tblDoc_details`, "
+        "`Docid_tblDoc_details_id`, "
+        "`customerdescription_tblProduct_ctblDoc_details`, "
+        "`firstnum_tblDoc_details`, "
+        "`fourthnum_tblDoc_details`, "
+        "`secondnum_tblDoc_details`, "
+        "`thirdnum_tblDoc_details`, "
+        "`Note_tblDoc_details`, "
+        "`creationtime_tblDoc_details`, "
+        "purchase_price_tblproduct_ctblDoc_details, "
+        "listprice_tblDoc_details, "
+        "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+        "Productid_tblDoc_details_id, "
+        "Doc_detailsid_tblDoc_details, "
+        "unit_tbldocdetails, "
+        "currencyrateinreport_tbldoc "
+        "unitsalespriceACU_tblDoc_details, "
+        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2) as unitsalespricetoreport, "
+        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2)*Qty_tblDoc_details as salespricetoreport, "
+        "round((purchase_price_tblproduct_ctblDoc_details),2) as unitpurchasepricetoreport, "
+        "round((purchase_price_tblproduct_ctblDoc_details),2)*Qty_tblDoc_details as purchasepricetoreport "
+
+        "FROM quotation_tbldoc_details "
+        "LEFT JOIN quotation_tbldoc "
+        "ON "
+        "quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+        "WHERE docid_tbldoc_details_id=%s "
+        "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
+        [docid])
+    docdetails = cursor3.fetchall()
+
+    cursor4 = connection.cursor()
+    cursor4.execute(
+        "SELECT  COUNT(Doc_detailsid_tblDoc_details) AS numberofrows "
+        "FROM quotation_tbldoc_details "
+        "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+        "ON "
+        "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+        "WHERE docid_tbldoc_details_id=%s "
+        "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
+        [docid])
+    results = cursor4.fetchall()
+
+    for instancesingle in results:
+        docdetailscount = instancesingle[0]
+
+    cursor5 = connection.cursor()
+    cursor5.execute("SELECT id, "
+                    "first_name, "
+                    "last_name, "
+                    "email, "
+                    "subscriptiontext_tblauth_user "
+                    "FROM auth_user "
+                    "WHERE id=%s ", [creatorid])
+    creatordata = cursor5.fetchall()
+
+    return render(request, 'quotation/supplierorderprint.html', {'doc': doc, 'docdetails': docdetails,
+                                                             'docdetailscount': docdetailscount,
+                                                             'creatordata': creatordata})
+def supplierorderemail(request, docid):
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "docid_tbldoc, "
+                    "email_tblcontacts_ctbldoc, "
+                    "creatorid_tbldoc, "
+                    "pretag_tbldockind, "
+                    "Doc_kind_name_tblDoc_kind, "
+                    "docnumber_tbldoc, "
+                    "subject_tbldoc, "
+                    "title_tblcontacts_ctbldoc, "
+                    "lastname_tblcontacts_ctbldoc, "
+                    "emailbodytextmodifiedbyuser_tbldoc "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE docid_tbldoc=%s ",
+                    [docid])
+    doc = cursor1.fetchall()
+    for x in doc:
+        creatorid = x[2]
+        pretag = x[3]
+        dockindname = x[4]
+        docnumber = x[5]
+        subject = x[6]
+
+    #import pdb;
+    #pdb.set_trace()
+
+    cursor10 = connection.cursor()
+    cursor10.execute("SELECT id, "
+                     "first_name, "
+                     "last_name, "
+                     "email, "
+                     "subscriptiontext_tblauth_user, "
+                     "emailbodytext_tblauth_user "
+                     "FROM auth_user "
+                    "WHERE id=%s ", [creatorid])
+    creatordata = cursor10.fetchall()
+    for x in creatordata:
+        emailbodytext = x[5]
+
+    pdffilename = dockindname + '_' + pretag + str(docnumber) + '_Subject:_' + subject + '.pdf'
+    os.system('google-chrome --headless --print-to-pdf='+ pdffilename + ' http://127.0.0.1:8000/quotation/quotationprint/' + docid + '/')
+
+    return render(request, 'quotation/emailadd.html', {'doc': doc,
+                                                       'pdffilename': pdffilename,
+                                                       'emailbodytext': emailbodytext,
+                                                       'creatordata': creatordata
+                                                       })
+def supplierorderrowremove(request, pk):
+    cursor2 = connection.cursor()
+    cursor2.execute(
+        "SELECT Docid_tblDoc_details_id FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [pk])
+    results = cursor2.fetchall()
+    for x in results:
+        na = x[0]
+    transaction.commit()
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "DELETE FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [pk])
+    transaction.commit()
+
+    return redirect('quotationform', pk=na)
+def supplierorderbackpage(request):
+
+
+    if request.method == 'POST':
+        supplierorderid = request.POST['supplierorderid']
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT "
+        "Docid_tblDoc, "
+        "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
+        "docnumber_tbldoc, "
+        "creatorid_tbldoc, "
+        "deliverydays_tbldoc "
+        "FROM quotation_tbldoc "
+        "WHERE docid_tbldoc=%s ",
+        [supplierorderid])
+
+    doc = cursor0.fetchall()
+    json_data = json.dumps(doc)
+
+    return HttpResponse(json_data, content_type="application/json")

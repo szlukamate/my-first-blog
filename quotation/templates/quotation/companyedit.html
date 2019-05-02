@@ -67,6 +67,17 @@
 								<input type="text" class="updateabletblcontacts" value="{{ contact.5}}" name="email_tblcontacts" rowid="{{ contact.0}}">
 
 								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+								{% if contact.6 == 1 %}
+
+
+									<label class="switch"><input type="checkbox" class="supplierordercontact" name="supplierordercontact_tblcontacts" rowid="{{ contact.0}}" checked><span class="slider"></span></label>
+
+
+								{% else %}
+
+									<label class="switch"><input type="checkbox" class="supplierordercontact" name="supplierordercontact_tblcontacts" rowid="{{ contact.0}}"><span class="slider"></span></label>
+
+								{% endif %}
 
 								<br>
 							{% endfor %}

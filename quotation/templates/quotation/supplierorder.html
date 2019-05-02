@@ -2,15 +2,15 @@
 {% load staticfiles%}
 	{% block content %}
 
-          		<p><span>Docid:</span><span id="quotationdocid">{{ doc.0.0}}</span></p>
-				<span id="quotationtemplate" ></span>
+          		<p><span>Docid:</span><span id="supplierorderdocid">{{ doc.0.0}}</span></p>
+				<span id="supplierordertemplate" ></span>
 
 				<p>Contactid:{{ doc.0.1}} hidden</p>
 
 
 				<p align="center" id="title" style="font-size:173%;">Supplier Order Form</p>{% csrf_token %}
 						<div id="infoframe">
-							<p >Number of Quotation: {{ doc.0.25 }}{{ doc.0.10 }}</p>
+							<p >Number of Supplier Order: {{ doc.0.25 }}{{ doc.0.10 }}</p>
 							<p >Creator: {{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
 							<p >Time of Creation: {{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
 						</div>
@@ -30,14 +30,8 @@
 
 						  </div>
 						  <div id="tabs1fragment-2">
-							<form action="{% url 'quotationsaveasmodern' pk=doc.0.0 %}">
-								<input type="submit" value="Quotation Save as Modern" />
-							</form>
-							<form action="{% url 'quotationsaveasorder' pk=doc.0.0 %}">
-								<input type="submit" value="Quotation Save as Order" />
-							</form>
-							<form action="{% url 'quotationemail' docid=doc.0.0 %}">
-								<input type="submit" value="Quotation Save as Email" />
+							<form action="{% url 'supplierorderemail' docid=doc.0.0 %}">
+								<input type="submit" value="supplierorder Save as Email" />
 							</form>
 
 
@@ -52,7 +46,7 @@
 
 								</ul>
 							{% endblock sidebar %}
-									<form action="{% url 'quotationprint' docid=doc.0.0 %}">
+									<form action="{% url 'supplierorderprint' docid=doc.0.0 %}">
 										<input type="submit" value="Print" />
 									</form>
 
@@ -66,15 +60,15 @@
 					<div id="sqlsaving"></div><br>
 						<div id="tabs2">
 						  <ul>
-							<li><a href="#tabs2fragment-1">Quotation</a></li>
+							<li><a href="#tabs2fragment-1">supplierorder</a></li>
 							<li><a href="#tabs2fragment-2">Items</a></li>
 						    <li><a href="#tabs2fragment-3">Preface</a></li>
 							<li><a href="#tabs2fragment-4">Backpage</a></li>
 
 						  </ul>
 						  <div id="tabs2fragment-1">
-							  <label for="prefacespecforquotation_tbldoc" >Prefacespec</label>
-							  <textarea rows="10" cols="60" class="updateabletbldoc" name="prefacespecforquotation_tbldoc">{{ doc.0.8}}</textarea>
+							  <label for="prefacespecforsupplierorder_tbldoc" >Prefacespec</label>
+							  <textarea rows="10" cols="60" class="updateabletbldoc" name="prefacespecforsupplierorder_tbldoc">{{ doc.0.8}}</textarea>
 							  <label for="subject_tbldoc" >Subject</label>
 							  <input type="text" class="updateabletbldoc" value="{{ doc.0.9}}" name="subject_tbldoc" >
 							  <div id="total">
@@ -90,7 +84,7 @@
 							  </div>
 							  <div id="payment">
 								  <label for="payment" >Payment:</label>
-								  <select class="selection" fieldname="paymenttextforquotation_tblpayment_ctbldoc" >
+								  <select class="selection" fieldname="paymenttextforsupplierorder_tblpayment_ctbldoc" >
 										<option value="" disabled selected>{{ doc.0.21}}</option>
 										<option value="Total_Off">Total_Off</option>
 										<option value="Total_On">Total_On</option>
@@ -112,12 +106,12 @@
 						  <div id="tabs2fragment-2">
 
 
-							  <div id="newquotationrowsdiv">
+							  <div id="newsupplierorderrowsdiv">
 								<input type="text" value="{{ nextchapternums.0 }}" id="nextfirstnumonhtml" maxlength="10" size="2">
 								<input type="text" value="{{ nextchapternums.1 }}" id="nextsecondnumonhtml" maxlength="10" size="2">
 								<input type="text" value="{{ nextchapternums.2 }}" id="nextthirdnumonhtml" maxlength="10" size="2">
 								<input type="text" value="{{ nextchapternums.3 }}" id="nextfourthnumonhtml" maxlength="10" size="2">
-								<a href="#" ><span id="newquotationrowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
+								<a href="#" ><span id="newsupplierorderrowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
 
 							  </div>
 
@@ -176,7 +170,7 @@
 											<input type="text" style="color:white; background-color: Green;" class="updateabletbldocdetails" value="{{ tblDoc_details.18}}"  name="unitsalespriceACU_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.22}}" name="Discount" size="3" disabled>
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.24}}" name="Supplier" size="6" disabled>
-											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
+											<a href="{% url 'supplierorderrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="supplierorderproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
 
 											<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->
 											{% if tblDoc_details.15 > 0 %}
@@ -190,16 +184,16 @@
 
 						  </div>
 						  <div id="tabs2fragment-3">
-							  <label for="prefacetextforquotation_tblprefaceforquotation_ctbldoc" >Preface</label>
-							  <textarea rows="8" cols="50" class="updateabletbldoc" name="prefacetextforquotation_tblprefaceforquotation_ctbldoc">{{ doc.0.6}}</textarea>
+							  <label for="prefacetextforsupplierorder_tblprefaceforsupplierorder_ctbldoc" >Preface</label>
+							  <textarea rows="8" cols="50" class="updateabletbldoc" name="prefacetextforsupplierorder_tblprefaceforsupplierorder_ctbldoc">{{ doc.0.6}}</textarea>
 
 						  </div>
 						  <div id="tabs2fragment-4">
 							  <label for="backpagetext_tbldoc" >Backpage</label>
-							  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetextforquotation_tblbackpageforquotation_ctbldoc">{{ doc.0.7}}</textarea>
+							  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetextforsupplierorder_tblbackpageforsupplierorder_ctbldoc">{{ doc.0.7}}</textarea>
 						  </div>
 
-				<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
-                <link rel="stylesheet" href="{% static 'css/quotation.css' %}">
+				<script type="text/javascript" src="{% static 'js/supplierorder.js' %}"></script>
+                <link rel="stylesheet" href="{% static 'css/supplierorder.css' %}">
 
 	{% endblock %}

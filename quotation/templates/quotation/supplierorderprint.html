@@ -1,0 +1,129 @@
+{% load static %}
+<html>
+
+		<head>
+			<title>Quotation Maker</title>
+			<link rel="stylesheet" href="{% static 'css/supplierorderprint.css' %}">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	   </head>
+    <body>
+	<p id="supplierorderid" hidden>{{ doc.0.0}}</p>
+	<p id="total" hidden>{{ doc.0.19}}</p>{% csrf_token %}
+	<p id="currencycodeinreport_tbldoc" hidden>{{ doc.0.22}}</p>
+	<p id="currencyrateinreport_tbldoc" hidden>{{ doc.0.23}}</p>
+
+		<!-- wrap first page ˇ-->
+		<div class="page">
+				<img id="logo" src="{% static "pic/abstract-logos.png" %}" alt="Logo header template" ">
+				<p id="companyname">{{ doc.0.3}} </p>
+				<p id="contactname">To: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}} </p>
+				<p id="pcdandtown">{{ doc.0.16}} {{ doc.0.17}}</p>
+				<p id="address">{{ doc.0.18}}</p>
+				<p id="mobile">{{ doc.0.14}}</p>
+				<p id="email">{{ doc.0.15}}</p>
+
+				<p id="numberofsupplierorderlabel">Number of Supplier Order:</p>
+				<p id="numberofsupplierorder">SOR-{{ doc.0.10}}</p>
+				<p id="ourcontactlabel">Our Contact:</p>
+				<p id="ourcontact">{{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
+				<p id="subscriptiontext">{{ creatordata.0.4 }}</p>
+				<p id="creationtimelabel">Time of Creation:</p>
+				<p id="creationtime">{{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
+				<p id="pageslabel">Pages:</p>
+				<p id="pages"></p>
+
+
+				<p id="subject">Subject: Supplier Order
+					{% if doc.0.9 != "" %}
+						 -
+
+					{% endif %}
+					{{ doc.0.9 }}</p>
+				<p id="salutation"> Dear {{ doc.0.13}} {{ doc.0.5}},</p>
+
+				<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
+				<p><textarea id="preface" rows="18" cols="70" wrap="off" disabled>{{ doc.0.6}}</textarea></p>
+				<div class="firstpagefooterdiv" >
+					<hr>
+					<span class="firstpagefooterspan1" >Please see the conditions in details on the last page<br></span>
+					<span class="firstpagefooterspan2" >Description2</span>
+					<span class="firstpagefooterspan3" >Description3</span>
+
+				</div>
+		</div>
+		<!-- first page wrapping end^ -->
+
+						{% for tblDoc_details in docdetails %}
+						<div class="item-container-for-measure" rowid="{{ forloop.counter0 }}">
+						{% if forloop.counter0 == 0 %} <!-- only at first item -->
+
+							<div id="prefacespec" contentEditable="true">{{ doc.0.8}}</div>
+						{% endif %}
+
+							<span name="htmlinsertbefore" rowid="{{ forloop.counter0 }}"></span>
+
+								<div class="item-container-frame" rowid="{{ forloop.counter0 }}">
+
+									<div rowid="{{ forloop.counter0 }}" class="item-container">
+
+												<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{tblDoc_details.4}}.</span>
+
+												{% if tblDoc_details.6 > 0 or tblDoc_details.7 > 0 or tblDoc_details.5 > 0%}
+												<span  class="chapternumbersspan" name="secondnum_tblDoc_details">{{tblDoc_details.6}}.</span>
+												{% endif %}
+
+												{% if tblDoc_details.7 > 0 or tblDoc_details.5 > 0 %}
+												<span class="chapternumbersspan" name="thirdnum_tblDoc_details">{{tblDoc_details.7}}.</span>
+												{% endif %}
+
+												{% if tblDoc_details.5 > 0 %}
+												<span class="chapternumbersspan" name="fourthnum_tblDoc_details">{{tblDoc_details.5}}.</span>
+												{% endif %}
+												<br>
+													<div  class="descriptiondiv">
+															<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
+													</div>
+													<div  class="qtydiv">
+															<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}} {{ tblDoc_details.15}}</p>
+													</div>
+													<div  class="unitsalespricediv">
+															<p   name="unitsalesprice" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.19}}</p>
+													</div>
+													<div  class="salespricediv">
+															<p   name="salesprice" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.20}}</p>
+													</div>
+
+													<div  class="totalhtmlinsertdiv">
+															<span name="totalhtmlinsertspan" rowid="{{ forloop.counter0 }}"></span>
+													</div>
+
+									</div>
+								</div>
+							<span name="htmlinsertafter" rowid="{{ forloop.counter0 }}"></span>
+						</div>
+						{% endfor %}
+		<div class="page">
+			<p id="deliverydays" hidden>{{ doc.0.20}}</p>
+			<p id="payment" hidden>{{ doc.0.21}}</p>
+
+			<div class="backpagetextcontainer">{{doc.0.7|safe}}
+
+
+			</div>
+			<div class="backpagesignature" >
+				<p>{{creatordata.0.1}} {{creatordata.0.2}}</p>
+				<p>{{creatordata.0.4}}</p>
+
+			</div>
+			<div class="backpagefooterdiv" >
+				<span class="backpagefooterspan2" pagenumber="1">Description2</span>
+				<span class="backpagefooterspan3" >Description3</span>
+			</div>
+
+		</div>
+
+
+		<script type="text/javascript" src="{% static 'js/supplierorderprint.js' %}"></script>
+   </body>
+</html>

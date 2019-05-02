@@ -167,7 +167,8 @@ def companyedit(request, pk):
             "lastname_tblcontacts, "
             "title_tblcontacts, "
             "mobile_tblcontacts, "
-            "email_tblcontacts "
+            "email_tblcontacts, "
+            "supplierordercontact_tblcontacts "
             "FROM quotation_tblcontacts "
             "WHERE companyid_tblcontacts_id=%s ",
             [pk])
@@ -228,3 +229,41 @@ def contactadd(request,pk):
     transaction.commit()
 
     return redirect('companyedit', pk=pk)
+def contactsettodefaulttosupplierorder(request):
+    if request.method == "POST":
+        rowid = request.POST['rowid']
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT "
+        "supplierordercontact_tblcontacts "
+        "FROM quotation_tblcontacts "
+        "WHERE Contactid_tblContacts=%s ",
+        [rowid])
+    contacts = cursor1.fetchall()
+    for x in contacts:
+        flagoldvalue= x[0]
+
+    if flagoldvalue == 1:
+        flagnewvalue = 0
+    else:
+        flagnewvalue = 1
+
+    cursor1 = connection.cursor()
+    cursor1.execute("UPDATE quotation_tblcontacts SET "
+                    "supplierordercontact_tblcontacts=" + str(flagnewvalue) + " "
+                    "WHERE Contactid_tblContacts=%s ",[rowid])
+    transaction.commit()
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT "
+        "supplierordercontact_tblcontacts "
+        "FROM quotation_tblcontacts "
+        "WHERE Contactid_tblContacts=%s ",
+        [rowid])
+    contactsverified = cursor1.fetchall()
+
+    json_data = json.dumps(contactsverified)
+
+    return HttpResponse(json_data, content_type="application/json")

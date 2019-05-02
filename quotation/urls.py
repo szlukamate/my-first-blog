@@ -63,5 +63,11 @@ urlpatterns = [
     url(r'supplierorderpre/$', views.supplierorderpre, name='supplierorderpre'),
     url(r'^supplierorderform/(?P<pk>[0-9]+)/$', views.supplierorderform, name='supplierorderform'),
     url(r'supplierordermake', views.supplierordermake, name='supplierordermake'),
+    url(r'^supplierorderprint/(?P<docid>[0-9]+)/$', views.supplierorderprint, name='supplierorderprint'),
+    url(r'^supplierorderemail/(?P<docid>[0-9]+)/$', views.supplierorderemail, name='supplierorderemail'),
+    url(r'^supplierorderrowremove/(?P<pk>[0-9]+)/$', views.supplierorderrowremove, name='supplierorderrowremove'),
+    url('supplierorderbackpage', views.supplierorderbackpage, name='supplierorderbackpage'),
+    url('contactsettodefaulttosupplierorder', views.contactsettodefaulttosupplierorder, name='contactsettodefaulttosupplierorder'),
+
 
 ]
