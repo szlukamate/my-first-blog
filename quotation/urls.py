@@ -60,14 +60,14 @@ urlpatterns = [
     url(r'^emailviewattachmentcandidate/(?P<pdffilename>[^/]+)/$', views.emailviewattachmentcandidate, name='emailviewattachmentcandidate'),
     url(r'docsearch/$', views.docsearch, name='docsearch'),
     url('docsearchcontent', views.docsearchcontent, name='docsearchcontent'),
-    url(r'supplierorderpre/$', views.supplierorderpre, name='supplierorderpre'),
-    url(r'^supplierorderform/(?P<pk>[0-9]+)/$', views.supplierorderform, name='supplierorderform'),
-    url(r'supplierordermake', views.supplierordermake, name='supplierordermake'),
-    url(r'^supplierorderprint/(?P<docid>[0-9]+)/$', views.supplierorderprint, name='supplierorderprint'),
-    url(r'^supplierorderemail/(?P<docid>[0-9]+)/$', views.supplierorderemail, name='supplierorderemail'),
-    url(r'^supplierorderrowremove/(?P<pk>[0-9]+)/$', views.supplierorderrowremove, name='supplierorderrowremove'),
-    url('supplierorderbackpage', views.supplierorderbackpage, name='supplierorderbackpage'),
-    url('contactsettodefaulttosupplierorder', views.contactsettodefaulttosupplierorder, name='contactsettodefaulttosupplierorder'),
+    url(r'purchaseorderpre/$', views.purchaseorderpre, name='purchaseorderpre'),
+    url(r'^purchaseorderform/(?P<pk>[0-9]+)/$', views.purchaseorderform, name='purchaseorderform'),
+    url(r'purchaseordermake', views.purchaseordermake, name='purchaseordermake'),
+    url(r'^purchaserorderprint/(?P<docid>[0-9]+)/$', views.purchaseorderprint, name='purchaseorderprint'),
+    url(r'^purchaseorderemail/(?P<docid>[0-9]+)/$', views.purchaseorderemail, name='purchaseorderemail'),
+    url(r'^purchaseorderrowremove/(?P<pk>[0-9]+)/$', views.purchaseorderrowremove, name='purchaseorderrowremove'),
+    url('purchaseorderbackpage', views.purchaseorderbackpage, name='purchaseorderbackpage'),
+    url('contactsettodefaulttopurchaseorder', views.contactsettodefaulttopurchaseorder, name='contactsettodefaulttopurchaseorder'),
 
 
 ]

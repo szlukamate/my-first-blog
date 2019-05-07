@@ -1,0 +1,71 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+
+				<p id="customerordersnumber" customerordersnumber="{{ customerordersnumber }}" hidden></p>
+
+							{% csrf_token %}
+
+							<p align="center" style="font-size:160%;">Purchase Order Preparation Form</p>
+							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>COR Number</td>
+													<td>C1</td>
+													<td>customerQty</td>
+													<td>PurchaseQty</td>
+													<td>ToSORQty</td>
+													<td>Date</td>
+													<td>Docid</td>
+													<td>Docdetailsid</td>
+													<td>Customer</td>
+
+													<td>Supplier</td>
+													<td>Currency</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												 {%  for customerorder in  customerorders %}
+
+
+													<tr>
+														<td>{{ customerorder.25}}{{ customerorder.10}}</td>
+														<td>{{ customerorder.30}}</td>
+														<td>{{ customerorder.27}}</td>
+														<td>{{ customerorder.43}}</td>
+														<td>{{ customerorder.45}}</td>
+
+														<td>{{ customerorder.12|date:"M.d.Y"}} {{ customerorder.12|time:"H:i" }}</td>
+														<td>{{ customerorder.0}}</td>
+														<td>{{ customerorder.26}}</td>
+														<td>{{ customerorder.3}}</td>
+														<td>{{ customerorder.40}} {{ customerorder.41}}</td>
+														<td>{{ customerorder.36}}</td>
+														<td><label class="switch" "><input type="checkbox" rowid="{{ forloop.counter }}" docdetailsid="{{ customerorder.26}}" suppliercompanyid="{{ customerorder.41}}" tosorqty="{{ customerorder.45}}"><span class="slider round"></span></label></td>
+
+
+													</tr>
+
+
+
+												{% endfor %}
+
+											</tbody>
+
+										</table>
+
+							</div>
+							<button id="purchaseordermakebutton" type="submit">
+							   <span>Make Purchase Order</span>
+							</button>
+
+		<script type="text/javascript" src="{% static 'js/purchaseorderpre.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/purchaseorderpre.css' %}">
+
+	{% endblock %}

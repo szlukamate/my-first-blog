@@ -1,5 +1,5 @@
 /*
-quotation.js
+companyedit.js
 */
 
             var msg="Hello Javascript2";
@@ -168,13 +168,13 @@ $(function () {
         };
 
    });
-   $('.supplierordercontact').change(function() {
+   $('.purchaseordercontact').change(function() {
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var rowid = $(this).attr( "rowid" );
 
            $.ajax({
             type: 'POST',
-            url: 'contactsettodefaulttosupplierorder',
+            url: 'contactsettodefaulttopurchaseorder',
 
             data: {
            'rowid' : rowid,

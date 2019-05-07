@@ -168,7 +168,7 @@ def companyedit(request, pk):
             "title_tblcontacts, "
             "mobile_tblcontacts, "
             "email_tblcontacts, "
-            "supplierordercontact_tblcontacts "
+            "purchaseordercontact_tblcontacts "
             "FROM quotation_tblcontacts "
             "WHERE companyid_tblcontacts_id=%s ",
             [pk])
@@ -229,14 +229,14 @@ def contactadd(request,pk):
     transaction.commit()
 
     return redirect('companyedit', pk=pk)
-def contactsettodefaulttosupplierorder(request):
+def contactsettodefaulttopurchaseorder(request):
     if request.method == "POST":
         rowid = request.POST['rowid']
 
     cursor1 = connection.cursor()
     cursor1.execute(
         "SELECT "
-        "supplierordercontact_tblcontacts "
+        "purchaseordercontact_tblcontacts "
         "FROM quotation_tblcontacts "
         "WHERE Contactid_tblContacts=%s ",
         [rowid])
@@ -251,14 +251,14 @@ def contactsettodefaulttosupplierorder(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("UPDATE quotation_tblcontacts SET "
-                    "supplierordercontact_tblcontacts=" + str(flagnewvalue) + " "
+                    "purchaseordercontact_tblcontacts=" + str(flagnewvalue) + " "
                     "WHERE Contactid_tblContacts=%s ",[rowid])
     transaction.commit()
 
     cursor1 = connection.cursor()
     cursor1.execute(
         "SELECT "
-        "supplierordercontact_tblcontacts "
+        "purchaseordercontact_tblcontacts "
         "FROM quotation_tblcontacts "
         "WHERE Contactid_tblContacts=%s ",
         [rowid])

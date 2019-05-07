@@ -313,7 +313,7 @@ def docselector(request, pk):
     elif dockind == 6:  # Accounting Entry
         return redirect('accountentryform', pk=pk)
     elif dockind == 7:  # Supplier Order
-        return redirect('supplierorderform', pk=pk)
+        return redirect('purchaseorderform', pk=pk)
 
 
 def docremove(request, pk):
@@ -352,11 +352,13 @@ def doclink(request, docid):
         thirteenthfield = docdata(secondfield, 7)  # creationtime
         fourteenthfield = docdata(secondfield, 8)  # subject
         fifteenthfield = fourthfield + 5 # text x coordinate
+        sixteenthfield = docdata(secondfield, 10) # na text
+
         levelmembernumber = levelmembernumber + 1
         appendvar = (
             firstfield, secondfield, thirdfield, fourthfield, fifthfield, sixthfield, seventhfield, eigthfield,
             ninethfield,
-            tenthfield, eleventhfield, twelvethfield, thirteenthfield, fourteenthfield, fifteenthfield)
+            tenthfield, eleventhfield, twelvethfield, thirteenthfield, fourteenthfield, fifteenthfield, sixteenthfield)
         docstolevelwithparentpointerlist = appendablelist
         docstolevelwithparentpointerlist.append(appendvar)
 
@@ -364,7 +366,7 @@ def doclink(request, docid):
 
     def docdata(dociddata, fieldindex):
         cursor1 = connection.cursor()
-        cursor1.execute("SELECT docid_tbldoc, "
+        cursor1.execute("SELECT D.docid_tbldoc, "
                         "companyname_tblcompanies_ctbldoc, "
                         "firstname_tblcontacts_ctbldoc, "
                         "lastname_tblcontacts_ctbldoc, "
@@ -372,26 +374,51 @@ def doclink(request, docid):
                         "pretag_tbldockind, "
                         "docnumber_tbldoc, "
                         "creationtime_tbldoc, "
-                        "subject_tbldoc "
-                        "FROM quotation_tbldoc "
+                        "subject_tbldoc, "
+                        "Doc_kindid_tblDoc_kind, "
+#                        "1 "
+
+#                       "numberofitems.y "
+                        "customerdocdetailsset.x "
+                        "FROM quotation_tbldoc as D "
                         "JOIN quotation_tbldoc_kind "
-                        "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
-                        "WHERE docid_tbldoc = %s", [dociddata])
+                        "ON D.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                        "JOIN (SELECT count(Docid_tblDoc_details_id) as y "
+                        "       FROM quotation_tbldoc_details"
+                        "       WHERE Docid_tblDoc_details_id = %s"
+                        "       GROUP BY Docid_tblDoc_details_id) as numberofitems "
+ 
+                        "LEFT JOIN (SELECT (D1.Docid_tblDoc_details_id) as xx, count(D2.Doc_detailsid_tblDoc_details) as x "
+                        "       FROM quotation_tbldoc_details as D1 "
+
+                        "       JOIN quotation_tbldoc_details as D2 "
+                        "       ON D1.Doc_detailsid_tblDoc_details=D2.podetailslink_tbldocdetails "
+
+                        "       JOIN quotation_tbldoc as Doc "
+                        "       ON D2.Docid_tblDoc_details_id=Doc.Docid_tblDoc "
+
+                        "       WHERE obsolete_tbldoc=0"
+                        "       GROUP BY D1.Docid_tblDoc_details_id, D2.Doc_detailsid_tblDoc_details ) as customerdocdetailsset "
+
+                        "ON D.Docid_tblDoc=customerdocdetailsset.xx "
+
+                        "WHERE D.docid_tbldoc = %s", [dociddata, dociddata])
+
         results = cursor1.fetchall()
         resultslen = len(results)
         if resultslen != 0:
             for x in results:
-                result=x[fieldindex]
+                result = x[fieldindex]
+
+                if x[9]!=2 and fieldindex == 10:
+                    result = ''
+
         else:
             result=''
         return result
     #doclevel-1 start
     cursor1 = connection.cursor()
-    '''
-    cursor1.execute("SELECT doclinkparentid_tbldoc, docid_tbldoc "
-                    "FROM quotation_tbldoc "
-                    "WHERE (docid_tbldoc = %s AND obsolete_tbldoc = 0)", [docid2])
-    '''
 
     cursor1.execute("SELECT " # self join if parentdoc is obsolete -> 0 length results2
                     "p.Docid_tblDoc as parent, "
