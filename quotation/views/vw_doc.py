@@ -7,7 +7,7 @@ from collections import namedtuple
 from django.db import connection, transaction
 from datetime import datetime, timedelta
 
-# import pdb;
+## import pdb;
 # pdb.set_trace()
 
 def docs(request):
@@ -353,12 +353,13 @@ def doclink(request, docid):
         fourteenthfield = docdata(secondfield, 8)  # subject
         fifteenthfield = fourthfield + 5 # text x coordinate
         sixteenthfield = docdata(secondfield, 10) # na text
+        seventeenthfield = docdata(secondfield, 11) # na text
 
         levelmembernumber = levelmembernumber + 1
         appendvar = (
             firstfield, secondfield, thirdfield, fourthfield, fifthfield, sixthfield, seventhfield, eigthfield,
             ninethfield,
-            tenthfield, eleventhfield, twelvethfield, thirteenthfield, fourteenthfield, fifteenthfield, sixteenthfield)
+            tenthfield, eleventhfield, twelvethfield, thirteenthfield, fourteenthfield, fifteenthfield, sixteenthfield, seventeenthfield)
         docstolevelwithparentpointerlist = appendablelist
         docstolevelwithparentpointerlist.append(appendvar)
 
@@ -378,18 +379,17 @@ def doclink(request, docid):
                         "Doc_kindid_tblDoc_kind, "
 #                        "1 "
 
-#                       "numberofitems.y "
-                        "customerdocdetailsset.x "
+                        "numberofitems.corlines, "
+                        "customerdocdetailsset.polines "
                         "FROM quotation_tbldoc as D "
                         "JOIN quotation_tbldoc_kind "
                         "ON D.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
 
-                        "JOIN (SELECT count(Docid_tblDoc_details_id) as y "
+                        "JOIN (SELECT count(Docid_tblDoc_details_id) as corlines "
                         "       FROM quotation_tbldoc_details"
-                        "       WHERE Docid_tblDoc_details_id = %s"
-                        "       GROUP BY Docid_tblDoc_details_id) as numberofitems "
- 
-                        "LEFT JOIN (SELECT (D1.Docid_tblDoc_details_id) as xx, count(D2.Doc_detailsid_tblDoc_details) as x "
+                        "       WHERE Docid_tblDoc_details_id = %s) as numberofitems  "
+
+                        "JOIN (SELECT count(D1.Docid_tblDoc_details_id) as polines "
                         "       FROM quotation_tbldoc_details as D1 "
 
                         "       JOIN quotation_tbldoc_details as D2 "
@@ -398,10 +398,7 @@ def doclink(request, docid):
                         "       JOIN quotation_tbldoc as Doc "
                         "       ON D2.Docid_tblDoc_details_id=Doc.Docid_tblDoc "
 
-                        "       WHERE obsolete_tbldoc=0"
-                        "       GROUP BY D1.Docid_tblDoc_details_id, D2.Doc_detailsid_tblDoc_details ) as customerdocdetailsset "
-
-                        "ON D.Docid_tblDoc=customerdocdetailsset.xx "
+                        "       WHERE obsolete_tbldoc=0) as customerdocdetailsset "
 
                         "WHERE D.docid_tbldoc = %s", [dociddata, dociddata])
 
@@ -412,6 +409,8 @@ def doclink(request, docid):
                 result = x[fieldindex]
 
                 if x[9]!=2 and fieldindex == 10:
+                    result = ''
+                if x[9]!=2 and fieldindex == 11:
                     result = ''
 
         else:

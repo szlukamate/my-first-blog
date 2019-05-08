@@ -1,27 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/static/css/supplierorder.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/static/css/supplierorderpre.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/static/css/supplierorderprint.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/static/js/companyedit.js" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/static/js/companyedit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/static/js/supplierorder.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/static/js/supplierorderpre.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/static/js/supplierorderprint.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/doclink.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/doclink.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/supplierorder.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/supplierorderpre.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/supplierorderpreredirecturl.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/supplierorderprint.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_companyandcontact.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_companyandcontact.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_doc.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_doc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_supplierorder.py" beforeDir="false" />
-    </list>
+    <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
