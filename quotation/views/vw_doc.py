@@ -379,15 +379,15 @@ def doclink(request, docid):
                         "Doc_kindid_tblDoc_kind, "
 #                        "1 "
 
-                        "numberofitems.corlines, "
-                        "customerdocdetailsset.polines "
+                        "numberofcorlines.corlines, "
+                        "podocdetailsset.polines "
                         "FROM quotation_tbldoc as D "
                         "JOIN quotation_tbldoc_kind "
                         "ON D.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
 
                         "JOIN (SELECT count(Docid_tblDoc_details_id) as corlines "
                         "       FROM quotation_tbldoc_details"
-                        "       WHERE Docid_tblDoc_details_id = %s) as numberofitems  "
+                        "       WHERE Docid_tblDoc_details_id = %s) as numberofcorlines  "
 
                         "JOIN (SELECT count(D1.Docid_tblDoc_details_id) as polines "
                         "       FROM quotation_tbldoc_details as D1 "
@@ -398,7 +398,7 @@ def doclink(request, docid):
                         "       JOIN quotation_tbldoc as Doc "
                         "       ON D2.Docid_tblDoc_details_id=Doc.Docid_tblDoc "
 
-                        "       WHERE obsolete_tbldoc=0) as customerdocdetailsset "
+                        "       WHERE obsolete_tbldoc=0) as podocdetailsset "
 
                         "WHERE D.docid_tbldoc = %s", [dociddata, dociddata])
 

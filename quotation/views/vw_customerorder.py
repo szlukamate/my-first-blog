@@ -94,38 +94,50 @@ def customerorderform(request, pk):
     cursor3 = connection.cursor()
     # if there is not such product already not show goto
 
-    cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
-                    "`Qty_tblDoc_details`, "
-                    "`Docid_tblDoc_details_id`, "
-                    "`customerdescription_tblProduct_ctblDoc_details`, "
-                    "`firstnum_tblDoc_details`, "
-                    "`fourthnum_tblDoc_details`, "
-                    "`secondnum_tblDoc_details`, "
-                    "`thirdnum_tblDoc_details`, "
-                    "`Note_tblDoc_details`, "
-                    "`creationtime_tblDoc_details`, "
-                    "purchase_price_tblproduct_ctblDoc_details, "
-                    "listprice_tblDoc_details, "
-                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-                    "Productid_tblDoc_details_id, "
-                    "Doc_detailsid_tblDoc_details, "
+    cursor3.execute("SELECT  DD.Doc_detailsid_tblDoc_details, "
+                    "DD.Qty_tblDoc_details, "
+                    "DD.Docid_tblDoc_details_id, "
+                    "DD.customerdescription_tblProduct_ctblDoc_details, "
+                    "DD.firstnum_tblDoc_details, "
+                    "DD.fourthnum_tblDoc_details, "
+                    "DD.secondnum_tblDoc_details, "
+                    "DD.thirdnum_tblDoc_details, "
+                    "DD.Note_tblDoc_details, "
+                    "DD.creationtime_tblDoc_details, "
+                    "DD.purchase_price_tblproduct_ctblDoc_details, "
+                    "DD.listprice_tblDoc_details, "
+                    "DD.currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                    "DD.Productid_tblDoc_details_id, "
+                    "DD.Doc_detailsid_tblDoc_details, "
                     "COALESCE(Productid_tblProduct, 0), "
-                    "currencyrate_tblcurrency_ctblDoc_details, "
-                    "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
-                    "unitsalespriceACU_tblDoc_details, "
-                    "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
-                    "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
-                    "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
-                    "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
-                    "unit_tbldocdetails, "
+                    "DD.currencyrate_tblcurrency_ctblDoc_details, "
+                    "round((((DD.listprice_tblDoc_details-DD.purchase_price_tblproduct_ctblDoc_details)/(DD.listprice_tblDoc_details))*100),1) as listpricemargin, "
+                    "DD.unitsalespriceACU_tblDoc_details, "
+                    "round((DD.purchase_price_tblproduct_ctblDoc_details * DD.currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
+                    "round((((DD.unitsalespriceACU_tblDoc_details-(DD.purchase_price_tblproduct_ctblDoc_details * DD.currencyrate_tblcurrency_ctblDoc_details))/(DD.unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
+                    "round((DD.listprice_tblDoc_details * DD.currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
+                    "(100-round(((DD.unitsalespriceACU_tblDoc_details/(DD.listprice_tblDoc_details * DD.currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
+                    "DD.unit_tbldocdetails, "
                     "companyname_tblcompanies, "
-                    "supplierdescription_tblProduct_ctblDoc_details "
+                    "DD.supplierdescription_tblProduct_ctblDoc_details " #25
+
+  #                  "xx.y "
                     "FROM quotation_tbldoc_details as DD "
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x ON DD.Productid_tblDoc_details_id = x.Productid_tblProduct "
-                    "JOIN quotation_tblcompanies as C ON DD.suppliercompanyid_tbldocdetails = C.companyid_tblcompanies "
-                    "WHERE docid_tbldoc_details_id=%s "
-                    "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
-                    [pk])
+                    "JOIN quotation_tblcompanies as C "
+                    "ON DD.suppliercompanyid_tbldocdetails = C.companyid_tblcompanies "
+
+                   "JOIN    (SELECT (D2.Docid_tblDoc) as xxx "
+                    "       FROM quotation_tbldoc as D2 "
+                    "       JOIN quotation_tbldoc_details as DD2"
+                    "       ON D2.Docid_tblDoc=DD2.Docid_tblDoc_details_id "
+                    "       WHERE D2.Docid_tblDoc=%s) as D1 "
+
+                    "ON D1.xxx = DD.Docid_tblDoc_details_id "
+
+                    "WHERE DD.docid_tbldoc_details_id=%s "
+                    "order by DD.firstnum_tblDoc_details,DD.secondnum_tblDoc_details,DD.thirdnum_tblDoc_details,DD.fourthnum_tblDoc_details",
+                    [pk, pk])
     docdetails = cursor3.fetchall()
 
     cursor10 = connection.cursor()

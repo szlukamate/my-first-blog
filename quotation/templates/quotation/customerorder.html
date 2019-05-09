@@ -168,6 +168,8 @@
 											<input type="text" style="color:white; background-color: Green;" class="updateabletbldocdetails" value="{{ tblDoc_details.18}}"  name="unitsalespriceACU_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.22}}" name="Discount" size="3" disabled>
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.24}}" name="Supplier" size="6" disabled>
+											<input type="text" style="color:white; background-color: Blue;" value="{{ tblDoc_details.26}}" name="Supplier" size="6" disabled>
+
 											<a href="{% url 'customerorderrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="customerorderproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
 
 											<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->
