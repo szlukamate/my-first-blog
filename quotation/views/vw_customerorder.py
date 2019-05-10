@@ -119,25 +119,25 @@ def customerorderform(request, pk):
                     "(100-round(((DD.unitsalespriceACU_tblDoc_details/(DD.listprice_tblDoc_details * DD.currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
                     "DD.unit_tbldocdetails, "
                     "companyname_tblcompanies, "
-                    "DD.supplierdescription_tblProduct_ctblDoc_details " #25
+                    "DD.supplierdescription_tblProduct_ctblDoc_details, " #25
 
-  #                  "xx.y "
+                    "DD2.Doc_detailsid_tblDoc_details "
                     "FROM quotation_tbldoc_details as DD "
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x ON DD.Productid_tblDoc_details_id = x.Productid_tblProduct "
                     "JOIN quotation_tblcompanies as C "
                     "ON DD.suppliercompanyid_tbldocdetails = C.companyid_tblcompanies "
 
-                   "JOIN    (SELECT (D2.Docid_tblDoc) as xxx "
-                    "       FROM quotation_tbldoc as D2 "
-                    "       JOIN quotation_tbldoc_details as DD2"
-                    "       ON D2.Docid_tblDoc=DD2.Docid_tblDoc_details_id "
-                    "       WHERE D2.Docid_tblDoc=%s) as D1 "
+                   "LEFT JOIN    (SELECT Doc_detailsid_tblDoc_details, podetailslink_tbldocdetails "
+                    "       FROM quotation_tbldoc_details as DDx "
+                    "       JOIN quotation_tbldoc as D"
+                    "       ON D.Docid_tblDoc=DDx.Docid_tblDoc_details_id "
+                    "       WHERE obsolete_tbldoc = 0) as DD2 "
 
-                    "ON D1.xxx = DD.Docid_tblDoc_details_id "
+                   "ON DD.Doc_detailsid_tblDoc_details=DD2.podetailslink_tbldocdetails "
 
                     "WHERE DD.docid_tbldoc_details_id=%s "
                     "order by DD.firstnum_tblDoc_details,DD.secondnum_tblDoc_details,DD.thirdnum_tblDoc_details,DD.fourthnum_tblDoc_details",
-                    [pk, pk])
+                    [pk])
     docdetails = cursor3.fetchall()
 
     cursor10 = connection.cursor()
