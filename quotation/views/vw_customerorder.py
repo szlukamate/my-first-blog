@@ -121,19 +121,39 @@ def customerorderform(request, pk):
                     "companyname_tblcompanies, "
                     "DD.supplierdescription_tblProduct_ctblDoc_details, " #25
 
-                    "DD2.Doc_detailsid_tblDoc_details "
+                    "DD2.podocdetails, "
+                    "DD2.podocdetailsqty, "
+                    "DD2.podocnumber, "
+                    "DD2.popretag, "
+                    "DD2.podocid "
+                    
+                    
+
                     "FROM quotation_tbldoc_details as DD "
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x ON DD.Productid_tblDoc_details_id = x.Productid_tblProduct "
                     "JOIN quotation_tblcompanies as C "
                     "ON DD.suppliercompanyid_tbldocdetails = C.companyid_tblcompanies "
 
-                   "LEFT JOIN    (SELECT Doc_detailsid_tblDoc_details, podetailslink_tbldocdetails "
-                    "       FROM quotation_tbldoc_details as DDx "
-                    "       JOIN quotation_tbldoc as D"
-                    "       ON D.Docid_tblDoc=DDx.Docid_tblDoc_details_id "
-                    "       WHERE obsolete_tbldoc = 0) as DD2 "
+                   "LEFT JOIN    (SELECT (Doc_detailsid_tblDoc_details) as podocdetails, "
+                    "               podetailslink_tbldocdetails, "
+                    "               (Qty_tblDoc_details) as podocdetailsqty, "
+                    "               (docnumber_tbldoc) as podocnumber, "
+                    "               (pretag_tbldockind) as popretag, "
+                    "               (docid) as podocid "
+                    "               FROM quotation_tbldoc_details as DDx "
 
-                   "ON DD.Doc_detailsid_tblDoc_details=DD2.podetailslink_tbldocdetails "
+                    "               JOIN (SELECT docnumber_tbldoc, "
+                    "                            (COALESCE(Docid_tblDoc, 0)) as docid, "
+                    "                             pretag_tbldockind "
+                    "                       FROM quotation_tbldoc"
+                    "                       JOIN quotation_tbldoc_kind "
+                    "                       ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    
+                    "                       WHERE obsolete_tbldoc = 0"
+                    "                    ) as D"
+                    "               ON D.docid=DDx.Docid_tblDoc_details_id "
+                    "            ) as DD2 "
+                    "ON DD.Doc_detailsid_tblDoc_details=DD2.podetailslink_tbldocdetails "
 
                     "WHERE DD.docid_tbldoc_details_id=%s "
                     "order by DD.firstnum_tblDoc_details,DD.secondnum_tblDoc_details,DD.thirdnum_tblDoc_details,DD.fourthnum_tblDoc_details",
