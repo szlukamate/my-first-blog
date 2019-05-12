@@ -68,6 +68,6 @@ urlpatterns = [
     url(r'^purchaseorderrowremove/(?P<pk>[0-9]+)/$', views.purchaseorderrowremove, name='purchaseorderrowremove'),
     url('purchaseorderbackpage', views.purchaseorderbackpage, name='purchaseorderbackpage'),
     url('contactsettodefaulttopurchaseorder', views.contactsettodefaulttopurchaseorder, name='contactsettodefaulttopurchaseorder'),
-
+    url(r'pohandler/$', views.pohandler, name='pohandler'),
 
 ]

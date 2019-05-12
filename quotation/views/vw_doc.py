@@ -377,7 +377,7 @@ def doclink(request, docid):
                         "creationtime_tbldoc, "
                         "subject_tbldoc, "
                         "Doc_kindid_tblDoc_kind, "
-#                        "1 "
+#                        "1 " 
 
                         "numberofcorlines.corlines, "
                         "podocdetailsset.polines "

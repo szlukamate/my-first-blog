@@ -1,0 +1,49 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+
+				<p id="customerordersnumber" customerordersnumber="{{ customerordersnumber }}" hidden></p>
+
+							{% csrf_token %}
+
+							<p align="center" style="font-size:160%;">Purchase Order Handler Form</p>
+							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+							<div class="container">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>COR Number</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												 {%  for po in  pos %}
+
+
+													<tr>
+														<td>{{ po.0}}</td>
+
+
+													</tr>
+
+
+
+												{% endfor %}
+
+											</tbody>
+
+										</table>
+
+							</div>
+<!--
+							<button id="purchaseordermakebutton" type="submit">
+							   <span>Make Purchase Order</span>
+							</button>
+-->
+		<script type="text/javascript" src="{% static 'js/pohandler.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/pohandler.css' %}">
+
+	{% endblock %}
