@@ -264,8 +264,9 @@ def purchaseordermake(request):
                         "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
                         "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
                         "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
-                        "unit_tbldocdetails, "
-                        "suppliercompanyid_tbldocdetails "
+                        "unit_tbldocdetails, " #23
+                        "suppliercompanyid_tbldocdetails, "
+                        "supplierdescription_tblProduct_ctblDoc_details "
                         "FROM quotation_tbldoc_details "
                         "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                         "ON "
@@ -294,6 +295,8 @@ def purchaseordermake(request):
 
             purchase_priceclone = x[10]
             customerdescriptionclone = x[3]
+            supplierdescriptionclone = x[25]
+
             currencyisocodeclone = x[12]
             listpricecomputed = x[11]
             currencyrateclone = x[16]
@@ -319,7 +322,8 @@ def purchaseordermake(request):
                 "unitsalespriceACU_tblDoc_details, "
                 "unit_tbldocdetails, "
                 "suppliercompanyid_tbldocdetails, "
-                "podetailslink_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                "podetailslink_tbldocdetails, "
+                "supplierdescription_tblProduct_ctblDoc_details) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
                 [maxdocid,
                  qty,
@@ -337,7 +341,8 @@ def purchaseordermake(request):
                  unitsalespriceACU,
                  unitclone,
                  suppliercompanyid,
-                 podetailslink])
+                 podetailslink,
+                 supplierdescriptionclone])
 
     return render(request, 'quotation/purchaseorderpreredirecturl.html',
                       {'maxdocid': maxdocid})

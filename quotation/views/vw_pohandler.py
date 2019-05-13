@@ -16,8 +16,47 @@ import subprocess
 import os
 # import pdb;
 # pdb.set_trace()
+def pohandlerframe(request):
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "companyname_tblcompanies_ctbldoc "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE obsolete_tbldoc = 0 "
+                    "GROUP BY companyname_tblcompanies_ctbldoc ")
+    companies = cursor1.fetchall()
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Doc_kind_name_tblDoc_kind "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE obsolete_tbldoc = 0 "
+                    "GROUP BY Doc_kind_name_tblDoc_kind ")
+    dockindnames = cursor1.fetchall()
+
+    return render(request, 'quotation/pohandlerframe.html', {'companies': companies,
+                                                        'dockindnames':dockindnames})
 
 def pohandler(request):
+    if request.method == "POST":
+        fieldvalue = request.POST['fieldvalue']
+        rowid = request.POST['rowid']
+        fieldname = request.POST['fieldname']
+        cursor22 = connection.cursor()
+        cursor22.callproc("sppohandlerfieldsupdate", [fieldname, fieldvalue, rowid])
+        results23 = cursor22.fetchall()
+        print(results23)
+        #import pdb;
+        #pdb.set_trace()
+
+        json_data = json.dumps(results23, indent=4, sort_keys=True, default=str)
+
+        return HttpResponse(json_data, content_type="application/json")
+
+
     cursor3 = connection.cursor()
     cursor3.execute("SELECT  DD.Doc_detailsid_tblDoc_details, "
                     "DD.Qty_tblDoc_details, "
@@ -51,13 +90,23 @@ def pohandler(request):
                     "DD2.cordetailsqty, "
                     "DD2.cordocnumber, "
                     "DD2.corpretag, "
-                    "DD2.corcompany "
+                    "DD2.corcompany, " #31
+                    
+                    "DD.dateofarrival_tbldocdetails, "
+                    "companyname_tblcompanies_ctbldoc as supplier,"
+                    "Docid_tblDoc as podocid "
+
 
                     "FROM quotation_tbldoc_details as DD "
+                    
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x ON DD.Productid_tblDoc_details_id = x.Productid_tblProduct "
                     "JOIN quotation_tblcompanies as C ON DD.suppliercompanyid_tbldocdetails = C.companyid_tblcompanies "
 
-                    "LEFT JOIN (SELECT (Doc_detailsid_tblDoc_details) as cordocdetailsid, "
+                    "JOIN quotation_tbldoc "
+                    "ON quotation_tbldoc.Docid_tblDoc=DD.Docid_tblDoc_details_id "
+
+
+                    "JOIN (SELECT (Doc_detailsid_tblDoc_details) as cordocdetailsid, "
                     "           (docid) as cordocid,"
                     "           (Qty_tblDoc_details) as cordetailsqty, "
                     "           (docnumber_tbldoc) as cordocnumber, "
@@ -79,9 +128,11 @@ def pohandler(request):
                     "           ) as DD2 "
                     "ON DD.podetailslink_tbldocdetails=DD2.cordocdetailsid "
 
-                    "WHERE docid_tbldoc_details_id=%s "
+                    "WHERE Doc_kindid_tblDoc_id=7 and obsolete_tbldoc = 0 "
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
     pos = cursor3.fetchall()
+#    import pdb;
+#    pdb.set_trace()
 
     return render(request, 'quotation/pohandler.html', {'pos': pos})
 

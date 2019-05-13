@@ -1,0 +1,20 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+
+							{% csrf_token %}
+
+
+							<p align="center" style="font-size:160%;">POhandler Form</p>
+
+
+							<button id="receptionbutton" type="submit">
+							   <span>Reception</span>
+							</button>
+
+							<span id="pohandlertemplate" ></span>
+		<script type="text/javascript" src="{% static 'js/pohandler.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/pohandler.css' %}">
+
+	{% endblock %}

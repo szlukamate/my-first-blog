@@ -15,7 +15,17 @@
 											<thead>
 
 												<tr>
-													<td>COR Number</td>
+													<td>PO Docid</td>
+
+													<td>PO Detailsid</td>
+													<td>Supplier</td>
+
+													<td>Customer</td>
+
+													<td>Customer Description</td>
+													<td>Supplier Description</td>
+													<td>Date of Arrival</td>
+
 												</tr>
 											</thead>
 
@@ -24,8 +34,21 @@
 
 
 													<tr>
-														<td>{{ po.0}}</td>
+														<td>{{ po.34}}</td>
 
+														<td>{{ po.0}}</td>
+														<td>{{ po.33}}</td>
+
+														<td><a href="{% url 'customerorderform' pk=po.27 %}">{{ po.30}}{{ po.29}}/{{ po.26}}</a> {{ po.31}}</td>
+
+														<td>{{ po.3}}</td>
+														<td>{{ po.25}}</td>
+														<td><input type="text" class="updateable" value="{{ po.32|date:'Y-m-d'}}" name="dateofarrival_tbldocdetails" rowid="{{ po.0}}"></td>
+														<td>
+															<button id="searchbutton" type="submit">
+															   <span>A</span>
+															</button
+														</td>
 
 													</tr>
 

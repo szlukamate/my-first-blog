@@ -1,5 +1,5 @@
 /*
-customerorder.js
+pohandler.js
 */
 
             var msg="Hello Javascript2";
@@ -15,66 +15,45 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
-    $('#purchaseordermakebutton').click(function() {
+   $('.updateable').change(function() {
 
-        var customerordersnumber=0;
-        var i;
-        var docdetailslist=[];
-        var docdetailslistmember;
-        var tosorqtymember;
+        var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
+        var fieldvalue = $(this).val();
+        var rowid = $(this).attr( "rowid" );
+        var fieldname = $(this).attr( "name" );
 
-        customerordersnumberfunc();
+           $.ajax({
+            type: 'POST',
+            url: '',
 
-        main();
+            data: {
+           'fieldvalue': fieldvalue,
+           'rowid' : rowid,
+           'fieldname': fieldname,
+           'csrfmiddlewaretoken': CSRFtoken,
+           },
+           success: updatesuccess,
+           error: updateerror,
+           datatype: 'html'
+          });
 
-            function main(){
+        function updatesuccess (data, textStatus, jqXHR){
+            console.log('datafromsql:' + data);
+            $('input[name="' + fieldname + '"][rowid="' + rowid + '"').val(data);
+            $('#sqlsaving').html('<span  class="glyphicon glyphicon-hdd"></span>');
 
-                for (i = 1; i <= customerordersnumber; i++) {
-                    getifchecked();
+            setTimeout(
+              function()
+              {
+                $('#sqlsaving').html("");
 
-                }
+              }, 500);
+            console.log(fieldvalue);
+        };
+        function updateerror (){
+            console.log('Failure in saving');
+        };
 
+   });
 
-            }
-
-            function customerordersnumberfunc(){
-            customerordersnumber=$('#customerordersnumber').attr( "customerordersnumber" ); //Number of Customer Order Items
-            //itemnumbers--; // convert 1-x -> 0-(x-1)
-            }
-            function getifchecked(){
-
-                    if ($('input[type="checkbox"][rowid="' + i + '"').is(":checked") ) { // sor=po (supplier order = purchase order)
-                           docdetailslistmember=$('input[type="checkbox"][rowid="' + i + '"').attr( "docdetailsid" );
-                           tosorqtymember=$('input[type="checkbox"][rowid="' + i + '"').attr( "tosorqty" );
-
-                           docdetailslist.push(docdetailslistmember, tosorqtymember);
-                           console.log('raw' + docdetailslist);
-                    }
-
-            }
-
-            $.ajax({
-                type: 'POST',
-                url: 'purchaseordermake',
-
-                data: {
-                'docdetailslist': JSON.stringify(docdetailslist),
-
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                },
-
-                success: function(url){
-                window.location.href = url;
-
-                },
-                error: function(){
-                    alert('failure');
-                },
-                datatype: 'html'
-
-            });
-
-            console.log('stringified' + JSON.stringify(docdetailslist));
-
-    });
 });
