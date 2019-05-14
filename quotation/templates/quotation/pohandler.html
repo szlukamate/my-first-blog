@@ -1,14 +1,14 @@
-{% extends 'quotation/base.html' %}
+<!--
+
 {% load staticfiles%}
+-->
+
 	{% block content %}
           
 
 				<p id="customerordersnumber" customerordersnumber="{{ customerordersnumber }}" hidden></p>
 
 							{% csrf_token %}
-
-							<p align="center" style="font-size:160%;">Purchase Order Handler Form</p>
-							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 
 							<div class="container">
 										<table class="table table-striped"">
@@ -43,9 +43,9 @@
 
 														<td>{{ po.3}}</td>
 														<td>{{ po.25}}</td>
-														<td><input type="text" class="updateable" value="{{ po.32|date:'Y-m-d'}}" name="dateofarrival_tbldocdetails" rowid="{{ po.0}}"></td>
+														<td><input type="text" class="updateable" name2="dateofarrivalinput" value="{{ po.32|date:'Y-m-d'}}" name="dateofarrival_tbldocdetails" rowid="{{ po.0}}"></td>
 														<td>
-															<button id="searchbutton" type="submit">
+															<button class="pohandlerarrivalhbutton" type="submit" rowid="{{ po.0}}">
 															   <span>A</span>
 															</button
 														</td>
@@ -66,7 +66,9 @@
 							   <span>Make Purchase Order</span>
 							</button>
 -->
+<!--
 		<script type="text/javascript" src="{% static 'js/pohandler.js' %}"></script>
-        <link rel="stylesheet" href="{% static 'css/pohandler.css' %}">
 
+        <link rel="stylesheet" href="{% static 'css/pohandler.css' %}">
+-->
 	{% endblock %}

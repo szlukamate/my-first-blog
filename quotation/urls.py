@@ -69,5 +69,8 @@ urlpatterns = [
     url('purchaseorderbackpage', views.purchaseorderbackpage, name='purchaseorderbackpage'),
     url('contactsettodefaulttopurchaseorder', views.contactsettodefaulttopurchaseorder, name='contactsettodefaulttopurchaseorder'),
     url(r'pohandlerframe/$', views.pohandlerframe, name='pohandlerframe'),
+    url('pohandlerfieldsupdate', views.pohandlerfieldsupdate, name='pohandlerfieldsupdate'),
+    url('pohandlersearchresults', views.pohandlersearchresults, name='pohandlersearchresults'),
+    url(r'^deliverynoteform/(?P<pk>[0-9]+)/$', views.deliverynoteform, name='deliverynoteform'),
 
 ]

@@ -230,7 +230,7 @@ $('#title').click(function() {
     $('[name="quotationproductforrow"]').click(function() {
         var quotationid=$('#quotationdocid').text();
         var docdetailsid=$(this).attr( "rowid" );
-        var productid=$('input[name="Productid_tblDoc_details_id"][rowid="' + docdetailsid + '"').val()
+        var productid=$('input[name="Productid_tblDoc_details_id"][rowid="' + docdetailsid + '"]').val();
         console.log('in');
             $.ajax({
                 type: 'POST',

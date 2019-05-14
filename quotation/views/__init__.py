@@ -10,3 +10,4 @@ from .vw_account import *
 from .vw_email import *
 from .vw_purchaseorder import *
 from .vw_pohandler import *
+from .vw_deliverynote import *

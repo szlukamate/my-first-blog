@@ -314,6 +314,8 @@ def docselector(request, pk):
         return redirect('accountentryform', pk=pk)
     elif dockind == 7:  # Supplier Order
         return redirect('purchaseorderform', pk=pk)
+    elif dockind == 8:  # Delivery Note
+        return redirect('deliverynoteform', pk=pk)
 
 
 def docremove(request, pk):
