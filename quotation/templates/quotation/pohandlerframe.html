@@ -14,11 +14,6 @@
 							<label for="to" >To</label>
 							<input id="todate" type="text" value="" name="to" maxlength="50" size="10">
 
-<!--
-							<button id="receptionbutton" type="submit">
-							   <span>Reception</span>
-							</button>
--->
 							<button id="pohandlersearchbutton" type="submit">
 							   <span class="glyphicon glyphicon-filter"></span>
 							</button>
@@ -26,6 +21,17 @@
 							<button id="pohandlersearchoutbutton" type="button">
 							   <span class="glyphicon glyphicon-trash"></span>
 							</button>
+
+							<button id="receptionbutton" type="submit">
+							   <span>Reception</span>
+							</button>
+							{% block sidebar %}
+								{% csrf_token %}
+							<ol id="selectable">Arrival dates:
+
+							</ol>
+							{% endblock sidebar %}
+
 							Filling Date: <input id="fillingdate" type="text" value="" maxlength="50" size="10">
 
 							<span id="pohandlertemplate" ></span>

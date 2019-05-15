@@ -10,14 +10,18 @@
 
 							{% csrf_token %}
 
-							<div class="container">
-										<table class="table table-striped"">
+							<div class="table-responsive text-nowrap">
+										<table class="table table-striped">
 											<thead>
 
 												<tr>
-													<td>PO Docid</td>
+													<td  class="col-sm-1">PO Docid</td>
 
-													<td>PO Detailsid</td>
+													<td class="col-sm-1">PO Detailsid</td>
+													<td class="col-sm-1">PO Docnumber</td>
+
+													<td class="col-sm-1">POtoCOR Detailslink</td>
+
 													<td>Supplier</td>
 
 													<td>Customer</td>
@@ -37,6 +41,10 @@
 														<td>{{ po.34}}</td>
 
 														<td>{{ po.0}}</td>
+														<td><a href="{% url 'purchaseorderform' pk=po.34 %}">{{ po.35}}{{ po.36}}</a></td>
+
+														<td>{{ po.26}}</td>
+
 														<td>{{ po.33}}</td>
 
 														<td><a href="{% url 'customerorderform' pk=po.27 %}">{{ po.30}}{{ po.29}}/{{ po.26}}</a> {{ po.31}}</td>
@@ -45,7 +53,7 @@
 														<td>{{ po.25}}</td>
 														<td><input type="text" class="updateable" name2="dateofarrivalinput" value="{{ po.32|date:'Y-m-d'}}" name="dateofarrival_tbldocdetails" rowid="{{ po.0}}"></td>
 														<td>
-															<button class="pohandlerarrivalhbutton" type="submit" rowid="{{ po.0}}">
+															<button class="pohandlerarrivalbutton" type="submit" rowid="{{ po.0}}">
 															   <span>A</span>
 															</button
 														</td>

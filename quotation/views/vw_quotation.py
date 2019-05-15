@@ -319,8 +319,6 @@ def quotationrowremove(request, pk):
 
     return redirect('quotationform', pk=na)
 def searchquotationcontacts(request):
-    quotationbackpage
-
     if request.method == 'POST':
         search_text = request.POST['search_text']
         docidinquotationjs = request.POST['docidinquotationjs']

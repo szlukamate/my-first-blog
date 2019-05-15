@@ -97,8 +97,9 @@ def pohandlersearchresults(request):
     
                     "DD.dateofarrival_tbldocdetails, "
                     "companyname_tblcompanies_ctbldoc as supplier,"
-                    "Docid_tblDoc as podocid "
-    
+                    "Docid_tblDoc as podocid, "
+                    "pretag_tbldockind as popretag, "
+                    "docnumber_tbldoc as podocnumber "    
     
                     "FROM quotation_tbldoc_details as DD "
     
@@ -108,6 +109,8 @@ def pohandlersearchresults(request):
                     "JOIN quotation_tbldoc "
                     "ON quotation_tbldoc.Docid_tblDoc=DD.Docid_tblDoc_details_id "
     
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
     
                     "JOIN (SELECT (Doc_detailsid_tblDoc_details) as cordocdetailsid, "
                     "           (docid) as cordocid,"
@@ -138,6 +141,26 @@ def pohandlersearchresults(request):
     #    pdb.set_trace()
 
     return render(request, 'quotation/pohandler.html', {'pos': pos})
+def pohandlerrowsourceforarrivaldates(request):
+    cursor0 = connection.cursor()
+    cursor0.execute(
+            "SELECT dateofarrival_tbldocdetails "
+            "FROM quotation_tbldoc_details as DD "
+    
+            "JOIN quotation_tbldoc "
+            "ON quotation_tbldoc.Docid_tblDoc=DD.Docid_tblDoc_details_id "
+    
+            "WHERE dateofarrival_tbldocdetails is not null and obsolete_tbldoc = 0 "
+            "GROUP BY dateofarrival_tbldocdetails "
+            "ORDER BY dateofarrival_tbldocdetails desc")
+
+    arrivaldates = cursor0.fetchall()
+
+    rownmbs=len(arrivaldates)
+    #import pdb;
+    #pdb.set_trace()
+
+    return render(request, 'quotation/pohandlerrowsourceforarrivaldates.html', {'arrivaldates': arrivaldates, 'rownmbs': rownmbs})
 
 
 

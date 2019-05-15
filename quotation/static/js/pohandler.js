@@ -15,6 +15,7 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
+    $( "#selectable" ).selectable();
     setTimeout(
       function()
       {
@@ -113,6 +114,33 @@ $(function () {
             console.log('Failure in saving');
         };
 
+            setTimeout(
+              function()
+              {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'pohandlerrowsourceforarrivaldates',
+
+                        data: {
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                        },
+
+                        success: ArrivaldatesSuccess,
+                        error: function(){
+                            alert('failure');
+                        },
+                        datatype: 'html'
+
+                    });
+              }, 500);
+
+            function ArrivaldatesSuccess(data, textStatus, jqXHR)
+            {
+
+                $('#selectable').html(data);
+
+            }
+
    });
     $('#pohandlersearchbutton').click(function() {
 
@@ -162,13 +190,13 @@ $(function () {
 //        sessionStorage.company = $('#company').val();
 
     });
-    $('body').on("click", ".pohandlerarrivalhbutton", function() {
+    $('body').on("click", ".pohandlerarrivalbutton", function() {
 
         var fillingdateval = $('#fillingdate').val();
-        var pohandlerarrivalhbuttonrowid = $(this).attr( "rowid" );
+        var pohandlerarrivalbuttonrowid = $(this).attr( "rowid" );
 
-        $('input[name2="dateofarrivalinput"][rowid="' + pohandlerarrivalhbuttonrowid + '"]').val(fillingdateval);
-        $('input[class="updateable"][rowid="' + pohandlerarrivalhbuttonrowid + '"]').trigger('change');
+        $('input[name2="dateofarrivalinput"][rowid="' + pohandlerarrivalbuttonrowid + '"]').val(fillingdateval);
+        $('input[class="updateable"][rowid="' + pohandlerarrivalbuttonrowid + '"]').trigger('change');
 
 
 

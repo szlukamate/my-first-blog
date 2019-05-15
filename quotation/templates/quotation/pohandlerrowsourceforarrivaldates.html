@@ -1,0 +1,13 @@
+{% if rownmbs > 0 %}
+
+{% for arrivaldate in arrivaldates %}
+
+    <li class="ui-widget-content">{{arrivaldate.0|date:"Y-m-d"}}</li>
+
+{% endfor %}
+
+{% else %}
+
+    <li>None to show!</li>
+
+{% endif %}
