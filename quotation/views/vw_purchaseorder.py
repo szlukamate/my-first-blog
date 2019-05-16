@@ -156,7 +156,8 @@ def purchaseordermake(request):
         cursor1 = connection.cursor()
         cursor1.execute(
             "SELECT contactid_tblcontacts, companyname_tblcompanies, Companyid_tblCompanies, "
-            "Firstname_tblcontacts, lastname_tblcontacts, "
+            "Firstname_tblcontacts, "
+            "lastname_tblcontacts, "
             "title_tblcontacts, "
             "mobile_tblcontacts, "
             "email_tblcontacts, "
@@ -187,9 +188,13 @@ def purchaseordermake(request):
                         "WHERE Doc_kindid_tblDoc_id = 7")
         results = cursor8.fetchall()
         resultslen = len(results)
-        for x in results:
-            docnumber = x[0]
-            docnumber += 1
+
+        if results[0][0] is not None: # only if there is not doc yet (this would be the first instance)
+            for x in results:
+                docnumber = x[0]
+                docnumber += 1
+        else:
+                docnumber = 80 # arbitrary number
 
         cursor2 = connection.cursor()
         cursor2.execute("INSERT INTO quotation_tbldoc "
@@ -278,7 +283,7 @@ def purchaseordermake(request):
 
         for x in docdetails:
             podetailslink=x[0]
-            for y in range(0, len(docdetailslist), 2):
+            for y in range(0, len(docdetailslist), 2): # qty set according to remnants in purhaseorderpre.html form
                 if int(docdetailslist[y]) == podetailslink:
                     qty=docdetailslist[y+1]
             #import pdb;

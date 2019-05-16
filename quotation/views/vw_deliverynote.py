@@ -8,5 +8,5 @@ from django.db import connection, transaction
 # import pdb;
 # pdb.set_trace()
 
-def deliverynoteform(request):
+def deliverynoteform(request, pk):
         return render(request, 'quotation/deliverynote.html', {})

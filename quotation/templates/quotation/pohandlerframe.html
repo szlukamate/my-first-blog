@@ -8,6 +8,14 @@
 
 							<p align="center" style="font-size:160%;">POhandler Form</p>
 
+							<input id="aux1" type="text" value="" hidden>
+
+							<p id="feedback">
+							<span>You've selected:</span> <span id="select-resultarrivaldates">none</span>.
+							</p>
+
+
+
 							<label for="from" >From</label>
 							<input id="fromdate" type="text" value="" name="from" maxlength="50" size="10">
 
@@ -22,12 +30,12 @@
 							   <span class="glyphicon glyphicon-trash"></span>
 							</button>
 
-							<button id="receptionbutton" type="submit">
+							<button id="pohandlerreceptionbutton" type="submit">
 							   <span>Reception</span>
 							</button>
 							{% block sidebar %}
 								{% csrf_token %}
-							<ol id="selectable">Arrival dates:
+							<ol id="selectablearrivaldates">Arrival dates:
 
 							</ol>
 							{% endblock sidebar %}

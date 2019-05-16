@@ -15,7 +15,50 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
-    $( "#selectable" ).selectable();
+            setTimeout(
+              function()
+              {
+
+                    $('#aux1').trigger('click');
+              }, 500);
+
+    $('#aux1').click(function() {
+            setTimeout(
+              function()
+              {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'pohandlerrowsourceforarrivaldates',
+
+                        data: {
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                        },
+
+                        success: ArrivaldatesSuccess,
+                        error: function(){
+                            alert('failure');
+                        },
+                        datatype: 'html'
+
+                    });
+              }, 500);
+
+            function ArrivaldatesSuccess(data, textStatus, jqXHR)
+            {
+
+                $('#selectablearrivaldates').html(data);
+
+            }
+
+    });
+    $( "#selectablearrivaldates" ).selectable({
+        stop: function() {
+           var result = $( "#select-resultarrivaldates" ).empty();
+            $( ".ui-selected", this ).each(function() {
+            result.append( $(this).text() );
+            });
+        }
+    });
     setTimeout(
       function()
       {
@@ -114,32 +157,7 @@ $(function () {
             console.log('Failure in saving');
         };
 
-            setTimeout(
-              function()
-              {
-                    $.ajax({
-                        type: 'POST',
-                        url: 'pohandlerrowsourceforarrivaldates',
-
-                        data: {
-                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                        },
-
-                        success: ArrivaldatesSuccess,
-                        error: function(){
-                            alert('failure');
-                        },
-                        datatype: 'html'
-
-                    });
-              }, 500);
-
-            function ArrivaldatesSuccess(data, textStatus, jqXHR)
-            {
-
-                $('#selectable').html(data);
-
-            }
+        $('#aux1').trigger('click');
 
    });
     $('#pohandlersearchbutton').click(function() {
@@ -203,5 +221,28 @@ $(function () {
 
 
     });
+    $('#pohandlerreceptionbutton').click(function() {
 
+            $.ajax({
+                type: 'POST',
+                url: 'pohandlerreception',
+
+                data: {
+                'dateofarrival' : $('#select-resultarrivaldates').val(),
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(url){
+                window.location.href = url;
+
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
+
+    });
 });

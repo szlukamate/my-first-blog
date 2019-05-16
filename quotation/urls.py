@@ -73,5 +73,5 @@ urlpatterns = [
     url('pohandlersearchresults', views.pohandlersearchresults, name='pohandlersearchresults'),
     url(r'^deliverynoteform/(?P<pk>[0-9]+)/$', views.deliverynoteform, name='deliverynoteform'),
     url('pohandlerrowsourceforarrivaldates', views.pohandlerrowsourceforarrivaldates, name='pohandlerrowsourceforarrivaldates'),
-
+    url('pohandlerreception', views.pohandlerreception, name='pohandlerreception'),
 ]
