@@ -91,7 +91,6 @@ def customerorderform(request, pk):
     companyid = cursor4.fetchall()
 
     cursor3 = connection.cursor()
-    cursor3 = connection.cursor()
     # if there is not such product already not show goto
 
     cursor3.execute("SELECT  DD.Doc_detailsid_tblDoc_details, "
@@ -119,13 +118,8 @@ def customerorderform(request, pk):
                     "(100-round(((DD.unitsalespriceACU_tblDoc_details/(DD.listprice_tblDoc_details * DD.currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
                     "DD.unit_tbldocdetails, "
                     "companyname_tblcompanies, "
-                    "DD.supplierdescription_tblProduct_ctblDoc_details, " #25
+                    "DD.supplierdescription_tblProduct_ctblDoc_details " #25
 
-                    "DD2.podocdetails, "
-                    "DD2.podocdetailsqty, "
-                    "DD2.podocnumber, "
-                    "DD2.popretag, "
-                    "DD2.podocid "
                     
                     
 
@@ -133,7 +127,21 @@ def customerorderform(request, pk):
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x ON DD.Productid_tblDoc_details_id = x.Productid_tblProduct "
                     "JOIN quotation_tblcompanies as C "
                     "ON DD.suppliercompanyid_tbldocdetails = C.companyid_tblcompanies "
+               
+                
+                    "WHERE DD.docid_tbldoc_details_id=%s "
+                    "order by DD.firstnum_tblDoc_details,DD.secondnum_tblDoc_details,DD.thirdnum_tblDoc_details,DD.fourthnum_tblDoc_details",
+                    [pk])
+    docdetails = cursor3.fetchall()
 
+    cursor14 = connection.cursor()
+    cursor14.execute("SELECT DD.Doc_detailsid_tblDoc_details, "
+                    "DD2.podocdetails, "
+                    "DD2.podocdetailsqty, "
+                    "DD2.podocnumber, "
+                    "DD2.popretag, "
+                    "DD2.podocid "
+                    "FROM quotation_tbldoc_details as DD "
                    "LEFT JOIN    (SELECT (Doc_detailsid_tblDoc_details) as podocdetails, "
                     "               podetailslink_tbldocdetails, "
                     "               (Qty_tblDoc_details) as podocdetailsqty, "
@@ -148,17 +156,14 @@ def customerorderform(request, pk):
                     "                       FROM quotation_tbldoc"
                     "                       JOIN quotation_tbldoc_kind "
                     "                       ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
-                    
+
                     "                       WHERE obsolete_tbldoc = 0"
                     "                    ) as D"
                     "               ON D.docid=DDx.Docid_tblDoc_details_id "
                     "            ) as DD2 "
                     "ON DD.Doc_detailsid_tblDoc_details=DD2.podetailslink_tbldocdetails "
-
-                    "WHERE DD.docid_tbldoc_details_id=%s "
-                    "order by DD.firstnum_tblDoc_details,DD.secondnum_tblDoc_details,DD.thirdnum_tblDoc_details,DD.fourthnum_tblDoc_details",
-                    [pk])
-    docdetails = cursor3.fetchall()
+                     "WHERE DD.docid_tbldoc_details_id=%s ",[pk])
+    polinks = cursor14.fetchall()
 
     cursor10 = connection.cursor()
     cursor10.execute("SELECT id, "
@@ -212,6 +217,7 @@ def customerorderform(request, pk):
     return render(request, 'quotation/customerorder.html',
                   {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums': nextchapternums,
                    'creatordata': creatordata,
+                   'polinks': polinks,
                    'currencycodes': currencycodes})
 
 

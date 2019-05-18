@@ -228,7 +228,7 @@ $(function () {
                 url: 'pohandlerreception',
 
                 data: {
-                'dateofarrival' : $('#select-resultarrivaldates').val(),
+                'dateofarrival' : $('#select-resultarrivaldates').text(),
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
 

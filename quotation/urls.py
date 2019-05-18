@@ -74,4 +74,7 @@ urlpatterns = [
     url(r'^deliverynoteform/(?P<pk>[0-9]+)/$', views.deliverynoteform, name='deliverynoteform'),
     url('pohandlerrowsourceforarrivaldates', views.pohandlerrowsourceforarrivaldates, name='pohandlerrowsourceforarrivaldates'),
     url('pohandlerreception', views.pohandlerreception, name='pohandlerreception'),
+    url(r'^deliverynoteprint/(?P<docid>[0-9]+)/$', views.deliverynoteprint, name='deliverynoteprint'),
+    url('deliverynotebackpage', views.deliverynotebackpage, name='deliverynotebackpage'),
+
 ]

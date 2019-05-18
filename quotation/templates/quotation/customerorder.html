@@ -170,7 +170,7 @@
 								<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.24}}" name="Supplier" size="6" disabled><br>
 				  				{% if tblDoc_details.1 != tblDoc_details.27 %} <!-- If COQty in line disagree with POQty in line then dashed border -->
 
-										{% if tblDoc_details.27 == None %} <!-- If none PO line then info text -->
+										{% if polinks.2 == None %} <!-- If none PO line then info text -->
 
 
 											<a href="#"><span style="color:white; background-color: Blue;">No PO line </a><br>
@@ -178,7 +178,7 @@
 
 										{% else %}
 
-											<a href="{% url 'purchaseorderform' pk=tblDoc_details.30 %}"><span style="color:white; background-color: Blue; border-width:3px; border-style:dashed; border-color: red;">{{ tblDoc_details.29}}{{ tblDoc_details.28}}/{{ tblDoc_details.27}}(PODDId:{{ tblDoc_details.26}})</a><br>
+											<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue; border-width:3px; border-style:dashed; border-color: red;">{{ polinks.4}}{{ polinks.3}}/{{ polinks.2}}(PODDId:{{ polinks.1}})</a><br>
 
 
 										{% endif %}
@@ -187,7 +187,7 @@
 
 								{% else %}
 
-									<a href="{% url 'purchaseorderform' pk=tblDoc_details.30 %}"><span style="color:white; background-color: Blue;" >{{ tblDoc_details.29}}{{ tblDoc_details.28}}(PODDId:{{ tblDoc_details.26}})</a><br>
+									<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue;" >{{ polinks.4}}{{ polinks.3}}(PODDId:{{ polinks.1}})</a><br>
 
 
 								{% endif %}

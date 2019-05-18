@@ -8,9 +8,9 @@
 				<p>Contactid:{{ doc.0.1}} hidden</p>
 
 
-				<p align="center" id="title" style="font-size:173%;">deliverynote Form</p>{% csrf_token %}
+				<p align="center" id="title" style="font-size:173%;">Delivery Note Form</p>{% csrf_token %}
 						<div id="infoframe">
-							<p >Number of deliverynote: {{ doc.0.25 }}{{ doc.0.10 }}</p>
+							<p >Number of Delivery Note: {{ doc.0.25 }}{{ doc.0.10 }}</p>
 							<p >Creator: {{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
 							<p >Time of Creation: {{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
 						</div>
@@ -43,7 +43,7 @@
 
 								</ul>
 							{% endblock sidebar %}
-									<form action="{% url 'quotationprint' docid=doc.0.0 %}">
+									<form action="{% url 'deliverynoteprint' docid=doc.0.0 %}">
 										<input type="submit" value="Print" />
 									</form>
 

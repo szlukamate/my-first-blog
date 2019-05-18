@@ -337,7 +337,7 @@ def pohandlerreception(request):
     docdetails = cursor3.fetchall()
 
     for x in docdetails:
-        podetailslink = x[0]
+        denotopodetailslink = x[0]
         qty = x[1]
 
         firstnum = x[4]
@@ -378,7 +378,7 @@ def pohandlerreception(request):
             "unitsalespriceACU_tblDoc_details, "
             "unit_tbldocdetails, "
             "suppliercompanyid_tbldocdetails, "
-            "podetailslink_tbldocdetails, "
+            "denotopodetailslink_tbldocdetails, "
             "supplierdescription_tblProduct_ctblDoc_details) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
             [maxdocid,
@@ -397,7 +397,7 @@ def pohandlerreception(request):
              unitsalespriceACU,
              unitclone,
              suppliercompanyid,
-             podetailslink,
+             denotopodetailslink,
              supplierdescriptionclone])
 
     return render(request, 'quotation/pohandlerreceptionredirecturl.html',{})
