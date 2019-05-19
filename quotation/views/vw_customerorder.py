@@ -140,7 +140,9 @@ def customerorderform(request, pk):
                     "DD2.podocdetailsqty, "
                     "DD2.podocnumber, "
                     "DD2.popretag, "
-                    "DD2.podocid "
+                    "DD2.podocid, "
+                     
+                     "DD3.sumpodocdetailsqty "
                     "FROM quotation_tbldoc_details as DD "
                    "LEFT JOIN    (SELECT (Doc_detailsid_tblDoc_details) as podocdetails, "
                     "               podetailslink_tbldocdetails, "
@@ -162,7 +164,18 @@ def customerorderform(request, pk):
                     "               ON D.docid=DDx.Docid_tblDoc_details_id "
                     "            ) as DD2 "
                     "ON DD.Doc_detailsid_tblDoc_details=DD2.podetailslink_tbldocdetails "
-                     "WHERE DD.docid_tbldoc_details_id=%s ",[pk])
+
+                   "LEFT JOIN    (SELECT podetailslink_tbldocdetails, sum(Qty_tblDoc_details) as sumpodocdetailsqty "
+                    "               FROM quotation_tbldoc_details as DDxx "
+
+                    "               JOIN quotation_tbldoc as Dxx "
+                    "               ON Dxx.Docid_tblDoc=DDxx.Docid_tblDoc_details_id "
+                    "               WHERE obsolete_tbldoc=0 "
+                    "               GROUP BY podetailslink_tbldocdetails) as DD3 "
+                    "ON DD.Doc_detailsid_tblDoc_details=DD3.podetailslink_tbldocdetails "
+
+
+                     "WHERE DD.docid_tbldoc_details_id=%s",[pk])
     polinks = cursor14.fetchall()
 
     cursor10 = connection.cursor()

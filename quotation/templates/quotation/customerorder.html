@@ -115,93 +115,101 @@
 
 				<br>
 				<br>
-								<div id="labels">
-									<label id="Pridlabel" for="Productid_tblDoc_details_id" >Prid</label>
-									<label id="Ddetidlabel" for="Doc_detailsid_tblDoc_details" >Ddetid</label>
-									<label id="C1label" for="firstnum_tblDoc_details" >C1</label>
-									<label id="C2label" for="secondnum_tblDoc_details" >C2</label>
-									<label id="C3label" for="thirdnum_tblDoc_details" >C3</label>
-									<label id="C4label" for="fourthnum_tblDoc_details" >C4</label>
-									<label id="Qtylabel" for="Qty_tblDoc_details" >Qty</label>
-									<label id="Unitlabel" for="unit_tblDoc_details" >Unit</label>
-									<label id="customerdescriptionlabel" for="customerdescription" >Customer Description</label>
-									<label id="supplierdescriptionlabel" for="supplierdescription" >Supplier Description</label>
-									<label id="Notelabel" for="Note_tblDoc_details" >Note</label>
-									<label id="Purchasepricelabel" for="purchase_price_tblproduct_ctblDoc_details" style="padding-left: 19px;">Purchaseprice</label>
-									<label id="listpricemarginlabel" for="listpricemargin" style="padding-left: 19px;">Listpricemargin</label>
-									<label id="listpricelabel" for="listprice_tblDoc_details" style="padding-left: 9px;">Listprice</label>
-									<label id="currencycodelabel"for="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" style="padding-left: 13px;">Currency Code</label>
+					<div id="labels">
+						<label id="Pridlabel" for="Productid_tblDoc_details_id" >Prid</label>
+						<label id="Ddetidlabel" for="Doc_detailsid_tblDoc_details" >Ddetid</label>
+						<label id="C1label" for="firstnum_tblDoc_details" >C1</label>
+						<label id="C2label" for="secondnum_tblDoc_details" >C2</label>
+						<label id="C3label" for="thirdnum_tblDoc_details" >C3</label>
+						<label id="C4label" for="fourthnum_tblDoc_details" >C4</label>
+						<label id="Qtylabel" for="Qty_tblDoc_details" >Qty</label>
+						<label id="Unitlabel" for="unit_tblDoc_details" >Unit</label>
+						<label id="customerdescriptionlabel" for="customerdescription" >Customer Description</label>
+						<label id="supplierdescriptionlabel" for="supplierdescription" >Supplier Description</label>
+						<label id="Notelabel" for="Note_tblDoc_details" >Note</label>
+						<label id="Purchasepricelabel" for="purchase_price_tblproduct_ctblDoc_details" style="padding-left: 19px;">Purchaseprice</label>
+						<label id="listpricemarginlabel" for="listpricemargin" style="padding-left: 19px;">Listpricemargin</label>
+						<label id="listpricelabel" for="listprice_tblDoc_details" style="padding-left: 9px;">Listprice</label>
+						<label id="currencycodelabel"for="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" style="padding-left: 13px;">Currency Code</label>
 
-									<label id="purchasepriceACUlabel"for="purchasepriceACU" style="padding-left: 13px;">Purchaseprice{{ doc.0.24}}</label>
-									<label id="currencyratelabel" for="currencyrate_tblcurrency_ctblDoc_details" style="padding-left: 13px;">Currency Rate</label>
-									<label id="unitsalespricemarginlabel" for="unitsalespricemargin" style="padding-left: 13px;">Unitsalespricemargin</label>
+						<label id="purchasepriceACUlabel"for="purchasepriceACU" style="padding-left: 13px;">Purchaseprice{{ doc.0.24}}</label>
+						<label id="currencyratelabel" for="currencyrate_tblcurrency_ctblDoc_details" style="padding-left: 13px;">Currency Rate</label>
+						<label id="unitsalespricemarginlabel" for="unitsalespricemargin" style="padding-left: 13px;">Unitsalespricemargin</label>
 
-									<label id="listpriceACUlabel" for="listpriceACU" style="padding-left: 9px;">Listprice{{ doc.0.24}}</label>
-									<label id="unitsalespriceACUlabel" for="unitsalespriceACU" style="padding-left: 13px;">Unitsalesprice{{ doc.0.24}}</label><br>
-									<label id="discountlabel" for="Discount" style="padding-left: 13px;">Discount</label><br>
-									<label id="supplierlabel" for="Supplier" style="padding-left: 13px;">Supplier</label><br>
-								</div>
+						<label id="listpriceACUlabel" for="listpriceACU" style="padding-left: 9px;">Listprice{{ doc.0.24}}</label>
+						<label id="unitsalespriceACUlabel" for="unitsalespriceACU" style="padding-left: 13px;">Unitsalesprice{{ doc.0.24}}</label><br>
+						<label id="discountlabel" for="Discount" style="padding-left: 13px;">Discount</label><br>
+						<label id="supplierlabel" for="Supplier" style="padding-left: 13px;">Supplier</label><br>
+					</div>
 
-								{% for tblDoc_details in  docdetails %}
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.13}}" name="Productid_tblDoc_details_id" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.14}}" name="Doc_detailsid_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.6}}" name="secondnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.7}}" name="thirdnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.5}}" name="fourthnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="2">
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.23}}" name="unit_tbldocdetails" rowid="{{ tblDoc_details.0}}" size="2">
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.3}}" name="customerdescription_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.25}}" name="supplierdescription_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
-								<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.8}}"  name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
-								<input type="text" style="color:white; background-color: lightCoral;" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" size="10" disabled>
-								<input type="text" style="color:white; background-color: lightCoral;"  value="{{ tblDoc_details.17}}" name="listpricemargin" size="2" disabled >
-								<input type="text" style="color:white; background-color: lightCoral;" value="{{ tblDoc_details.11}}" name="listprice_tblDoc_details" size="10" disabled >
-								<input type="text" style="color:white; background-color: Coral;" value="{{ tblDoc_details.12}}" name="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" size="3" disabled>
+					{% for tblDoc_details in  docdetails %}
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.13}}" name="Productid_tblDoc_details_id" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.14}}" name="Doc_detailsid_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.6}}" name="secondnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.7}}" name="thirdnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.5}}" name="fourthnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.23}}" name="unit_tbldocdetails" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.3}}" name="customerdescription_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.25}}" name="supplierdescription_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.8}}"  name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
+						<input type="text" style="color:white; background-color: lightCoral;" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" size="10" disabled>
+						<input type="text" style="color:white; background-color: lightCoral;"  value="{{ tblDoc_details.17}}" name="listpricemargin" size="2" disabled >
+						<input type="text" style="color:white; background-color: lightCoral;" value="{{ tblDoc_details.11}}" name="listprice_tblDoc_details" size="10" disabled >
+						<input type="text" style="color:white; background-color: Coral;" value="{{ tblDoc_details.12}}" name="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" size="3" disabled>
 
-								<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.19}}" name="purchasepriceACU" size="10" disabled>
-								<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.16}}" name="currencyirate_tblcurrency_ctblDoc_details" size="3" disabled>
-								<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.20}}" name="unitsalespricemargin" size="3" disabled>
-
-
-								<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.21}}" name="listpriceACU" size="10" disabled >
-								<input type="text" style="color:white; background-color: Green;" class="updateabletbldocdetails" value="{{ tblDoc_details.18}}"  name="unitsalespriceACU_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
-								<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.22}}" name="Discount" size="3" disabled>
-								<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.24}}" name="Supplier" size="6" disabled><br>
-				  				{% if tblDoc_details.1 != tblDoc_details.27 %} <!-- If COQty in line disagree with POQty in line then dashed border -->
-
-										{% if polinks.2 == None %} <!-- If none PO line then info text -->
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.19}}" name="purchasepriceACU" size="10" disabled>
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.16}}" name="currencyirate_tblcurrency_ctblDoc_details" size="3" disabled>
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.20}}" name="unitsalespricemargin" size="3" disabled>
 
 
-											<a href="#"><span style="color:white; background-color: Blue;">No PO line </a><br>
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.21}}" name="listpriceACU" size="10" disabled >
+						<input type="text" style="color:white; background-color: Green;" class="updateabletbldocdetails" value="{{ tblDoc_details.18}}"  name="unitsalespriceACU_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.22}}" name="Discount" size="3" disabled>
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.24}}" name="Supplier" size="6" disabled><br>
+						{% for polink in polinks %}
 
 
+
+								{% if tblDoc_details.0 == polink.0 %} <!-- match docdetailsids -->
+
+									{% if tblDoc_details.1 == polink.6 %} <!-- if matches sumqty-->
+										{% if polink.2 != tblDoc_details.1 %} <!-- if many POs-->
+											<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue;" >{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})/{{ polink.2}}</a><br>
+										{% else %}
+										<!-- if only one PO-->
+											<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue;" >{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})</a><br>
+										{% endif %}
+									{% else %}
+
+										{% if polink.6 == None %} <!-- if no PO-->
+											<a href="#"><span style="color:white; background-color: Blue; border-width:3px; border-style:dashed; border-color: red;">No PO line </a><br>
 										{% else %}
 
-											<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue; border-width:3px; border-style:dashed; border-color: red;">{{ polinks.4}}{{ polinks.3}}/{{ polinks.2}}(PODDId:{{ polinks.1}})</a><br>
 
-
+											<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue; border-width:3px; border-style:dashed; border-color: red;">{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})/{{ polink.2}}</a><br>
 										{% endif %}
-
-
-
-								{% else %}
-
-									<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue;" >{{ polinks.4}}{{ polinks.3}}(PODDId:{{ polinks.1}})</a><br>
+									{% endif %}
 
 
 								{% endif %}
-								<a href="{% url 'customerorderrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="customerorderproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
-
-								<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->
-								{% if tblDoc_details.15 > 0 %}
-								<a href="{% url 'products' pkproductid=tblDoc_details.13 %}"><span class="glyphicon glyphicon-filter" ></span></a><br><hr>
-								{% else %}
-								<br><hr>
-								{% endif %}
 
 
-								{% endfor %}
+						{% endfor %}
+
+
+						<a href="{% url 'customerorderrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="customerorderproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
+
+						<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->
+						{% if tblDoc_details.15 > 0 %}
+						<a href="{% url 'products' pkproductid=tblDoc_details.13 %}"><span class="glyphicon glyphicon-filter" ></span></a><br><hr>
+						{% else %}
+						<br><hr>
+						{% endif %}
+
+
+					{% endfor %}
 
 			  </div>
 			  <div id="tabs2fragment-3">
