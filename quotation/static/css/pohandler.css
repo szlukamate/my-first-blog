@@ -54,3 +54,30 @@
   left:180mm;
   top: 30mm;
 }
+.pohandlersplitbutton:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid blue;
+
+
+}
+.pohandlersplitbutton:active {
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.pohandlersplitbutton {
+  background-color: blue;
+  color: white;
+
+  font-size: 18px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 12px;
+    padding: 2px 8px;
+}
+.ui-dialog {
+    left: 50% !important;
+    top: 50% !important;
+    margin-left: -175px !important;
+    margin-top: -175px !important;
+}

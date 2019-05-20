@@ -715,7 +715,7 @@ def purchaseorderrowremove(request, pk):
         "DELETE FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [pk])
     transaction.commit()
 
-    return redirect('quotationform', pk=na)
+    return redirect('purchaseorderform', pk=na)
 def purchaseorderbackpage(request):
 
 

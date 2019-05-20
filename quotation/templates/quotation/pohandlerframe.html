@@ -42,7 +42,20 @@
 
 							Filling Date: <input id="fillingdate" type="text" value="" maxlength="50" size="10">
 
+							<div id="dialog-form" title="Split Item">
+
+							  <form>
+								<fieldset>
+								  <label for="qty">New Qty</label>
+								  <input type="text" name="qty" id="qtydialog" class="text ui-widget-content ui-corner-all">
+								<p>Rowid: <span id="rowid"></span></p>
+								  <!-- Allow form submission with keyboard without duplicating the dialog button -->
+								  <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+								</fieldset>
+							  </form>
+							</div>
 							<span id="pohandlertemplate" ></span>
+
 		<script type="text/javascript" src="{% static 'js/pohandler.js' %}"></script>
         <link rel="stylesheet" href="{% static 'css/pohandler.css' %}">
 

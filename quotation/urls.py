@@ -76,5 +76,6 @@ urlpatterns = [
     url('pohandlerreception', views.pohandlerreception, name='pohandlerreception'),
     url(r'^deliverynoteprint/(?P<docid>[0-9]+)/$', views.deliverynoteprint, name='deliverynoteprint'),
     url('deliverynotebackpage', views.deliverynotebackpage, name='deliverynotebackpage'),
+    url('pohandlersplit', views.pohandlersplit, name='pohandlersplit'),
 
 ]

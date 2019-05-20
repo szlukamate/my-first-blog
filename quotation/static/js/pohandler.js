@@ -14,7 +14,7 @@ $(window).on("unload", function(){
   alert('Bye.');
 });
 */
-$(function () {
+$(document).ready(function () {
             setTimeout(
               function()
               {
@@ -245,4 +245,56 @@ $(function () {
 
 
     });
+
+    $( "#dialog-form" ).dialog({
+          autoOpen: false,
+          height: 210,
+          width: 350,
+          modal: true,
+          buttons: {
+            "Split": function() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'pohandlersplit',
+
+                    data: {
+                    'rowid' : $('#rowid').html(),
+                    'newqty' : $('#qtydialog').val(),
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(url){
+                    window.location.href = url;
+
+                    },
+                    error: function(){
+
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+            },
+            Cancel: function() {
+                    $( this ).dialog( "close" );
+            }
+          },
+          close: function() {
+                    $( this ).dialog( "close" );
+          }
+    });
+
+    $('body').on("click", ".pohandlersplitbutton", function() {
+            var rowid = $(this).attr( "rowid" );
+            var oldqty=$('td[name="qty"][rowid="' + rowid + '"]').text();
+            $('#qtydialog').val(oldqty);
+            $('#rowid').html(rowid);
+            $( "#dialog-form" ).dialog( "open" );
+
+
+
+
+
+    });
+
 });

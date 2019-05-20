@@ -176,19 +176,19 @@
 
 									{% if tblDoc_details.1 == polink.6 %} <!-- if matches sumqty-->
 										{% if polink.2 != tblDoc_details.1 %} <!-- if many POs-->
-											<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue;" >{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})/{{ polink.2}}</a><br>
+											<a href="{% url 'purchaseorderform' pk=polink.5 %}"><span style="color:black; background-color: #33cccc;" >{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})/{{ polink.2}}</a><br>
 										{% else %}
 										<!-- if only one PO-->
-											<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue;" >{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})</a><br>
+											<a href="{% url 'purchaseorderform' pk=polink.5 %}"><span style="color:black; background-color: #33cccc;" >{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})</a><br>
 										{% endif %}
 									{% else %}
 
 										{% if polink.6 == None %} <!-- if no PO-->
-											<a href="#"><span style="color:white; background-color: Blue; border-width:3px; border-style:dashed; border-color: red;">No PO line </a><br>
+											<a href="#"><span style="color:black; background-color: #33cccc; border-width:3px; border-style:dashed; border-color: red;">No PO line </a><br>
 										{% else %}
 
 
-											<a href="{% url 'purchaseorderform' pk=1 %}"><span style="color:white; background-color: Blue; border-width:3px; border-style:dashed; border-color: red;">{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})/{{ polink.2}}</a><br>
+											<a href="{% url 'purchaseorderform' pk=polink.5 %}"><span style="color:black; background-color: #33cccc; border-width:3px; border-style:dashed; border-color: red;">{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})/{{ polink.2}}</a><br>
 										{% endif %}
 									{% endif %}
 

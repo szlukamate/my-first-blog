@@ -29,6 +29,8 @@
 
 													<td>Customer Description</td>
 													<td>Supplier Description</td>
+													<td>Qty</td>
+
 													<td>Date of Arrival</td>
 
 												</tr>
@@ -53,11 +55,19 @@
 
 														<td>{{ po.3}}</td>
 														<td>{{ po.25}}</td>
+														<td class="tds" name="qty" rowid="{{ po.0}}">{{ po.28}}</td>
+
 														<td><input type="text" class="updateable" name2="dateofarrivalinput" value="{{ po.32|date:'Y-m-d'}}" name="dateofarrival_tbldocdetails" rowid="{{ po.0}}"></td>
 														<td>
 															<button class="pohandlerarrivalbutton" type="submit" rowid="{{ po.0}}">
 															   <span>A</span>
 															</button
+														</td>
+														<td>
+															<button class="pohandlersplitbutton" type="submit" rowid="{{ po.0}}">
+															   <span>S</span>
+															</button
+
 														</td>
 
 													</tr>
