@@ -36,20 +36,24 @@ def pohandlerfieldsupdate(request):
 
         return HttpResponse(json_data, content_type="application/json")
 def pohandlersearchresults(request):
-#    docnumber = request.POST['docnumber']
+    receivedstatus = request.POST['receivedstatus']
+    print(receivedstatus)
 #    dockindname = request.POST['dockindname']
-    fromdate = request.POST['fromdate']
-    todate = request.POST['todate']
+#    fromdate = request.POST['fromdate']
+#    todate = request.POST['todate']
 #    company = request.POST['company']
 
 
-#    if docnumber != '':
+    if receivedstatus == 'false':
+        receivedstatusphrase = "and DDdeno.denodocnumber is null "
+    else:
+        receivedstatusphrase = ""
 #        docnumber = "and docnumber_tbldoc='" + docnumber + "' "
 #    if dockindname != '':
 #        dockindname = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
 
     #datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
-    datephrase = "and DATE(creationtime_tbldoc) >= '" + fromdate + "' and DATE(creationtime_tbldoc) <= '" + todate + "' "
+    #datephrase = "and DATE(creationtime_tbldoc) >= '" + fromdate + "' and DATE(creationtime_tbldoc) <= '" + todate + "' "
     #datephrase = "and DATE(creationtime_tbldoc) = '2019-04-19'"
 
 #    if company != '':
@@ -57,7 +61,7 @@ def pohandlersearchresults(request):
 
     #import pdb;
     #pdb.set_trace()
-    searchphrase= datephrase + " "
+    searchphrase = receivedstatusphrase
 
 
     cursor3 = connection.cursor()
@@ -100,7 +104,11 @@ def pohandlersearchresults(request):
                     "Docid_tblDoc as podocid, "
                     "pretag_tbldockind as popretag, "
                     "docnumber_tbldoc as podocnumber, "
-                    "DD.denotopodetailslink_tbldocdetails "    
+                    
+                    "DDdeno.denodocdetails, "
+                    "DDdeno.denodocnumber, "    
+                    "DDdeno.denopretag, "    
+                    "DDdeno.denodocid " #40    
     
                     "FROM quotation_tbldoc_details as DD "
     
@@ -134,8 +142,29 @@ def pohandlersearchresults(request):
     
                     "           ) as DD2 "
                     "ON DD.podetailslink_tbldocdetails=DD2.cordocdetailsid "
+
+                   "LEFT JOIN    (SELECT (Doc_detailsid_tblDoc_details) as denodocdetails, "
+                    "               denotopodetailslink_tbldocdetails, "
+                    "               (docnumber_tbldoc) as denodocnumber, "
+                    "               (pretag_tbldockind) as denopretag, "
+                    "               (docid) as denodocid "
+                    "               FROM quotation_tbldoc_details as DDx "
+
+                    "               JOIN (SELECT docnumber_tbldoc, "
+                    "                            (COALESCE(Docid_tblDoc, 0)) as docid, "
+                    "                             pretag_tbldockind "
+                    "                       FROM quotation_tbldoc"
+                    "                       JOIN quotation_tbldoc_kind "
+                    "                       ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "                       WHERE obsolete_tbldoc = 0"
+                    "                    ) as D"
+                    "               ON D.docid=DDx.Docid_tblDoc_details_id "
+                    "            ) as DDdeno "
+                    "ON DD.Doc_detailsid_tblDoc_details=DDdeno.denotopodetailslink_tbldocdetails "
+
     
-                    "WHERE Doc_kindid_tblDoc_id=7 and obsolete_tbldoc = 0 "
+                    "WHERE Doc_kindid_tblDoc_id=7 and obsolete_tbldoc = 0 " + searchphrase + " "
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
     pos = cursor3.fetchall()
     #    import pdb;
@@ -169,6 +198,26 @@ def pohandlerreception(request):
 
     creatorid = request.user.id
 
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Contactid_tblDoc_id, "
+                    "FROM quotation_tbldoc_details as DD "
+                    "JOIN quotation_tbldoc as D ON "
+                    "D.Docid_tblDoc=DD.Docid_tblDoc_details_id "
+                    
+                    "WHERE Doc_detailsid_tblDoc_details=%s "
+                    "Group by Contactid_tblDoc_id ",
+                    [dateofarrival])
+    customerordercontactsforarrival = cursor1.fetchall()
+
+
+
+
+
+
+
+
+
     pk=60
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -184,7 +233,7 @@ def pohandlerreception(request):
                     "paymenttextforquotation_tblpayment_ctbldoc, "
                     "currencycodeinreport_tbldoc, "
                     "currencyrateinreport_tbldoc, "
-                    "accountcurrencycode_tbldoc " #12
+                    "accountcurrencycode_tbldoc, " 
 
                     "companyname_tblcompanies_ctbldoc, "
                     "firstname_tblcontacts_ctbldoc, "
@@ -193,7 +242,7 @@ def pohandlerreception(request):
                     "mobile_tblcontacts_ctbldoc, "
                     "email_tblcontacts_ctbldoc, "
                     "pcd_tblcompanies_ctbldoc, "
-                    "town_tblcompanies_ctbldoc, "
+                    "town_tblcompanies_ctbldoc, " #20
                     "address_tblcompanies_ctbldoc "
 
                     "FROM quotation_tbldoc "
@@ -331,10 +380,14 @@ def pohandlerreception(request):
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                     "ON "
                     "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
-                    "WHERE dateofarrival_tbldocdetails = %s "
+                    "JOIN quotation_tbldoc as D ON D.Docid_tblDoc=quotation_tbldoc_details.Docid_tblDoc_details_id "
+
+                    "WHERE dateofarrival_tbldocdetails = %s and obsolete_tbldoc=0 "
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                     [dateofarrival])
     docdetails = cursor3.fetchall()
+    #import pdb;
+    #pdb.set_trace()
 
     for x in docdetails:
         denotopodetailslink = x[0]
@@ -444,7 +497,7 @@ def pohandlersplit(request):
         #pdb.set_trace()
 
         for x in docdetails:
-
+            modifiedqty = x[1]-int(newqty)
             docid = x[2]
             firstnum = x[4]
             fourthnum = x[5]
@@ -502,4 +555,11 @@ def pohandlersplit(request):
              unitclone,
              suppliercompanyid,
              podetailslink])
-        return render(request, 'quotation/pohandlerreceptionredirecturl.html', {})
+
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            "UPDATE quotation_tbldoc_details SET "
+            "Qty_tblDoc_details= %s "
+            "WHERE doc_detailsid_tbldoc_details =%s ", [modifiedqty, rowid])
+
+        return render(request, 'quotation/pohandlersplitredirecturl.html', {})

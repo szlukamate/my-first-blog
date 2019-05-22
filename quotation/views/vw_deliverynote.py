@@ -28,8 +28,8 @@ def deliverynoteform(request, pk):
                         cursor22.callproc("spquotationdocdetailsfieldsupdate", [fieldname, fieldvalue, rowid])
                         results23 = cursor22.fetchall()
                         print(results23)
-                        import pdb;
-                        pdb.set_trace()
+                        #import pdb;
+                        #pdb.set_trace()
 
                         json_data = json.dumps(results23)
 
@@ -72,9 +72,18 @@ def deliverynoteform(request, pk):
                         "currencycodeinreport_tbldoc, "
                         "currencyrateinreport_tbldoc, "
                         "accountcurrencycode_tbldoc, "
-                        "pretag_tbldockind "
+                        "pretag_tbldockind, " #25
+                        "wherefrom_tbldoc, "
+                        "whereto_tbldoc, "
+                        "Cf.companyname_tblcompanies as companywherefromdeno, "
+                        "Ct.companyname_tblcompanies as companywheretodeno "
+
                         "FROM quotation_tbldoc as D "
                         "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
+                        "LEFT JOIN quotation_tblcompanies as Cf "
+                        "ON D.wherefrom_tbldoc = Cf.Companyid_tblCompanies "
+                        "LEFT JOIN quotation_tblcompanies as Ct "
+                        "ON D.whereto_tbldoc = Ct.Companyid_tblCompanies "
                         "WHERE docid_tbldoc=%s "
                         "order by docid_tbldoc desc",
                         [pk])

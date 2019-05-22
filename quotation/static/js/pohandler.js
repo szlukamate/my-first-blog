@@ -62,56 +62,18 @@ $(document).ready(function () {
     setTimeout(
       function()
       {
-//            $('#docnumber').val(sessionStorage.docnumber);
-//            $('#dockindname').val(sessionStorage.dockindname);
-                var dfrom = new Date();
 
-                var fromyear = dfrom.getFullYear()-1; //-1 cause one year diff between fromdate and todate
-                var frommonth = dfrom.getMonth()+1; // +1 cause 0-11 the javascript months
-                var fromday = dfrom.getDate();
+              $('#fillingdate').datepicker({ dateFormat: 'yy-mm-dd' });
 
-                var fromoutput = fromyear + '-' +
-                    (frommonth<10 ? '0' : '') + frommonth + '-' +
-                    (fromday<10 ? '0' : '') + fromday;
-
-
-                var dto = new Date();
-
-                var toyear = dto.getFullYear();
-                var tomonth = dto.getMonth()+1; // +1 cause 0-11 the javascript months
-                var today = dto.getDate();
-
+                var d = new Date();
+                var toyear = d.getFullYear();
+                var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                var today = d.getDate();
                 var tooutput = toyear + '-' +
                     (tomonth<10 ? '0' : '') + tomonth + '-' +
                     (today<10 ? '0' : '') + today;
-
-            if (typeof sessionStorage.fromdate === 'undefined') {
-
-//                sessionStorage.fromdate = fromoutput;
-                $('#fromdate').val(fromoutput);
-                //console.log(sessionStorage.fromdate);
-
-            } else {
-            $('#fromdate').val(sessionStorage.fromdate);
-
-            }
-
-            if (typeof sessionStorage.todate === 'undefined') {
-
-                sessionStorage.todate = tooutput;
-                $('#todate').val(tooutput);
-
-
-                //console.log(sessionStorage.todate);
-
-            } else {
-            $('#todate').val(sessionStorage.todate);
-
-            }
-
-              $('#fillingdate').datepicker({ dateFormat: 'yy-mm-dd' });
               $('#fillingdate').val(tooutput); //today date to fillingdate default
-
+              $('#receiveds').prop('checked', false);
 //            $('#company').val(sessionStorage.company);
 
             $('#pohandlersearchbutton').trigger('click');
@@ -167,10 +129,10 @@ $(document).ready(function () {
                 url: 'pohandlersearchresults',
 
                 data: {
-//                'docnumber': $('#docnumber').val(),
+                'receivedstatus': $('#receiveds').prop('checked'),
 //                'dockindname': $('#dockindname').val(),
-                'fromdate': $('#fromdate').val(),
-                'todate': $('#todate').val(),
+//                'fromdate': $('#fromdate').val(),
+//                'todate': $('#todate').val(),
 //                'company': $('#company').val(),
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),

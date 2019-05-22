@@ -15,13 +15,8 @@
 											<thead>
 
 												<tr>
-													<td  class="col-sm-1">PO Docid</td>
 
-													<td class="col-sm-1">PO Detailsid</td>
-													<td class="col-sm-1">PO Docnumber</td>
-
-													<td class="col-sm-1">POtoCOR Detailslink</td>
-													<td class="col-sm-1">DENOtoPO Detailslink</td>
+													<td class="col-sm-1">Delivery Note</td>
 
 													<td>Supplier</td>
 
@@ -41,21 +36,19 @@
 
 
 													<tr>
-														<td>{{ po.34}}</td>
+													{% if po.39 == None %}
+														<td>No Received</td>
+													{% else %}
+														<td><a href="{% url 'deliverynoteform' pk=po.40 %}">{{ po.39}}{{ po.38}}/{{ po.37}}</a></td>
+													{% endif %}
 
-														<td>{{ po.0}}</td>
-														<td><a href="{% url 'purchaseorderform' pk=po.34 %}">{{ po.35}}{{ po.36}}</a></td>
-
-														<td>{{ po.26}}</td>
-
-														<td>{{ po.37}}</td>
-														<td>{{ po.33}}</td>
+														<td><a href="{% url 'purchaseorderform' pk=po.34 %}">{{ po.35}}{{ po.36}}/{{ po.0}}</a> {{ po.33}}</td>
 
 														<td><a href="{% url 'customerorderform' pk=po.27 %}">{{ po.30}}{{ po.29}}/{{ po.26}}</a> {{ po.31}}</td>
 
 														<td>{{ po.3}}</td>
 														<td>{{ po.25}}</td>
-														<td class="tds" name="qty" rowid="{{ po.0}}">{{ po.28}}</td>
+														<td class="tds" name="qty" rowid="{{ po.0}}">{{ po.1}}</td>
 
 														<td><input type="text" class="updateable" name2="dateofarrivalinput" value="{{ po.32|date:'Y-m-d'}}" name="dateofarrival_tbldocdetails" rowid="{{ po.0}}"></td>
 														<td>
