@@ -39,12 +39,12 @@
 													{% if po.39 == None %}
 														<td>No Received</td>
 													{% else %}
-														<td><a href="{% url 'deliverynoteform' pk=po.40 %}">{{ po.39}}{{ po.38}}/{{ po.37}}</a></td>
+														<td><a href="{% url 'deliverynoteform' pk=po.40 %}">{{ po.39}}{{ po.38}}/{{ po.37}}({{ po.40}})</a></td>
 													{% endif %}
 
-														<td><a href="{% url 'purchaseorderform' pk=po.34 %}">{{ po.35}}{{ po.36}}/{{ po.0}}</a> {{ po.33}}</td>
+														<td><a href="{% url 'purchaseorderform' pk=po.34 %}">{{ po.35}}{{ po.36}}/{{ po.0}}({{ po.34}})</a> {{ po.33}}</td>
 
-														<td><a href="{% url 'customerorderform' pk=po.27 %}">{{ po.30}}{{ po.29}}/{{ po.26}}</a> {{ po.31}}</td>
+														<td><a href="{% url 'customerorderform' pk=po.27 %}">{{ po.30}}{{ po.29}}/{{ po.26}}({{ po.27}})</a> {{ po.31}}</td>
 
 														<td>{{ po.3}}</td>
 														<td>{{ po.25}}</td>

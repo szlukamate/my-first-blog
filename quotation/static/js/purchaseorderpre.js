@@ -1,5 +1,5 @@
 /*
-customerorder.js
+purchaseorderpre.js
 */
 
             var msg="Hello Javascript2";
@@ -28,6 +28,7 @@ $(function () {
         main();
 
             function main(){
+                customerordersnumberfunc();
 
                 for (i = 1; i <= customerordersnumber; i++) {
                     getifchecked();
@@ -39,7 +40,6 @@ $(function () {
 
             function customerordersnumberfunc(){
             customerordersnumber=$('#customerordersnumber').attr( "customerordersnumber" ); //Number of Customer Order Items
-            //itemnumbers--; // convert 1-x -> 0-(x-1)
             }
             function getifchecked(){
 

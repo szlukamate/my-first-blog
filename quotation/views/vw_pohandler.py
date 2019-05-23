@@ -165,7 +165,7 @@ def pohandlersearchresults(request):
 
     
                     "WHERE Doc_kindid_tblDoc_id=7 and obsolete_tbldoc = 0 " + searchphrase + " "
-                    "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
+                    "order by DD.Docid_tblDoc_details_id, firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
     pos = cursor3.fetchall()
 
     return render(request, 'quotation/pohandler.html', {'pos': pos})
@@ -198,7 +198,7 @@ def pohandlerreception(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
-                    "Docid_tblDoc "
+                    "Docid_tblDoc as podocid "
                     "FROM quotation_tbldoc_details as DD "
                     "JOIN quotation_tbldoc as D ON "
                     "D.Docid_tblDoc=DD.Docid_tblDoc_details_id "
@@ -206,7 +206,7 @@ def pohandlerreception(request):
                     "WHERE dateofarrival_tbldocdetails = %s and obsolete_tbldoc=0 "
                     "Group by Docid_tblDoc ",
                     [dateofarrival])
-    purchaseorderdocidsforarrival = cursor1.fetchall()
+    idsforarrival = cursor1.fetchall()
     #import pdb;
     #pdb.set_trace()
 
