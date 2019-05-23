@@ -167,8 +167,6 @@ def pohandlersearchresults(request):
                     "WHERE Doc_kindid_tblDoc_id=7 and obsolete_tbldoc = 0 " + searchphrase + " "
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
     pos = cursor3.fetchall()
-    #    import pdb;
-    #    pdb.set_trace()
 
     return render(request, 'quotation/pohandler.html', {'pos': pos})
 def pohandlerrowsourceforarrivaldates(request):
@@ -200,23 +198,17 @@ def pohandlerreception(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
-                    "Contactid_tblDoc_id, "
+                    "Docid_tblDoc "
                     "FROM quotation_tbldoc_details as DD "
                     "JOIN quotation_tbldoc as D ON "
                     "D.Docid_tblDoc=DD.Docid_tblDoc_details_id "
                     
-                    "WHERE Doc_detailsid_tblDoc_details=%s "
-                    "Group by Contactid_tblDoc_id ",
+                    "WHERE dateofarrival_tbldocdetails = %s and obsolete_tbldoc=0 "
+                    "Group by Docid_tblDoc ",
                     [dateofarrival])
-    customerordercontactsforarrival = cursor1.fetchall()
-
-
-
-
-
-
-
-
+    purchaseorderdocidsforarrival = cursor1.fetchall()
+    #import pdb;
+    #pdb.set_trace()
 
     pk=60
     cursor1 = connection.cursor()
@@ -263,16 +255,18 @@ def pohandlerreception(request):
         currencyrateinreport = x[11]
         accountcurrencycode = x[12]
 
-        companynameclone = x[12]
+        companynameclone = x[13]
  #       companyid = instancesingle[2]
-        firstnameclone = x[13]
-        lastnameclone = x[14]
-        titleclone = x[15]
-        mobileclone = x[16]
-        emailclone = x[17]
-        pcdclone = x[18]
-        townclone = x[19]
-        addressclone = x[20]
+        firstnameclone = x[14]
+        lastnameclone = x[15]
+        titleclone = x[16]
+        mobileclone = x[17]
+        emailclone = x[18]
+        pcdclone = x[19]
+        townclone = x[20]
+        addressclone = x[21]
+        #import pdb;
+        #pdb.set_trace()
 
     cursor8 = connection.cursor()
     cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
