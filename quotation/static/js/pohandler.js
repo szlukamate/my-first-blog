@@ -130,10 +130,6 @@ $(document).ready(function () {
 
                 data: {
                 'receivedstatus': $('#receiveds').prop('checked'),
-//                'dockindname': $('#dockindname').val(),
-//                'fromdate': $('#fromdate').val(),
-//                'todate': $('#todate').val(),
-//                'company': $('#company').val(),
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
@@ -149,25 +145,6 @@ $(document).ready(function () {
                 datatype: 'html'
 
             });
-                setTimeout(
-                  function()
-                  {
-//                    var companyvalueaccumulator=$('select#company').val(); // swap options of select element after html template refresh
-//                    var companyswap=$('select#companyswap').html();
-//                    $('select#company').html(companyswap);
-//                    $('select#company').val(companyvalueaccumulator);
-
-//                    var dockindnamevalueaccumulator=$('select#dockindname').val();
-//                    var dockindnameswap=$('select#dockindnameswap').html();
-//                    $('select#dockindname').html(dockindnameswap);
-//                    $('select#dockindname').val(dockindnamevalueaccumulator);
-
-                  }, 500);
-//        sessionStorage.docnumber = $('#docnumber').val();
-//        sessionStorage.dockindname = $('#dockindname').val();
-//        sessionStorage.fromdate = $('#fromdate').val();
-//        sessionStorage.todate = $('#todate').val();
-//        sessionStorage.company = $('#company').val();
 
     });
     $('body').on("click", ".pohandlerarrivalbutton", function() {
@@ -180,30 +157,6 @@ $(document).ready(function () {
 
 
 
-
-
-    });
-    $('#pohandlerreceptionbutton').click(function() {
-
-            $.ajax({
-                type: 'POST',
-                url: 'pohandlerreception',
-
-                data: {
-                'dateofarrival' : $('#select-resultarrivaldates').text(),
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                },
-
-                success: function(url){
-                window.location.href = url;
-
-                },
-                error: function(){
-                    alert('failure');
-                },
-                datatype: 'html'
-
-            });
 
 
     });
@@ -258,5 +211,70 @@ $(document).ready(function () {
 
 
     });
+    $('#pohandlerreceptionbutton').click(function() {
 
+        var porowsnumber=0;
+        var i;
+        var dateofarrivallist=[];
+        var podocdetailsid;
+        var podocid;
+        var cordocid;
+
+        var dateofarrival = $('#select-resultarrivaldates').text()
+        porowsnumberfunc();
+
+        main();
+
+            function main(){
+                porowsnumberfunc();
+
+                for (i = 1; i <= porowsnumber; i++) {
+                    getifchecked();
+
+                }
+
+
+            }
+
+            function porowsnumberfunc(){
+            porowsnumber=$('#porowsnumber').attr( "porowsnumber" ); //Number of PO rows arrived
+            }
+            function getifchecked(){
+
+                    if ($('input[type="text"][loopid="' + i + '"][name2="dateofarrivalinput"]').val() == dateofarrival) {
+                           podocdetailsid=$('input[type="text"][loopid="' + i + '"').attr( "podocdetailsid" );
+                           podocid=$('input[type="text"][loopid="' + i + '"').attr( "podocid" );
+                           cordocid=$('input[type="text"][loopid="' + i + '"').attr( "cordocid" );
+
+                           dateofarrivallist.push(podocdetailsid, podocid, cordocid, dateofarrival);
+                           console.log('raw' + dateofarrivallist);
+                    }
+
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: 'pohandlerreception',
+
+                data: {
+                'dateofarrival' : $('#select-resultarrivaldates').text(),
+                'dateofarrivallist': JSON.stringify(dateofarrivallist),
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(url){
+//                window.location.href = url;
+
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
+            console.log('stringified' + JSON.stringify(dateofarrivallist));
+
+    });
 });

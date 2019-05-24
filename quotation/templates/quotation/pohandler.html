@@ -6,7 +6,7 @@
 	{% block content %}
           
 
-				<p id="customerordersnumber" customerordersnumber="{{ customerordersnumber }}" hidden></p>
+				<p id="porowsnumber" porowsnumber="{{ porowsnumber }}" hidden></p>
 
 							{% csrf_token %}
 
@@ -50,7 +50,7 @@
 														<td>{{ po.25}}</td>
 														<td class="tds" name="qty" rowid="{{ po.0}}">{{ po.1}}</td>
 
-														<td><input type="text" class="updateable" name2="dateofarrivalinput" value="{{ po.32|date:'Y-m-d'}}" name="dateofarrival_tbldocdetails" rowid="{{ po.0}}"></td>
+														<td><input type="text" class="updateable" name2="dateofarrivalinput" podocdetailsid="{{ po.0}}" podocid="{{ po.34}}" cordocid="{{ po.27}}" value="{{ po.32|date:'Y-m-d'}}" name="dateofarrival_tbldocdetails" loopid="{{ forloop.counter }}" rowid="{{ po.0}}"></td>
 														<td>
 															<button class="pohandlerarrivalbutton" type="submit" rowid="{{ po.0}}">
 															   <span>A</span>

@@ -167,8 +167,10 @@ def pohandlersearchresults(request):
                     "WHERE Doc_kindid_tblDoc_id=7 and obsolete_tbldoc = 0 " + searchphrase + " "
                     "order by DD.Docid_tblDoc_details_id, firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
     pos = cursor3.fetchall()
+    porowsnumber = len(pos)
 
-    return render(request, 'quotation/pohandler.html', {'pos': pos})
+    return render(request, 'quotation/pohandler.html', {'pos': pos,
+                                                        'porowsnumber': porowsnumber})
 def pohandlerrowsourceforarrivaldates(request):
     cursor0 = connection.cursor()
     cursor0.execute(
@@ -195,6 +197,18 @@ def pohandlerreception(request):
     dateofarrival = request.POST['dateofarrival']
 
     creatorid = request.user.id
+
+    cursor1 = connection.cursor()
+    cursor1.execute("DROP TEMPORARY TABLE IF EXISTS tempo;")
+
+    cursor1 = connection.cursor()
+    cursor1.execute("CREATE TABLE IF NOT EXISTS tempo "
+                    "    ( contact_id INT(11) NOT NULL AUTO_INCREMENT, "
+                    "      last_name VARCHAR(30) NOT NULL, "
+                    "     first_name VARCHAR(25), "
+                    "      birthday DATE, "
+                    "      CONSTRAINT contacts_pk PRIMARY KEY (contact_id) "
+                    "    ); ")
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
