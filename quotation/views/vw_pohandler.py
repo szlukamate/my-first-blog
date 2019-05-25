@@ -195,20 +195,54 @@ def pohandlerrowsourceforarrivaldates(request):
 
 def pohandlerreception(request):
     dateofarrival = request.POST['dateofarrival']
+    dateofarrivallistraw = request.POST['dateofarrivallist']
+    dateofarrivallist = json.loads(dateofarrivallistraw)
 
     creatorid = request.user.id
 
-    cursor1 = connection.cursor()
-    cursor1.execute("DROP TEMPORARY TABLE IF EXISTS tempo;")
 
-    cursor1 = connection.cursor()
-    cursor1.execute("CREATE TABLE IF NOT EXISTS tempo "
-                    "    ( contact_id INT(11) NOT NULL AUTO_INCREMENT, "
-                    "      last_name VARCHAR(30) NOT NULL, "
-                    "     first_name VARCHAR(25), "
-                    "      birthday DATE, "
-                    "      CONSTRAINT contacts_pk PRIMARY KEY (contact_id) "
-                    "    ); ")
+
+    cursor2 = connection.cursor()
+    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows;")
+    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows2;")
+    cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS porows "
+                    "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    "     podocdetailsid INT(11) NOT NULL, "
+                    "     podocid INT(11) NULL, " 
+                    "     cordocid INT(11) NULL, "
+                    "     dateofarrivaldate varchar(55) NULL) "
+                    "      ENGINE=INNODB "
+                    "    ; ")
+
+    for x in range(0, len(dateofarrivallist), 4):
+        podocdetailsid = dateofarrivallist[x+0]
+        podocid = dateofarrivallist[x+1]
+        cordocid = dateofarrivallist[x+2]
+        dateofarrivaldate = dateofarrivallist[x+3]
+
+        cursor2.execute("INSERT INTO porows (podocdetailsid, "
+                        "podocid, "
+                        "cordocid, "
+                        "dateofarrivaldate) VALUES ('" + podocdetailsid + "', "
+                                                    "'" + podocid + "', "
+                                                    "'" + cordocid + "', "
+                                                    "'" + dateofarrivaldate + "');")
+
+    cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS porows2 as (SELECT * FROM porows)")
+
+    cursor2.execute("SELECT porows.podocdetailsid "
+                    "FROM porows "
+                    "LEFT JOIN (SELECT count(*) "
+                    "           FROM porows2"
+                    "           ) as x "
+                    "ON porows.auxid=x.auxid")
+    tables = cursor2.fetchall()
+    import pdb;
+    pdb.set_trace()
+
+
+    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows;")
+
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
