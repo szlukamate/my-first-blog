@@ -74,7 +74,6 @@ def deliverynoteform(request, pk):
                         "D.accountcurrencycode_tbldoc, "
                         "pretag_tbldockind, " #25
                         "D.wherefromdocid_tbldoc, "
-                        "D.wherefromdocid_tbldoc, "
                         "D.wheretodocid_tbldoc, "
                         "Dfrom.companyname_tblcompanies_ctbldoc as companywherefromdeno, "
                         "Dto.companyname_tblcompanies_ctbldoc as companywheretodeno "
