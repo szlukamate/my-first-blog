@@ -64,69 +64,127 @@ def docsearchcontent(request):
     todate = request.POST['todate']
     company = request.POST['company']
 
-
     if docnumber != '':
-        docnumber = "and docnumber_tbldoc='" + docnumber + "' "
+        docnumberformainresults = "and D1.docnumber_tbldoc='" + docnumber + "' "
+    else:
+        docnumberformainresults = ""
+        docnumberforrowsources = ""
+
     if dockindname != '':
-        dockindname = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
+        dockindnameformainresults = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
+        dockindnameforrowsources = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
+    else:
+        dockindnameformainresults = ""
+        dockindnameforrowsources = ""
 
     #datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
-    datephrase = "and DATE(creationtime_tbldoc) >= '" + fromdate + "' and DATE(creationtime_tbldoc) <= '" + todate + "' "
+#    datephrase = "and DATE(quotation_tbldoc.creationtime_tbldoc) >= '" + fromdate + "' and DATE('D.creationtime_tbldoc') <= '" + todate + "' "
+#    datephrase = "and D.creationtime_tbldoc >= '" + fromdate + "' and D.creationtime_tbldoc <= '" + todate + "' "
     #datephrase = "and DATE(creationtime_tbldoc) = '2019-04-19'"
-
+    datephraseformainresults = ''
+    datephraseforrowsources = ''
     if company != '':
-        company = "and companyname_tblcompanies_ctbldoc='" + company + "'"
+        companyformainresults = "and companyname_tblcompanies_ctbldoc='" + company + "'"
+        companyforrowsources = "and companyname_tblcompanies_ctbldoc='" + company + "'"
+    else:
+        companyformainresults = ""
+        companyforrowsources = ""
 
     #import pdb;
     #pdb.set_trace()
-    searchphrase= docnumber + dockindname + datephrase + company + " "
+    searchphraseformainresults = docnumberformainresults + dockindnameformainresults + datephraseformainresults + companyformainresults + " "
+    searchphraseforrowsources = dockindnameforrowsources + companyforrowsources + " "
 
     cursor1 = connection.cursor()
-#    import pdb;
-#    pdb.set_trace()
+    #import pdb;
+    #pdb.set_trace()
 
-    cursor1.execute("SELECT docid_tbldoc, "
-                    "pcd_tblcompanies_ctbldoc, "
-                    "town_tblcompanies_ctbldoc, "
-                    "Doc_kindid_tblDoc_id, "
-                    "companyname_tblcompanies_ctbldoc, "
-                    "firstname_tblcontacts_ctbldoc, "
-                    "lastname_tblcontacts_ctbldoc, "
-                    "creationtime_tbldoc,"
+    cursor1.execute("SELECT D1.docid_tbldoc, "
+                    "D1.pcd_tblcompanies_ctbldoc, "
+                    "D1.town_tblcompanies_ctbldoc, "
+                    "D1.Doc_kindid_tblDoc_id, "
+                    "D1.companyname_tblcompanies_ctbldoc, "
+                    "D1.firstname_tblcontacts_ctbldoc, "
+                    "D1.lastname_tblcontacts_ctbldoc, "
+                    "D1.creationtime_tbldoc, "
                     "Doc_kind_name_tblDoc_kind, "
                     "pretag_tbldockind, "
-                    "docnumber_tbldoc, "
+                    "D1.docnumber_tbldoc, " #10
                     "Doc_kindid_tblDoc_kind, "
-                    "subject_tbldoc "
-                    "FROM quotation_tbldoc "
+                    "D1.subject_tbldoc, "
+                    "D1.wherefromdocid_tbldoc, "
+                    "D1.wheretodocid_tbldoc, "
+                    "Dfrom.fromcompanyname, "
+                    "Dto.tocompanyname, "
+                    "D1.obsolete_tbldoc, "
+                    "Dfrom.frompretag, "
+                    "Dfrom.fromdocnumber, "
+                    "Dto.topretag, " #20
+                    "Dto.todocnumber "
+                    
+                    "FROM quotation_tbldoc as D1 "
+
                     "JOIN quotation_tbldoc_kind "
-                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
-                    "WHERE obsolete_tbldoc = 0 " + searchphrase + "" 
-                    "order by docid_tbldoc desc ")
+                    "ON D1.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "LEFT JOIN (SELECT companyname_tblcompanies_ctbldoc as fromcompanyname, "
+                    "                   docid_tbldoc as fromdocid, "
+                    "                   pretag_tbldockind as frompretag, "
+                    "                   docnumber_tbldoc as fromdocnumber "
+                    
+                    "                   FROM quotation_tbldoc "
+
+                    "                   JOIN quotation_tbldoc_kind "
+                    "                   ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "           ) as Dfrom "
+                    "ON D1.wherefromdocid_tbldoc = Dfrom.fromdocid "
+
+                    "LEFT JOIN (SELECT companyname_tblcompanies_ctbldoc as tocompanyname, "
+                    "                   docid_tbldoc as todocid, "
+                    "                   pretag_tbldockind as topretag, "
+                    "                   docnumber_tbldoc as todocnumber "
+                    
+                    "                   FROM quotation_tbldoc "
+
+                    "                   JOIN quotation_tbldoc_kind "
+                    "                   ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "           ) as Dto "
+                    "ON D1.wheretodocid_tbldoc = Dto.todocid "
+
+                    "HAVING D1.obsolete_tbldoc = 0 " + searchphraseformainresults + ""
+                    "order by D1.docid_tbldoc desc ")
     docs = cursor1.fetchall()
     #import pdb;
     #pdb.set_trace()
 
-    cursor1 = connection.cursor()
-    cursor1.execute("SELECT "
+    cursor2 = connection.cursor()
+    cursor2.execute("SELECT "
                     "companyname_tblcompanies_ctbldoc "
+
                     "FROM quotation_tbldoc "
+
                     "JOIN quotation_tbldoc_kind "
                     "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
-                    "WHERE obsolete_tbldoc = 0 " + searchphrase + ""
-                    "GROUP BY companyname_tblcompanies_ctbldoc ")
-    companiesrowsources = cursor1.fetchall()
 
+                    "WHERE quotation_tbldoc.obsolete_tbldoc = 0 " + searchphraseforrowsources + ""
+                    "GROUP BY companyname_tblcompanies_ctbldoc ")
+
+    companiesrowsources = cursor2.fetchall()
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
                     "Doc_kind_name_tblDoc_kind "
+
                     "FROM quotation_tbldoc "
+
                     "JOIN quotation_tbldoc_kind "
                     "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
-                    "WHERE obsolete_tbldoc = 0 " + searchphrase + ""
-                    "GROUP BY Doc_kind_name_tblDoc_kind ")
-    dockindrowsources = cursor1.fetchall()
 
+                    "WHERE quotation_tbldoc.obsolete_tbldoc = 0 " + searchphraseforrowsources + ""
+                    "GROUP BY Doc_kind_name_tblDoc_kind ")
+
+    dockindrowsources = cursor1.fetchall()
     return render(request, 'quotation/docsearchcontent.html', {'docs': docs,
                                                                'companiesrowsources': companiesrowsources,
                                                                'dockindrowsources': dockindrowsources})

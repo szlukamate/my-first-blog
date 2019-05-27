@@ -162,7 +162,6 @@ def pohandlersearchresults(request):
                     "               ON D.docid=DDx.Docid_tblDoc_details_id "
                     "            ) as DDdeno "
                     "ON DD.Doc_detailsid_tblDoc_details=DDdeno.denotopodetailslink_tbldocdetails "
-
     
                     "WHERE Doc_kindid_tblDoc_id=7 and obsolete_tbldoc = 0 " + searchphrase + " "
                     "order by DD.Docid_tblDoc_details_id, firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
