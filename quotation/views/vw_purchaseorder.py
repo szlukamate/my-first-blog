@@ -494,6 +494,49 @@ def purchaseorderform(request, pk):
                     [pk])
     docdetails = cursor3.fetchall()
 
+    cursor14 = connection.cursor()
+    cursor14.execute("SELECT DD.Doc_detailsid_tblDoc_details, "
+                     "DD2.denodocdetails, "
+                     "DD2.denodocdetailsqty, "
+                     "DD2.denodocnumber, "
+                     "DD2.denopretag, "
+                     "DD2.denodocid, "
+
+                     "DD3.sumdenodocdetailsqty "
+                     "FROM quotation_tbldoc_details as DD "
+                     "LEFT JOIN    (SELECT (Doc_detailsid_tblDoc_details) as denodocdetails, "
+                     "               denotopodetailslink_tbldocdetails, "
+                     "               (Qty_tblDoc_details) as denodocdetailsqty, "
+                     "               (docnumber_tbldoc) as denodocnumber, "
+                     "               (pretag_tbldockind) as denopretag, "
+                     "               (docid) as denodocid "
+                     "               FROM quotation_tbldoc_details as DDx "
+
+                     "               JOIN (SELECT docnumber_tbldoc, "
+                     "                            (COALESCE(Docid_tblDoc, 0)) as docid, "
+                     "                             pretag_tbldockind "
+                     "                       FROM quotation_tbldoc"
+                     "                       JOIN quotation_tbldoc_kind "
+                     "                       ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                     "                       WHERE obsolete_tbldoc = 0"
+                     "                    ) as D"
+                     "               ON D.docid=DDx.Docid_tblDoc_details_id "
+                     "            ) as DD2 "
+                     "ON DD.Doc_detailsid_tblDoc_details=DD2.denotopodetailslink_tbldocdetails "
+
+                     "LEFT JOIN    (SELECT denotopodetailslink_tbldocdetails, sum(Qty_tblDoc_details) as sumdenodocdetailsqty "
+                     "               FROM quotation_tbldoc_details as DDxx "
+
+                     "               JOIN quotation_tbldoc as Dxx "
+                     "               ON Dxx.Docid_tblDoc=DDxx.Docid_tblDoc_details_id "
+                     "               WHERE obsolete_tbldoc=0 "
+                     "               GROUP BY denotopodetailslink_tbldocdetails) as DD3 "
+                     "ON DD.Doc_detailsid_tblDoc_details=DD3.denotopodetailslink_tbldocdetails "
+
+                     "WHERE DD.docid_tbldoc_details_id=%s", [pk])
+    denotopolinks = cursor14.fetchall()
+
     cursor10 = connection.cursor()
     cursor10.execute("SELECT id, "
                      "first_name, "
@@ -549,8 +592,10 @@ def purchaseorderform(request, pk):
         nextchapternums[3]=nextchapternums[3]+1
 
     return render(request, 'quotation/purchaseorder.html', {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums' : nextchapternums,
-                                                        'creatordata': creatordata,
-                                                        'currencycodes': currencycodes})
+                                                            'creatordata': creatordata,
+                                                            'denotopolinks': denotopolinks,
+
+                                                            'currencycodes': currencycodes})
 
 
 def purchaseorderprint(request, docid):

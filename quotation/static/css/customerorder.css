@@ -145,3 +145,8 @@ position: absolute;
 top: 12mm;
 left: 371mm;
 }
+#title {
+color:white;
+background-color: blue;
+font-size: 173%;
+}

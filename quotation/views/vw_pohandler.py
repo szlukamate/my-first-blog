@@ -257,6 +257,7 @@ def pohandlerreception(request):
     docmakercounter = 0
 
     for x3 in tables2:
+        podocdetailsid = x3[1]
         podocid = x3[2]
         cordocid = x3[3]
         numberofitemstodeno = x3[5]
@@ -386,7 +387,7 @@ def pohandlerreception(request):
                              paymenttext,
                              currencycodeinreport,
                              currencyrateinreport,
-                             pk,
+                             cordocid,
                              accountcurrencycode,
                              podocid,
                              cordocid])
@@ -406,7 +407,7 @@ def pohandlerreception(request):
 
         docmakercounter -= 1
 
-        cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
+        cursor2.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
                         "`Qty_tblDoc_details`, "
                         "`Docid_tblDoc_details_id`, "
                         "`customerdescription_tblProduct_ctblDoc_details`, "
@@ -432,16 +433,20 @@ def pohandlerreception(request):
                         "unit_tbldocdetails, "  # 23
                         "suppliercompanyid_tbldocdetails, "
                         "supplierdescription_tblProduct_ctblDoc_details "
+
                         "FROM quotation_tbldoc_details "
+
                         "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                         "ON "
                         "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
-                        "JOIN quotation_tbldoc as D ON D.Docid_tblDoc=quotation_tbldoc_details.Docid_tblDoc_details_id "
+
+                        "JOIN quotation_tbldoc as D "
+                        "ON D.Docid_tblDoc=quotation_tbldoc_details.Docid_tblDoc_details_id "
     
-                        "WHERE dateofarrival_tbldocdetails = %s and obsolete_tbldoc=0 "
+                        "WHERE obsolete_tbldoc=0 and Doc_detailsid_tblDoc_details=%s "
                         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
-                        [dateofarrival])
-        docdetails = cursor3.fetchall()
+                        [podocdetailsid])
+        docdetails = cursor2.fetchall()
         #import pdb;
         #pdb.set_trace()
 

@@ -5,10 +5,10 @@
           		<p><span>Docid:</span><span id="purchaseorderdocid">{{ doc.0.0}}</span></p>
 				<span id="purchaseordertemplate" ></span>
 
-				<p>Contactid:{{ doc.0.1}} hidden</p>
+				<p hidden>Contactid:{{ doc.0.1}} </p>
 
 
-				<p align="center" id="title" style="font-size:173%;">Purchase Order Form</p>{% csrf_token %}
+				<p align="center" id="title" >Purchase Order Form</p>{% csrf_token %}
 						<div id="infoframe">
 							<p >Number of Purchase Order: {{ doc.0.25 }}{{ doc.0.10 }}</p>
 							<p >Creator: {{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
@@ -170,7 +170,39 @@
 											<input type="text" style="color:white; background-color: Green;" class="updateabletbldocdetails" value="{{ tblDoc_details.18}}"  name="unitsalespriceACU_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.22}}" name="Discount" size="3" disabled>
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.24}}" name="Supplier" size="6" disabled><br>
-											<a href="{% url 'customerorderform' pk=tblDoc_details.27 %}"><span style="color:white; background-color: blue;" >{{ tblDoc_details.30}}{{ tblDoc_details.29}} {{ tblDoc_details.31}} (CORDDId:{{ tblDoc_details.26}})</a><br>
+											<a href="{% url 'customerorderform' pk=tblDoc_details.27 %}"><span style="color:white; background-color: blue;" >{{ tblDoc_details.30}}{{ tblDoc_details.29}} {{ tblDoc_details.31}} (CORDDId:{{ tblDoc_details.26}})</a>
+
+												{% for denotopolink in denotopolinks %}
+
+
+
+														{% if tblDoc_details.0 == denotopolink.0 %} <!-- match docdetailsids -->
+
+															{% if tblDoc_details.1 == denotopolink.6 %} <!-- if matches sumqty-->
+																{% if denotopolink.2 != tblDoc_details.1 %} <!-- if many POs-->
+																	<a href="{% url 'deliverynoteform' pk=denotopolink.5 %}"><span style="color:black; background-color: yellow;" >{{ denotopolink.4}}{{ denotopolink.3}}(PODDId:{{ denotopolink.1}})/{{ denotopolink.2}}</a><br>
+																{% else %}
+																<!-- if only one PO-->
+																	<a href="{% url 'deliverynoteform' pk=denotopolink.5 %}"><span style="color:black; background-color: yellow;" >{{ denotopolink.4}}{{ denotopolink.3}}(PODDId:{{ denotopolink.1}})</a><br>
+																{% endif %}
+															{% else %}
+
+																{% if denotopolink.6 == None %} <!-- if no PO-->
+																	<a href="#"><span style="color:black; background-color: yellow; border-width:3px; border-style:dashed; border-color: red;">No DENO line </a><br>
+																{% else %}
+
+
+																	<a href="{% url 'deliverynoteform' pk=denotopolink.5 %}"><span style="color:black; background-color: yellow; border-width:3px; border-style:dashed; border-color: red;">{{ denotopolink.4}}{{ denotopolink.3}}(PODDId:{{ denotopolink.1}})/{{ denotopolink.2}}</a><br>
+																{% endif %}
+															{% endif %}
+
+
+														{% endif %}
+
+
+												{% endfor %}
+
+
 											<a href="{% url 'purchaseorderrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="purchaseorderproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
 
 											<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->
@@ -179,6 +211,7 @@
 											{% else %}
 											<br><hr>
 											{% endif %}
+
 
 
 											{% endfor %}

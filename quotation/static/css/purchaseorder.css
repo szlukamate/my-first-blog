@@ -39,52 +39,6 @@ top: 0 mm;
 left: 0 mm;
 
 }
-/*
-#Pridlabel{
-position: relative;
-top: 12mm;
-}
-#Ddetidlabel{
-position: relative;
-top: 12mm;
-}
-#C1label{
-position: relative;
-top: 12mm;
-}
-#C2label{
-position: relative;
-top: 12mm;
-}
-#C3label{
-position: relative;
-top: 12mm;
-}
-#C4label{
-position: relative;
-top: 12mm;
-}
-#Qtylabel{
-position: relative;
-top: 12mm;
-}
-#Unitlabel{
-position: relative;
-top: 12mm;
-}
-#customerdescriptionlabel{
-position: relative;
-top: 12mm;
-}
-#supplierdescriptionlabel{
-position: relative;
-top: 12mm;
-}
-#Notelabel{
-position: relative;
-top: 12mm;
-}
-*/
 #Purchasepricelabel{
 position: absolute;
 top: 12mm;
@@ -144,4 +98,9 @@ left: 358mm;
 position: absolute;
 top: 12mm;
 left: 371mm;
+}
+#title {
+color:black;
+background-color: #33cccc;
+font-size: 173%;
 }
