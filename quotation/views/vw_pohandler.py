@@ -197,8 +197,130 @@ def pohandlerreception(request):
 
     creatorid = request.user.id
 
+#autosplitting start
+    dateofarrivallistsplitted= []
+    for x1 in range(0, len(dateofarrivallist), 4):
+        podocdetailsid = dateofarrivallist[x1+0]
+        podocid = dateofarrivallist[x1+1]
+        cordocid = dateofarrivallist[x1+2]
+        dateofarrivaldate = dateofarrivallist[x1+3]
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
+                        "`Qty_tblDoc_details`, "
+                        "`Docid_tblDoc_details_id`, "
+                        "`customerdescription_tblProduct_ctblDoc_details`, "
+                        "`firstnum_tblDoc_details`, "
+                        "`fourthnum_tblDoc_details`, "
+                        "`secondnum_tblDoc_details`, "
+                        "`thirdnum_tblDoc_details`, "
+                        "`Note_tblDoc_details`, "
+                        "`creationtime_tblDoc_details`, "
+                        "purchase_price_tblproduct_ctblDoc_details, "
+                        "listprice_tblDoc_details, "
+                        "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                        "Productid_tblDoc_details_id, "
+                        "Doc_detailsid_tblDoc_details, "
+                        "COALESCE(Productid_tblProduct, 0), "
+                        "currencyrate_tblcurrency_ctblDoc_details, "
+                        "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
+                        "unitsalespriceACU_tblDoc_details, "
+                        "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
+                        "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
+                        "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
+                        "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
+                        "unit_tbldocdetails, "
+                        "suppliercompanyid_tbldocdetails, "
+                        "podetailslink_tbldocdetails "
+                        "FROM quotation_tbldoc_details "
+                        "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+                        "ON "
+                        "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+                        "WHERE Doc_detailsid_tblDoc_details=%s "
+                        "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
+                        [podocdetailsid])
+        docdetails = cursor3.fetchall()
+
+        for x in docdetails:
+            qty = x[1]
+            docid = x[2]
+            firstnum = x[4]
+            fourthnum = x[5]
+            secondnum = x[6]
+            thirdnum = x[7]
+            note = x[8]
+            productid = x[13]
+            currencyrate = x[16]
+            suppliercompanyid = x[24]
+            podetailslink = x[25]
+
+            purchase_priceclone = x[10]
+            customerdescriptionclone = x[3]
+            currencyisocodeclone = x[12]
+            listpricecomputed = x[11]
+            currencyrateclone = x[16]
+            unitclone = x[23]
+            unitsalespriceACU = x[18]
+
+        cursor4 = connection.cursor()
+        for x2 in range(int(qty)):
+            cursor4.execute(
+                "INSERT INTO quotation_tbldoc_details "
+                "( Docid_tblDoc_details_id, "
+                "`Qty_tblDoc_details`, "
+                "`customerdescription_tblProduct_ctblDoc_details`, "
+                "firstnum_tblDoc_details, "
+                "`fourthnum_tblDoc_details`, "
+                "`secondnum_tblDoc_details`, "
+                "`thirdnum_tblDoc_details`, "
+                "`Note_tblDoc_details`, "
+                "purchase_price_tblproduct_ctblDoc_details, "
+                "listprice_tblDoc_details, "
+                "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                "Productid_tblDoc_details_id, "
+                "currencyrate_tblcurrency_ctblDoc_details, "
+                "unitsalespriceACU_tblDoc_details, "
+                "unit_tbldocdetails, "
+                "suppliercompanyid_tbldocdetails, "
+                "podetailslink_tbldocdetails, "
+                "creatorid_tbldocdetails, "
+                "dateofarrival_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+
+                [docid,
+                 1,
+                 customerdescriptionclone,
+                 firstnum,
+                 fourthnum,
+                 secondnum,
+                 thirdnum,
+                 note,
+                 purchase_priceclone,
+                 listpricecomputed,
+                 currencyisocodeclone,
+                 productid,
+                 currencyrate,
+                 unitsalespriceACU,
+                 unitclone,
+                 suppliercompanyid,
+                 podetailslink,
+                 creatorid,
+                 dateofarrivaldate])
+
+            cursor3 = connection.cursor()
+            cursor3.execute("SELECT max(Doc_detailsid_tblDoc_details) FROM quotation_tbldoc_details WHERE creatorid_tbldocdetails=%s", [creatorid])
+            results = cursor3.fetchall()
+            for x in results:
+                maxdocdetailsid = x[0]
+
+            appendvar = (maxdocdetailsid, podocid, cordocid, dateofarrivaldate)
+            dateofarrivallistsplitted.append(appendvar)
+
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            "DELETE FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [podocdetailsid])
 
 
+#autosplitting end
     cursor2 = connection.cursor()
     cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows;")
     cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows2;")
@@ -212,19 +334,19 @@ def pohandlerreception(request):
                     "      ENGINE=INNODB "
                     "    ; ")
 
-    for x in range(0, len(dateofarrivallist), 4):
-        podocdetailsid = dateofarrivallist[x+0]
-        podocid = dateofarrivallist[x+1]
-        cordocid = dateofarrivallist[x+2]
-        dateofarrivaldate = dateofarrivallist[x+3]
+    for x11 in range(len(dateofarrivallistsplitted)):
+        podocdetailsid = dateofarrivallistsplitted[x11][0]
+        podocid = dateofarrivallistsplitted[x11][1]
+        cordocid = dateofarrivallistsplitted[x11][2]
+        dateofarrivaldate = dateofarrivallistsplitted[x11][3]
 
         cursor2.execute("INSERT INTO porows (podocdetailsid, "
                         "podocid, "
                         "cordocid, "
-                        "dateofarrivaldate) VALUES ('" + podocdetailsid + "', "
-                                                    "'" + podocid + "', "
-                                                    "'" + cordocid + "', "
-                                                    "'" + dateofarrivaldate + "');")
+                        "dateofarrivaldate) VALUES ('" + str(podocdetailsid) + "', "
+                                                    "'" + str(podocid) + "', "
+                                                    "'" + str(cordocid) + "', "
+                                                    "'" + str(dateofarrivaldate) + "');")
 
     cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS porows2 as (SELECT * FROM porows)")
 
@@ -249,7 +371,6 @@ def pohandlerreception(request):
                         "numberofitemstodeno= %s "
                         "WHERE auxid =%s ", [numberofitemstodeno, auxid])
 
-#    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows;")
 
     cursor2.execute("SELECT *  "
                     "FROM porows ")
@@ -261,8 +382,6 @@ def pohandlerreception(request):
         podocid = x3[2]
         cordocid = x3[3]
         numberofitemstodeno = x3[5]
-#        import pdb;
-#        pdb.set_trace()
 
         if docmakercounter  == 0:
             docmakercounter = numberofitemstodeno
@@ -313,7 +432,6 @@ def pohandlerreception(request):
                 accountcurrencycode = x[12]
 
                 companynameclone = x[13]
-                #       companyid = instancesingle[2]
                 firstnameclone = x[14]
                 lastnameclone = x[15]
                 titleclone = x[16]

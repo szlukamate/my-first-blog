@@ -311,3 +311,28 @@ def deliverynotebackpage(request):
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")
+def deliverynotepre(request, docid):
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT "
+        "Docid_tblDoc_details_id, "
+        "customerdescription_tblProduct_ctblDoc_details, "
+        "Productid_tblDoc_details_id, "
+        "supplierdescription_tblProduct_ctblDoc_details, "
+        "sum(Qty_tblDoc_details) "
+
+        "FROM quotation_tbldoc_details "
+        "LEFT JOIN quotation_tbldoc "
+        "ON "
+        "quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+        "WHERE docid_tbldoc_details_id=%s "
+        "GROUP BY Docid_tblDoc_details_id, "
+        "           customerdescription_tblProduct_ctblDoc_details, "
+        "           Productid_tblDoc_details_id, "
+        "           supplierdescription_tblProduct_ctblDoc_details ",
+        [docid])
+    docdetails = cursor3.fetchall()
+
+
+    return render(request, 'quotation/deliverynotepre.html', {'docdetails': docdetails})
