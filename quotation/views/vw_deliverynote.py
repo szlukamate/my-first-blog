@@ -16,6 +16,10 @@ import subprocess
 import os
 
 
+# import pdb;
+# pdb.set_trace()
+
+
 def deliverynoteform(request, pk):
         if request.method == "POST":
                 fieldvalue = request.POST['fieldvalue']
@@ -318,21 +322,55 @@ def deliverynotepre(request, docid):
         "SELECT "
         "Docid_tblDoc_details_id, "
         "customerdescription_tblProduct_ctblDoc_details, "
-        "Productid_tblDoc_details_id, "
+        "DD.Productid_tblDoc_details_id, "
         "supplierdescription_tblProduct_ctblDoc_details, "
-        "sum(Qty_tblDoc_details) "
+        "sum(Qty_tblDoc_details) as ordered, "
+        "sum(Denod.denodqty) as denod, "
+        "sum(onstock.onstockqty) as onstock "
 
-        "FROM quotation_tbldoc_details "
-        "LEFT JOIN quotation_tbldoc "
-        "ON "
-        "quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+        "FROM quotation_tbldoc_details as DD "
+
+        
+        "LEFT JOIN (SELECT "
+        "           wheretodocid_tbldoc, "
+        "           DD2.denodqty as denodqty, "
+        "           DD2.Productid_tblDoc_details_id as productid"
+        
+        "           FROM quotation_tbldoc "
+        
+        "           LEFT JOIN   (SELECT "
+        "                       Docid_tblDoc_details_id as docid, "
+        "                       sum(Qty_tblDoc_details) as denodqty, "
+        "                       Productid_tblDoc_details_id "
+ 
+        "                       FROM quotation_tbldoc_details"
+                                    
+        "                       GROUP BY docid, Productid_tblDoc_details_id  "
+        "                       ) as DD2 "
+        "           ON quotation_tbldoc.Docid_tblDoc = DD2.docid "
+
+        "           WHERE obsolete_tbldoc = 0 "
+        "           ) AS Denod "
+        "ON (DD.Docid_tblDoc_details_id = Denod.wheretodocid_tbldoc and DD.Productid_tblDoc_details_id = Denod.productid) "
+
+        "LEFT JOIN (SELECT "
+        "           Docid_tblDoc_details_id as docid, "
+        "           sum(Qty_tblDoc_details) as onstockqty, "
+        "           Productid_tblDoc_details_id as productid "
+        
+        "           FROM quotation_tbldoc_details "
+
+        "           WHERE obsolete_tbldoc = 0 "
+        "           GROUP BY docid, productid "
+        "           ) AS onstock "
+        "ON (788 = onstock.docid and DD.Productid_tblDoc_details_id = onstock.productid) "
+
         "WHERE docid_tbldoc_details_id=%s "
         "GROUP BY Docid_tblDoc_details_id, "
         "           customerdescription_tblProduct_ctblDoc_details, "
-        "           Productid_tblDoc_details_id, "
+        "           DD.Productid_tblDoc_details_id, "
         "           supplierdescription_tblProduct_ctblDoc_details ",
         [docid])
     docdetails = cursor3.fetchall()
-
 
     return render(request, 'quotation/deliverynotepre.html', {'docdetails': docdetails})

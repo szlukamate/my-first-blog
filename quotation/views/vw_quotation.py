@@ -951,7 +951,8 @@ def quotationsaveasorder(request, pk):
                         "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
                         "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
                         "unit_tbldocdetails, "
-                        "suppliercompanyid_tbldocdetails "
+                        "suppliercompanyid_tbldocdetails, "
+                        "supplierdescription_tblProduct_ctblDoc_details "
                         "FROM quotation_tbldoc_details "
                         "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                         "ON "
@@ -970,6 +971,7 @@ def quotationsaveasorder(request, pk):
         productid = x[13]
         currencyrate = x[16]
         suppliercompanyid = x[24]
+        supplierdescriptionclone = x[25]
 
         purchase_priceclone = x[10]
         customerdescriptionclone = x[3]
@@ -997,7 +999,8 @@ def quotationsaveasorder(request, pk):
             "currencyrate_tblcurrency_ctblDoc_details, "
             "unitsalespriceACU_tblDoc_details, "
             "unit_tbldocdetails, "
-            "suppliercompanyid_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            "suppliercompanyid_tbldocdetails, "
+            "supplierdescription_tblProduct_ctblDoc_details) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
             [maxdocid,
              qty,
@@ -1014,5 +1017,6 @@ def quotationsaveasorder(request, pk):
              currencyrate,
              unitsalespriceACU,
              unitclone,
-             suppliercompanyid])
+             suppliercompanyid,
+             supplierdescriptionclone])
     return redirect('docselector', pk=maxdocid)
