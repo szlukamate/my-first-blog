@@ -360,7 +360,6 @@ def deliverynotepre(request, docid):
         
         "           FROM quotation_tbldoc_details "
 
-        "           WHERE obsolete_tbldoc = 0 "
         "           GROUP BY docid, productid "
         "           ) AS onstock "
         "ON (788 = onstock.docid and DD.Productid_tblDoc_details_id = onstock.productid) "

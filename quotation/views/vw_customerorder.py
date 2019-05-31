@@ -103,7 +103,7 @@ def customerorderform(request, pk):
                     "DD.thirdnum_tblDoc_details, "
                     "DD.Note_tblDoc_details, "
                     "DD.creationtime_tblDoc_details, "
-                    "DD.purchase_price_tblproduct_ctblDoc_details, "
+                    "DD.purchase_price_tblproduct_ctblDoc_details, " #10
                     "DD.listprice_tblDoc_details, "
                     "DD.currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
                     "DD.Productid_tblDoc_details_id, "
