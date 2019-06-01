@@ -2,8 +2,8 @@
 {% load staticfiles%}
 	{% block content %}
           
-
-				<p id="customerordersnumber" customerordersnumber="{{ customerordersnumber }}" hidden></p>
+				<p id="rowsnumber" rowsnumber="{{ rowsnumber }}" hidden></p>
+				<p id="customerordernumber" customerordernumber="{{ customerordernumber }}" hidden></p>
 
 							{% csrf_token %}
 
@@ -24,6 +24,9 @@
 													<td>Supplierdescription</td>
 													<td>On Order</td>
 													<td>On DENO</td>
+													<td>To DENO</td>
+													<td>On StockIngoing</td>
+													<td>On StockOutgoing</td>
 													<td>On Stock</td>
 
 												</tr>
@@ -34,12 +37,16 @@
 
 
 													<tr>
-														<td>{{ docdetail.2}}</td>
 														<td>{{ docdetail.1}}</td>
+														<td>{{ docdetail.0}}</td>
+														<td>{{ docdetail.2}}</td>
 														<td>{{ docdetail.3}}</td>
 														<td>{{ docdetail.4}}</td>
-														<td>{{ docdetail.5}}</td>
+														<td>{{ docdetail.8}}</td>
+
+														<td >{{ docdetail.5}}</td>
 														<td>{{ docdetail.6}}</td>
+														<td name="onstock" productid="{{ docdetail.1}}" loopid="{{ forloop.counter }}" >{{ docdetail.7}}</td>
 
 
 													</tr>

@@ -1,5 +1,5 @@
 /*
-purchaseorderpre.js
+deliverynotepre.js
 */
 
             var msg="Hello Javascript2";
@@ -15,56 +15,56 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
-    $('#purchaseordermakebutton').click(function() {
-
-        var customerordersnumber=0;
+    $('#deliverynotemakebutton').click(function() {
+        var rowsnumber=0;
         var i;
-        var docdetailslist=[];
-        var docdetailslistmember;
-        var tosorqtymember;
+        var productidlist=[];
+        var poproductid;
+        var podocid;
+        var cordocid;
 
-        customerordersnumberfunc();
+        var dateofarrival = $('#select-resultarrivaldates').text()
 
         main();
 
             function main(){
-                customerordersnumberfunc();
+                rowsnumberfunc();
 
-                for (i = 1; i <= customerordersnumber; i++) {
-                    getifchecked();
+                for (i = 1; i <= rowsnumber; i++) {
+                    getrowdetails();
 
                 }
 
 
             }
 
-            function customerordersnumberfunc(){
-            customerordersnumber=$('#customerordersnumber').attr( "customerordersnumber" ); //Number of Customer Order Items
+            function rowsnumberfunc(){
+            rowsnumber=$('#rowsnumber').attr( "rowsnumber" );
             }
-            function getifchecked(){
+            function getrowdetails(){
 
-                    if ($('input[type="checkbox"][rowid="' + i + '"').is(":checked") ) {
-                           docdetailslistmember=$('input[type="checkbox"][rowid="' + i + '"').attr( "docdetailsid" );
-                           tosorqtymember=$('input[type="checkbox"][rowid="' + i + '"').attr( "tosorqty" );
+                    if ($('td[loopid="' + i + '"][name="onstock"]').text() != '0.0') {
+                           productid=$('td[loopid="' + i + '"').attr( "productid" );
 
-                           docdetailslist.push(docdetailslistmember, tosorqtymember);
-                           console.log('raw' + docdetailslist);
+                           productidlist.push(productid);
+                           console.log('raw' + productidlist);
                     }
 
             }
 
             $.ajax({
                 type: 'POST',
-                url: 'purchaseordermake',
+                url: 'deliverynotemake',
 
                 data: {
-                'docdetailslist': JSON.stringify(docdetailslist),
+                'customerordernumber' : $('#customerordernumber').text(),
+                'productidlist': JSON.stringify(productidlist),
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
 
                 success: function(url){
-                window.location.href = url;
+//                window.location.href = url;
 
                 },
                 error: function(){
@@ -74,7 +74,7 @@ $(function () {
 
             });
 
-            console.log('stringified' + JSON.stringify(docdetailslist));
+            console.log('stringified' + JSON.stringify(productidlist));
 
     });
 });

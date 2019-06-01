@@ -1,5 +1,5 @@
 /*
-quotation.js
+deliverynote.js
 */
 
             var msg="Hello Javascript2";
