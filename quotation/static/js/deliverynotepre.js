@@ -19,10 +19,6 @@ $(function () {
         var rowsnumber=0;
         var i;
         var productidlist=[];
-        var poproductid;
-        var podocid;
-        var cordocid;
-
         var dateofarrival = $('#select-resultarrivaldates').text()
 
         main();
@@ -44,11 +40,17 @@ $(function () {
             function getrowdetails(){
 
                     if ($('td[loopid="' + i + '"][name="onstock"]').text() != '0.0') {
-                           productid=$('td[loopid="' + i + '"').attr( "productid" );
+                           productid=$('td[loopid="' + i + '"][name="onstock"]').attr( "productid" );
 
-                           productidlist.push(productid);
+                    }
+
+                    if ($('td[loopid="' + i + '"][name="todeno"]').text() != '0.0') {
+                           productqty=$('td[loopid="' + i + '"][name="todeno"]').attr( "productqty" );
+
+                           productidlist.push(productid, productqty);
                            console.log('raw' + productidlist);
                     }
+
 
             }
 
@@ -57,7 +59,7 @@ $(function () {
                 url: 'deliverynotemake',
 
                 data: {
-                'customerordernumber' : $('#customerordernumber').text(),
+                'customerordernumber' : $('#customerordernumber').attr( "customerordernumber" ),
                 'productidlist': JSON.stringify(productidlist),
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
@@ -75,6 +77,7 @@ $(function () {
             });
 
             console.log('stringified' + JSON.stringify(productidlist));
+            console.log('customerordernumber' + $('#customerordernumber').attr( "customerordernumber" ));
 
     });
 });
