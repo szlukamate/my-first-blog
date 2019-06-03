@@ -323,20 +323,24 @@ def deliverynotepre(request, docid):
         "customerdescription_tblProduct_ctblDoc_details, "
         "DD.Productid_tblDoc_details_id, "
         "supplierdescription_tblProduct_ctblDoc_details, "
-        "COALESCE(sum(Qty_tblDoc_details), 0) as ordered, "
+        "COALESCE(sum(DD.Qty_tblDoc_details), 0) as ordered, "
         "COALESCE(sum(Denod.denodqty), 0) as denod, "
         "COALESCE(sum(onstockingoing.onstockingoingqty), 0) as onstockingoing, "
         "COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstockoutgoing, "
-        "COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstock, "
-        "IF((COALESCE(sum(Qty_tblDoc_details), 0))<=(COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0)), COALESCE(sum(Qty_tblDoc_details), 0), (COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0)))" # if ordered<=onstock, ordered, onstock
+        "COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstock, " #7
+        "IF(   (COALESCE(sum(Qty_tblDoc_details), 0))<=(COALESCE(sum(Denod.denodqty), 0))  , "
+        "   0.0, "
+        "   IF((COALESCE(sum(Qty_tblDoc_details), 0))<=(COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0)), "
+        "       COALESCE(sum(Qty_tblDoc_details), 0)-COALESCE(sum(Denod.denodqty), 0), " #True
+        "       (COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0)))) as todeno " # 8 if ordered<=denod, 0.0, (if ordered<=onstock, ordered-ondeno, onstock) 
 
         "FROM quotation_tbldoc_details as DD "
 
         
         "LEFT JOIN (SELECT "
         "           wheretodocid_tbldoc, "
-        "           DD2.denodqty as denodqty, "
-        "           DD2.Productid_tblDoc_details_id as productid"
+        "           sum(DD2.denodqty) as denodqty, "
+        "           DD2.Productid_tblDoc_details_id as productid "
         
         "           FROM quotation_tbldoc "
         
@@ -352,13 +356,14 @@ def deliverynotepre(request, docid):
         "           ON quotation_tbldoc.Docid_tblDoc = DD2.docid "
 
         "           WHERE obsolete_tbldoc = 0 "
+        "           GROUP BY wheretodocid_tbldoc, productid "
         "           ) AS Denod "
         "ON (DD.Docid_tblDoc_details_id = Denod.wheretodocid_tbldoc and DD.Productid_tblDoc_details_id = Denod.productid) "
 #ingoing
 
         "LEFT JOIN (SELECT "
         "           wheretodocid_tbldoc, "
-        "           onstockingoing2.onstockingoingqty as onstockingoingqty, "
+        "           sum(onstockingoing2.onstockingoingqty) as onstockingoingqty, "
         "           onstockingoing2.productid as productid "
         
         "           FROM quotation_tbldoc "
@@ -375,14 +380,16 @@ def deliverynotepre(request, docid):
         "           ON quotation_tbldoc.Docid_tblDoc = onstockingoing2.docid "
 
         "           WHERE obsolete_tbldoc = 0 "
+        "           GROUP BY wheretodocid_tbldoc, productid "
+
         "           ) AS onstockingoing "
         "ON (788 = onstockingoing.wheretodocid_tbldoc and DD.Productid_tblDoc_details_id = onstockingoing.productid) "
 #outgoing
         "LEFT JOIN (SELECT "
         "           wherefromdocid_tbldoc, "
-        "           onstockoutgoing2.onstockoutgoingqty as onstockoutgoingqty, "
+        "           sum(onstockoutgoing2.onstockoutgoingqty) as onstockoutgoingqty, "
         "           onstockoutgoing2.productid as productid "
-        
+       
         "           FROM quotation_tbldoc "
 
                     "LEFT JOIN (SELECT "
@@ -397,16 +404,21 @@ def deliverynotepre(request, docid):
         "           ON quotation_tbldoc.Docid_tblDoc = onstockoutgoing2.docid "
 
         "           WHERE obsolete_tbldoc = 0 "
+        "           GROUP BY wherefromdocid_tbldoc, productid "
+
         "           ) AS onstockoutgoing "
         "ON (788 = onstockoutgoing.wherefromdocid_tbldoc and DD.Productid_tblDoc_details_id = onstockoutgoing.productid) "
-
 
         "WHERE docid_tbldoc_details_id=%s "
         "GROUP BY   customerdescription_tblProduct_ctblDoc_details, "
         "           DD.Productid_tblDoc_details_id, "
         "           supplierdescription_tblProduct_ctblDoc_details ",
         [docid])
+
     docdetails = cursor3.fetchall()
+    #import pdb;
+    #pdb.set_trace()
+
     rowsnumber = len(docdetails)
     customerordernumber = docid
     return render(request, 'quotation/deliverynotepre.html', {'docdetails': docdetails,
@@ -586,8 +598,6 @@ def deliverynotemake(request):
     for x3 in tables:
         productid = x3[1]
         productqty = x3[2]
-        #import pdb;
-        #pdb.set_trace()
 
         cursor3 = connection.cursor()
         cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
@@ -630,8 +640,6 @@ def deliverynotemake(request):
                         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details LIMIT 1",
                         [customerordernumber, productid])
         docdetails = cursor3.fetchall()
-        #import pdb;
-        #pdb.set_trace()
 
         for x in docdetails:
             denotopodetailslink = x[0]
@@ -696,5 +704,7 @@ def deliverynotemake(request):
                  suppliercompanyid,
                  denotopodetailslink,
                  supplierdescriptionclone])
+        #import pdb;
+        #pdb.set_trace()
 
     return render(request, 'quotation/pohandlerreceptionredirecturl.html', {})

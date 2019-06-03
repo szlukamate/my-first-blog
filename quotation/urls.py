@@ -81,5 +81,6 @@ urlpatterns = [
     url('searchcustomerordercontacts', views.searchcustomerordercontacts, name='searchcustomerordercontacts'),
     url(r'^customerorderupdatecontact/(?P<pkdocid>[0-9]+)/(?P<pkcontactid>[0-9]+)/$', views.customerorderupdatecontact,name='customerorderupdatecontact'),
     url('deliverynotemake', views.deliverynotemake, name='deliverynotemake'),
+    url(r'stockmain/$', views.stockmain, name='stockmain'),
 
 ]
