@@ -38,29 +38,11 @@ def pohandlerfieldsupdate(request):
 def pohandlersearchresults(request):
     receivedstatus = request.POST['receivedstatus']
     print(receivedstatus)
-#    dockindname = request.POST['dockindname']
-#    fromdate = request.POST['fromdate']
-#    todate = request.POST['todate']
-#    company = request.POST['company']
-
 
     if receivedstatus == 'false':
         receivedstatusphrase = "and DDdeno.denodocnumber is null "
     else:
         receivedstatusphrase = ""
-#        docnumber = "and docnumber_tbldoc='" + docnumber + "' "
-#    if dockindname != '':
-#        dockindname = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
-
-    #datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
-    #datephrase = "and DATE(creationtime_tbldoc) >= '" + fromdate + "' and DATE(creationtime_tbldoc) <= '" + todate + "' "
-    #datephrase = "and DATE(creationtime_tbldoc) = '2019-04-19'"
-
-#    if company != '':
-#        company = "and companyname_tblcompanies_ctbldoc='" + company + "'"
-
-    #import pdb;
-    #pdb.set_trace()
     searchphrase = receivedstatusphrase
 
 
@@ -173,14 +155,34 @@ def pohandlersearchresults(request):
 def pohandlerrowsourceforarrivaldates(request):
     cursor0 = connection.cursor()
     cursor0.execute(
-            "SELECT dateofarrival_tbldocdetails "
+            "SELECT dateofarrival_tbldocdetails, "
+            "DDdeno.denodocnumber "
+            
             "FROM quotation_tbldoc_details as DD "
     
             "JOIN quotation_tbldoc "
             "ON quotation_tbldoc.Docid_tblDoc=DD.Docid_tblDoc_details_id "
+
+           "LEFT JOIN    (SELECT "
+            "               denotopodetailslink_tbldocdetails, "
+            "               (docnumber_tbldoc) as denodocnumber "
+
+            "               FROM quotation_tbldoc_details as DD2 "
+
+            "               JOIN (SELECT docnumber_tbldoc, "
+            "                            (COALESCE(Docid_tblDoc, 0)) as docid "
     
-            "WHERE dateofarrival_tbldocdetails is not null and obsolete_tbldoc = 0 "
-            "GROUP BY dateofarrival_tbldocdetails "
+            "                       FROM quotation_tbldoc"
+
+            "                       WHERE obsolete_tbldoc = 0"
+            "                    ) as D"
+            "               ON D.docid=DD2.Docid_tblDoc_details_id "
+            "            ) as DDdeno "
+            "ON DD.Doc_detailsid_tblDoc_details=DDdeno.denotopodetailslink_tbldocdetails "
+
+    
+            "WHERE dateofarrival_tbldocdetails is not null and obsolete_tbldoc = 0 and DDdeno.denodocnumber is null "
+            "GROUP BY dateofarrival_tbldocdetails, DDdeno.denodocnumber "
             "ORDER BY dateofarrival_tbldocdetails desc")
 
     arrivaldates = cursor0.fetchall()

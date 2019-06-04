@@ -27,9 +27,9 @@ def stockmain(request):
         "customerdescription_tblProduct_ctblDoc_details, "
         "DD.Productid_tblDoc_details_id, "
         "supplierdescription_tblProduct_ctblDoc_details, "
-        "COALESCE(sum(onstockingoing.onstockingoingqty), 0) as onstockingoing, "
-        "COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstockoutgoing, "
-        "COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstock "
+        "onstockingoing.onstockingoingqty as onstockingoing, "
+        "onstockoutgoing.onstockoutgoingqty as onstockoutgoing, "
+        "COALESCE(onstockingoing.onstockingoingqty,0)-COALESCE(onstockoutgoing.onstockoutgoingqty,0) as onstock "
 
         "FROM quotation_tbldoc_details as DD "
 
@@ -43,7 +43,7 @@ def stockmain(request):
         
         "           FROM quotation_tbldoc "
 
-                    "LEFT JOIN (SELECT "
+                    "JOIN (SELECT "
                     "           Docid_tblDoc_details_id as docid, "
                     "           sum(Qty_tblDoc_details) as onstockingoingqty, "
                     "           Productid_tblDoc_details_id as productid "
@@ -67,7 +67,7 @@ def stockmain(request):
        
         "           FROM quotation_tbldoc "
 
-                    "LEFT JOIN (SELECT "
+                    "JOIN (SELECT "
                     "           Docid_tblDoc_details_id as docid, "
                     "           sum(Qty_tblDoc_details) as onstockoutgoingqty, "
                     "           Productid_tblDoc_details_id as productid "
@@ -90,7 +90,9 @@ def stockmain(request):
         "WHERE obsolete_tbldoc=0 and Doc_kindid_tblDoc_id=2 "
         "GROUP BY   customerdescription_tblProduct_ctblDoc_details, "
         "           DD.Productid_tblDoc_details_id, "
-        "           supplierdescription_tblProduct_ctblDoc_details ")
+        "           supplierdescription_tblProduct_ctblDoc_details, "
+        "           onstockingoing, "
+        "           onstockoutgoing ")
 
     docdetails = cursor3.fetchall()
     #import pdb;

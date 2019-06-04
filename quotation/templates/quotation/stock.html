@@ -18,10 +18,8 @@
 													<td>Productid</td>
 													<td>Customerdescription</td>
 													<td>Supplierdescription</td>
-
 													<td>On StockIngoing</td>
 													<td>On StockOutgoing</td>
-
 													<td>On Stock</td>
 
 												</tr>
@@ -29,23 +27,21 @@
 
 											<tbody>
 												 {%  for docdetail in  docdetails %}
+													{% if docdetail.5 != 0 %}
+
+														<tr>
+															<td>{{ docdetail.1}}</td>
+															<td>{{ docdetail.0}}</td>
+															<td>{{ docdetail.2}}</td>
+
+															<td >{{ docdetail.3}}</td>
+															<td>{{ docdetail.4}}</td>
+
+															<td name="onstock" productid="{{ docdetail.1}}" loopid="{{ forloop.counter }}" >{{ docdetail.5}}</td>
 
 
-													<tr>
-														<td>{{ docdetail.1}}</td>
-														<td>{{ docdetail.0}}</td>
-														<td>{{ docdetail.2}}</td>
-
-														<td >{{ docdetail.3}}</td>
-														<td>{{ docdetail.4}}</td>
-
-														<td name="onstock" productid="{{ docdetail.1}}" loopid="{{ forloop.counter }}" >{{ docdetail.5}}</td>
-
-
-													</tr>
-
-
-
+														</tr>
+												    {% endif %}
 												{% endfor %}
 
 											</tbody>
@@ -54,7 +50,7 @@
 
 							</div>
 
-		<script type="text/javascript" src="{% static 'js/deliverynotepre.js' %}"></script>
-        <link rel="stylesheet" href="{% static 'css/deliverynotepre.css' %}">
+		<script type="text/javascript" src="{% static 'js/stock.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/stock.css' %}">
 
 	{% endblock %}
