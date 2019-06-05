@@ -6,7 +6,7 @@
 
 
 		<p align="center" id="title" style="font-size:160%;">Products Form</p>{% csrf_token %}
-		<p align="left"><a href="{% url 'productnew' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+		<p id="newproductsign" align="left"><a href="#"><span class="glyphicon glyphicon-plus"></span></a></p>
 
 		<p id="sqlsavingfeedbackproduct"></p><br>
 			<label for="Productid_tblProduct" >Id</label>
@@ -35,8 +35,35 @@
 				{% endfor %}
 			</select>
 
+
+			{% if product.11 == 1 %}
+
+				<span style="color:orange;">Service</span>
+
+			{% else %}
+
+				{% if product.10 == 1 %}
+					<span style="color:black; white-space: nowrap;">Discrete Product</span>
+				{% else %}
+					<span style="color:green; white-space: nowrap;">Indiscrete Product</span>
+				{% endif %}
+
+			{% endif %}
+
 			<a href="{% url 'productremove' pkproductid=product.0 %}"><span class="glyphicon glyphicon-remove"></span></a><hr>
 			{% endfor %}
+
+			<div id="dialog-form" title="New Product Type">
+			<p>Please choose the type of product from below:</p>
+
+			  <form>
+				<fieldset>
+
+				</fieldset>
+			  </form>
+			</div>
+
 			<script type="text/javascript" src="{% static 'js/products.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/products.css' %}">
 
 	{% endblock %}

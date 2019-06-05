@@ -41,7 +41,10 @@ def products(request, pkproductid):
                        "unit_tblproduct, "
                        "suppliercompanyid_tblproduct, "
                        "companyname_tblcompanies, "
-                       "supplierdescription_tblProduct "
+                       "supplierdescription_tblProduct, "
+                       "discreteflag_tblproduct, " #10
+                       "serviceflag_tblproduct "
+
                        "FROM quotation_tblproduct "
                        "JOIN quotation_tblcompanies "
                        "ON companyid_tblcompanies = suppliercompanyid_tblproduct "

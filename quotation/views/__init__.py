@@ -12,3 +12,4 @@ from .vw_purchaseorder import *
 from .vw_pohandler import *
 from .vw_deliverynote import *
 from .vw_stock import *
+from .vw_customerinvoice import *

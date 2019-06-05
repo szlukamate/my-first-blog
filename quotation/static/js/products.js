@@ -248,5 +248,53 @@ $(function () {
                     }
 
     });
+    $( "#dialog-form" ).dialog({
+          autoOpen: false,
+          height: 260,
+          width: 350,
+          modal: true,
+          buttons: {
+            "Service": function() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'productnew/',
+
+                    data: {
+                    'serviceflag' : 1,
+                    'discreteflag' : 0,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(url){
+                    //window.location.href = url;
+
+                    },
+                    error: function(){
+
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+            },
+            "Product/InDiscrete": function() {
+                    $( this ).dialog( "close" );
+            },
+            "Product/Discrete": function() {
+                    $( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                    $( this ).dialog( "close" );
+            }
+          },
+          close: function() {
+                    $( this ).dialog( "close" );
+          }
+    });
+   $('#newproductsign').click(function() {
+            $( "#dialog-form" ).dialog( "open" );
+
+
+   });
 
 });

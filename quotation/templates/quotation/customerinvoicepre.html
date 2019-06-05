@@ -1,0 +1,70 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+				<p id="rowsnumber" rowsnumber="{{ rowsnumber }}" hidden></p>
+				<p id="customerordernumber" customerordernumber="{{ customerordernumber }}" hidden></p>
+
+							{% csrf_token %}
+
+							<p align="center" style="font-size:160%;">Customer Invoice Preparation Form</p>
+							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+							<button id="customerinvoicemakebutton" type="submit">
+							   <span>Make Customer Invoice</span>
+							</button>
+
+							<div class="table-responsive text-nowrap">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>Productid</td>
+													<td>Customerdescription</td>
+													<td>Supplierdescription</td>
+													<td>On Order</td>
+													<td>On DENO</td>
+													<td>To DENO</td>
+<!--
+													<td>On StockIngoing</td>
+													<td>On StockOutgoing</td>
+-->
+													<td>On Stock</td>
+
+												</tr>
+											</thead>
+
+											<tbody>
+												 {%  for docdetail in  docdetails %}
+
+
+													<tr>
+														<td>{{ docdetail.1}}</td>
+														<td>{{ docdetail.0}}</td>
+														<td>{{ docdetail.2}}</td>
+														<td>{{ docdetail.3}}</td>
+														<td>{{ docdetail.4}}</td>
+														<td name="todeno" productqty="{{ docdetail.8}}" loopid="{{ forloop.counter }}" >{{ docdetail.8}}</td>
+<!--
+														<td >{{ docdetail.5}}</td>
+														<td>{{ docdetail.6}}</td>
+-->
+														<td name="onstock" productid="{{ docdetail.1}}" loopid="{{ forloop.counter }}" >{{ docdetail.7}}</td>
+
+
+													</tr>
+
+
+
+												{% endfor %}
+
+											</tbody>
+
+										</table>
+
+							</div>
+
+		<script type="text/javascript" src="{% static 'js/customerinvoicepre.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/customerinvoicepre.css' %}">
+
+	{% endblock %}

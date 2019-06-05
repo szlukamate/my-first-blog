@@ -19,7 +19,7 @@ urlpatterns = [
     url('quotationnewrowadd', views.quotationnewrowadd, name='quotationnewrowadd'),
     url(r'^quotationupdatecontact/(?P<pkdocid>[0-9]+)/(?P<pkcontactid>[0-9]+)/$', views.quotationupdatecontact, name='quotationupdatecontact'),
     url('productupdatecurrencyisocode', views.productupdatecurrencyisocode, name='productupdatecurrencyisocode'),
-    url(r'^productnew/$', views.productnew, name='productnew'),
+    url(r'productnew', views.productnew, name='productnew'),
     url(r'^productremove/(?P<pkproductid>[0-9]+)/$', views.productremove, name='productremove'),
     url(r'^quotationrowremove/(?P<pk>[0-9]+)/$', views.quotationrowremove, name='quotationrowremove'),
     url('searchquotationcontacts', views.searchquotationcontacts, name='searchquotationcontacts'),
@@ -82,5 +82,6 @@ urlpatterns = [
     url(r'^customerorderupdatecontact/(?P<pkdocid>[0-9]+)/(?P<pkcontactid>[0-9]+)/$', views.customerorderupdatecontact,name='customerorderupdatecontact'),
     url('deliverynotemake', views.deliverynotemake, name='deliverynotemake'),
     url(r'stockmain/$', views.stockmain, name='stockmain'),
+    url(r'^customerinvoicepre/(?P<docid>[0-9]+)/$', views.customerinvoicepre, name='customerinvoicepre'),
 
 ]

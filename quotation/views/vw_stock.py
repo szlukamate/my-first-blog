@@ -24,12 +24,19 @@ def stockmain(request):
     cursor3 = connection.cursor()
     cursor3.execute(
         "SELECT "
-        "customerdescription_tblProduct_ctblDoc_details, "
+        "P.customerdescription_tblProduct, "
         "DD.Productid_tblDoc_details_id, "
-        "supplierdescription_tblProduct_ctblDoc_details, "
+        "supplierdescription_tblProduct, "
         "onstockingoing.onstockingoingqty as onstockingoing, "
         "onstockoutgoing.onstockoutgoingqty as onstockoutgoing, "
-        "COALESCE(onstockingoing.onstockingoingqty,0)-COALESCE(onstockoutgoing.onstockoutgoingqty,0) as onstock "
+        "COALESCE(onstockingoing.onstockingoingqty,0)-COALESCE(onstockoutgoing.onstockoutgoingqty,0) as onstock, "
+        "unit_tblproduct, "
+        "purchase_price_tblproduct, "
+        "margin_tblproduct, "
+        "round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
+        "companyname_tblcompanies as supplier, " #10
+        "currencyisocode_tblcurrency_ctblproduct "
+        
 
         "FROM quotation_tbldoc_details as DD "
 
@@ -86,6 +93,12 @@ def stockmain(request):
 
         "LEFT JOIN quotation_tbldoc "
         "ON DD.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+
+        "LEFT JOIN quotation_tblproduct as P "
+        "ON DD.Productid_tblDoc_details_id = P.Productid_tblProduct "
+
+        "JOIN quotation_tblcompanies "
+        "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
 
         "WHERE obsolete_tbldoc=0 and Doc_kindid_tblDoc_id=2 "
         "GROUP BY   customerdescription_tblProduct_ctblDoc_details, "
