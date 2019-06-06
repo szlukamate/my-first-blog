@@ -199,7 +199,7 @@ def pohandlerreception(request):
 
     creatorid = request.user.id
 
-#autosplitting start
+#splitting start
     dateofarrivallistsplitted= []
     for x1 in range(0, len(dateofarrivallist), 4):
         podocdetailsid = dateofarrivallist[x1+0]
@@ -228,16 +228,21 @@ def pohandlerreception(request):
                         "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
                         "unitsalespriceACU_tblDoc_details, "
                         "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
-                        "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
+                        "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, " #20
                         "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
                         "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
                         "unit_tbldocdetails, "
                         "suppliercompanyid_tbldocdetails, "
-                        "podetailslink_tbldocdetails "
+                        "podetailslink_tbldocdetails, "
+                        "serviceflag_tblproduct, "
+                        "discreteflag_tblproduct "
+                        
+                        
                         "FROM quotation_tbldoc_details "
-                        "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+                        "LEFT JOIN quotation_tblproduct as P "
                         "ON "
-                        "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+                        "quotation_tbldoc_details.Productid_tblDoc_details_id = P.Productid_tblProduct "
+
                         "WHERE Doc_detailsid_tblDoc_details=%s "
                         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                         [podocdetailsid])
@@ -263,66 +268,81 @@ def pohandlerreception(request):
             currencyrateclone = x[16]
             unitclone = x[23]
             unitsalespriceACU = x[18]
+            serviceflag = x[26]
+            discreteflag = x[27]
+        #import pdb;
+        #pdb.set_trace()
 
-        cursor4 = connection.cursor()
-        for x2 in range(int(qty)):
-            cursor4.execute(
-                "INSERT INTO quotation_tbldoc_details "
-                "( Docid_tblDoc_details_id, "
-                "`Qty_tblDoc_details`, "
-                "`customerdescription_tblProduct_ctblDoc_details`, "
-                "firstnum_tblDoc_details, "
-                "`fourthnum_tblDoc_details`, "
-                "`secondnum_tblDoc_details`, "
-                "`thirdnum_tblDoc_details`, "
-                "`Note_tblDoc_details`, "
-                "purchase_price_tblproduct_ctblDoc_details, "
-                "listprice_tblDoc_details, "
-                "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-                "Productid_tblDoc_details_id, "
-                "currencyrate_tblcurrency_ctblDoc_details, "
-                "unitsalespriceACU_tblDoc_details, "
-                "unit_tbldocdetails, "
-                "suppliercompanyid_tbldocdetails, "
-                "podetailslink_tbldocdetails, "
-                "creatorid_tbldocdetails, "
-                "dateofarrival_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+        if serviceflag == 1: # if service no split
+            appendvar = (podocdetailsid, podocid, cordocid, dateofarrivaldate)
+            dateofarrivallistsplitted.append(appendvar) # splitted list name signs that processed the list
+        else:
+            if discreteflag == 0: # if indiscret (batched non unique) no split
+                appendvar = (podocdetailsid, podocid, cordocid, dateofarrivaldate)
+                dateofarrivallistsplitted.append(appendvar)
+            else: # let's split!
 
-                [docid,
-                 1,
-                 customerdescriptionclone,
-                 firstnum,
-                 fourthnum,
-                 secondnum,
-                 thirdnum,
-                 note,
-                 purchase_priceclone,
-                 listpricecomputed,
-                 currencyisocodeclone,
-                 productid,
-                 currencyrate,
-                 unitsalespriceACU,
-                 unitclone,
-                 suppliercompanyid,
-                 podetailslink,
-                 creatorid,
-                 dateofarrivaldate])
+                cursor4 = connection.cursor()
+                for x2 in range(int(qty)):
+                    cursor4.execute(
+                        "INSERT INTO quotation_tbldoc_details "
+                        "( Docid_tblDoc_details_id, "
+                        "`Qty_tblDoc_details`, "
+                        "`customerdescription_tblProduct_ctblDoc_details`, "
+                        "firstnum_tblDoc_details, "
+                        "`fourthnum_tblDoc_details`, "
+                        "`secondnum_tblDoc_details`, "
+                        "`thirdnum_tblDoc_details`, "
+                        "`Note_tblDoc_details`, "
+                        "purchase_price_tblproduct_ctblDoc_details, "
+                        "listprice_tblDoc_details, "
+                        "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                        "Productid_tblDoc_details_id, "
+                        "currencyrate_tblcurrency_ctblDoc_details, "
+                        "unitsalespriceACU_tblDoc_details, "
+                        "unit_tbldocdetails, "
+                        "suppliercompanyid_tbldocdetails, "
+                        "podetailslink_tbldocdetails, "
+                        "creatorid_tbldocdetails, "
+                        "dateofarrival_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
-            cursor3 = connection.cursor()
-            cursor3.execute("SELECT max(Doc_detailsid_tblDoc_details) FROM quotation_tbldoc_details WHERE creatorid_tbldocdetails=%s", [creatorid])
-            results = cursor3.fetchall()
-            for x in results:
-                maxdocdetailsid = x[0]
+                        [docid,
+                         1,
+                         customerdescriptionclone,
+                         firstnum,
+                         fourthnum,
+                         secondnum,
+                         thirdnum,
+                         note,
+                         purchase_priceclone,
+                         listpricecomputed,
+                         currencyisocodeclone,
+                         productid,
+                         currencyrate,
+                         unitsalespriceACU,
+                         unitclone,
+                         suppliercompanyid,
+                         podetailslink,
+                         creatorid,
+                         dateofarrivaldate])
 
-            appendvar = (maxdocdetailsid, podocid, cordocid, dateofarrivaldate)
-            dateofarrivallistsplitted.append(appendvar)
+                    cursor3 = connection.cursor()
+                    cursor3.execute("SELECT max(Doc_detailsid_tblDoc_details) FROM quotation_tbldoc_details WHERE creatorid_tbldocdetails=%s", [creatorid])
+                    results = cursor3.fetchall()
+                    for x in results:
+                        maxdocdetailsid = x[0]
 
-        cursor2 = connection.cursor()
-        cursor2.execute(
-            "DELETE FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [podocdetailsid])
+                    appendvar = (maxdocdetailsid, podocid, cordocid, dateofarrivaldate)
+                    dateofarrivallistsplitted.append(appendvar)
+
+                cursor2 = connection.cursor()
+                cursor2.execute(
+                    "DELETE FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [podocdetailsid])
 
 
-#autosplitting end
+#splitting end
+
+#dateofarrivallistsplitted to table start
     cursor2 = connection.cursor()
     cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows;")
     cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows2;")
@@ -355,7 +375,9 @@ def pohandlerreception(request):
     cursor2.execute("SELECT *  "
                     "FROM porows ")
     tables = cursor2.fetchall()
+#dateofarrivallistsplitted to table end
 
+#docdetails per docid to table start
     for xx in tables:
         auxid = xx[0]
         podocid = xx[2]
@@ -369,11 +391,12 @@ def pohandlerreception(request):
         for x2 in numberofitemstodenoresults:
             numberofitemstodeno= x2[0]
 
-        cursor2.execute("UPDATE porows SET "
+        cursor2.execute("UPDATE porows SET " 
                         "numberofitemstodeno= %s "
                         "WHERE auxid =%s ", [numberofitemstodeno, auxid])
+#docdetails per docid to table end
 
-
+#deliverynote making start
     cursor2.execute("SELECT *  "
                     "FROM porows ")
     tables2 = cursor2.fetchall()
@@ -385,7 +408,7 @@ def pohandlerreception(request):
         cordocid = x3[3]
         numberofitemstodeno = x3[5]
 
-        if docmakercounter  == 0:
+        if docmakercounter  == 0: #doc create only once even multiple docdetails
             docmakercounter = numberofitemstodeno
 
             pk = 60
@@ -525,7 +548,7 @@ def pohandlerreception(request):
             for x in results:
                 maxdocid = x[0]
 
-        docmakercounter -= 1
+        docmakercounter -= 1 #doc maked flag
 
         cursor2.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
                         "`Qty_tblDoc_details`, "
@@ -613,7 +636,8 @@ def pohandlerreception(request):
                 "unit_tbldocdetails, "
                 "suppliercompanyid_tbldocdetails, "
                 "denotopodetailslink_tbldocdetails, "
-                "supplierdescription_tblProduct_ctblDoc_details) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                "supplierdescription_tblProduct_ctblDoc_details, "
+                "podocdetailsidforlabel_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
                 [maxdocid,
                  qty,
@@ -632,7 +656,9 @@ def pohandlerreception(request):
                  unitclone,
                  suppliercompanyid,
                  denotopodetailslink,
-                 supplierdescriptionclone])
+                 supplierdescriptionclone,
+                 podocdetailsid])
+#deliverynote making end
 
     return render(request, 'quotation/pohandlerreceptionredirecturl.html',{})
 def pohandlersplit(request):

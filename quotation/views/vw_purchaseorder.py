@@ -30,7 +30,7 @@ def purchaseorderpre(request):
                     "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
                     "prefacespecforquotation_tbldoc, "
                     "subject_tbldoc, "
-                    "docnumber_tbldoc, "
+                    "docnumber_tbldoc, " #10
                     "creatorid_tbldoc, "
                     "creationtime_tbldoc, "
                     "title_tblcontacts_ctbldoc, "
@@ -40,7 +40,7 @@ def purchaseorderpre(request):
                     "town_tblcompanies_ctbldoc, "
                     "address_tblcompanies_ctbldoc, "
                     "total_tbldoc, "
-                    "deliverydays_tbldoc, "
+                    "deliverydays_tbldoc, " #20
                     "paymenttextforquotation_tblpayment_ctbldoc, "
                     "currencycodeinreport_tbldoc, "
                     "currencyrateinreport_tbldoc, "
@@ -51,7 +51,7 @@ def purchaseorderpre(request):
                     "`Qty_tblDoc_details` as customerqty, "
                     "`Docid_tblDoc_details_id`, "
                     "`customerdescription_tblProduct_ctblDoc_details`, "
-                    "`firstnum_tblDoc_details`, "
+                    "`firstnum_tblDoc_details`, " #30
                     "`fourthnum_tblDoc_details`, "
                     "`secondnum_tblDoc_details`, "
                     "`thirdnum_tblDoc_details`, "
@@ -61,12 +61,13 @@ def purchaseorderpre(request):
                     "Productid_tblDoc_details_id, "
                     "Doc_detailsid_tblDoc_details, "
                     "unit_tbldocdetails, "
-                    "S.companyname_tblcompanies as supplier, "
+                    "S.companyname_tblcompanies as supplier, " #40
                     "suppliercompanyid_tbldocdetails, "
                     "supplierdescription_tblProduct_ctblDoc_details, "
                     "COALESCE(purchaseorderset.purchaseQty,0) as purchaseqty2, "
                     "obsolete_tbldoc, "
                     "(Qty_tblDoc_details-COALESCE(purchaseorderset.purchaseQty,0)) as tosorqty "
+
                     "FROM quotation_tbldoc_details as DD "
                     "JOIN quotation_tblcompanies as S ON DD.suppliercompanyid_tbldocdetails = S.companyid_tblcompanies "
                     "JOIN quotation_tbldoc as D ON D.Docid_tblDoc=DD.Docid_tblDoc_details_id "

@@ -155,14 +155,18 @@ def productlistpricefieldupdate(request):
     return HttpResponse(json_data, content_type="application/json")
 
 def productnew(request):
+    serviceflag = request.POST['serviceflag']
+    discreteflag = request.POST['discreteflag']
 
     cursor1 = connection.cursor()
     cursor1.execute("INSERT INTO quotation_tblproduct "
                     "(customerdescription_tblproduct, "
-                    "suppliercompanyid_tblproduct) VALUES ('DefaultDescription', '1')")
+                    "serviceflag_tblproduct, "
+                    "discreteflag_tblproduct, "
+                    "suppliercompanyid_tblproduct) VALUES ('DefaultDescription', '" + serviceflag + "', '" + discreteflag + "', '1')")
     transaction.commit()
 
-    return redirect('products', pkproductid=0)
+    return render(request, 'quotation/productnewredirecturl.html', {})
 
 def productremove(request,pkproductid):
     cursor1 = connection.cursor()

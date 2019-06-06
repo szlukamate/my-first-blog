@@ -266,7 +266,7 @@ $(function () {
                     },
 
                     success: function(url){
-                    //window.location.href = url;
+                    window.location.href = url;
 
                     },
                     error: function(){
@@ -278,10 +278,50 @@ $(function () {
                 });
             },
             "Product/InDiscrete": function() {
-                    $( this ).dialog( "close" );
+                $.ajax({
+                    type: 'POST',
+                    url: 'productnew/',
+
+                    data: {
+                    'serviceflag' : 0,
+                    'discreteflag' : 0,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(url){
+                    window.location.href = url;
+
+                    },
+                    error: function(){
+
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
             },
             "Product/Discrete": function() {
-                    $( this ).dialog( "close" );
+                $.ajax({
+                    type: 'POST',
+                    url: 'productnew/',
+
+                    data: {
+                    'serviceflag' : 0,
+                    'discreteflag' : 1,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(url){
+                    window.location.href = url;
+
+                    },
+                    error: function(){
+
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
             },
             Cancel: function() {
                     $( this ).dialog( "close" );

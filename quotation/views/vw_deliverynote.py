@@ -126,15 +126,23 @@ def deliverynoteform(request, pk):
                         "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
                         "unitsalespriceACU_tblDoc_details, "
                         "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
-                        "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
+                        "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, " #20
                         "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
                         "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
                         "unit_tbldocdetails, "
                         "companyname_tblcompanies, "
-                        "supplierdescription_tblProduct_ctblDoc_details "
+                        "supplierdescription_tblProduct_ctblDoc_details, "
+                        "IF (serviceflag_tblproduct=1, 0, podocdetailsidforlabel_tbldocdetails) "
+#                        "serviceflag_tblproduct "
+                        
                         "FROM quotation_tbldoc_details as DD "
-                        "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x ON DD.Productid_tblDoc_details_id = x.Productid_tblProduct "
-                        "JOIN quotation_tblcompanies as C ON DD.suppliercompanyid_tbldocdetails = C.companyid_tblcompanies "
+                        
+                        "LEFT JOIN quotation_tblproduct as P "
+                        "ON DD.Productid_tblDoc_details_id = P.Productid_tblProduct "
+                        
+                        "JOIN quotation_tblcompanies as C "
+                        "ON DD.suppliercompanyid_tbldocdetails = C.companyid_tblcompanies "
+                        
                         "WHERE docid_tbldoc_details_id=%s "
                         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                         [pk])

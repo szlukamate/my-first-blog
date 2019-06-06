@@ -10,13 +10,14 @@
 							<p align="center" style="font-size:160%;">Purchase Order Preparation Form</p>
 							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 
-							<div class="container">
+							<div class="table-responsive text-nowrap">
 										<table class="table table-striped"">
 											<thead>
 
 												<tr>
 													<td>COR Number</td>
 													<td>C1</td>
+													<td>Customerdescription</td>
 													<td>customerQty</td>
 													<td>PurchaseQty</td>
 													<td>ToSORQty</td>
@@ -37,6 +38,7 @@
 													<tr>
 														<td>{{ customerorder.25}}{{ customerorder.10}}</td>
 														<td>{{ customerorder.30}}</td>
+														<td>{{ customerorder.29}}</td>
 														<td>{{ customerorder.27}}</td>
 														<td>{{ customerorder.43}}</td>
 														<td>{{ customerorder.45}}</td>
