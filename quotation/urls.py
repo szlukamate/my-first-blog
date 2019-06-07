@@ -83,5 +83,6 @@ urlpatterns = [
     url('deliverynotemake', views.deliverynotemake, name='deliverynotemake'),
     url(r'stockmain/$', views.stockmain, name='stockmain'),
     url(r'^customerinvoicepre/(?P<docid>[0-9]+)/$', views.customerinvoicepre, name='customerinvoicepre'),
+    url('stocklabellist', views.stocklabellist, name='stocklabellist'),
 
 ]

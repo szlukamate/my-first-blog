@@ -116,5 +116,28 @@ def stockmain(request):
     return render(request, 'quotation/stock.html', {'docdetails': docdetails,
                                                               'customerordernumber': customerordernumber,
                                                               'rowsnumber': rowsnumber})
+def stocklabellist(request):
+    productid = request.POST['productid']
+
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT "
+        "podocdetailsidforlabel_tbldocdetails, "
+        "DD.Productid_tblDoc_details_id "
+
+        "FROM quotation_tbldoc_details as DD "
+
+        "LEFT JOIN quotation_tbldoc "
+        "ON DD.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+
+        "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
+        , [productid])
+
+
+    results = cursor0.fetchall()
+    transaction.commit()
+
+
+    return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
 
 

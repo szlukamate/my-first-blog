@@ -42,6 +42,11 @@
 															<td>{{ docdetail.9}} {{ docdetail.11}}</td>
 
 															<td name="onstock" productid="{{ docdetail.1}}" loopid="{{ forloop.counter }}" >{{ docdetail.5}} {{ docdetail.6}}</td>
+															<td>
+																<button class="labelbutton" type="submit" productid="{{ docdetail.1}}">
+																   <span>L</span>
+																</button
+															</td>
 
 
 														</tr>
@@ -52,6 +57,12 @@
 
 										</table>
 
+							</div>
+
+							<div id="dialog-message" title="Download complete">
+							  <p>
+									<span id="stocklabellisttemplate" ></span>
+							  </p>
 							</div>
 
 		<script type="text/javascript" src="{% static 'js/stock.js' %}"></script>
