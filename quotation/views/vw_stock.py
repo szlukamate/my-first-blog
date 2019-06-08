@@ -122,16 +122,29 @@ def stocklabellist(request):
     cursor0 = connection.cursor()
     cursor0.execute(
         "SELECT "
-        "podocdetailsidforlabel_tbldocdetails, "
-        "DD.Productid_tblDoc_details_id "
+        "DDingoing.podocdetailsidforlabel_tbldocdetails, "
+        "DDingoing.Productid_tblDoc_details_id, "
+        "DDoutgoing.podocdetailsidforlabel_tbldocdetails "
 
-        "FROM quotation_tbldoc_details as DD "
+        "FROM quotation_tbldoc_details as DDingoing "
 
-        "LEFT JOIN quotation_tbldoc "
-        "ON DD.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+        "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails, "
+        "           Docid_tblDoc_details_id "
 
-        "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
-        , [productid])
+        "           FROM quotation_tbldoc_details as DD2 "
+
+        "           JOIN quotation_tbldoc as D2"
+        "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
+        "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
+        "           ) as DDoutgoing "
+        "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.podocdetailsidforlabel_tbldocdetails "
+
+        "LEFT JOIN quotation_tbldoc as D "
+        "ON DDingoing.Docid_tblDoc_details_id = D.Docid_tblDoc "
+
+        "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and DDingoing.Productid_tblDoc_details_id=%s and DDoutgoing.podocdetailsidforlabel_tbldocdetails is null "
+        "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
+        , [productid, productid])
 
 
     results = cursor0.fetchall()

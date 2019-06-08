@@ -590,13 +590,6 @@ def deliverynotemake(request):
                      788,
                      customerordernumber])
 
-    #    cursor8 = connection.cursor()
-    #    cursor8.execute("SELECT Doc_detailsid_tblDoc_details "
-    #                    "FROM quotation_tbldoc_details "
-    #                    "WHERE dateofarrival_tbldocdetails = %s",
-    #                    [dateofarrival])
-    #    docdetailstodeno = cursor8.fetchall()
-
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
     results = cursor3.fetchall()
@@ -671,48 +664,109 @@ def deliverynotemake(request):
             currencyrateclone = x[16]
             unitclone = x[23]
             unitsalespriceACU = x[18]
+            #the product get service and discreteflags start
 
-            cursor4 = connection.cursor()
-            cursor4.execute(
-                "INSERT INTO quotation_tbldoc_details "
-                "( Docid_tblDoc_details_id, "
-                "`Qty_tblDoc_details`, "
-                "`customerdescription_tblProduct_ctblDoc_details`, "
-                "firstnum_tblDoc_details, "
-                "`fourthnum_tblDoc_details`, "
-                "`secondnum_tblDoc_details`, "
-                "`thirdnum_tblDoc_details`, "
-                "`Note_tblDoc_details`, "
-                "purchase_price_tblproduct_ctblDoc_details, "
-                "listprice_tblDoc_details, "
-                "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-                "Productid_tblDoc_details_id, "
-                "currencyrate_tblcurrency_ctblDoc_details, "
-                "unitsalespriceACU_tblDoc_details, "
-                "unit_tbldocdetails, "
-                "suppliercompanyid_tbldocdetails, "
-                "denotopodetailslink_tbldocdetails, "
-                "supplierdescription_tblProduct_ctblDoc_details) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            cursor3 = connection.cursor()
+            cursor3.execute("SELECT serviceflag_tblproduct, "
+                            "       discreteflag_tblproduct "
+                            "FROM quotation_tblproduct "
+                            "WHERE Productid_tblProduct=%s", [productid])
+            results = cursor3.fetchall()
+            for x in results:
+                serviceflag = x[0]
+                discreteflag = x[1]
 
-                [maxdocid,
-                 productqty,
-                 customerdescriptionclone,
-                 firstnum,
-                 fourthnum,
-                 secondnum,
-                 thirdnum,
-                 note,
-                 purchase_priceclone,
-                 listpricecomputed,
-                 currencyisocodeclone,
-                 productid,
-                 currencyrate,
-                 unitsalespriceACU,
-                 unitclone,
-                 suppliercompanyid,
-                 denotopodetailslink,
-                 supplierdescriptionclone])
-        #import pdb;
-        #pdb.set_trace()
+            #the product get service and discreteflags end
+
+            # oldestlabelid determination start
+            def oldestlabel():
+
+                cursor0 = connection.cursor()
+                cursor0.execute(
+                    "SELECT "
+                    "DDingoing.podocdetailsidforlabel_tbldocdetails, "
+                    "DDingoing.Productid_tblDoc_details_id, "
+                    "DDoutgoing.podocdetailsidforlabel_tbldocdetails "
+    
+                    "FROM quotation_tbldoc_details as DDingoing "
+    
+                    "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails, "
+                    "           Docid_tblDoc_details_id "
+    
+                    "           FROM quotation_tbldoc_details as DD2 "
+    
+                    "           JOIN quotation_tbldoc as D2"
+                    "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
+                    "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
+                    "           ) as DDoutgoing "
+                    "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.podocdetailsidforlabel_tbldocdetails "
+    
+                    "LEFT JOIN quotation_tbldoc as D "
+                    "ON DDingoing.Docid_tblDoc_details_id = D.Docid_tblDoc "
+    
+                    "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and DDingoing.Productid_tblDoc_details_id=%s and DDoutgoing.podocdetailsidforlabel_tbldocdetails is null "
+                    "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
+                    , [productid, productid])
+
+                results22 = cursor0.fetchall()
+                for x14 in results22:
+                    podocdetailsidforlabel=x14[0]
+
+                return podocdetailsidforlabel
+            # oldestlabelid determination end
+
+            def docdetailsinsert(productqty, podocdetailsidforlabel):
+
+                cursor4 = connection.cursor()
+                cursor4.execute(
+                    "INSERT INTO quotation_tbldoc_details "
+                    "( Docid_tblDoc_details_id, "
+                    "`Qty_tblDoc_details`, "
+                    "`customerdescription_tblProduct_ctblDoc_details`, "
+                    "firstnum_tblDoc_details, "
+                    "`fourthnum_tblDoc_details`, "
+                    "`secondnum_tblDoc_details`, "
+                    "`thirdnum_tblDoc_details`, "
+                    "`Note_tblDoc_details`, "
+                    "purchase_price_tblproduct_ctblDoc_details, "
+                    "listprice_tblDoc_details, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                    "Productid_tblDoc_details_id, "
+                    "currencyrate_tblcurrency_ctblDoc_details, "
+                    "unitsalespriceACU_tblDoc_details, "
+                    "unit_tbldocdetails, "
+                    "suppliercompanyid_tbldocdetails, "
+                    "denotopodetailslink_tbldocdetails, "
+                    "supplierdescription_tblProduct_ctblDoc_details, "
+                    "podocdetailsidforlabel_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+
+                    [maxdocid,
+                     productqty,
+                     customerdescriptionclone,
+                     firstnum,
+                     fourthnum,
+                     secondnum,
+                     thirdnum,
+                     note,
+                     purchase_priceclone,
+                     listpricecomputed,
+                     currencyisocodeclone,
+                     productid,
+                     currencyrate,
+                     unitsalespriceACU,
+                     unitclone,
+                     suppliercompanyid,
+                     denotopodetailslink,
+                     supplierdescriptionclone,
+                     podocdetailsidforlabel])
+            #import pdb;
+            #pdb.set_trace()
+                return
+            if discreteflag == 0: #indiscrete
+
+                docdetailsinsert(productqty, oldestlabel())
+            else: #discrete
+                for x6 in range(productqty):
+                    docdetailsinsert(1, oldestlabel())
 
     return render(request, 'quotation/pohandlerreceptionredirecturl.html', {})
