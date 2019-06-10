@@ -333,18 +333,18 @@ def deliverynotepre(request, docid):
         "supplierdescription_tblProduct_ctblDoc_details, "
         "COALESCE(sum(DD.Qty_tblDoc_details), 0) as ordered, "
         "COALESCE(sum(Denod.denodqty), 0) as denod, "
-        "COALESCE(sum(onstockingoing.onstockingoingqty), 0) as onstockingoing, "
-        "COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstockoutgoing, "
-        "COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstock, " #7
-        "IF(   (COALESCE(sum(Qty_tblDoc_details), 0))<=(COALESCE(sum(Denod.denodqty), 0))  , "
-        "   0.0, "
-        "   IF((COALESCE(sum(Qty_tblDoc_details), 0))<=(COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0)), "
-        "       COALESCE(sum(Qty_tblDoc_details), 0)-COALESCE(sum(Denod.denodqty), 0), " #True
-        "       (COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0)))) as todeno " # 8 if ordered<=denod, 0.0, (if ordered<=onstock, ordered-ondeno, onstock) 
+        "COALESCE(onstockingoing.onstockingoingqty, 0) as onstockingoing, "
+        "COALESCE(onstockoutgoing.onstockoutgoingqty, 0) as onstockoutgoing, "
+        "COALESCE(onstockingoing.onstockingoingqty, 0)-COALESCE(onstockoutgoing.onstockoutgoingqty, 0) as onstock " #7
+#        "IF(   (COALESCE(sum(DD.Qty_tblDoc_details), 0))<=(COALESCE(sum(Denod.denodqty), 0))  ,0,0) as todeno "
+#        "   0.0, "
+#        "   IF((COALESCE(sum(DD.Qty_tblDoc_details), 0))<=(COALESCE(onstockingoing.onstockingoingqty, 0)-COALESCE(onstockoutgoing.onstockoutgoingqty, 0)), "
+#        "       COALESCE(sum(DD.Qty_tblDoc_details), 0)-COALESCE(sum(Denod.denodqty), 0), "
+#        "       (COALESCE(onstockingoing.onstockingoingqty, 0)-COALESCE(onstockoutgoing.onstockoutgoingqty, 0)))) as todeno " # 8 if ordered<=denod, 0.0, (if ordered<=onstock, ordered-ondeno, onstock) 
 
         "FROM quotation_tbldoc_details as DD "
 
-        
+#denod        
         "LEFT JOIN (SELECT "
         "           wheretodocid_tbldoc, "
         "           sum(DD2.denodqty) as denodqty, "
@@ -376,7 +376,7 @@ def deliverynotepre(request, docid):
         
         "           FROM quotation_tbldoc "
 
-                    "LEFT JOIN (SELECT "
+                    "JOIN (SELECT "
                     "           Docid_tblDoc_details_id as docid, "
                     "           sum(Qty_tblDoc_details) as onstockingoingqty, "
                     "           Productid_tblDoc_details_id as productid "
@@ -420,7 +420,10 @@ def deliverynotepre(request, docid):
         "WHERE docid_tbldoc_details_id=%s "
         "GROUP BY   customerdescription_tblProduct_ctblDoc_details, "
         "           DD.Productid_tblDoc_details_id, "
-        "           supplierdescription_tblProduct_ctblDoc_details ",
+        "           supplierdescription_tblProduct_ctblDoc_details, "
+        "           onstockingoing, "
+        "           onstockoutgoing, "
+        "           onstock ",
         [docid])
 
     docdetails = cursor3.fetchall()
@@ -711,6 +714,8 @@ def deliverynotemake(request):
                 results22 = cursor0.fetchall()
                 for x14 in results22:
                     podocdetailsidforlabel=x14[0]
+                import pdb;
+                pdb.set_trace()
 
                 return podocdetailsidforlabel
             # oldestlabelid determination end

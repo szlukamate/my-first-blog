@@ -345,12 +345,12 @@ def pohandlerreception(request):
 #dateofarrivallistsplitted to table start
     cursor2 = connection.cursor()
     cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows;")
-    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS porows2;")
     cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS porows "
                     "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
                     "     podocdetailsid INT(11) NOT NULL, "
                     "     podocid INT(11) NULL, " 
                     "     cordocid INT(11) NULL, "
+                    "     denoqty DECIMAL(10,1) NULL,"
                     "     dateofarrivaldate varchar(55) NULL, "
                     "     numberofitemstodeno INT(11) NULL) "
                     "      ENGINE=INNODB "
@@ -362,6 +362,47 @@ def pohandlerreception(request):
         cordocid = dateofarrivallistsplitted[x11][2]
         dateofarrivaldate = dateofarrivallistsplitted[x11][3]
 
+
+
+
+        cursor2.execute("SELECT DD2cor.Qty_tblDoc_details as corqty, "
+                        "DD1po.Qty_tblDoc_details as poqty, "
+                        "Denod.denodqty as denodqty "
+                        
+                        "FROM quotation_tbldoc_details as DD1po "
+
+                        "LEFT JOIN quotation_tbldoc_details as DD2cor "
+                        "ON DD1po.podetailslink_tbldocdetails=DD2cor.Doc_detailsid_tblDoc_details "
+                #denod        
+                        "LEFT JOIN (SELECT "
+                        "           wheretodocid_tbldoc, "
+                        "           sum(DD2.denodqty) as denodqty "
+                        
+                        "           FROM quotation_tbldoc "
+                        
+                        "           LEFT JOIN   (SELECT "
+                        "                       Docid_tblDoc_details_id as docid, "
+                        "                       sum(Qty_tblDoc_details) as denodqty "
+                 
+                        "                       FROM quotation_tbldoc_details"
+                                                    
+                        "                       GROUP BY docid "
+                        "                       ) as DD2 "
+                        "           ON quotation_tbldoc.Docid_tblDoc = DD2.docid "
+                
+                        "           WHERE obsolete_tbldoc = 0 "
+                        "           GROUP BY wheretodocid_tbldoc "
+                        "           ) AS Denod "
+                        "ON DD1po.Docid_tblDoc_details_id = Denod.wheretodocid_tbldoc "
+
+                        "WHERE DD1po.Doc_detailsid_tblDoc_details=%s",[podocdetailsid])
+        results5 = cursor2.fetchall()
+        for k in results5:
+            corqty = k[0]
+            poqty = k[1]
+            denodqty = k[2]
+
+
         cursor2.execute("INSERT INTO porows (podocdetailsid, "
                         "podocid, "
                         "cordocid, "
@@ -369,8 +410,6 @@ def pohandlerreception(request):
                                                     "'" + str(podocid) + "', "
                                                     "'" + str(cordocid) + "', "
                                                     "'" + str(dateofarrivaldate) + "');")
-
-    cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS porows2 as (SELECT * FROM porows)")
 
     cursor2.execute("SELECT *  "
                     "FROM porows ")
@@ -396,17 +435,26 @@ def pohandlerreception(request):
                         "WHERE auxid =%s ", [numberofitemstodeno, auxid])
 #docdetails per docid to table end
 
+#porows table:
+    #auxid, numberofitemstodeno
+    #1 1
+    #2 2
+    #3 2
+    #4 1
+
 #deliverynote making start
     cursor2.execute("SELECT *  "
                     "FROM porows ")
     tables2 = cursor2.fetchall()
     docmakercounter = 0
+    #import pdb;
+    #pdb.set_trace()
 
     for x3 in tables2:
         podocdetailsid = x3[1]
         podocid = x3[2]
         cordocid = x3[3]
-        numberofitemstodeno = x3[5]
+        numberofitemstodeno = x3[6]
 
         if docmakercounter  == 0: #doc create only once even multiple docdetails
             docmakercounter = numberofitemstodeno

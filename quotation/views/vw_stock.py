@@ -101,9 +101,8 @@ def stockmain(request):
         "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
 
         "WHERE obsolete_tbldoc=0 and Doc_kindid_tblDoc_id=2 "
-        "GROUP BY   customerdescription_tblProduct_ctblDoc_details, "
-        "           DD.Productid_tblDoc_details_id, "
-        "           supplierdescription_tblProduct_ctblDoc_details, "
+        "GROUP BY   DD.Productid_tblDoc_details_id, "
+        "           supplierdescription_tblProduct, "
         "           onstockingoing, "
         "           onstockoutgoing ")
 
