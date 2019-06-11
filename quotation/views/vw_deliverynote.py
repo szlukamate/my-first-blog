@@ -426,9 +426,27 @@ def deliverynotepre(request, docid):
         "           onstock ",
         [docid])
 
-    docdetails = cursor3.fetchall()
+    docdetailspre = cursor3.fetchall()
+    for instancesingle in docdetailspre:
+        customerdescription = instancesingle[0]
+
     #import pdb;
     #pdb.set_trace()
+    docdetailsprelen = len(docdetailspre)
+    todocdetailspre = []
+    todocdetails = []
+    docdetails = []
+
+
+    for z in range(docdetailsprelen):  # order number to the tuple for template lines
+        appendvar = (str(z),customerdescription)
+        todocdetails.append(appendvar)
+
+    docdetails = todocdetails
+
+    #import pdb;
+    #pdb.set_trace()
+
 
     rowsnumber = len(docdetails)
     customerordernumber = docid
