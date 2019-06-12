@@ -427,19 +427,31 @@ def deliverynotepre(request, docid):
         [docid])
 
     docdetailspre = cursor3.fetchall()
-    for instancesingle in docdetailspre:
-        customerdescription = instancesingle[0]
-
-    #import pdb;
-    #pdb.set_trace()
-    docdetailsprelen = len(docdetailspre)
-    todocdetailspre = []
+#    todocdetailspre = []
     todocdetails = []
     docdetails = []
 
+    for instancesingle in docdetailspre:
+        customerdescription = instancesingle[0]
+        productid = instancesingle[1]
+        supplierdescription = instancesingle[2]
+        ordered = instancesingle[3]
+        denod = instancesingle[4]
+        onstockingoing = instancesingle[5]
+        onstockoutgoing = instancesingle[6]
+        onstock = instancesingle[7]
 
-    for z in range(docdetailsprelen):  # order number to the tuple for template lines
-        appendvar = (str(z),customerdescription)
+        if ordered <= denod:
+            todeno = 0.0
+        else:
+            if ordered <= onstock:
+                todeno = ordered-denod
+            else:
+                todeno = onstock
+
+#        if ordered <= denod, 0.0, ( if ordered <= onstock, ordered-ondeno, onstock)
+
+        appendvar = (customerdescription, productid, supplierdescription, ordered, denod, onstockingoing, onstockoutgoing, onstock, todeno )
         todocdetails.append(appendvar)
 
     docdetails = todocdetails
@@ -665,7 +677,7 @@ def deliverynotemake(request):
 
         for x in docdetails:
             denotopodetailslink = x[0]
-            qty = x[1]
+#            qty = x[1]
 
             firstnum = x[4]
             fourthnum = x[5]
@@ -705,40 +717,46 @@ def deliverynotemake(request):
                 cursor0 = connection.cursor()
                 cursor0.execute(
                     "SELECT "
-                    "DDingoing.podocdetailsidforlabel_tbldocdetails, "
-                    "DDingoing.Productid_tblDoc_details_id, "
-                    "DDoutgoing.podocdetailsidforlabel_tbldocdetails "
-    
+                    "DDingoing.podocdetailsidforlabel_tbldocdetails as inlabel, "
+                    "sum(DDingoing.Qty_tblDoc_details) as inqty, "
+                    "sum(DDoutgoing.outqty) as outqty, "
+                    "COALESCE(sum(DDingoing.Qty_tblDoc_details),0)-COALESCE(sum(DDoutgoing.outqty),0) as onstock "
+
                     "FROM quotation_tbldoc_details as DDingoing "
-    
-                    "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails, "
-                    "           Docid_tblDoc_details_id "
-    
+
+                    "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails as outlabel, "
+                    "           Docid_tblDoc_details_id, "
+                    "           sum(Qty_tblDoc_details) as outqty "
+
                     "           FROM quotation_tbldoc_details as DD2 "
-    
+
                     "           JOIN quotation_tbldoc as D2"
                     "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
                     "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
+                    "           GROUP BY outlabel, Docid_tblDoc_details_id "
+
                     "           ) as DDoutgoing "
-                    "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.podocdetailsidforlabel_tbldocdetails "
-    
+                    "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.outlabel "  # and outqty <> DDoutgoing.outqty "
+
                     "LEFT JOIN quotation_tbldoc as D "
                     "ON DDingoing.Docid_tblDoc_details_id = D.Docid_tblDoc "
-    
-                    "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and DDingoing.Productid_tblDoc_details_id=%s and DDoutgoing.podocdetailsidforlabel_tbldocdetails is null "
+
+                    "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and DDingoing.Productid_tblDoc_details_id=%s "  # and DDoutgoing.podocdetailsidforlabel_tbldocdetails is null "
+                    "GROUP BY inlabel "
                     "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
                     , [productid, productid])
 
                 results22 = cursor0.fetchall()
                 for x14 in results22:
                     podocdetailsidforlabel=x14[0]
+                    productqtyoldestlabel=x14[3]
                 import pdb;
                 pdb.set_trace()
 
-                return podocdetailsidforlabel
+                return productqtyoldestlabel, podocdetailsidforlabel
             # oldestlabelid determination end
 
-            def docdetailsinsert(productqty, podocdetailsidforlabel):
+            def docdetailsinsert(productqtyoldestlabel, podocdetailsidforlabel):
 
                 cursor4 = connection.cursor()
                 cursor4.execute(
@@ -786,8 +804,27 @@ def deliverynotemake(request):
             #pdb.set_trace()
                 return
             if discreteflag == 0: #indiscrete
+                productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
+                if productqty <= productqtyoldestlabel:
+                    docdetailsinsert(productqty, podocdetailsidforlabel)
 
-                docdetailsinsert(productqty, oldestlabel())
+                else:
+                    docdetailsinsert(productqtyoldestlabel, podocdetailsidforlabel)
+                    remnantqty = productqty - productqtyoldestlabel
+
+                while remnantqty >= 0:
+                    productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
+
+
+                    import pdb;
+                    pdb.set_trace()
+
+                    if remnantqty <= productqtyoldestlabel:
+                        docdetailsinsert(remnantqty, podocdetailsidforlabel)
+                    else:
+                        docdetailsinsert(productqtyoldestlabel, podocdetailsidforlabel)
+                    remnantqty = remnantqty - productqtyoldestlabel
+
             else: #discrete
                 for x6 in range(productqty):
                     docdetailsinsert(1, oldestlabel())

@@ -1,7 +1,11 @@
 
+
 {% for result in results %}
 
-<p>{{result.0}} {{result.1}} {{result.2}}</p>
+
+{% if result.3 > 0 %}
+<p>{{result.0}} {{result.3}}</p>
+{% endif %}
 
 {% endfor %}
 

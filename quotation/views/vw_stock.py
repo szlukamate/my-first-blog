@@ -118,37 +118,55 @@ def stockmain(request):
 def stocklabellist(request):
     productid = request.POST['productid']
 
-    cursor0 = connection.cursor()
-    cursor0.execute(
+    cursor1 = connection.cursor()
+    cursor1.execute(
         "SELECT "
-        "DDingoing.podocdetailsidforlabel_tbldocdetails, "
-        "DDingoing.Productid_tblDoc_details_id, "
-        "DDoutgoing.podocdetailsidforlabel_tbldocdetails "
+        "discreteflag_tblproduct "
 
-        "FROM quotation_tbldoc_details as DDingoing "
+        "FROM quotation_tblproduct as P "
 
-        "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails, "
-        "           Docid_tblDoc_details_id "
+        "WHERE Productid_tblProduct=%s "
+        , [productid])
 
-        "           FROM quotation_tbldoc_details as DD2 "
+    results22 = cursor1.fetchall()
+    for x14 in results22:
+        discreteflag = x14[0]
 
-        "           JOIN quotation_tbldoc as D2"
-        "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
-        "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
-        "           ) as DDoutgoing "
-        "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.podocdetailsidforlabel_tbldocdetails "
+        cursor0 = connection.cursor()
+        cursor0.execute(
+            "SELECT "
+            "DDingoing.podocdetailsidforlabel_tbldocdetails as inlabel, "
+            "sum(DDingoing.Qty_tblDoc_details) as inqty, "
+            "sum(DDoutgoing.outqty) as outqty, "
+            "COALESCE(sum(DDingoing.Qty_tblDoc_details),0)-COALESCE(sum(DDoutgoing.outqty),0) as onstock "
+    
+            "FROM quotation_tbldoc_details as DDingoing "
+    
+            "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails as outlabel, "
+            "           Docid_tblDoc_details_id, "
+            "           sum(Qty_tblDoc_details) as outqty "
+    
+            "           FROM quotation_tbldoc_details as DD2 "
+    
+            "           JOIN quotation_tbldoc as D2"
+            "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
+            "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
+            "           GROUP BY outlabel, Docid_tblDoc_details_id "
+            
+            "           ) as DDoutgoing "
+            "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.outlabel " #and outqty <> DDoutgoing.outqty "
+    
+            "LEFT JOIN quotation_tbldoc as D "
+            "ON DDingoing.Docid_tblDoc_details_id = D.Docid_tblDoc "
+    
+            "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and DDingoing.Productid_tblDoc_details_id=%s " #and DDoutgoing.podocdetailsidforlabel_tbldocdetails is null "
+            "GROUP BY inlabel "
+            "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
+            , [productid, productid])
 
-        "LEFT JOIN quotation_tbldoc as D "
-        "ON DDingoing.Docid_tblDoc_details_id = D.Docid_tblDoc "
 
-        "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and DDingoing.Productid_tblDoc_details_id=%s and DDoutgoing.podocdetailsidforlabel_tbldocdetails is null "
-        "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
-        , [productid, productid])
-
-
-    results = cursor0.fetchall()
-    transaction.commit()
-
+        results = cursor0.fetchall()
+        transaction.commit()
 
     return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
 
