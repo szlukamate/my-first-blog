@@ -135,7 +135,7 @@ def stocklabellist(request):
         cursor0 = connection.cursor()
         cursor0.execute(
             "SELECT "
-            "DDingoing.podocdetailsidforlabel_tbldocdetails as inlabel, "
+            "DDingoing.podocdetailsidforlabel_tbldocdetails as labelid, "
             "sum(DDingoing.Qty_tblDoc_details) as inqty, "
             "sum(DDoutgoing.outqty) as outqty, "
             "COALESCE(sum(DDingoing.Qty_tblDoc_details),0)-COALESCE(sum(DDoutgoing.outqty),0) as onstock "
@@ -160,13 +160,27 @@ def stocklabellist(request):
             "ON DDingoing.Docid_tblDoc_details_id = D.Docid_tblDoc "
     
             "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and DDingoing.Productid_tblDoc_details_id=%s " #and DDoutgoing.podocdetailsidforlabel_tbldocdetails is null "
-            "GROUP BY inlabel "
+            "GROUP BY labelid "
             "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
             , [productid, productid])
 
 
-        results = cursor0.fetchall()
-        transaction.commit()
+        resultspre = cursor0.fetchall()
+        toresults = []
+        results = []
+
+        for instancesingle in resultspre:
+            labelid = instancesingle[0]
+            inqty = instancesingle[1]
+            outqty = instancesingle[2]
+            onstockqty = instancesingle[3]
+
+            if onstockqty > 0:
+                appendvar = (
+                labelid, inqty, outqty, onstockqty)
+                toresults.append(appendvar)
+
+        results = toresults
 
     return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
 

@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 import subprocess
 import os
-
+import time
 
 # import pdb;
 # pdb.set_trace()
@@ -717,7 +717,7 @@ def deliverynotemake(request):
                 cursor0 = connection.cursor()
                 cursor0.execute(
                     "SELECT "
-                    "DDingoing.podocdetailsidforlabel_tbldocdetails as inlabel, "
+                    "DDingoing.podocdetailsidforlabel_tbldocdetails as labelid, "
                     "sum(DDingoing.Qty_tblDoc_details) as inqty, "
                     "sum(DDoutgoing.outqty) as outqty, "
                     "COALESCE(sum(DDingoing.Qty_tblDoc_details),0)-COALESCE(sum(DDoutgoing.outqty),0) as onstock "
@@ -742,16 +742,32 @@ def deliverynotemake(request):
                     "ON DDingoing.Docid_tblDoc_details_id = D.Docid_tblDoc "
 
                     "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and DDingoing.Productid_tblDoc_details_id=%s "  # and DDoutgoing.podocdetailsidforlabel_tbldocdetails is null "
-                    "GROUP BY inlabel "
-                    "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
+                    "GROUP BY labelid "
+                    "order by DDingoing.podocdetailsidforlabel_tbldocdetails asc "
                     , [productid, productid])
 
-                results22 = cursor0.fetchall()
-                for x14 in results22:
-                    podocdetailsidforlabel=x14[0]
-                    productqtyoldestlabel=x14[3]
-                import pdb;
-                pdb.set_trace()
+                resultspre = cursor0.fetchall()
+                toresults = []
+                results = []
+
+                for instancesingle in resultspre:
+                    labelid = instancesingle[0]
+                    inqty = instancesingle[1]
+                    outqty = instancesingle[2]
+                    onstockqty = instancesingle[3]
+
+                    if onstockqty > 0:
+                        productqtyoldestlabel = onstockqty
+                        podocdetailsidforlabel = labelid
+                        break
+                    else:
+                        productqtyoldestlabel = 'nomore'
+                        podocdetailsidforlabel = 'nomore'
+
+
+
+                #import pdb;
+                #pdb.set_trace()
 
                 return productqtyoldestlabel, podocdetailsidforlabel
             # oldestlabelid determination end
@@ -782,7 +798,7 @@ def deliverynotemake(request):
                     "podocdetailsidforlabel_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
                     [maxdocid,
-                     productqty,
+                     productqtyoldestlabel,
                      customerdescriptionclone,
                      firstnum,
                      fourthnum,
@@ -807,26 +823,41 @@ def deliverynotemake(request):
                 productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
                 if productqty <= productqtyoldestlabel:
                     docdetailsinsert(productqty, podocdetailsidforlabel)
+                    remnantqty = 0
+
+                #                    import pdb;
+#                    pdb.set_trace()
 
                 else:
                     docdetailsinsert(productqtyoldestlabel, podocdetailsidforlabel)
                     remnantqty = productqty - productqtyoldestlabel
+                    #import pdb;
+                    #pdb.set_trace()
 
-                while remnantqty >= 0:
+                while remnantqty > 0:
                     productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
+                    #import pdb;
+                    #pdb.set_trace()
 
+#                    time.sleep(2)
+                    print(remnantqty)
+                    if productqtyoldestlabel == 'nomore':
+                        break
 
-                    import pdb;
-                    pdb.set_trace()
 
                     if remnantqty <= productqtyoldestlabel:
                         docdetailsinsert(remnantqty, podocdetailsidforlabel)
+                        remnantqty = 0
                     else:
                         docdetailsinsert(productqtyoldestlabel, podocdetailsidforlabel)
-                    remnantqty = remnantqty - productqtyoldestlabel
+                        remnantqty = remnantqty - productqtyoldestlabel
+
+ #                   import pdb;
+ #                   pdb.set_trace()
 
             else: #discrete
                 for x6 in range(productqty):
-                    docdetailsinsert(1, oldestlabel())
+                    productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
+                    docdetailsinsert(1, podocdetailsidforlabel)
 
     return render(request, 'quotation/pohandlerreceptionredirecturl.html', {})
