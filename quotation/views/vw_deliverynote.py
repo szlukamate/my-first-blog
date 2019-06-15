@@ -333,7 +333,7 @@ def deliverynotepre(request, docid):
         "supplierdescription_tblProduct_ctblDoc_details, "
         "COALESCE(sum(DD.Qty_tblDoc_details), 0) as ordered, "
         "COALESCE(sum(Denod.denodqty), 0) as denod, "
-        "COALESCE(onstockingoing.onstockingoingqty, 0) as onstockingoing, "
+        "COALESCE(sum(onstockingoing.onstockingoingqty), 0) as onstockingoing, "
         "COALESCE(onstockoutgoing.onstockoutgoingqty, 0) as onstockoutgoing, "
         "COALESCE(onstockingoing.onstockingoingqty, 0)-COALESCE(onstockoutgoing.onstockoutgoingqty, 0) as onstock " #7
 #        "IF(   (COALESCE(sum(DD.Qty_tblDoc_details), 0))<=(COALESCE(sum(Denod.denodqty), 0))  ,0,0) as todeno "
@@ -370,28 +370,34 @@ def deliverynotepre(request, docid):
 #ingoing
 
         "LEFT JOIN (SELECT "
-        "           wheretodocid_tbldoc, "
+        "           D2.wheretodocid_tbldoc as wheretodocid, "
         "           sum(onstockingoing2.onstockingoingqty) as onstockingoingqty, "
-        "           onstockingoing2.productid as productid "
-        
-        "           FROM quotation_tbldoc "
+        "           onstockingoing2.productid as productid, "
+        "           D3.Contactid_tblDoc_id as contactid2 "
+
+        "           FROM quotation_tbldoc D2 "
 
                     "JOIN (SELECT "
-                    "           Docid_tblDoc_details_id as docid, "
-                    "           sum(Qty_tblDoc_details) as onstockingoingqty, "
-                    "           Productid_tblDoc_details_id as productid "
-                    
-                    "           FROM quotation_tbldoc_details "
-            
-                    "           GROUP BY docid, productid "
-                    "           ) AS onstockingoing2 "
-        "           ON quotation_tbldoc.Docid_tblDoc = onstockingoing2.docid "
+                    "      Docid_tblDoc_details_id as docid, "
+                    "      sum(Qty_tblDoc_details) as onstockingoingqty, "
+                    "      Productid_tblDoc_details_id as productid "
 
-        "           WHERE obsolete_tbldoc = 0 "
-        "           GROUP BY wheretodocid_tbldoc, productid "
+                    "      FROM quotation_tbldoc_details "
+            
+                    "      GROUP BY docid, productid "
+                    "     ) AS onstockingoing2 "
+        "           ON D2.Docid_tblDoc = onstockingoing2.docid "
+
+                    "LEFT JOIN quotation_tbldoc as D3" #D3 contains all where wheredoc is not null
+        "           ON D2.wheretodocid_tbldoc = D3.Docid_tblDoc"
+
+        "           WHERE D2.obsolete_tbldoc = 0 and D3.Contactid_tblDoc_id=9 "
+        "           GROUP BY D2.wheretodocid_tbldoc, "
+        "                       productid, "
+        "                       contactid2 "
 
         "           ) AS onstockingoing "
-        "ON (788 = onstockingoing.wheretodocid_tbldoc and DD.Productid_tblDoc_details_id = onstockingoing.productid) "
+        "ON (DD.Productid_tblDoc_details_id = onstockingoing.productid) "
 #outgoing
         "LEFT JOIN (SELECT "
         "           wherefromdocid_tbldoc, "
@@ -421,7 +427,7 @@ def deliverynotepre(request, docid):
         "GROUP BY   customerdescription_tblProduct_ctblDoc_details, "
         "           DD.Productid_tblDoc_details_id, "
         "           supplierdescription_tblProduct_ctblDoc_details, "
-        "           onstockingoing, "
+#        "           onstockingoing, "
         "           onstockoutgoing, "
         "           onstock ",
         [docid])
@@ -595,8 +601,8 @@ def deliverynotemake(request):
                     "currencyrateinreport_tbldoc, "
                     "doclinkparentid_tbldoc, "
                     "accountcurrencycode_tbldoc, "
-                    "wherefromdocid_tbldoc, "
-                    "wheretodocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+#                    "wherefromdocid_tbldoc, " Remain Null at Insert
+                    "wheretodocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [8, contactid,
                      companynameclone,
                      firstnameclone,
@@ -620,7 +626,7 @@ def deliverynotemake(request):
                      currencyrateinreport,
                      customerordernumber,
                      accountcurrencycode,
-                     788,
+#                     NULL,
                      customerordernumber])
 
     cursor3 = connection.cursor()
@@ -719,32 +725,45 @@ def deliverynotemake(request):
                     "SELECT "
                     "DDingoing.podocdetailsidforlabel_tbldocdetails as labelid, "
                     "sum(DDingoing.Qty_tblDoc_details) as inqty, "
-                    "sum(DDoutgoing.outqty) as outqty, "
-                    "COALESCE(sum(DDingoing.Qty_tblDoc_details),0)-COALESCE(sum(DDoutgoing.outqty),0) as onstock "
+                    #            "sum(DDoutgoing.outqty) as outqty, "
+                    #            "COALESCE(sum(DDingoing.Qty_tblDoc_details),0)-COALESCE(sum(DDoutgoing.outqty),0) as onstock 
+                    "D4.contactid as contactid "
 
                     "FROM quotation_tbldoc_details as DDingoing "
 
-                    "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails as outlabel, "
-                    "           Docid_tblDoc_details_id, "
-                    "           sum(Qty_tblDoc_details) as outqty "
+                    #            "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails as outlabel, "
+                    #            "           Docid_tblDoc_details_id, "
+                    #            "           sum(Qty_tblDoc_details) as outqty "
 
-                    "           FROM quotation_tbldoc_details as DD2 "
+                    #            "           FROM quotation_tbldoc_details as DD2 "
 
-                    "           JOIN quotation_tbldoc as D2"
-                    "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
-                    "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
-                    "           GROUP BY outlabel, Docid_tblDoc_details_id "
+                    #            "           JOIN quotation_tbldoc as D2"
+                    #            "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
+                    #            "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
+                    #            "           GROUP BY outlabel, Docid_tblDoc_details_id "
 
-                    "           ) as DDoutgoing "
-                    "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.outlabel "  # and outqty <> DDoutgoing.outqty "
+                    #            "           ) as DDoutgoing "
+                    #            "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.outlabel " #and outqty <> DDoutgoing.outqty "
 
-                    "LEFT JOIN quotation_tbldoc as D "
-                    "ON DDingoing.Docid_tblDoc_details_id = D.Docid_tblDoc "
+                    "JOIN (SELECT "
+                    "       D.Docid_tblDoc, "
+                    "       D2.Contactid_tblDoc_id as contactid, "
+                    "       D.obsolete_tbldoc as obsolete"
+                    ""
+                    "       FROM quotation_tbldoc as D "
 
-                    "WHERE obsolete_tbldoc=0 and wheretodocid_tbldoc=788 and DDingoing.Productid_tblDoc_details_id=%s "  # and DDoutgoing.podocdetailsidforlabel_tbldocdetails is null "
-                    "GROUP BY labelid "
-                    "order by DDingoing.podocdetailsidforlabel_tbldocdetails asc "
-                    , [productid, productid])
+                    "JOIN quotation_tbldoc as D2 "  # contactid lookup
+                    "ON D.wheretodocid_tblDoc = D2.Docid_tblDoc "
+                    "       WHERE D2.Contactid_tblDoc_id=9 "
+
+                    "     ) as D4 "
+
+                    "ON DDingoing.Docid_tblDoc_details_id = D4.Docid_tblDoc "
+
+                    "WHERE D4.obsolete=0 and DDingoing.Productid_tblDoc_details_id=%s   "
+                    "GROUP BY labelid, contactid "
+                    "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
+                    , [productid])
 
                 resultspre = cursor0.fetchall()
                 toresults = []
@@ -753,11 +772,11 @@ def deliverynotemake(request):
                 for instancesingle in resultspre:
                     labelid = instancesingle[0]
                     inqty = instancesingle[1]
-                    outqty = instancesingle[2]
-                    onstockqty = instancesingle[3]
+#                    outqty = instancesingle[2]
+#                    onstockqty = instancesingle[3]
 
-                    if onstockqty > 0:
-                        productqtyoldestlabel = onstockqty
+                    if inqty > 0:
+                        productqtyoldestlabel = inqty
                         podocdetailsidforlabel = labelid
                         break
                     else:
