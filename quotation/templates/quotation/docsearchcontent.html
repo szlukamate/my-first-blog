@@ -31,13 +31,14 @@
 
 
 													<tr>
-														<td>{{ tblDoc.0 }}</td>
+														<td>{{ tblDoc.0 }}{{ tblDoc.15 }}</td>
 														<td>{{ tblDoc.4}} ({{ tblDoc.5}} {{ tblDoc.6}})</td>
-															{% if tblDoc.15 != None %}
-															<td><a href="#" hrefdjango="{% url 'docselector' pk=tblDoc.0 %}" class="linkable">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})<span style="color:red;"> {{ tblDoc.15}}/{{ tblDoc.18}}{{ tblDoc.19}}/ --> {{ tblDoc.16}}/{{ tblDoc.20}}{{ tblDoc.21}}/</span></td>
-															{% else %}
-															<td><a href="#" hrefdjango="{% url 'docselector' pk=tblDoc.0 %}" class="linkable">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})</td>
-															{% endif %}
+
+														{% if tblDoc.15 != None %}
+														<td><a href="#" hrefdjango="{% url 'docselector' pk=tblDoc.0 %}" class="linkable">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})<span style="color:red;">{% if tblDoc.15 != None %}{{ tblDoc.15}}/{{ tblDoc.18}}{{ tblDoc.19}}/{% else %} Central Stock {% endif %} --> {{ tblDoc.16}}/{{ tblDoc.20}}{{ tblDoc.21}}/</span></td>
+														{% else %}
+														<td><a href="#" hrefdjango="{% url 'docselector' pk=tblDoc.0 %}" class="linkable">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})</td>
+														{% endif %}
 
 														<td>{{ tblDoc.7|date:"M.d.Y" }} {{ tblDoc.7|time:"H:i" }}</td>
 														<td>{{ tblDoc.12}}</td>

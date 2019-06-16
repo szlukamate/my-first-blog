@@ -399,6 +399,7 @@ def deliverynotepre(request, docid):
         "           ) AS onstockingoing "
         "ON (DD.Productid_tblDoc_details_id = onstockingoing.productid) "
 #outgoing
+
         "LEFT JOIN (SELECT "
         "           wherefromdocid_tbldoc, "
         "           sum(onstockoutgoing2.onstockoutgoingqty) as onstockoutgoingqty, "
@@ -559,8 +560,9 @@ def deliverynotemake(request):
         pcdclone = x[19]
         townclone = x[20]
         addressclone = x[21]
-        # import pdb;
-        # pdb.set_trace()
+
+        #import pdb;
+        #pdb.set_trace()
 
     cursor8 = connection.cursor()
     cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
@@ -601,7 +603,7 @@ def deliverynotemake(request):
                     "currencyrateinreport_tbldoc, "
                     "doclinkparentid_tbldoc, "
                     "accountcurrencycode_tbldoc, "
-#                    "wherefromdocid_tbldoc, " Remain Null at Insert
+#                    "wherefromdocid_tbldoc, " #Remain Null at Insert
                     "wheretodocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [8, contactid,
                      companynameclone,
@@ -626,7 +628,7 @@ def deliverynotemake(request):
                      currencyrateinreport,
                      customerordernumber,
                      accountcurrencycode,
-#                     NULL,
+#                     788,
                      customerordernumber])
 
     cursor3 = connection.cursor()
