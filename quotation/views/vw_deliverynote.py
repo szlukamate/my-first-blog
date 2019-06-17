@@ -334,8 +334,8 @@ def deliverynotepre(request, docid):
         "COALESCE(sum(DD.Qty_tblDoc_details), 0) as ordered, "
         "COALESCE(sum(Denod.denodqty), 0) as denod, "
         "COALESCE(sum(onstockingoing.onstockingoingqty), 0) as onstockingoing, "
-        "COALESCE(onstockoutgoing.onstockoutgoingqty, 0) as onstockoutgoing, "
-        "COALESCE(onstockingoing.onstockingoingqty, 0)-COALESCE(onstockoutgoing.onstockoutgoingqty, 0) as onstock " #7
+        "COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstockoutgoing, "
+        "COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstock " #7
 #        "IF(   (COALESCE(sum(DD.Qty_tblDoc_details), 0))<=(COALESCE(sum(Denod.denodqty), 0))  ,0,0) as todeno "
 #        "   0.0, "
 #        "   IF((COALESCE(sum(DD.Qty_tblDoc_details), 0))<=(COALESCE(onstockingoing.onstockingoingqty, 0)-COALESCE(onstockoutgoing.onstockoutgoingqty, 0)), "
@@ -427,10 +427,10 @@ def deliverynotepre(request, docid):
         "WHERE docid_tbldoc_details_id=%s "
         "GROUP BY   customerdescription_tblProduct_ctblDoc_details, "
         "           DD.Productid_tblDoc_details_id, "
-        "           supplierdescription_tblProduct_ctblDoc_details, "
+        "           supplierdescription_tblProduct_ctblDoc_details ",
 #        "           onstockingoing, "
-        "           onstockoutgoing, "
-        "           onstock ",
+#        "           onstockoutgoing, "
+#        "           onstock ",
         [docid])
 
     docdetailspre = cursor3.fetchall()
@@ -603,8 +603,8 @@ def deliverynotemake(request):
                     "currencyrateinreport_tbldoc, "
                     "doclinkparentid_tbldoc, "
                     "accountcurrencycode_tbldoc, "
-#                    "wherefromdocid_tbldoc, " #Remain Null at Insert
-                    "wheretodocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "wherefromdocid_tbldoc, " 
+                    "wheretodocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [8, contactid,
                      companynameclone,
                      firstnameclone,
@@ -628,7 +628,7 @@ def deliverynotemake(request):
                      currencyrateinreport,
                      customerordernumber,
                      accountcurrencycode,
-#                     788,
+                     788,
                      customerordernumber])
 
     cursor3 = connection.cursor()

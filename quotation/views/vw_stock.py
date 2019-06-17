@@ -76,14 +76,13 @@ def stockmain(request):
         "ON (DD.Docid_tblDoc_details_id = onstockingoing.wheretodocid and DD.Productid_tblDoc_details_id = onstockingoing.productid) "
 #outgoing
         "LEFT JOIN (SELECT "
-        "           D2out.wherefromdocid_tbldoc as wherefromdocid, "
+        "           wherefromdocid_tbldoc, "
         "           sum(onstockoutgoing2.onstockoutgoingqty) as onstockoutgoingqty, "
-        "           onstockoutgoing2.productid as productid, "
-        "           D3out.Contactid_tblDoc_id as contactid2"
+        "           onstockoutgoing2.productid as productid "
        
-        "           FROM quotation_tbldoc D2out "
+        "           FROM quotation_tbldoc "
 
-                    "JOIN (SELECT "
+                    "LEFT JOIN (SELECT "
                     "           Docid_tblDoc_details_id as docid, "
                     "           sum(Qty_tblDoc_details) as onstockoutgoingqty, "
                     "           Productid_tblDoc_details_id as productid "
@@ -92,16 +91,13 @@ def stockmain(request):
             
                     "           GROUP BY docid, productid "
                     "           ) AS onstockoutgoing2 "
-        "           ON D2out.Docid_tblDoc = onstockoutgoing2.docid "
+        "           ON quotation_tbldoc.Docid_tblDoc = onstockoutgoing2.docid "
 
-                    "LEFT JOIN quotation_tbldoc as D3out" #D3out contains all where wheredoc is not null
-        "           ON D2out.wheretodocid_tbldoc = D3out.Docid_tblDoc "
-        
-                    "WHERE D2out.obsolete_tbldoc=0 and D3out.Contactid_tblDoc_id=9 "
-        "           GROUP BY wherefromdocid, productid, contactid2 "
+        "           WHERE obsolete_tbldoc = 0 "
+        "           GROUP BY wherefromdocid_tbldoc, productid "
 
         "           ) AS onstockoutgoing "
-        "ON (DD.Docid_tblDoc_details_id = onstockoutgoing.wherefromdocid and DD.Productid_tblDoc_details_id = onstockoutgoing.productid) "
+        "ON (788 = onstockoutgoing.wherefromdocid_tbldoc and DD.Productid_tblDoc_details_id = onstockoutgoing.productid) "
 
         "LEFT JOIN quotation_tbldoc "
         "ON DD.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
@@ -149,64 +145,92 @@ def stocklabellist(request):
         cursor0 = connection.cursor()
         cursor0.execute(
             "SELECT "
-            "DDingoing.podocdetailsidforlabel_tbldocdetails as labelid, "
-            "sum(DDingoing.Qty_tblDoc_details) as inqty, "
-#            "sum(DDoutgoing.outqty) as outqty, "
-#            "COALESCE(sum(DDingoing.Qty_tblDoc_details),0)-COALESCE(sum(DDoutgoing.outqty),0) as onstock 
-            "D4.contactid as contactid "
+            "Dingoing.inlabel as labelid, "
+            "Dingoing.inqty as inqty, "
+            "DDoutgoing.outqty as outqty, "
+           "COALESCE(Dingoing.inqty,0)-COALESCE(DDoutgoing.outqty,0) as onstock " 
     
-            "FROM quotation_tbldoc_details as DDingoing "
-    
-#            "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails as outlabel, "
-#            "           Docid_tblDoc_details_id, "
-#            "           sum(Qty_tblDoc_details) as outqty "
-    
-#            "           FROM quotation_tbldoc_details as DD2 "
-    
-#            "           JOIN quotation_tbldoc as D2"
-#            "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
-#            "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
-#            "           GROUP BY outlabel, Docid_tblDoc_details_id "
-            
-#            "           ) as DDoutgoing "
-#            "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.outlabel " #and outqty <> DDoutgoing.outqty "
-    
+            "FROM quotation_tbldoc_details as DD "
+#ingoing
             "JOIN (SELECT "
-            "       D.Docid_tblDoc, "
-            "       D2.Contactid_tblDoc_id as contactid, "
-            "       D.obsolete_tbldoc as obsolete"
+            "       D.Docid_tblDoc as docid, "
+            "       DDingoing.inlabel as inlabel, "
+            "       D.obsolete_tbldoc as obsolete, "
+            "       sum(DDingoing.inqty) as inqty "
             ""
             "       FROM quotation_tbldoc as D "
+            "   "
+                    "JOIN (SELECT podocdetailsidforlabel_tbldocdetails as inlabel, "
+                    "           Docid_tblDoc_details_id, "
+                    "           sum(Qty_tblDoc_details) as inqty "
+            
+                    "           FROM quotation_tbldoc_details as DD2 "
+            
+                    "           JOIN quotation_tbldoc as D2"
+                    "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
+            
+                    "           WHERE D2.obsolete_tbldoc=0 "
+                    "           GROUP BY inlabel, Docid_tblDoc_details_id "
+                    
+                    "           ) as DDingoing "
+                    "ON D.Docid_tblDoc = DDingoing.Docid_tblDoc_details_id " 
+
                     
                     "JOIN quotation_tbldoc as D2 " #contactid lookup
                     "ON D.wheretodocid_tblDoc = D2.Docid_tblDoc "
-            "       WHERE D2.Contactid_tblDoc_id=9 "
+            "       WHERE D2.Contactid_tblDoc_id=9 and D2.obsolete_tbldoc = 0 "
+        "           GROUP BY docid, "
+        "                       inlabel, "
+        "                       obsolete "
+            ""
             
-            "     ) as D4 "
+            "     ) as Dingoing "
 
-            "ON DDingoing.Docid_tblDoc_details_id = D4.Docid_tblDoc "
+            "ON DD.Docid_tblDoc_details_id = Dingoing.docid "
+
+#outgoing    
+            "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails as outlabel, "
+            "           Docid_tblDoc_details_id, "
+            "           sum(Qty_tblDoc_details) as outqty "
+    
+            "           FROM quotation_tbldoc_details as DD2 "
+    
+            "           JOIN quotation_tbldoc as D2"
+            "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
+
+            "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788  "
+            "           GROUP BY outlabel, Docid_tblDoc_details_id "
+            
+            "           ) as DDoutgoing "
+            "ON DD.podocdetailsidforlabel_tbldocdetails = DDoutgoing.outlabel " #and outqty <> DDoutgoing.outqty "
+   
         
-            "WHERE D4.obsolete=0 and DDingoing.Productid_tblDoc_details_id=%s   " 
-            "GROUP BY labelid, contactid "
-            "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
+            "JOIN quotation_tbldoc as D "
+            "ON DD.Docid_tblDoc_details_id = D.Docid_tblDoc "
+
+        
+            "WHERE DD.Productid_tblDoc_details_id=%s and D.obsolete_tbldoc=0   " 
+            "GROUP BY labelid, inqty, outqty, onstock  "
+            "order by labelid desc "
             , [productid])
 
 
         resultspre = cursor0.fetchall()
         toresults = []
         results = []
+        import pdb;
+        pdb.set_trace()
 
         for instancesingle in resultspre:
             labelid = instancesingle[0]
             inqty = instancesingle[1]
-            contactid = instancesingle[2]
-#            outqty = instancesingle[2]
-#            onstockqty = instancesingle[3]
+            outqty = instancesingle[2]
+            onstockqty = instancesingle[3]
 
-#            if onstockqty > 0:
-            appendvar = (
-            labelid, inqty, contactid)
-            toresults.append(appendvar)
+            if onstockqty > 0:
+                appendvar = (
+                labelid, inqty, outqty, onstockqty)
+                toresults.append(appendvar)
 
         results = toresults
 
