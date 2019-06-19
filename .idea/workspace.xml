@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quotation/views/vw_stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_stock.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -58,8 +57,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="606" column="46" lean-forward="true" selection-start-line="606" selection-start-column="46" selection-end-line="606" selection-end-column="46" />
+            <state relative-caret-position="8850">
+              <caret line="606" column="46" selection-start-line="606" selection-start-column="46" selection-end-line="606" selection-end-column="46" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -70,7 +69,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
+            <state relative-caret-position="1740">
               <caret line="123" column="20" selection-start-line="123" selection-start-column="20" selection-end-line="123" selection-end-column="20" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
@@ -117,8 +116,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="190" column="13" lean-forward="true" selection-start-line="190" selection-start-column="13" selection-end-line="190" selection-end-column="13" />
+            <state relative-caret-position="680">
+              <caret line="104" column="20" lean-forward="true" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="20" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -279,7 +278,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="989" extended-state="6" />
+    <frame x="64" y="-4" width="1857" height="990" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.16499737" />
@@ -647,6 +646,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8850">
+          <caret line="606" column="46" selection-start-line="606" selection-start-column="46" selection-end-line="606" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1740">
+          <caret line="123" column="20" selection-start-line="123" selection-start-column="20" selection-end-line="123" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_pohandler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -676,30 +695,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="123" column="20" selection-start-line="123" selection-start-column="20" selection-end-line="123" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="606" column="46" lean-forward="true" selection-start-line="606" selection-start-column="46" selection-end-line="606" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="190" column="13" lean-forward="true" selection-start-line="190" selection-start-column="13" selection-end-line="190" selection-end-column="13" />
+        <state relative-caret-position="680">
+          <caret line="104" column="20" lean-forward="true" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="20" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
