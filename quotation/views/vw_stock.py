@@ -123,7 +123,7 @@ def stockmain(request):
 #        "           onstockingoing, "
 #        "           onstockoutgoing.onstockoutgoingqty ")
 #        "           onstockingoing.wheretodocid, "
-#        "           onstockingoing.contactid2 ")
+#        "           onstockingoing.contactid2 ")#
 
     docdetails = cursor3.fetchall()
     #import pdb;

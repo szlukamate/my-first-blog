@@ -2,6 +2,39 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/1905011szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/1905012szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190501szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190502szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190507szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190508szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190509szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190510szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190511szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190512szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190513szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190514szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190515szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190516szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190518szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190519.odt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190519szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190520szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190522szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190523szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190524szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190525szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190526szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190527szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190528szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190529szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190530szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190531szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190601szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190602szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190603szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190604szmbackup.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190605szmbackup.sql" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/quotation/views/vw_stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_stock.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -116,8 +149,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="104" column="20" lean-forward="true" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="20" />
+            <state relative-caret-position="245">
+              <caret line="126" lean-forward="true" selection-start-line="126" selection-end-line="126" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -697,8 +730,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="104" column="20" lean-forward="true" selection-start-line="104" selection-start-column="20" selection-end-line="104" selection-end-column="20" />
+        <state relative-caret-position="245">
+          <caret line="126" lean-forward="true" selection-start-line="126" selection-end-line="126" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
