@@ -556,7 +556,8 @@ def pohandlerreception(request):
                             "doclinkparentid_tbldoc, "
                             "accountcurrencycode_tbldoc, "
                             "wherefromdocid_tbldoc, "
-                            "wheretodocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                            "wheretodocid_tbldoc,"
+                            "denoenabledflag_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                             [8, contactid,
                              companynameclone,
                              firstnameclone,
@@ -581,7 +582,8 @@ def pohandlerreception(request):
                              cordocid,
                              accountcurrencycode,
                              podocid,
-                             cordocid])
+                             cordocid,
+                             1])
 
             #    cursor8 = connection.cursor()
             #    cursor8.execute("SELECT Doc_detailsid_tblDoc_details "

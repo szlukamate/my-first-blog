@@ -604,7 +604,8 @@ def deliverynotemake(request):
                     "doclinkparentid_tbldoc, "
                     "accountcurrencycode_tbldoc, "
                     "wherefromdocid_tbldoc, " 
-                    "wheretodocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "wheretodocid_tbldoc,"
+                    "denoenabledflag_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [8, contactid,
                      companynameclone,
                      firstnameclone,
@@ -629,7 +630,8 @@ def deliverynotemake(request):
                      customerordernumber,
                      accountcurrencycode,
                      788,
-                     customerordernumber])
+                     customerordernumber,
+                     1])
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])

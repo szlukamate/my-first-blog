@@ -23,6 +23,10 @@ def stockmain(request):
 
     cursor3 = connection.cursor()
     cursor3.execute(
+# stockflag_tblcompanies signs this company is a stock
+# lateststocktaking_tblcompanies signs tha date of last stocktaking which is showed in stockmain
+# denoenabledflag_tbldoc signs this doc counts in stockmain (is zero at stocktaking delivery note under assembling for several hours until ready)
+# stocktakingdeno_tbldoc signs this is a stocktaking deno (creationtimestamp of this row is for lateststocktaking_tblcompanies field)
         "SELECT "
         "P.customerdescription_tblProduct, "
         "DD.Productid_tblDoc_details_id, "
