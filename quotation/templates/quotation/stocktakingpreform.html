@@ -1,0 +1,62 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+				<p id="rowsnumber" rowsnumber="{{ rowsnumber }}" hidden></p>
+				<p id="customerordernumber" customerordernumber="{{ customerordernumber }}" hidden></p>
+
+							{% csrf_token %}
+
+							<p align="center" style="font-size:160%;">Stock Taking Pre Form</p>
+							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+							<div class="table-responsive text-nowrap">
+										<table class="table table-striped"">
+											<thead>
+
+												<tr>
+													<td>Companyid</td>
+													<td>Stockname</td>
+													<td>lateststocktaking_tblcompanies</td>
+													<td>Latest Enabled StocktakingDeno</td>
+													<td>Latest Disabled StocktakingDeno</td>
+
+												</tr>
+											</thead>
+
+											<tbody>
+												 {%  for result in  results %}
+
+														<tr>
+															<td>{{ result.0}}</td>
+															<td>{{ result.1}}</td>
+															<td>{{ result.2}}</td>
+															<td>{{ result.3}}</td>
+															<td>{{ result.4}}</td>
+
+															<td>
+																<button class="labelbutton" type="submit" productid="{{ docdetail.1}}">
+																   <span>L</span>
+																</button
+															</td>
+
+
+														</tr>
+												{% endfor %}
+
+											</tbody>
+
+										</table>
+
+							</div>
+
+							<div id="dialog-message" title="Download complete">
+							  <p>
+									<span id="stocklabellisttemplate" ></span>
+							  </p>
+							</div>
+
+		<script type="text/javascript" src="{% static 'js/stocktakingpreform.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/stocktakingpreform.css' %}">
+
+	{% endblock %}

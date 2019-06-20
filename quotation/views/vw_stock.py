@@ -23,10 +23,6 @@ def stockmain(request):
 
     cursor3 = connection.cursor()
     cursor3.execute(
-# stockflag_tblcompanies signs this company is a stock
-# lateststocktaking_tblcompanies signs tha date of last stocktaking which is showed in stockmain
-# denoenabledflag_tbldoc signs this doc counts in stockmain (is zero at stocktaking delivery note under assembling for several hours until ready)
-# stocktakingdeno_tbldoc signs this is a stocktaking deno (creationtimestamp of this row is for lateststocktaking_tblcompanies field)
         "SELECT "
         "P.customerdescription_tblProduct, "
         "DD.Productid_tblDoc_details_id, "
@@ -250,3 +246,38 @@ def stocklabellist(request):
     return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
 
 
+def stocktakingpreform(request):
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        # stockflag_tblcompanies signs this company is a stock
+        # lateststocktaking_tblcompanies signs tha date of last stocktaking which is showed in stockmain
+        # denoenabledflag_tbldoc signs this doc counts in stockmain (is zero at stocktaking delivery note under assembling for several hours until ready)
+        # stocktakingdeno_tbldoc signs this is a stocktaking deno (creationtimestamp of this row is for lateststocktaking_tblcompanies field)
+        "SELECT "
+        "Companyid_tblCompanies, "
+        "companyname_tblcompanies, "
+        "lateststocktaking_tblcompanies, "
+        "latestenabledstocktaking.companyid "
+        ""
+        "FROM quotation_tblcompanies as C "
+
+        "JOIN (SELECT "
+        "      Companyid_tblContacts_id as companyid"
+        ""
+        "      FROM quotation_tblcontacts "
+        ""
+        "      "
+        "     ) as latestenabledstocktaking "
+        "ON C.Companyid_tblCompanies = latestenabledstocktaking.companyid "
+        ""
+        "WHERE stockflag_tblcompanies=1 ")
+
+    results = cursor3.fetchall()
+    # import pdb;
+    # pdb.set_trace()
+
+    rowsnumber = len(results)
+    customerordernumber = 1
+    return render(request, 'quotation/stocktakingpreform.html', {'results': results,
+                                                    'customerordernumber': customerordernumber,
+                                                    'rowsnumber': rowsnumber})
