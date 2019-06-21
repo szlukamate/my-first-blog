@@ -278,7 +278,7 @@ def stocktakingpreform(request):
         
         "            FROM quotation_tbldoc "
         ""
-        "            WHERE denoenabledflag_tbldoc=1 and stocktakingdeno_tbldoc=1 "
+        "            WHERE denoenabledflag_tbldoc=1 and stocktakingdeno_tbldoc=1 and obsolete_tbldoc=0 "
         "            ) as D "
         "      ON quotation_tblcontacts.Contactid_tblContacts = D.contactid "
         "     ) as latestenabledstocktaking "
@@ -298,7 +298,7 @@ def stocktakingpreform(request):
         
         "            FROM quotation_tbldoc "
         ""
-        "            WHERE denoenabledflag_tbldoc=0 and stocktakingdeno_tbldoc=1 "
+        "            WHERE denoenabledflag_tbldoc=0 and stocktakingdeno_tbldoc=1 and obsolete_tbldoc=0 "
         "            ) as D "
         "      ON quotation_tblcontacts.Contactid_tblContacts = D.contactid "
         "     ) as latestdisabledstocktaking "
@@ -316,3 +316,141 @@ def stocktakingpreform(request):
     return render(request, 'quotation/stocktakingpreform.html', {'results': results,
                                                     'customerordernumber': customerordernumber,
                                                     'rowsnumber': rowsnumber})
+
+
+def stocknewdocforstocktaking(request):
+    stockid = request.POST['stockid']
+
+    cursor0 = connection.cursor()
+    cursor0.execute("SELECT "
+                    "Contactid_tblContacts "
+
+                    "FROM quotation_tblcontacts "
+                    "WHERE Companyid_tblContacts_id=%s ",
+                    [stockid])
+    results = cursor0.fetchall()
+    for x in results:
+        contactid = x[0]
+
+
+    creatorid=request.user.id
+
+    prefacetext = ""
+    backpagetext = ""
+    prefacespectext = ""
+    subject = "Stocktaking"
+    total = "Off"
+    deliverydays = 0
+    paymenttext = ""
+    currencycodeinreport = "HUF"
+    currencyrateinreport = 1
+    accountcurrencycode = "HUF"
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT contactid_tblcontacts, companyname_tblcompanies, Companyid_tblCompanies, "
+        "Firstname_tblcontacts, lastname_tblcontacts, "
+        "title_tblcontacts, "
+        "mobile_tblcontacts, "
+        "email_tblcontacts, "
+        "pcd_tblcompanies, "
+        "town_tblcompanies, "
+        "address_tblcompanies "
+        "FROM quotation_tblcontacts "
+        "JOIN quotation_tblcompanies "
+        "ON quotation_tblcompanies.companyid_tblcompanies = quotation_tblcontacts.companyid_tblcontacts_id "
+        "WHERE contactid_tblcontacts =%s", [contactid])
+    companyandcontactdata = cursor1.fetchall()
+    for instancesingle in companyandcontactdata:
+        companynameclone = instancesingle[1]
+        companyid = instancesingle[2]  # for the lookup the default values in the tblcompanies (i.e. defaultpreface)
+        firstnameclone = instancesingle[3]
+        lastnameclone = instancesingle[4]
+        titleclone = instancesingle[5]
+        mobileclone = instancesingle[6]
+        emailclone = instancesingle[7]
+        pcdclone = instancesingle[8]
+        townclone = instancesingle[9]
+        addressclone = instancesingle[10]
+
+        cursor8 = connection.cursor()
+        cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
+                        "WHERE Doc_kindid_tblDoc_id = 8")
+        results = cursor8.fetchall()
+        resultslen = len(results)
+        for x in results:
+            docnumber = x[0]
+        docnumber += 1
+
+        cursor2 = connection.cursor()
+        cursor2.execute("INSERT INTO quotation_tbldoc "
+                        "( Doc_kindid_tblDoc_id, "
+                        "Contactid_tblDoc_id, "
+                        "companyname_tblcompanies_ctbldoc, "
+                        "firstname_tblcontacts_ctbldoc, "
+                        "lastname_tblcontacts_ctbldoc, "
+                        "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
+                        "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
+                        "prefacespecforquotation_tbldoc, "
+                        "subject_tbldoc, "
+                        "docnumber_tblDoc, "
+                        "total_tbldoc, "
+                        "deliverydays_tbldoc, "
+                        "creatorid_tbldoc, "
+                        "title_tblcontacts_ctbldoc, "
+                        "mobile_tblcontacts_ctbldoc, "
+                        "email_tblcontacts_ctbldoc, "
+                        "pcd_tblcompanies_ctbldoc, "
+                        "town_tblcompanies_ctbldoc, "
+                        "address_tblcompanies_ctbldoc, "
+                        "paymenttextforquotation_tblpayment_ctbldoc, "
+                        "currencycodeinreport_tbldoc, "
+                        "currencyrateinreport_tbldoc, "
+                        "doclinkparentid_tbldoc, "
+                        "accountcurrencycode_tbldoc, "
+                        "denoenabledflag_tbldoc, "
+                        "stocktakingdeno_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        [8, contactid, companynameclone, firstnameclone, lastnameclone, prefacetext, backpagetext,
+                         prefacespectext,
+                         subject,
+                         docnumber,
+                         total,
+                         deliverydays,
+                         creatorid,
+                         titleclone,
+                         mobileclone,
+                         emailclone,
+                         pcdclone,
+                         townclone,
+                         addressclone,
+                         paymenttext,
+                         currencycodeinreport,
+                         currencyrateinreport,
+                         0,
+                         accountcurrencycode,
+                         0,
+                         1])
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
+        results = cursor3.fetchall()
+        for x in results:
+            maxdocid = x[0]
+
+        cursor4 = connection.cursor()
+        cursor4.execute(
+            "INSERT INTO quotation_tbldoc_details ( Docid_tblDoc_details_id) VALUES (%s)",
+            [maxdocid])
+
+    return render(request, 'quotation/stocktakingpreformredirecturl.html', {})
+def stockcopyfromtimestampforstocktaking(request):
+    stockid = request.POST['stockid']
+    latestdisabledstocktakingdenotimestamp = request.POST['latestdisabledstocktakingdenotimestamp']
+
+    cursor0 = connection.cursor()
+    cursor0.execute("UPDATE quotation_tblcompanies "
+                    "SET lateststocktaking_tblcompanies = %s "
+                    "WHERE Companyid_tblCompanies = %s ",
+                    [latestdisabledstocktakingdenotimestamp, stockid])
+
+    return render(request, 'quotation/stocktakingpreformredirecturl.html', {})

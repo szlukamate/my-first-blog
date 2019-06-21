@@ -1,5 +1,5 @@
 /*
-stock.js
+stocktakingpreform.js
 */
 
             var msg="Hello Javascript2";
@@ -16,34 +16,22 @@ $(window).on("unload", function(){
 */
 $(function () {
 
-    $( "#dialog-message" ).dialog({
-      autoOpen: false,
-      height: 230,
-      width: 350,
-      modal: true,
-      buttons: {
-        Ok: function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
-    $('.labelbutton').click(function() {
-        var productid = $(this).attr( "productid" );
+    $('.newbutton').click(function() {
+        var stockid = $(this).attr( "stockid" );
 
             $.ajax({
                 type: 'POST',
-                url: 'stocklabellist',
+                url: 'stocknewdocforstocktaking',
 
                 data: {
-                'productid': productid,
+                'stockid': stockid,
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
 
-                success: function(data){
+                success: function(url){
+                    window.location.href = url;
 
-                    $('#stocklabellisttemplate').html(data);
-                    //console.log(data);
                 },
                 error: function(){
                     alert('failure');
@@ -52,7 +40,33 @@ $(function () {
 
             });
 
-        $( "#dialog-message" ).dialog( "open" );
+    });
+    $('.copybutton').click(function() {
+        var stockid = $(this).attr( "stockid" );
+        var latestdisabledstocktakingdenotimestamp = $(this).attr( "latestdisabledstocktakingdenotimestamp" );
+
+            $.ajax({
+                type: 'POST',
+                url: 'stockcopyfromtimestampforstocktaking',
+
+                data: {
+                'stockid': stockid,
+                'latestdisabledstocktakingdenotimestamp': latestdisabledstocktakingdenotimestamp,
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(url){
+                    window.location.href = url;
+
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
     });
 
 });
