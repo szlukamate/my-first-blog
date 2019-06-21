@@ -1,42 +1,37 @@
-
-#deliverynotemakebutton:hover {
+.copybutton:hover {
   background-color: white;
   color: black;
-  border: 2px solid yellow;
+  border: 2px solid green;
 
 
 }
-#deliverynotemakebutton:active {
- // background-color: #3e8e41;
+.copybutton:active {
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
 
-#deliverynotemakebutton {
-    position: absolute;
-    top: 5%;
-    right: 20%;
-  background-color: yellow;
-  color: black;
+.copybutton {
+  background-color: green;
+  color: white;
 
-  font-size: 24px;
+  font-size: 18px;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     border-radius: 12px;
-    padding: 22px 16px;
+    padding: 2px 8px;
 }
-.labelbutton:hover {
+.newbutton:hover {
   background-color: white;
   color: black;
   border: 2px solid yellow;
 
 
 }
-.labelbutton:active {
+.newbutton:active {
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
 
-.labelbutton {
+.newbutton {
   background-color: yellow;
   color: black;
 

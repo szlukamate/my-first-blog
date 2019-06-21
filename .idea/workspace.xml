@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/static/css/stocktakingpreform.css" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/static/css/stocktakingpreform.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/stocktakingpreform.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/stocktakingpreform.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quotation/views/vw_stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_stock.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +17,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="48" column="47" lean-forward="true" selection-start-line="48" selection-start-column="47" selection-end-line="48" selection-end-column="47" />
+            <state relative-caret-position="720">
+              <caret line="48" column="47" selection-start-line="48" selection-start-column="47" selection-end-line="48" selection-end-column="47" />
             </state>
           </provider>
         </entry>
@@ -32,11 +32,20 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/quotation/static/css/stocktakingpreform.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/stocktakingpreform.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="32" column="75" selection-start-line="32" selection-start-column="75" selection-end-line="32" selection-end-column="75" />
+            <state relative-caret-position="185">
+              <caret line="36" column="64" lean-forward="true" selection-start-line="36" selection-start-column="64" selection-end-line="36" selection-end-column="64" />
             </state>
           </provider>
         </entry>
@@ -44,7 +53,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
+            <state relative-caret-position="1275">
               <caret line="86" column="83" selection-start-line="86" selection-start-column="83" selection-end-line="86" selection-end-column="83" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
@@ -80,7 +89,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_pohandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="427">
+            <state relative-caret-position="8655">
               <caret line="592" column="22" selection-start-line="592" selection-start-column="22" selection-end-line="592" selection-end-column="22" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
@@ -89,11 +98,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="272" column="42" lean-forward="true" selection-start-line="272" selection-start-column="42" selection-end-line="272" selection-end-column="42" />
+            <state relative-caret-position="360">
+              <caret line="261" column="40" selection-start-line="261" selection-start-column="40" selection-end-line="261" selection-end-column="40" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -153,7 +162,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/quotation/static/js/quotation.js" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/pohandlerrowsourceforarrivaldates.html" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/deliverynoteprint.html" />
         <option value="$PROJECT_DIR$/quotation/static/js/deliverynoteprint.js" />
@@ -202,8 +210,9 @@
         <option value="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" />
         <option value="$PROJECT_DIR$/quotation/urls.py" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/base.html" />
-        <option value="$PROJECT_DIR$/quotation/templates/quotation/stocktakingpreform.html" />
         <option value="$PROJECT_DIR$/quotation/views/vw_stock.py" />
+        <option value="$PROJECT_DIR$/quotation/templates/quotation/stocktakingpreform.html" />
+        <option value="$PROJECT_DIR$/quotation/static/css/stocktakingpreform.css" />
       </list>
     </option>
   </component>
@@ -277,13 +286,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/companyedit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="530">
-          <caret line="73" selection-start-line="72" selection-end-line="73" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/static/css/companyedit.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="750">
@@ -591,10 +593,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_purchaseorder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="69" selection-start-line="69" selection-end-line="69" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_quotation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4395">
+          <caret line="308" column="116" selection-start-line="308" selection-start-column="116" selection-end-line="308" selection-end-column="116" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="48" column="47" selection-start-line="48" selection-start-column="47" selection-end-line="48" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/stock.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="675">
           <caret line="45" column="79" selection-start-line="45" selection-start-column="79" selection-end-line="45" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1275">
+          <caret line="86" column="83" selection-start-line="86" selection-start-column="83" selection-end-line="86" selection-end-column="83" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -618,29 +657,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_purchaseorder.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="69" selection-start-line="69" selection-end-line="69" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_quotation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4395">
-          <caret line="308" column="116" selection-start-line="308" selection-start-column="116" selection-end-line="308" selection-end-column="116" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_pohandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
+        <state relative-caret-position="8655">
           <caret line="592" column="22" selection-start-line="592" selection-start-column="22" selection-end-line="592" selection-end-column="22" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
@@ -648,37 +667,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/urls.py">
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="86" column="83" selection-start-line="86" selection-start-column="83" selection-end-line="86" selection-end-column="83" />
+        <state relative-caret-position="360">
+          <caret line="261" column="40" selection-start-line="261" selection-start-column="40" selection-end-line="261" selection-end-column="40" />
           <folding>
-            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#0#64#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="48" column="47" lean-forward="true" selection-start-line="48" selection-start-column="47" selection-end-line="48" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/stocktakingpreform.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="32" column="75" selection-start-line="32" selection-start-column="75" selection-end-line="32" selection-end-column="75" />
+        <state relative-caret-position="185">
+          <caret line="36" column="64" lean-forward="true" selection-start-line="36" selection-start-column="64" selection-end-line="36" selection-end-column="64" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
+    <entry file="file://$PROJECT_DIR$/quotation/static/css/stocktakingpreform.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="272" column="42" lean-forward="true" selection-start-line="272" selection-start-column="42" selection-end-line="272" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="240">
+          <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
         </state>
       </provider>
     </entry>

@@ -257,18 +257,53 @@ def stocktakingpreform(request):
         "Companyid_tblCompanies, "
         "companyname_tblcompanies, "
         "lateststocktaking_tblcompanies, "
-        "latestenabledstocktaking.companyid "
+        "latestenabledstocktaking.creationtime, "
+        "latestenabledstocktaking.docid, "
+        "latestdisabledstocktaking.creationtime, "
+        "latestdisabledstocktaking.docid "
         ""
         "FROM quotation_tblcompanies as C "
+#latestEnabledstocktaking
+        "LEFT JOIN (SELECT "
+        "      Companyid_tblContacts_id as companyid, "
+        "      Contactid_tblContacts as contactid, "
+        "      D.creationtime as creationtime, "
+        "      D.docid as docid "
 
-        "JOIN (SELECT "
-        "      Companyid_tblContacts_id as companyid"
-        ""
         "      FROM quotation_tblcontacts "
+        
+        "      JOIN (SELECT Docid_tblDoc as docid, "
+        "            Contactid_tblDoc_id as contactid, "
+        "            creationtime_tbldoc as creationtime "
+        
+        "            FROM quotation_tbldoc "
         ""
-        "      "
+        "            WHERE denoenabledflag_tbldoc=1 and stocktakingdeno_tbldoc=1 "
+        "            ) as D "
+        "      ON quotation_tblcontacts.Contactid_tblContacts = D.contactid "
         "     ) as latestenabledstocktaking "
         "ON C.Companyid_tblCompanies = latestenabledstocktaking.companyid "
+#latestDisabledstocktaking
+        "LEFT JOIN (SELECT "
+        "      Companyid_tblContacts_id as companyid, "
+        "      Contactid_tblContacts as contactid, "
+        "      D.creationtime as creationtime, "
+        "      D.docid as docid "
+
+        "      FROM quotation_tblcontacts "
+        
+        "      JOIN (SELECT Docid_tblDoc as docid, "
+        "            Contactid_tblDoc_id as contactid, "
+        "            creationtime_tbldoc as creationtime "
+        
+        "            FROM quotation_tbldoc "
+        ""
+        "            WHERE denoenabledflag_tbldoc=0 and stocktakingdeno_tbldoc=1 "
+        "            ) as D "
+        "      ON quotation_tblcontacts.Contactid_tblContacts = D.contactid "
+        "     ) as latestdisabledstocktaking "
+        "ON C.Companyid_tblCompanies = latestdisabledstocktaking.companyid "
+
         ""
         "WHERE stockflag_tblcompanies=1 ")
 
