@@ -120,8 +120,10 @@ def docsearchcontent(request):
                     "Dfrom.frompretag, "
                     "Dfrom.fromdocnumber, "
                     "Dto.topretag, " #20
-                    "Dto.todocnumber "
-                    
+                    "Dto.todocnumber, "
+                    "D1.stocktakingdeno_tbldoc, "
+                    "D1.denoenabledflag_tbldoc "
+                   
                     "FROM quotation_tbldoc as D1 "
 
                     "JOIN quotation_tbldoc_kind "

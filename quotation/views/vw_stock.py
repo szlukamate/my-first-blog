@@ -446,11 +446,19 @@ def stocknewdocforstocktaking(request):
 def stockcopyfromtimestampforstocktaking(request):
     stockid = request.POST['stockid']
     latestdisabledstocktakingdenotimestamp = request.POST['latestdisabledstocktakingdenotimestamp']
+    latestdisabledstocktakingdenodocid = request.POST['latestdisabledstocktakingdenodocid']
 
     cursor0 = connection.cursor()
     cursor0.execute("UPDATE quotation_tblcompanies "
                     "SET lateststocktaking_tblcompanies = %s "
                     "WHERE Companyid_tblCompanies = %s ",
                     [latestdisabledstocktakingdenotimestamp, stockid])
+
+    cursor1 = connection.cursor()
+    cursor1.execute("UPDATE quotation_tbldoc "
+                    "SET denoenabledflag_tbldoc = 1 "
+                    "WHERE Docid_tblDoc = %s ",
+                    [latestdisabledstocktakingdenodocid])
+
 
     return render(request, 'quotation/stocktakingpreformredirecturl.html', {})

@@ -30,13 +30,13 @@
 														<tr>
 															<td>{{ result.0}}</td>
 															<td>{{ result.1}}</td>
-															<td>{{ result.2}}</td>
-															<td>{{ result.3}}/{{ result.4}}/</td>
-															<td>{{ result.5|date:"Y-m-d H:i"}} {{ result.6}}</td>
+															<td>{{ result.2|date:"Y-m-d H:i"}}</td>
+															<td>{{ result.3|date:"Y-m-d H:i"}}/{{ result.4}}/</td>
+															<td>{{ result.5|date:"Y-m-d H:i"}}/{{ result.6}}/</td>
 
 															<td>
-																<button title="Copy time to Stock from Stock Taking" class="copybutton" type="submit" stockid="{{ result.0}}" latestdisabledstocktakingdenotimestamp="{{ result.5|date:"Y-m-d H:i"}}">
-																   <span>C</span>
+																<button title="Enable Stocktaking/Copy time to Stock from Stock Taking" class="copybutton" type="submit" stockid="{{ result.0}}" latestdisabledstocktakingdenotimestamp="{{ result.5|date:"Y-m-d H:i"}}" latestdisabledstocktakingdenodocid="{{ result.6}}">
+																   <span>E</span>
 																</button>
 																<button title="New Delivery Note creation for Stock Taking" class="newbutton" type="submit" stockid="{{ result.0}}">
 																   <span>N</span>

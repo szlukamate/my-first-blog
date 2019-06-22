@@ -44,6 +44,7 @@ $(function () {
     $('.copybutton').click(function() {
         var stockid = $(this).attr( "stockid" );
         var latestdisabledstocktakingdenotimestamp = $(this).attr( "latestdisabledstocktakingdenotimestamp" );
+        var latestdisabledstocktakingdenodocid = $(this).attr( "latestdisabledstocktakingdenodocid" );
 
             $.ajax({
                 type: 'POST',
@@ -52,6 +53,7 @@ $(function () {
                 data: {
                 'stockid': stockid,
                 'latestdisabledstocktakingdenotimestamp': latestdisabledstocktakingdenotimestamp,
+                'latestdisabledstocktakingdenodocid': latestdisabledstocktakingdenodocid,
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
