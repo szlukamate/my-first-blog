@@ -80,7 +80,9 @@ def deliverynoteform(request, pk):
                         "D.wherefromdocid_tbldoc, "
                         "D.wheretodocid_tbldoc, "
                         "Dfrom.companyname_tblcompanies_ctbldoc as companywherefromdeno, "
-                        "Dto.companyname_tblcompanies_ctbldoc as companywheretodeno "
+                        "Dto.companyname_tblcompanies_ctbldoc as companywheretodeno, "
+                        "D.stocktakingdeno_tbldoc, " #30
+                        "D.denoenabledflag_tbldoc "
 
                         "FROM quotation_tbldoc as D "
                         "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
@@ -884,3 +886,248 @@ def deliverynotemake(request):
                     docdetailsinsert(1, podocdetailsidforlabel)
 
     return render(request, 'quotation/pohandlerreceptionredirecturl.html', {})
+def deliverynotenewrowadd(request):
+    if request.method == "POST":
+        docdetailsid = request.POST['docdetailsid']
+        deliverynoteid = request.POST['deliverynoteid']
+        nextfirstnumonhtml= request.POST['nextfirstnumonhtml']
+        nextsecondnumonhtml = request.POST['nextsecondnumonhtml']
+        nextthirdnumonhtml = request.POST['nextthirdnumonhtml']
+        nextfourthnumonhtml = request.POST['nextfourthnumonhtml']
+
+        nextchapternumset = array('i', [int(nextfirstnumonhtml), int(nextsecondnumonhtml), int(nextthirdnumonhtml), int(nextfourthnumonhtml)])
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT Productid_tblProduct, "
+        "purchase_price_tblproduct, "
+        "margin_tblproduct, "
+        "round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
+        "customerdescription_tblProduct, "
+        "currencyisocode_tblcurrency_ctblproduct, "
+        "supplierdescription_tblProduct "
+        "FROM quotation_tblproduct "
+        "WHERE obsolete_tblproduct=0 ")
+    products = cursor1.fetchall()
+    transaction.commit()
+    #return redirect('quotationform', pk=1)
+
+    return render(request, 'quotation/deliverynotenewrowadd.html',{'products': products, 'docid': deliverynoteid, 'nextchapternumset': nextchapternumset, 'docdetailsid' : docdetailsid })
+def deliverynotenewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml,
+                    nextthirdnumonhtml, nextfourthnumonhtml):
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT `Productid_tblProduct`, "
+        "`purchase_price_tblproduct`, `"
+        "customerdescription_tblProduct`, "
+        "`margin_tblproduct`, "
+        "`currencyisocode_tblcurrency_ctblproduct`, "
+        "currencyrate_tblcurrency, "
+        "unit_tblproduct, "
+        "supplierdescription_tblProduct, "
+        "suppliercompanyid_tblProduct "
+        "FROM `quotation_tblproduct` "
+        "LEFT JOIN quotation_tblcurrency "
+        "ON quotation_tblproduct.currencyisocode_tblcurrency_ctblproduct=quotation_tblcurrency.currencyisocode_tblcurrency "
+        "WHERE Productid_tblProduct= %s", [pkproductid])
+    results = cursor0.fetchall()
+    for instancesingle in results:
+        purchase_priceclone = instancesingle[1]
+        customerdescriptionclone = instancesingle[2]
+        currencyisocodeclone = instancesingle[4]
+        marginfromproducttable = instancesingle[3]
+        listpricecomputed = round((100 * purchase_priceclone) / (100 - marginfromproducttable), 2)
+        currencyrateclone = instancesingle[5]
+        unitclone = instancesingle[6]
+        supplierdescriptionclone = instancesingle[7]
+        suppliercompanyidclone = instancesingle[8]
+
+        unitsalespriceACU = listpricecomputed * currencyrateclone
+    # import pdb;
+    # pdb.set_trace()
+
+    if int(pkdocdetailsid) != 0:  # only modifying row
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            "UPDATE quotation_tbldoc_details SET "
+            "Productid_tblDoc_details_id= %s, "
+            "firstnum_tblDoc_details=%s, "
+            "secondnum_tblDoc_details=%s, "
+            "thirdnum_tblDoc_details=%s, "
+            "fourthnum_tblDoc_details=%s, "
+            "purchase_price_tblproduct_ctblDoc_details=%s, "
+            "customerdescription_tblProduct_ctblDoc_details=%s, "
+            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details=%s, "
+            "listprice_tblDoc_details=%s, "
+            "currencyrate_tblcurrency_ctblDoc_details=%s, "
+            "unitsalespriceACU_tblDoc_details=%s, "
+            "unit_tbldocdetails=%s, "
+            "supplierdescription_tblProduct_ctblDoc_details=%s, "
+            "suppliercompanyid_tblDocdetails=%s "
+            "WHERE doc_detailsid_tbldoc_details =%s ",
+            [pkproductid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml,
+             purchase_priceclone, customerdescriptionclone, currencyisocodeclone, listpricecomputed, currencyrateclone,
+             unitsalespriceACU,
+             unitclone,
+             supplierdescriptionclone,
+             suppliercompanyidclone,
+             pkdocdetailsid])
+
+    else:
+        cursor1 = connection.cursor()  # new row needed
+        cursor1.execute(
+            "INSERT INTO quotation_tbldoc_details "
+            "(`Qty_tblDoc_details`, "
+            "`Docid_tblDoc_details_id`, "
+            "`Productid_tblDoc_details_id`, "
+            "`firstnum_tblDoc_details`, "
+            "`fourthnum_tblDoc_details`, "
+            "`secondnum_tblDoc_details`, "
+            "`thirdnum_tblDoc_details`, "
+            "`Note_tblDoc_details`, "
+            "`purchase_price_tblproduct_ctblDoc_details`, "
+            "`customerdescription_tblProduct_ctblDoc_details`, "
+            "`currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`, "
+            "listprice_tblDoc_details, "
+            "currencyrate_tblcurrency_ctblDoc_details, "
+            "unitsalespriceACU_tblDoc_details, "
+            "unit_tbldocdetails, "
+            "`supplierdescription_tblProduct_ctblDoc_details`, "
+            "suppliercompanyid_tblDocdetails) "
+
+            "VALUES (1, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            [pkdocid, pkproductid, nextfirstnumonhtml, nextfourthnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml,
+             purchase_priceclone, customerdescriptionclone, currencyisocodeclone,
+             listpricecomputed,
+             currencyrateclone,
+             unitsalespriceACU,
+             unitclone,
+             supplierdescriptionclone,
+             suppliercompanyidclone])
+        transaction.commit()
+
+    return redirect('deliverynoteform', pk=pkdocid)
+def deliverynoterowremove(request, pk):
+    cursor2 = connection.cursor()
+    cursor2.execute(
+        "SELECT Docid_tblDoc_details_id FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [pk])
+    results = cursor2.fetchall()
+    for x in results:
+        na = x[0]
+    transaction.commit()
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "DELETE FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [pk])
+    transaction.commit()
+
+    return redirect('deliverynoteform', pk=na)
+def deliverynotenewlabel(request):
+    newlabelid = request.POST['newlabelid']
+    deliverynotedocid = request.POST['deliverynotedocid']
+    #import pdb;
+    #pdb.set_trace()
+
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
+                    "`Qty_tblDoc_details`, "
+                    "`Docid_tblDoc_details_id`, "
+                    "`customerdescription_tblProduct_ctblDoc_details`, "
+                    "`firstnum_tblDoc_details`, "
+                    "`fourthnum_tblDoc_details`, "
+                    "`secondnum_tblDoc_details`, "
+                    "`thirdnum_tblDoc_details`, "
+                    "`Note_tblDoc_details`, "
+                    "`creationtime_tblDoc_details`, "
+                    "purchase_price_tblproduct_ctblDoc_details, "
+                    "listprice_tblDoc_details, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                    "Productid_tblDoc_details_id, "
+                    "Doc_detailsid_tblDoc_details, "
+                    "COALESCE(Productid_tblProduct, 0), "
+                    "currencyrate_tblcurrency_ctblDoc_details, "
+                    "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
+                    "unitsalespriceACU_tblDoc_details, "
+                    "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
+                    "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
+                    "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
+                    "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
+                    "unit_tbldocdetails, "
+                    "suppliercompanyid_tbldocdetails, "
+                    "podetailslink_tbldocdetails "
+                    "FROM quotation_tbldoc_details "
+                    "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+                    "ON "
+                    "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+                    "WHERE Doc_detailsid_tblDoc_details=%s "
+                    "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
+                    [newlabelid])
+    docdetails = cursor3.fetchall()
+    # import pdb;
+    # pdb.set_trace()
+
+    for x in docdetails:
+        qty = x[1]
+#        deliverynotedocid = x[2]
+        firstnum = x[4]
+        fourthnum = x[5]
+        secondnum = x[6]
+        thirdnum = x[7]
+        note = x[8]
+        productid = x[13]
+        currencyrate = x[16]
+        suppliercompanyid = x[24]
+        podetailslink = x[25]
+
+        purchase_priceclone = x[10]
+        customerdescriptionclone = x[3]
+        currencyisocodeclone = x[12]
+        listpricecomputed = x[11]
+        currencyrateclone = x[16]
+        unitclone = x[23]
+        unitsalespriceACU = x[18]
+
+    cursor4 = connection.cursor()
+    cursor4.execute(
+        "INSERT INTO quotation_tbldoc_details "
+        "( Docid_tblDoc_details_id, "
+        "`Qty_tblDoc_details`, "
+        "`customerdescription_tblProduct_ctblDoc_details`, "
+        "firstnum_tblDoc_details, "
+        "`fourthnum_tblDoc_details`, "
+        "`secondnum_tblDoc_details`, "
+        "`thirdnum_tblDoc_details`, "
+        "`Note_tblDoc_details`, "
+        "purchase_price_tblproduct_ctblDoc_details, "
+        "listprice_tblDoc_details, "
+        "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+        "Productid_tblDoc_details_id, "
+        "currencyrate_tblcurrency_ctblDoc_details, "
+        "unitsalespriceACU_tblDoc_details, "
+        "unit_tbldocdetails, "
+        "suppliercompanyid_tbldocdetails, "
+        "podetailslink_tbldocdetails, "
+        "podocdetailsidforlabel_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+
+        [int(deliverynotedocid),
+         qty,
+         customerdescriptionclone,
+         firstnum,
+         fourthnum,
+         secondnum,
+         thirdnum,
+         note,
+         purchase_priceclone,
+         listpricecomputed,
+         currencyisocodeclone,
+         productid,
+         currencyrate,
+         unitsalespriceACU,
+         unitclone,
+         suppliercompanyid,
+         podetailslink,
+         int(newlabelid)])
+
+    pk=deliverynotedocid
+
+    return render(request, 'quotation/deliverynotenewlabelredirecturl.html', {'pk': pk})

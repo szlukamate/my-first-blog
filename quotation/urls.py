@@ -87,5 +87,10 @@ urlpatterns = [
     url(r'stocktakingpreform/$', views.stocktakingpreform, name='stocktakingpreform'),
     url('stocknewdocforstocktaking', views.stocknewdocforstocktaking, name='stocknewdocforstocktaking'),
     url('stockcopyfromtimestampforstocktaking', views.stockcopyfromtimestampforstocktaking, name='stockcopyfromtimestampforstocktaking'),
+    url('deliverynotenewrowadd', views.deliverynotenewrowadd, name='deliverynotenewrowadd'),
+    url(r'^deliverynoterowremove/(?P<pk>[0-9]+)/$', views.deliverynoterowremove, name='deliverynoterowremove'),
+    url(r'^deliverynotenewrow/(?P<pkdocid>[0-9]+)/(?P<pkproductid>[0-9]+)/(?P<pkdocdetailsid>[0-9]+)/(?P<nextfirstnumonhtml>[0-9]+)/(?P<nextsecondnumonhtml>[0-9]+)/(?P<nextthirdnumonhtml>[0-9]+)/(?P<nextfourthnumonhtml>[0-9]+)/$',
+        views.deliverynotenewrow, name='deliverynotenewrow'),
+    url('deliverynotenewlabel', views.deliverynotenewlabel, name='deliverynotenewlabel'),
 
 ]

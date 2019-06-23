@@ -193,16 +193,16 @@ $('#title').click(function() {
 
             }
    });
-    $('#newquotationrowsignonhtml').click(function() {
-        var quotationid=$('#quotationdocid').text();
+    $('#newdeliverynoterowsignonhtml').click(function() {
+        var deliverynoteid=$('#deliverynotedocid').text();
 
             $.ajax({
                 type: 'POST',
-                url: 'quotationnewrowadd',
+                url: 'deliverynotenewrowadd',
 
                 data: {
-                'quotationid' : quotationid,
-                'docdetailsid' : 0, // New row in docdetails the 0 shows it (the quotationnewrowadd def in vw_quotation.py recognizes it)
+                'deliverynoteid' : deliverynoteid,
+                'docdetailsid' : 0, // New row in docdetails the 0 shows it (the deliverynotenewrowadd def in vw_deliverynote.py recognizes it)
                 'nextfirstnumonhtml' : $('#nextfirstnumonhtml').val(),
                 'nextsecondnumonhtml' : $('#nextsecondnumonhtml').val(),
                 'nextthirdnumonhtml' : $('#nextthirdnumonhtml').val(),
@@ -213,7 +213,7 @@ $('#title').click(function() {
 
                 success: function(data){
 
-                    $('#quotationtemplate').html(data);
+                    $('#deliverynotetemplate').html(data);
                     console.log(data);
                 },
                 error: function(){
@@ -227,18 +227,18 @@ $('#title').click(function() {
 
     });
 
-    $('[name="quotationproductforrow"]').click(function() {
-        var quotationid=$('#quotationdocid').text();
+    $('[name="deliverynoteproductforrow"]').click(function() {
+        var deliverynoteid=$('#deliverynotedocid').text();
         var docdetailsid=$(this).attr( "rowid" );
         var productid=$('input[name="Productid_tblDoc_details_id"][rowid="' + docdetailsid + '"]').val();
         console.log('in');
             $.ajax({
                 type: 'POST',
-                url: 'quotationnewrowadd',
+                url: 'deliverynotenewrowadd',
 
                 data: {
-                'quotationid' : quotationid,
-                'docdetailsid' : docdetailsid, // Only product update the !0 shows it (the quotationnewrowadd def in vw_quotation.py recognizes it)
+                'deliverynoteid' : deliverynoteid,
+                'docdetailsid' : docdetailsid, // Only product update the !0 shows it (the deliverynotenewrowadd def in vw_deliverynote.py recognizes it)
                 'nextfirstnumonhtml' :    $('input[name="firstnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
                 'nextsecondnumonhtml' : $('input[name="secondnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
                 'nextthirdnumonhtml' : $('input[name="thirdnum_tblDoc_details"][rowid="' + docdetailsid + '"').val(),
@@ -249,7 +249,7 @@ $('#title').click(function() {
 
                 success: function(data){
 
-                    $('#quotationtemplate').html(data);
+                    $('#deliverynotetemplate').html(data);
                     console.log(data);
                     location.href = "#" + productid;
                 },
@@ -308,4 +308,46 @@ $('#title').click(function() {
 
    });
 
+    $( "#dialog-form" ).dialog({
+          autoOpen: false,
+          height: 210,
+          width: 350,
+          modal: true,
+          buttons: {
+            "Add New Label": function() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'deliverynotenewlabel',
+
+                    data: {
+                    'newlabelid' : $('#newlabelid').val(),
+                    'deliverynotedocid' : $('#deliverynotedocid').text(),
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(url){
+                    window.location.href = url;
+
+                    },
+                    error: function(){
+
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+            },
+            Cancel: function() {
+                    $( this ).dialog( "close" );
+            }
+          },
+          close: function() {
+                    $( this ).dialog( "close" );
+          }
+    });
+
+    $('#newlabelbutton').click(function() {
+            $( "#dialog-form" ).dialog( "open" );
+
+    });
 });

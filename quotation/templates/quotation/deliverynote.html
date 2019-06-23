@@ -13,6 +13,17 @@
 							<p >Number of Delivery Note: {{ doc.0.25 }}{{ doc.0.10 }}</p>
 							<p >Creator: {{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
 							<p >Time of Creation: {{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
+							{% if doc.0.30 == 1 %} <!-- if stocktaking deno -->
+								{% if doc.0.31 == 1 %} <!-- if enabled -->
+								<p style="color:green;">Stocktaking Deno Enabled</p>
+								{% else %}
+								<p style="color:red;">Stocktaking Deno Disabled</p>
+								{% endif %}
+							{% endif %}
+							<button id="newlabelbutton" type="submit">
+							   <span>+ New label</span>
+							</button>
+
 						</div>
 						<div id="tabs1">
 						  <ul>
@@ -106,12 +117,12 @@
 						  <div id="tabs2fragment-2">
 
 
-							  <div id="newquotationrowsdiv">
+							  <div id="newdeliverynoterowsdiv">
 								<input type="text" value="{{ nextchapternums.0 }}" id="nextfirstnumonhtml" maxlength="10" size="2">
 								<input type="text" value="{{ nextchapternums.1 }}" id="nextsecondnumonhtml" maxlength="10" size="2">
 								<input type="text" value="{{ nextchapternums.2 }}" id="nextthirdnumonhtml" maxlength="10" size="2">
 								<input type="text" value="{{ nextchapternums.3 }}" id="nextfourthnumonhtml" maxlength="10" size="2">
-								<a href="#" ><span id="newquotationrowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
+								<a href="#" ><span id="newdeliverynoterowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
 
 							  </div>
 
@@ -146,7 +157,7 @@
 
 											{% for tblDoc_details in  docdetails %}
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.13}}" name="Productid_tblDoc_details_id" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
-											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.14}}" name="Doc_detailsid_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
+											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.14}}" name="Doc_detailsid_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="4" disabled>
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.6}}" name="secondnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
 											<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.7}}" name="thirdnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
@@ -174,7 +185,7 @@
 							  				<span>LabelId: {{ tblDoc_details.26}}</span>
 											{% endif %}
 
-											<a href="{% url 'quotationrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="quotationproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
+											<a href="{% url 'deliverynoterowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="deliverynoteproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
 
 											<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->
 											{% if tblDoc_details.15 > 0 %}
@@ -196,6 +207,16 @@
 							  <label for="backpagetext_tbldoc" >Backpage</label>
 							  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetextforquotation_tblbackpageforquotation_ctbldoc">{{ doc.0.7}}</textarea>
 						  </div>
+							<div id="dialog-form" title="New Label">
+							  <form>
+								<fieldset>
+								  <label for="newlabelid">Labelid</label>
+								  <input type="text" id="newlabelid" class="text ui-widget-content ui-corner-all">
+								  <!-- Allow form submission with keyboard without duplicating the dialog button -->
+								  <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+								</fieldset>
+							  </form>
+							</div>
 
 				<script type="text/javascript" src="{% static 'js/deliverynote.js' %}"></script>
                 <link rel="stylesheet" href="{% static 'css/deliverynote.css' %}">
