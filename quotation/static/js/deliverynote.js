@@ -321,12 +321,14 @@ $('#title').click(function() {
 
                     data: {
                     'newlabelid' : $('#newlabelid').val(),
-                    'deliverynotedocid' : $('#deliverynotedocid').text(),
+//                    'deliverynotedocid' : $('#deliverynotedocid').text(),
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
 
-                    success: function(url){
-                    window.location.href = url;
+                    success: function(data){
+//                    window.location.href = url;
+                    window.parametertostocktaking = data;
+                    console.log('data:' + data);
 
                     },
                     error: function(){
@@ -336,6 +338,40 @@ $('#title').click(function() {
                     datatype: 'html'
 
                 });
+                        setTimeout(
+                          function()
+                          {
+
+                          console.log('parametertostocktaking:' + window.parametertostocktaking);
+
+                            $('#parametertostocktaking').val(window.parametertostocktaking.trim());
+
+                            switch(window.parametertostocktaking.trim()) {
+                              case 'noneproduct':
+                                $( "#dialog-form" ).dialog( "close" );
+                                $( "#dialog-form-noneproduct" ).dialog( "open" );
+                                break;
+                              case 'indiscreteproduct':
+                                $( "#dialog-form" ).dialog( "close" );
+                                $( "#dialog-form-indiscreteproduct" ).dialog( "open" );
+                                break;
+                              case 'discreteproduct':
+                                $( "#dialog-form" ).dialog( "close" );
+                                $( "#dialog-form-discreteproduct" ).dialog( "open" );
+                                break;
+                              case 'serviceproduct':
+                                $( "#dialog-form" ).dialog( "close" );
+                                $( "#dialog-form-serviceproduct" ).dialog( "open" );
+                                break;
+                              default:
+                                // code block
+                            }
+
+                          }, 500);
+
+
+
+
             },
             Cancel: function() {
                     $( this ).dialog( "close" );
@@ -344,10 +380,128 @@ $('#title').click(function() {
           close: function() {
                     $( this ).dialog( "close" );
           }
+
+
+
     });
 
     $('#newlabelbutton').click(function() {
             $( "#dialog-form" ).dialog( "open" );
 
     });
+    $( "#dialog-form-indiscreteproduct" ).dialog({
+      autoOpen: false,
+      height: 210,
+      width: 350,
+      modal: true,
+      buttons: {
+        "Send Qty": function() {
+            $.ajax({
+                type: 'POST',
+                url: 'deliverynoteafternewlabel',
+
+                data: {
+                'newlabelid' : $('#newlabelid').val(),
+                'deliverynotedocid' : $('#deliverynotedocid').text(),
+                'indiscreteqty' : $('#indiscreteqty').val(),
+                'parametertostocktaking' : $('#parametertostocktaking').val(),
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(url){
+                window.location.href = url;
+
+                },
+                error: function(){
+
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
+
+
+
+        },
+        Cancel: function() {
+                $( this ).dialog( "close" );
+        }
+      },
+      close: function() {
+                $( this ).dialog( "close" );
+      }
+
+
+
+    });
+    $( "#dialog-form-noneproduct" ).dialog({
+          autoOpen: false,
+          height: 210,
+          width: 350,
+          modal: true,
+          buttons: {
+          Close: function() {
+                    $( this ).dialog( "close" );
+          }
+          }
+
+
+    });
+    $( "#dialog-form-discreteproduct" ).dialog({
+      autoOpen: false,
+      height: 210,
+      width: 350,
+      modal: true,
+      open: function() {
+            $.ajax({
+                type: 'POST',
+                url: 'deliverynoteafternewlabel',
+
+                data: {
+                'newlabelid' : $('#newlabelid').val(),
+                'deliverynotedocid' : $('#deliverynotedocid').text(),
+                'indiscreteqty' : $('#indiscreteqty').val(),
+                'parametertostocktaking' : $('#parametertostocktaking').val(),
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(url){
+                window.location.href = url;
+
+                },
+                error: function(){
+
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
+            setTimeout(function() {
+
+                $( "#dialog-form-discreteproduct" ).dialog( "close" );
+            }, 1000);
+        },
+      close: function() {
+                $( this ).dialog( "close" );
+      }
+
+
+
+    });
+    $( "#dialog-form-serviceproduct" ).dialog({
+          autoOpen: false,
+          height: 210,
+          width: 350,
+          modal: true,
+          buttons: {
+          Close: function() {
+                    $( this ).dialog( "close" );
+          }
+          }
+
+
+    });
+
 });

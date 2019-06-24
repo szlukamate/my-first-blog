@@ -207,12 +207,51 @@
 							  <label for="backpagetext_tbldoc" >Backpage</label>
 							  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetextforquotation_tblbackpageforquotation_ctbldoc">{{ doc.0.7}}</textarea>
 						  </div>
+
+				<p><input type="text" id="parametertostocktaking" hidden></p>
+
 							<div id="dialog-form" title="New Label">
 							  <form>
 								<fieldset>
 								  <label for="newlabelid">Labelid</label>
 								  <input type="text" id="newlabelid" class="text ui-widget-content ui-corner-all">
 								  <!-- Allow form submission with keyboard without duplicating the dialog button -->
+								  <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+								</fieldset>
+							  </form>
+							</div>
+							<div id="dialog-form-indiscreteproduct" title="Indiscrete Product Qty">
+							  <form>
+								<fieldset>
+								  <label for="indiscreteqty">Qty:</label>
+								  <input type="text" id="indiscreteqty" class="text ui-widget-content ui-corner-all">
+								  <!-- Allow form submission with keyboard without duplicating the dialog button -->
+								  <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+								</fieldset>
+							  </form>
+							</div>
+							<div id="dialog-form-discreteproduct" title="Discrete Product">
+							  <form>
+								<fieldset>
+								  <!-- Allow form submission with keyboard without duplicating the dialog button -->
+								  <label for="discreteproduct">Processing</label>
+								  <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+								</fieldset>
+							  </form>
+							</div>
+
+							<div id="dialog-form-noneproduct" title="None Product">
+							  <form>
+								<fieldset>
+								  <label for="noneproduct">There is not product match</label>
+								  <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+								</fieldset>
+							  </form>
+							</div>
+							<div id="dialog-form-serviceproduct" title="Service Product">
+							  <form>
+								<fieldset>
+								  <label for="serviceproduct">The Product is a Service. A Service is not stocktakingable.</label>
 								  <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
 								</fieldset>
 							  </form>

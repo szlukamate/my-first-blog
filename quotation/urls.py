@@ -92,5 +92,6 @@ urlpatterns = [
     url(r'^deliverynotenewrow/(?P<pkdocid>[0-9]+)/(?P<pkproductid>[0-9]+)/(?P<pkdocdetailsid>[0-9]+)/(?P<nextfirstnumonhtml>[0-9]+)/(?P<nextsecondnumonhtml>[0-9]+)/(?P<nextthirdnumonhtml>[0-9]+)/(?P<nextfourthnumonhtml>[0-9]+)/$',
         views.deliverynotenewrow, name='deliverynotenewrow'),
     url('deliverynotenewlabel', views.deliverynotenewlabel, name='deliverynotenewlabel'),
+    url('deliverynoteafternewlabel', views.deliverynoteafternewlabel, name='deliverynoteafternewlabel'),
 
 ]

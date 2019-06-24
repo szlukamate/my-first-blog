@@ -1024,7 +1024,99 @@ def deliverynoterowremove(request, pk):
     return redirect('deliverynoteform', pk=na)
 def deliverynotenewlabel(request):
     newlabelid = request.POST['newlabelid']
+#    deliverynotedocid = request.POST['deliverynotedocid']
+
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
+                    "`Qty_tblDoc_details`, "
+                    "`Docid_tblDoc_details_id`, "
+                    "`customerdescription_tblProduct_ctblDoc_details`, "
+                    "`firstnum_tblDoc_details`, "
+                    "`fourthnum_tblDoc_details`, "
+                    "`secondnum_tblDoc_details`, "
+                    "`thirdnum_tblDoc_details`, "
+                    "`Note_tblDoc_details`, "
+                    "`creationtime_tblDoc_details`, "
+                    "purchase_price_tblproduct_ctblDoc_details, "
+                    "listprice_tblDoc_details, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                    "Productid_tblDoc_details_id, "
+                    "Doc_detailsid_tblDoc_details, "
+                    "COALESCE(Productid_tblProduct, 0), "
+                    "currencyrate_tblcurrency_ctblDoc_details, "
+                    "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
+                    "unitsalespriceACU_tblDoc_details, "
+                    "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
+                    "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
+                    "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
+                    "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
+                    "unit_tbldocdetails, "
+                    "suppliercompanyid_tbldocdetails, "
+                    "podetailslink_tbldocdetails "
+
+                    "FROM quotation_tbldoc_details "
+
+                    "JOIN quotation_tbldoc as D "
+                    "ON quotation_tbldoc_details.Docid_tblDoc_details_id = D.Docid_tblDoc "
+
+                    "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+                    "ON "
+                    "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+
+                    "WHERE Doc_detailsid_tblDoc_details=%s and Doc_kindid_tblDoc_id=7 "
+                    "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
+                    [newlabelid])
+    docdetails = cursor3.fetchall()
+    docdetailslen = len(docdetails)
+    if docdetailslen != 0:
+
+        for x in docdetails:
+            productid = x[13]
+
+
+            cursor5 = connection.cursor()
+            cursor5.execute("SELECT  "
+                            "discreteflag_tblproduct, "
+                            "serviceflag_tblproduct "
+                            ""
+                            "FROM quotation_tblproduct "
+                            ""
+                            "WHERE Productid_tblProduct=%s ",
+                            [productid])
+            docdetails2 = cursor5.fetchall()
+            # import pdb;
+            # pdb.set_trace()
+
+
+            for x in docdetails2:
+                discreteflag = x[0]
+                serviceflag = x[1]
+            if serviceflag == 0:
+                if discreteflag == 1:
+
+                    parametertostocktaking = 'discreteproduct'
+
+                else:
+                    parametertostocktaking = 'indiscreteproduct'
+            else:
+                parametertostocktaking = 'serviceproduct'
+    else:
+
+
+        parametertostocktaking = 'noneproduct'
+
+
+
+
+
+#    pk=deliverynotedocid
+
+    return render(request, 'quotation/deliverynoteparameterstostocktaking.html', {'parametertostocktaking': parametertostocktaking})
+def deliverynoteafternewlabel(request):
+    newlabelid = request.POST['newlabelid']
     deliverynotedocid = request.POST['deliverynotedocid']
+    indiscreteqty = request.POST['indiscreteqty']
+    parametertostocktaking = request.POST['parametertostocktaking']
     #import pdb;
     #pdb.set_trace()
 
@@ -1055,20 +1147,23 @@ def deliverynotenewlabel(request):
                     "unit_tbldocdetails, "
                     "suppliercompanyid_tbldocdetails, "
                     "podetailslink_tbldocdetails "
+
                     "FROM quotation_tbldoc_details "
+
+                    "JOIN quotation_tbldoc as D "
+                    "ON quotation_tbldoc_details.Docid_tblDoc_details_id = D.Docid_tblDoc "
+
                     "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                     "ON "
                     "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
-                    "WHERE Doc_detailsid_tblDoc_details=%s "
+
+                    "WHERE Doc_detailsid_tblDoc_details=%s and Doc_kindid_tblDoc_id=7 "
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                     [newlabelid])
     docdetails = cursor3.fetchall()
-    # import pdb;
-    # pdb.set_trace()
 
     for x in docdetails:
-        qty = x[1]
-#        deliverynotedocid = x[2]
+#        qty = x[1]
         firstnum = x[4]
         fourthnum = x[5]
         secondnum = x[6]
@@ -1086,6 +1181,11 @@ def deliverynotenewlabel(request):
         currencyrateclone = x[16]
         unitclone = x[23]
         unitsalespriceACU = x[18]
+
+    if parametertostocktaking == 'discreteproduct':
+        qty = 1.0
+    elif parametertostocktaking == 'indiscreteproduct':
+        qty = indiscreteqty
 
     cursor4 = connection.cursor()
     cursor4.execute(
@@ -1127,6 +1227,15 @@ def deliverynotenewlabel(request):
          suppliercompanyid,
          podetailslink,
          int(newlabelid)])
+
+
+        #import pdb;
+        #pdb.set_trace()
+
+
+
+
+
 
     pk=deliverynotedocid
 
