@@ -1063,7 +1063,7 @@ def deliverynotenewlabel(request):
                     "ON "
                     "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
 
-                    "WHERE Doc_detailsid_tblDoc_details=%s and Doc_kindid_tblDoc_id=7 "
+                    "WHERE Doc_detailsid_tblDoc_details=%s and Doc_kindid_tblDoc_id=7 and obsolete_tbldoc=0 "
                     "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                     [newlabelid])
     docdetails = cursor3.fetchall()

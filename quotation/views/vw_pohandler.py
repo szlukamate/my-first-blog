@@ -459,7 +459,7 @@ def pohandlerreception(request):
         if docmakercounter  == 0: #doc create only once even multiple docdetails
             docmakercounter = numberofitemstodeno
 
-            pk = 60
+            pk = cordocid
             cursor1 = connection.cursor()
             cursor1.execute("SELECT "
                             "Docid_tblDoc, "
