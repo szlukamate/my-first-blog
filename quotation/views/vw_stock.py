@@ -25,14 +25,14 @@ def stockmain(request):
     cursor3.execute(
         "SELECT "
         "P.customerdescription_tblProduct, "
-        "DD.Productid_tblDoc_details_id, "
+        "DD.Productid_tblDoc_details_id as productid, "
         "supplierdescription_tblProduct, "
-        "onstockingoing.onstockingoingqty as onstockingoing, " 
+        "COALESCE(sum(onstockingoing.onstockingoingqty),0) as onstockingoing, " 
 #        "1 as onstockingoing, " 
 #        "COALESCE(sum(onstockoutgoing.onstockoutgoingqty),0) as onstockoutgoing, "
-#        "onstockingoing.denodocids as denodocids, "
+#        "onstockingoing.docid as docid, "
 #        "COALESCE(sum(onstockingoing.onstockingoingqty),0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty),0) as onstock, "
-#        "onstockingoing.denodocids as DDdocid, "
+#        "DD.Docid_tblDoc_details_id, "
         "unit_tblproduct, "
         "purchase_price_tblproduct, "
         "margin_tblproduct, "
@@ -43,43 +43,33 @@ def stockmain(request):
 #        "onstockingoing.contactid2 "
         
         "FROM quotation_tbldoc_details as DD "
+
 #ingoing
         "JOIN (SELECT "
+        "           DD1.docid as docid, "
         "           D2.wheretodocid_tbldoc as wheretodocid, "
-        "           onstockingoing2.onstockingoingqty as onstockingoingqty, "
-#        "           1 as onstockingoingqty, "
+        "           sum(DD1.onstockingoingqty) as onstockingoingqty, "
 #        "           max(onstockingoing2.denodocids) as denodocids, "
-        "           onstockingoing2.productid as productid "
+        "           DD1.productid as productid "
 
-        "           FROM quotation_tbldoc D2 " # docs where wheretodocid is not null (cors or denos) and to stock
+        "           FROM quotation_tbldoc D2 " # only denos to stock
 
-                    "JOIN (SELECT "
-#                    "      Docid_tbldoc as denodocids, " # denos
-        "                    wheretodocid_tbldoc as wheretodocid, "
-        "                    DD1.onstockingoingqty as onstockingoingqty, "
-        "                    DD1.Productid as productid "
-
-                     "      FROM quotation_tbldoc D3 "   
-
-                            "JOIN (SELECT " # core
-                            "           Docid_tblDoc_details_id as docid, "
-                            "           Qty_tblDoc_details as onstockingoingqty, "
-                            "           Productid_tblDoc_details_id as productid "
-                            
-                            "           FROM quotation_tbldoc_details "
+                    "JOIN (SELECT " # core
+                    "           Docid_tblDoc_details_id as docid, "
+                    "           sum(Qty_tblDoc_details) as onstockingoingqty, "
+                    "           Productid_tblDoc_details_id as productid "
                     
-#                            "           GROUP BY productid, docid, onstockingoingqty "
-                            "           ) AS DD1 "
-                "           ON D3.Docid_tblDoc = DD1.docid "
+                    "           FROM quotation_tbldoc_details DD "
 
-                "           WHERE D3.obsolete_tbldoc = 0 "
+#                                "JOIN quotation_tbldoc D "
+#                                "ON DD.Docid_tblDoc_details_id = D.Docid_tblDoc "
+                                
+#                                "WHERE obsolete_tbldoc=0 "           
+                            "           GROUP BY productid, docid "
+                    "           ) AS DD1 "
+        "           ON D2.Docid_tblDoc = DD1.docid "
 
-                "           GROUP BY wheretodocid, productid, onstockingoingqty "
-            
-                    "     ) AS onstockingoing2 "
-       "            ON D2.wheretodocid_tbldoc = onstockingoing2.wheretodocid "
-
-                    "JOIN (SELECT "
+                    "JOIN (SELECT " # only denos companyids to stock
         "                       C.Companyid_tblContacts_id as companyid, "
         "                       Docid_tblDoc "
         ""
@@ -92,13 +82,12 @@ def stockmain(request):
         "           ON D2.wheretodocid_tbldoc = D33.Docid_tblDoc"
 
         "           WHERE D2.obsolete_tbldoc = 0 and D33.companyid in (9,10) "
-        "           GROUP BY D2.wheretodocid_tbldoc, "
-#        "                    denodocids, "
-                             "onstockingoingqty, "
+        "           GROUP BY docid, "
         "                    productid "
 
         "           ) AS onstockingoing "
-        "ON (DD.Docid_tblDoc_details_id = onstockingoing.wheretodocid and DD.Productid_tblDoc_details_id = onstockingoing.productid) "
+        "ON (DD.Docid_tblDoc_details_id = onstockingoing.docid and DD.Productid_tblDoc_details_id = onstockingoing.productid) "
+
 #outgoing
 #        "LEFT JOIN (SELECT "
 #        "           wherefromdocid_tbldoc, "
@@ -124,8 +113,8 @@ def stockmain(request):
 #        "           ) AS onstockoutgoing "
 #        "ON ( DD.Docid_tblDoc_details_id = onstockoutgoing.wherefromdocid_tbldoc and DD.Productid_tblDoc_details_id = onstockoutgoing.productid) "
 
-        "LEFT JOIN quotation_tbldoc "
-        "ON DD.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+        "LEFT JOIN quotation_tbldoc D "
+        "ON DD.Docid_tblDoc_details_id = D.Docid_tblDoc "
 
         "LEFT JOIN quotation_tblproduct as P "
         "ON DD.Productid_tblDoc_details_id = P.Productid_tblProduct "
@@ -133,12 +122,12 @@ def stockmain(request):
         "JOIN quotation_tblcompanies "
         "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
 
-        "WHERE obsolete_tbldoc=0 and serviceflag_tblproduct=0 "# and wheretodocid_tbldoc is not null "
-        "GROUP BY   DD.Productid_tblDoc_details_id, "
+        "WHERE obsolete_tbldoc=0 and serviceflag_tblproduct=0 and Doc_kindid_tblDoc_id=8 "# and wheretodocid_tbldoc is not null "
+        "GROUP BY   productid ")
 #        "           supplierdescription_tblProduct, "
 #        "           DDdocid, "
 #       "           denodocids, "
-        "           onstockingoing ")
+#        "           onstockingoing ")
 #        "           onstockoutgoing.onstockoutgoingqty ")
 #        "           onstockingoing.wheretodocid, "
 #        "           onstockingoing.contactid2 ")#

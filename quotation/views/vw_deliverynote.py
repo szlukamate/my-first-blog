@@ -1206,8 +1206,7 @@ def deliverynoteafternewlabel(request):
         "unitsalespriceACU_tblDoc_details, "
         "unit_tbldocdetails, "
         "suppliercompanyid_tbldocdetails, "
-        "podetailslink_tbldocdetails, "
-        "podocdetailsidforlabel_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+        "podocdetailsidforlabel_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
         [int(deliverynotedocid),
          qty,
@@ -1225,7 +1224,6 @@ def deliverynoteafternewlabel(request):
          unitsalespriceACU,
          unitclone,
          suppliercompanyid,
-         podetailslink,
          int(newlabelid)])
 
 
