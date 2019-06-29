@@ -2,7 +2,7 @@
 	{% block content %}
           
 
-				<p align="center" id="title" style="font-size:160%;">Quotation Newrow Add Form</p>{% csrf_token %}
+				<p align="center" id="title" style="font-size:160%;">Newrow Add Form</p>{% csrf_token %}
 					<p  >Product nums: {{nextchapternumset.0}}-{{nextchapternumset.1}}-{{nextchapternumset.2}}-{{nextchapternumset.3}}</p>
 							<div class="container" style="max-height: 200px; overflow:scroll;">
 										<table class="table table-striped">
@@ -29,7 +29,7 @@
 														<td>{{ product.3 }}</td>
 														<td>{{ product.4 }}</td>
 														<td>{{ product.6 }}</td>
-														<td>{{ product.5 }}<a href="{% url 'quotationnewrow' pkdocid=docid pkproductid=product.0 pkdocdetailsid=docdetailsid nextfirstnumonhtml=nextchapternumset.0 nextsecondnumonhtml=nextchapternumset.1 nextthirdnumonhtml=nextchapternumset.2 nextfourthnumonhtml=nextchapternumset.3 %}"><span class="glyphicon glyphicon-arrow-left"></span></a><a href="{% url 'products' pkproductid=product.0 %}"><span class="glyphicon glyphicon-filter"></span></a></td>
+														<td>{{ product.5 }}<a href="{% url 'customerordernewrow' pkdocid=docid pkproductid=product.0 pkdocdetailsid=docdetailsid nextfirstnumonhtml=nextchapternumset.0 nextsecondnumonhtml=nextchapternumset.1 nextthirdnumonhtml=nextchapternumset.2 nextfourthnumonhtml=nextchapternumset.3 %}"><span class="glyphicon glyphicon-arrow-left"></span></a><a href="{% url 'products' pkproductid=product.0 %}"><span class="glyphicon glyphicon-filter"></span></a></td>
 													</tr>
 
 
@@ -40,6 +40,6 @@
 										</table>
 							</div>
 
-											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
+											<script type="text/javascript" src="{% static 'js/customerorder.js' %}"></script>
 
 	{% endblock %}

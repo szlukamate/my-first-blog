@@ -27,7 +27,7 @@ def stockmain(request):
         "P.customerdescription_tblProduct, "
         "DD.Productid_tblDoc_details_id as productid, "
         "supplierdescription_tblProduct, "
-        "COALESCE(sum(onstockingoing.onstockingoingqty),0) as onstockingoing, " 
+        "onstockingoing.onstockingoingqty as onstockingoing, " 
 #        "1 as onstockingoing, " 
 #        "COALESCE(sum(onstockoutgoing.onstockoutgoingqty),0) as onstockoutgoing, "
 #        "onstockingoing.docid as docid, "
@@ -42,14 +42,11 @@ def stockmain(request):
 #        "onstockingoing.wheretodocid, "
 #        "onstockingoing.contactid2 "
         
-        "FROM quotation_tbldoc_details as DD "
+        "FROM quotation_tbldoc_details as DD " # all deno items
 
 #ingoing
         "JOIN (SELECT "
-        "           DD1.docid as docid, "
-        "           D2.wheretodocid_tbldoc as wheretodocid, "
         "           sum(DD1.onstockingoingqty) as onstockingoingqty, "
-#        "           max(onstockingoing2.denodocids) as denodocids, "
         "           DD1.productid as productid "
 
         "           FROM quotation_tbldoc D2 " # only denos to stock
@@ -65,28 +62,38 @@ def stockmain(request):
 #                                "ON DD.Docid_tblDoc_details_id = D.Docid_tblDoc "
                                 
 #                                "WHERE obsolete_tbldoc=0 "           
-                            "           GROUP BY productid, docid "
+                            "    GROUP BY productid, docid "
                     "           ) AS DD1 "
         "           ON D2.Docid_tblDoc = DD1.docid "
 
                     "JOIN (SELECT " # only denos companyids to stock
-        "                       C.Companyid_tblContacts_id as companyid, "
+        "                       lateststocktaking.companyid as companyid, "
+"                               lateststocktaking.lateststocktaking as lateststocktaking, "        
         "                       Docid_tblDoc "
         ""
         "                       FROM quotation_tbldoc as D4 "
         ""
-                               "JOIN quotation_tblcontacts as C "
-        "                       ON D4.Contactid_tblDoc_id = C.Contactid_tblContacts "
+                               "JOIN (SELECT "
+        "                             lateststocktaking_tblcompanies as lateststocktaking, "
+        "                             C.Companyid_tblContacts_id as companyid, "
+        "                             C.Contactid_tblContacts as contactid  "
+
+        "                             FROM quotation_tblcontacts as C "
+        ""
+        "                             JOIN quotation_tblcompanies as companies"
+        "                             ON C.Companyid_tblContacts_id = companies.Companyid_tblCompanies"
+
+"                                     ) as lateststocktaking "
+        "                       ON D4.Contactid_tblDoc_id = lateststocktaking.contactid "
 
         "                      ) as D33" 
         "           ON D2.wheretodocid_tbldoc = D33.Docid_tblDoc"
 
-        "           WHERE D2.obsolete_tbldoc = 0 and D33.companyid in (9,10) "
-        "           GROUP BY docid, "
-        "                    productid "
+        "           WHERE D2.obsolete_tbldoc = 0 and D33.companyid in (9,10) and D2.creationtime_tbldoc > D33.lateststocktaking and D2.denoenabledflag_tbldoc=1 "
+        "           GROUP BY productid "
 
         "           ) AS onstockingoing "
-        "ON (DD.Docid_tblDoc_details_id = onstockingoing.docid and DD.Productid_tblDoc_details_id = onstockingoing.productid) "
+        "ON DD.Productid_tblDoc_details_id = onstockingoing.productid "
 
 #outgoing
 #        "LEFT JOIN (SELECT "
@@ -122,7 +129,7 @@ def stockmain(request):
         "JOIN quotation_tblcompanies "
         "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
 
-        "WHERE obsolete_tbldoc=0 and serviceflag_tblproduct=0 and Doc_kindid_tblDoc_id=8 "# and wheretodocid_tbldoc is not null "
+        "WHERE obsolete_tbldoc=0 and Doc_kindid_tblDoc_id=8 "# and wheretodocid_tbldoc is not null "
         "GROUP BY   productid ")
 #        "           supplierdescription_tblProduct, "
 #        "           DDdocid, "
@@ -273,9 +280,8 @@ def stocktakingpreform(request): # Settings --> Stocktaking
 #latestEnabledstocktaking
         "LEFT JOIN (SELECT "
         "      Companyid_tblContacts_id as companyid, "
-        "      Contactid_tblContacts as contactid, "
-        "      D.creationtime as creationtime, "
-        "      D.docid as docid "
+        "      max(D.creationtime) as creationtime, "
+        "      max(D.docid) as docid "
 
         "      FROM quotation_tblcontacts "
         
@@ -288,12 +294,12 @@ def stocktakingpreform(request): # Settings --> Stocktaking
         "            WHERE denoenabledflag_tbldoc=1 and stocktakingdeno_tbldoc=1 and obsolete_tbldoc=0 "
         "            ) as D "
         "      ON quotation_tblcontacts.Contactid_tblContacts = D.contactid "
+        "      GROUP BY companyid"
         "     ) as latestenabledstocktaking "
         "ON C.Companyid_tblCompanies = latestenabledstocktaking.companyid "
 #latestDisabledstocktaking
         "LEFT JOIN (SELECT "
         "      Companyid_tblContacts_id as companyid, "
-        "      Contactid_tblContacts as contactid, "
         "      D.creationtime as creationtime, "
         "      D.docid as docid "
 

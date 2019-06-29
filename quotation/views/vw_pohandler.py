@@ -736,12 +736,14 @@ def pohandlersplit(request):
                         "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
                         "unitsalespriceACU_tblDoc_details, "
                         "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
-                        "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
+                        "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, " #20
                         "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
                         "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
                         "unit_tbldocdetails, "
                         "suppliercompanyid_tbldocdetails, "
-                        "podetailslink_tbldocdetails "
+                        "podetailslink_tbldocdetails, "
+                        "supplierdescription_tblProduct_ctblDoc_details "
+
                         "FROM quotation_tbldoc_details "
                         "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                         "ON "
@@ -773,6 +775,7 @@ def pohandlersplit(request):
             currencyrateclone = x[16]
             unitclone = x[23]
             unitsalespriceACU = x[18]
+            supplierdescriptionclone = x[26]
 
         cursor4 = connection.cursor()
         cursor4.execute(
@@ -793,7 +796,8 @@ def pohandlersplit(request):
             "unitsalespriceACU_tblDoc_details, "
             "unit_tbldocdetails, "
             "suppliercompanyid_tbldocdetails, "
-            "podetailslink_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            "podetailslink_tbldocdetails, "
+            "supplierdescription_tblProduct_ctblDoc_details) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
             [docid,
              newqty,
@@ -811,7 +815,8 @@ def pohandlersplit(request):
              unitsalespriceACU,
              unitclone,
              suppliercompanyid,
-             podetailslink])
+             podetailslink,
+             supplierdescriptionclone])
 
         cursor2 = connection.cursor()
         cursor2.execute(
