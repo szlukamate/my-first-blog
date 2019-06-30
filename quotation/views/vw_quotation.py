@@ -30,8 +30,8 @@ def quotationform(request, pk):
             cursor22.callproc("spquotationdocdetailsfieldsupdate", [fieldname, fieldvalue, rowid])
             results23 = cursor22.fetchall()
             print(results23)
-            import pdb;
-            pdb.set_trace()
+#            import pdb;
+#            pdb.set_trace()
 
             json_data = json.dumps(results23)
 
