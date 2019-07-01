@@ -86,6 +86,7 @@ def stocklabellist(request): # labels on stockform for particular product
                     
                     "JOIN quotation_tbldoc as D2 " #contactid lookup
                     "ON D.wheretodocid_tblDoc = D2.Docid_tblDoc "
+
             "       WHERE D2.Contactid_tblDoc_id=9 and D2.obsolete_tbldoc = 0 "
         "           GROUP BY docid, "
         "                       inlabel, "
