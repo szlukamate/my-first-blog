@@ -178,6 +178,17 @@ def customerorderform(request, pk):
                      "WHERE DD.docid_tbldoc_details_id=%s",[pk])
     polinks = cursor14.fetchall()
 
+    cursor15 = connection.cursor()
+    cursor15.execute("SELECT "
+                     "Companyid_tblCompanies, "
+                     "companyname_tblcompanies "
+
+                     "FROM quotation_tblcompanies "
+
+
+                     "WHERE stockflag_tblcompanies=1 ")
+    stockradiobuttonrows = cursor15.fetchall()
+
     cursor10 = connection.cursor()
     cursor10.execute("SELECT id, "
                      "first_name, "
@@ -231,6 +242,7 @@ def customerorderform(request, pk):
                   {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums': nextchapternums,
                    'creatordata': creatordata,
                    'polinks': polinks,
+                   'stockradiobuttonrows': stockradiobuttonrows,
                    'currencycodes': currencycodes})
 
 

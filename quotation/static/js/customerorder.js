@@ -15,8 +15,52 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
-//$("#tabs").tabs({ active: 0 });
+    var stockradios = $('input:radio[name=stockradio]');
+    if(stockradios.is(':checked') === false) {
+        stockradios.filter('[value="9"]').prop('checked', true);
+    }
+    $( "#stockradiobutton" ).dialog({
+      autoOpen: false,
+      height: 330,
+      width: 350,
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        var customerorderid=$('#customerorderdocid').text();
+        var selectedstockid=$('input[type="radio"]:checked').val();
+        console.log(selectedstockid);
 
+
+            $.ajax({
+                type: 'POST',
+                url: 'deliverynotepre',
+
+                data: {
+                'customerorderid' : customerorderid,
+                'selectedstockid' : selectedstockid,
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(data){
+
+                    $('#deliverynotepretemplate').html(data);
+                    console.log(data);
+
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
+        }
+      }
+    });
+
+    $( "input[type='radio']" ).checkboxradio();
 
     var index1 = 'qpsstats-active-tab1';
     //  Define friendly data store name
@@ -62,7 +106,6 @@ $(function () {
             } catch(e) {}
         }
     });
-
 $('#title').click(function() {
     $('#title').hide();
 
@@ -307,5 +350,9 @@ $('#title').click(function() {
         };
 
    });
+    $('#choosestockbutton').click(function() {
+            $( "#stockradiobutton" ).dialog( "open" );
+
+    });
 
 });

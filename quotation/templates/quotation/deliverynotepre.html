@@ -1,13 +1,13 @@
-{% extends 'quotation/base.html' %}
 {% load staticfiles%}
-	{% block content %}
-          
+
 				<p id="rowsnumber" rowsnumber="{{ rowsnumber }}" hidden></p>
 				<p id="customerordernumber" customerordernumber="{{ customerordernumber }}" hidden></p>
+				<p id="selectedstockid" selectedstockid="{{ stockdetails.0.0 }}" hidden></p>
 
 							{% csrf_token %}
 
 							<p align="center" style="font-size:160%;">Delivery Note Preparation Form</p>
+							<p align="center" style="font-size:160%; color:red;">{{ stockdetails.0.1 }}</p>
 							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 
 							<button id="deliverynotemakebutton" type="submit">
@@ -66,5 +66,3 @@
 
 		<script type="text/javascript" src="{% static 'js/deliverynotepre.js' %}"></script>
         <link rel="stylesheet" href="{% static 'css/deliverynotepre.css' %}">
-
-	{% endblock %}

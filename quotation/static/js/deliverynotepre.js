@@ -60,13 +60,14 @@ $(function () {
 
                 data: {
                 'customerordernumber' : $('#customerordernumber').attr( "customerordernumber" ),
+                'selectedstockid' : $('#selectedstockid').attr( "selectedstockid" ),
                 'productidlist': JSON.stringify(productidlist),
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
 
                 success: function(url){
-//                window.location.href = url;
+                window.location.href = url;
 
                 },
                 error: function(){
@@ -77,7 +78,7 @@ $(function () {
             });
 
             console.log('stringified' + JSON.stringify(productidlist));
-            console.log('customerordernumber' + $('#customerordernumber').attr( "customerordernumber" ));
+            console.log(url);bb
 
     });
 });

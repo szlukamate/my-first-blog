@@ -5,6 +5,7 @@
 
 	<p><span>Docid:</span><span id="customerorderdocid">{{ doc.0.0}}</span></p>
 	<span id="customerordertemplate" ></span>
+	<span id="deliverynotepretemplate" ></span>
 
 	<p>Contactid:{{ doc.0.1}} hidden</p>
 
@@ -31,9 +32,9 @@
 
 			  </div>
 			  <div id="tabs1fragment-2">
-							<form action="{% url 'deliverynotepre' docid=doc.0.0 %}">
-								<input type="submit" value="Delivery Note" />
-							</form>
+							<button id="choosestockbutton" type="submit">
+							   <span>Delivery Note</span>
+							</button
 							<form action="{% url 'customerinvoicepre' docid=doc.0.0 %}">
 								<input type="submit" value="Customer Invoice" />
 							</form>
@@ -223,11 +224,21 @@
 				  <textarea rows="8" cols="50" class="updateabletbldoc" name="prefacetextforcustomerorder_tblprefaceforcustomerorder_ctbldoc">{{ doc.0.6}}</textarea>
 
 			  </div>
+
 			  <div id="tabs2fragment-4">
 				  <label for="backpagetext_tbldoc" >Backpage</label>
 				  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetextforcustomerorder_tblbackpageforcustomerorder_ctbldoc">{{ doc.0.7}}</textarea>
 			  </div>
 
+			  <div id="stockradiobutton" class="widget">
+				  <fieldset>
+					<legend>Select a Stock: </legend>
+					{% for stockradiobuttonrow in stockradiobuttonrows %}
+					<label for="radio-{{ forloop.counter }}">{{ stockradiobuttonrow.1}}</label>
+					<input type="radio" value="{{ stockradiobuttonrow.0}}" name="stockradio" id="radio-{{ forloop.counter }}"><br>
+					{% endfor %}
+				  </fieldset>
+			  </div>
 	<script type="text/javascript" src="{% static 'js/customerorder.js' %}"></script>
 	<link rel="stylesheet" href="{% static 'css/customerorder.css' %}">
 

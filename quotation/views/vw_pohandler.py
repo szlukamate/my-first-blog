@@ -192,7 +192,7 @@ def pohandlerrowsourceforarrivaldates(request):
     return render(request, 'quotation/pohandlerrowsourceforarrivaldates.html', {'arrivaldates': arrivaldates, 'rownmbs': rownmbs})
 
 
-def pohandlerreception(request):
+def pohandlerreception(request): #from pohandlerform
     dateofarrival = request.POST['dateofarrival']
     dateofarrivallistraw = request.POST['dateofarrivallist']
     dateofarrivallist = json.loads(dateofarrivallistraw)

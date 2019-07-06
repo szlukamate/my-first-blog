@@ -150,3 +150,9 @@ color:white;
 background-color: blue;
 font-size: 173%;
 }
+.ui-dialog {
+    left: 50% !important;
+    top: 50% !important;
+    margin-left: -175px !important;
+    margin-top: -175px !important;
+}

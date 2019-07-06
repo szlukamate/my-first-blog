@@ -325,7 +325,25 @@ def deliverynotebackpage(request):
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")
-def deliverynotepre(request, docid):
+def deliverynotepre(request):
+
+    customerorderid = request.POST['customerorderid']
+    selectedstockid = request.POST['selectedstockid']
+
+    cursor44 = connection.cursor()
+    cursor44.execute(
+        "SELECT  "
+        "Companyid_tblCompanies, "
+        "companyname_tblcompanies "
+        
+        "FROM quotation_tblcompanies "
+        
+        "WHERE Companyid_tblCompanies=%s",
+        [selectedstockid])
+    stockdetails = cursor44.fetchall()
+
+    #import pdb;
+    #pdb.set_trace()
 
     cursor3 = connection.cursor()
     cursor3.execute(
@@ -433,7 +451,7 @@ def deliverynotepre(request, docid):
 #        "           onstockingoing, "
 #        "           onstockoutgoing, "
 #        "           onstock ",
-        [docid])
+        [customerorderid])
 
     docdetailspre = cursor3.fetchall()
 #    todocdetailspre = []
@@ -470,17 +488,37 @@ def deliverynotepre(request, docid):
 
 
     rowsnumber = len(docdetails)
-    customerordernumber = docid
+    customerordernumber = customerorderid
     return render(request, 'quotation/deliverynotepre.html', {'docdetails': docdetails,
                                                               'customerordernumber': customerordernumber,
+                                                              'stockdetails': stockdetails,
                                                               'rowsnumber': rowsnumber})
 
 
-def deliverynotemake(request):
+def deliverynotemake(request): #from deliverynotepre form (from button)
     customerordernumber = request.POST['customerordernumber']
+    selectedstockid = request.POST['selectedstockid']
     productidlistraw = request.POST['productidlist']
     productidlist = json.loads(productidlistraw)
 
+    cursor44 = connection.cursor()
+    cursor44.execute(
+        "SELECT  D.Docid_tblDoc "
+
+        "FROM quotation_tblcompanies "
+
+        "JOIN quotation_tbldoc D "
+        "ON quotation_tblcompanies.lateststocktaking_tblcompanies < D.creationtime_tbldoc "
+
+
+        "WHERE Companyid_tblCompanies=%s",
+        [selectedstockid])
+    results = cursor44.fetchall()
+
+    for instancesingle in results:
+        laststocktakingdocid = instancesingle[0]
+    import pdb;
+    pdb.set_trace()
 
     creatorid = request.user.id
 
@@ -631,7 +669,7 @@ def deliverynotemake(request):
                      currencyrateinreport,
                      customerordernumber,
                      accountcurrencycode,
-                     788,
+                     laststocktakingdocid,
                      customerordernumber,
                      1])
 
@@ -885,7 +923,7 @@ def deliverynotemake(request):
                     productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
                     docdetailsinsert(1, podocdetailsidforlabel)
 
-    return render(request, 'quotation/pohandlerreceptionredirecturl.html', {})
+    return render(request, 'quotation/deliverynotepreredirecturl.html', {'pk': pk})
 def deliverynotenewrowadd(request):
     if request.method == "POST":
         docdetailsid = request.POST['docdetailsid']
@@ -1238,3 +1276,114 @@ def deliverynoteafternewlabel(request):
     pk=deliverynotedocid
 
     return render(request, 'quotation/deliverynotenewlabelredirecturl.html', {'pk': pk})
+
+
+def deliverynotechoosestock(request):  # labels on stockform for particular product
+    productid = request.POST['productid']
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT "
+        "discreteflag_tblproduct "
+
+        "FROM quotation_tblproduct as P "
+
+        "WHERE Productid_tblProduct=%s "
+        , [productid])
+
+    results22 = cursor1.fetchall()
+    for x14 in results22:
+        discreteflag = x14[0]
+
+        cursor0 = connection.cursor()
+        cursor0.execute(
+            "SELECT "
+            "Dingoing.inlabel as labelid, "
+            "Dingoing.inqty as inqty, "
+            "DDoutgoing.outqty as outqty, "
+            "COALESCE(Dingoing.inqty,0)-COALESCE(DDoutgoing.outqty,0) as onstock "
+
+            "FROM quotation_tbldoc_details as DD "
+            # ingoing
+            "JOIN (SELECT "
+            "       D.Docid_tblDoc as docid, "
+            "       DDingoing.inlabel as inlabel, "
+            "       D.obsolete_tbldoc as obsolete, "
+            "       sum(DDingoing.inqty) as inqty "
+            ""
+            "       FROM quotation_tbldoc as D "
+            "   "
+            "JOIN (SELECT podocdetailsidforlabel_tbldocdetails as inlabel, "
+            "           Docid_tblDoc_details_id, "
+            "           sum(Qty_tblDoc_details) as inqty "
+
+            "           FROM quotation_tbldoc_details as DD2 "
+
+            "           JOIN quotation_tbldoc as D2"
+            "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
+
+            "           WHERE D2.obsolete_tbldoc=0 "
+            "           GROUP BY inlabel, Docid_tblDoc_details_id "
+
+            "           ) as DDingoing "
+            "ON D.Docid_tblDoc = DDingoing.Docid_tblDoc_details_id "
+
+
+            "JOIN quotation_tbldoc as D2 "  # contactid lookup
+            "ON D.wheretodocid_tblDoc = D2.Docid_tblDoc "
+
+            "       WHERE D2.Contactid_tblDoc_id=9 and D2.obsolete_tbldoc = 0 "
+            "           GROUP BY docid, "
+            "                       inlabel, "
+            "                       obsolete "
+            ""
+
+            "     ) as Dingoing "
+
+            "ON DD.Docid_tblDoc_details_id = Dingoing.docid "
+
+            # outgoing    
+            "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails as outlabel, "
+            "           Docid_tblDoc_details_id, "
+            "           sum(Qty_tblDoc_details) as outqty "
+
+            "           FROM quotation_tbldoc_details as DD2 "
+
+            "           JOIN quotation_tbldoc as D2"
+            "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
+
+            "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788  "
+            "           GROUP BY outlabel, Docid_tblDoc_details_id "
+
+            "           ) as DDoutgoing "
+            "ON DD.podocdetailsidforlabel_tbldocdetails = DDoutgoing.outlabel "  # and outqty <> DDoutgoing.outqty "
+
+            "JOIN quotation_tbldoc as D "
+            "ON DD.Docid_tblDoc_details_id = D.Docid_tblDoc "
+
+
+            "WHERE DD.Productid_tblDoc_details_id=%s and D.obsolete_tbldoc=0   "
+            "GROUP BY labelid, inqty, outqty, onstock  "
+            "order by labelid desc "
+            , [productid])
+
+        resultspre = cursor0.fetchall()
+        toresults = []
+        results = []
+        import pdb;
+        pdb.set_trace()
+
+        for instancesingle in resultspre:
+            labelid = instancesingle[0]
+            inqty = instancesingle[1]
+            outqty = instancesingle[2]
+            onstockqty = instancesingle[3]
+
+            if onstockqty > 0:
+                appendvar = (
+                    labelid, inqty, outqty, onstockqty)
+                toresults.append(appendvar)
+
+        results = toresults
+
+    return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
