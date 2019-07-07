@@ -495,7 +495,7 @@ def deliverynotepre(request):
                                                               'rowsnumber': rowsnumber})
 
 
-def deliverynotemake(request): #from deliverynotepre form (from button)
+def deliverynotemake(request): #from deliverynotepre form (buttonpress comes here)
     customerordernumber = request.POST['customerordernumber']
     selectedstockid = request.POST['selectedstockid']
     productidlistraw = request.POST['productidlist']
@@ -503,22 +503,33 @@ def deliverynotemake(request): #from deliverynotepre form (from button)
 
     cursor44 = connection.cursor()
     cursor44.execute(
-        "SELECT  D.Docid_tblDoc "
+        "SELECT  Docid_tblDoc, "
+        "        lateststocktaking.companyid "
 
-        "FROM quotation_tblcompanies "
+        "FROM quotation_tbldoc "
 
-        "JOIN quotation_tbldoc D "
-        "ON quotation_tblcompanies.lateststocktaking_tblcompanies < D.creationtime_tbldoc "
+        "JOIN (SELECT "
+                         "lateststocktaking_tblcompanies as lateststocktaking, " 
+                         "C.Companyid_tblContacts_id as companyid, " 
+                         "C.Contactid_tblContacts as contactid "  
+
+                         "FROM quotation_tblcontacts as C "
+
+                         "JOIN quotation_tblcompanies as companies "
+                         "ON C.Companyid_tblContacts_id = companies.Companyid_tblCompanies "
+
+                   ") as lateststocktaking "
+        "ON quotation_tbldoc.Contactid_tblDoc_id = lateststocktaking.contactid "
 
 
-        "WHERE Companyid_tblCompanies=%s",
+        "WHERE lateststocktaking.companyid=%s and denoenabledflag_tbldoc=1 and stocktakingdeno_tbldoc=1 and obsolete_tbldoc=0 ",
         [selectedstockid])
     results = cursor44.fetchall()
 
     for instancesingle in results:
         laststocktakingdocid = instancesingle[0]
-    import pdb;
-    pdb.set_trace()
+    # import pdb;
+    # pdb.set_trace()
 
     creatorid = request.user.id
 
