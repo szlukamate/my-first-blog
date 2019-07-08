@@ -1,36 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/190606szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190607szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190608szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190610szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190611szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190612szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190613szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190614szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190615szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190616szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190617szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/1906192szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190619szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/1906202szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190620szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/1906212szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190621szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190622szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190623szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190624szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190625szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190626szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190627szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190628szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190629szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190630szmbackup.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" afterDir="false" />
-    </list>
+    <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,21 +10,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/customerorder.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3540">
-              <caret line="236" column="69" selection-start-line="236" selection-start-column="69" selection-end-line="236" selection-end-column="69" />
-              <folding>
-                <element signature="n#style#0;n#span#0;n#a#0;n#div#1;n#div#3;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#a#1;n#div#1;n#div#3;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#a#2;n#div#1;n#div#3;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#a#3;n#div#1;n#div#3;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/static/js/customerorder.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -123,11 +79,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="410" column="77" selection-start-line="410" selection-start-column="77" selection-end-line="410" selection-end-column="77" />
+            <state relative-caret-position="755">
+              <caret line="425" column="47" lean-forward="true" selection-start-line="425" selection-start-column="47" selection-end-line="425" selection-end-column="47" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -140,6 +96,18 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="2640">
               <caret line="191" column="108" selection-start-line="191" selection-start-column="80" selection-end-line="191" selection-end-column="108" />
+              <folding>
+                <element signature="e#0#64#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="103" column="4" lean-forward="true" selection-start-line="103" selection-start-column="4" selection-end-line="103" selection-end-column="4" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -553,16 +521,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5310">
-          <caret line="369" selection-start-line="369" selection-end-line="369" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/stock.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="410">
@@ -716,8 +674,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="410" column="77" selection-start-line="410" selection-start-column="77" selection-end-line="410" selection-end-column="77" />
+        <state relative-caret-position="755">
+          <caret line="425" column="47" lean-forward="true" selection-start-line="425" selection-start-column="47" selection-end-line="425" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="103" column="4" lean-forward="true" selection-start-line="103" selection-start-column="4" selection-end-line="103" selection-end-column="4" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
