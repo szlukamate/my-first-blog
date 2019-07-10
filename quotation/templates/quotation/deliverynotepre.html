@@ -39,17 +39,40 @@
 
 
 													<tr>
-														<td>{{ docdetail.1}}</td>
 														<td>{{ docdetail.0}}</td>
+														<td>{{ docdetail.1}}</td>
 														<td>{{ docdetail.2}}</td>
 														<td>{{ docdetail.3}}</td>
-														<td>{{ docdetail.4}}</td>
-														<td name="todeno" productqty="{{ docdetail.8}}" loopid="{{ forloop.counter }}" >{{ docdetail.8}}</td>
 
-														<td >{{ docdetail.5}}</td>
-														<td>{{ docdetail.6}}</td>
+														{% if docdetail.4 > 0 %}
+															<td style="color:red;">{{ docdetail.4}}</td>
+														{% else %}
+															<td>{{ docdetail.4}}</td>
+														{% endif %}
 
-														<td name="onstock" productid="{{ docdetail.1}}" loopid="{{ forloop.counter }}" >{{ docdetail.7}}</td>
+														{% if docdetail.5 > 0 %}
+															<td style="color:red;" name="todeno" productqty="{{ docdetail.5}}" loopid="{{ forloop.counter }}" >{{ docdetail.5}}</td>
+														{% else %}
+															<td name="todeno" productqty="{{ docdetail.5}}" loopid="{{ forloop.counter }}" >{{ docdetail.5}}</td>
+														{% endif %}
+
+														{% if docdetail.6 > 0 %}
+															<td style="color:red;">{{ docdetail.6}}</td>
+														{% else %}
+															<td>{{ docdetail.6}}</td>
+														{% endif %}
+
+														{% if docdetail.7 > 0 %}
+															<td style="color:red;">{{ docdetail.7}}</td>
+														{% else %}
+															<td>{{ docdetail.7}}</td>
+														{% endif %}
+
+														{% if docdetail.8 > 0 %}
+															<td style="color:red;" name="onstock" productid="{{ docdetail.0}}" loopid="{{ forloop.counter }}" >{{ docdetail.8}}</td>
+														{% else %}
+															<td name="onstock" productid="{{ docdetail.0}}" loopid="{{ forloop.counter }}" >{{ docdetail.8}}</td>
+														{% endif %}
 
 
 													</tr>
