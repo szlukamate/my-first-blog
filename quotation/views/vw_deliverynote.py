@@ -382,7 +382,7 @@ def deliverynotepre(request):
     #import pdb;
     #pdb.set_trace()
 
-    # stockresults to temptable end
+# stockresults to temptable end
 
 
     cursor3 = connection.cursor()
@@ -465,14 +465,13 @@ def deliverynotepre(request):
         if ordered <= denod:
             todeno = 0.0
         else:
-            if ordered <= onstock:
+            if (ordered-denod) <= onstock :
                 todeno = ordered-denod
             else:
                 todeno = onstock
 
-#        if ordered <= denod, 0.0, ( if ordered <= onstock, ordered-ondeno, onstock)
+#        if ordered <= denod, 0.0, ( if (ordered-denod) <= onstock, ordered-ondeno, onstock)
 
-#        appendvar = (customerdescription, productid, supplierdescription, ordered, denod, onstockingoing, onstockoutgoing, onstock, todeno )
         appendvar = (productid, customerdescription, supplierdescription, ordered, denod, todeno, inqty, outqty, onstock )
         todocdetails.append(appendvar)
 
@@ -490,179 +489,13 @@ def deliverynotepre(request):
                                                               'rowsnumber': rowsnumber})
 
 
-def deliverynotepredelete(request):
-    customerorderid = request.POST['customerorderid']
-    selectedstockid = request.POST['selectedstockid']
-
-    cursor44 = connection.cursor()
-    cursor44.execute(
-        "SELECT  "
-        "Companyid_tblCompanies, "
-        "companyname_tblcompanies "
-
-        "FROM quotation_tblcompanies "
-
-        "WHERE Companyid_tblCompanies=%s",
-        [selectedstockid])
-    stockdetails = cursor44.fetchall()
-
-    # import pdb;
-    # pdb.set_trace()
-
-    cursor3 = connection.cursor()
-    cursor3.execute(
-        "SELECT "
-        "customerdescription_tblProduct_ctblDoc_details, "
-        "DD.Productid_tblDoc_details_id, "
-        "supplierdescription_tblProduct_ctblDoc_details, "
-        "COALESCE(sum(DD.Qty_tblDoc_details), 0) as ordered, "
-        "COALESCE(sum(Denod.denodqty), 0) as denod, "
-        "COALESCE(sum(onstockingoing.onstockingoingqty), 0) as onstockingoing, "
-        "COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstockoutgoing, "
-        "COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstock "  # 7
-
-        "FROM quotation_tbldoc_details as DD "
-
-        # denod        
-        "LEFT JOIN (SELECT "
-        "           wheretodocid_tbldoc, "
-        "           sum(DD2.denodqty) as denodqty, "
-        "           DD2.Productid_tblDoc_details_id as productid "
-
-        "           FROM quotation_tbldoc "
-
-        "           LEFT JOIN   (SELECT "
-        "                       Docid_tblDoc_details_id as docid, "
-        "                       sum(Qty_tblDoc_details) as denodqty, "
-        "                       Productid_tblDoc_details_id "
-
-        "                       FROM quotation_tbldoc_details"
-
-        "                       GROUP BY docid, Productid_tblDoc_details_id  "
-        "                       ) as DD2 "
-        "           ON quotation_tbldoc.Docid_tblDoc = DD2.docid "
-
-        "           WHERE obsolete_tbldoc = 0 "
-        "           GROUP BY wheretodocid_tbldoc, productid "
-        "           ) AS Denod "
-        "ON (DD.Docid_tblDoc_details_id = Denod.wheretodocid_tbldoc and DD.Productid_tblDoc_details_id = Denod.productid) "
-        # ingoing
-
-        "LEFT JOIN (SELECT "
-        "           D2.wheretodocid_tbldoc as wheretodocid, "
-        "           sum(onstockingoing2.onstockingoingqty) as onstockingoingqty, "
-        "           onstockingoing2.productid as productid, "
-        "           D3.Contactid_tblDoc_id as contactid2 "
-
-        "           FROM quotation_tbldoc D2 "
-
-        "JOIN (SELECT "
-        "      Docid_tblDoc_details_id as docid, "
-        "      sum(Qty_tblDoc_details) as onstockingoingqty, "
-        "      Productid_tblDoc_details_id as productid "
-
-        "      FROM quotation_tbldoc_details "
-
-        "      GROUP BY docid, productid "
-        "     ) AS onstockingoing2 "
-        "           ON D2.Docid_tblDoc = onstockingoing2.docid "
-
-        "LEFT JOIN quotation_tbldoc as D3"  # D3 contains all where wheredoc is not null
-        "           ON D2.wheretodocid_tbldoc = D3.Docid_tblDoc"
-
-        "           WHERE D2.obsolete_tbldoc = 0 and D3.Contactid_tblDoc_id=9 "
-        "           GROUP BY D2.wheretodocid_tbldoc, "
-        "                       productid, "
-        "                       contactid2 "
-
-        "           ) AS onstockingoing "
-        "ON (DD.Productid_tblDoc_details_id = onstockingoing.productid) "
-        # outgoing
-
-        "LEFT JOIN (SELECT "
-        "           wherefromdocid_tbldoc, "
-        "           sum(onstockoutgoing2.onstockoutgoingqty) as onstockoutgoingqty, "
-        "           onstockoutgoing2.productid as productid "
-
-        "           FROM quotation_tbldoc "
-
-        "LEFT JOIN (SELECT "
-        "           Docid_tblDoc_details_id as docid, "
-        "           sum(Qty_tblDoc_details) as onstockoutgoingqty, "
-        "           Productid_tblDoc_details_id as productid "
-
-        "           FROM quotation_tbldoc_details "
-
-        "           GROUP BY docid, productid "
-        "           ) AS onstockoutgoing2 "
-        "           ON quotation_tbldoc.Docid_tblDoc = onstockoutgoing2.docid "
-
-        "           WHERE obsolete_tbldoc = 0 "
-        "           GROUP BY wherefromdocid_tbldoc, productid "
-
-        "           ) AS onstockoutgoing "
-        "ON (788 = onstockoutgoing.wherefromdocid_tbldoc and DD.Productid_tblDoc_details_id = onstockoutgoing.productid) "
-
-        "WHERE docid_tbldoc_details_id=%s "
-        "GROUP BY   customerdescription_tblProduct_ctblDoc_details, "
-        "           DD.Productid_tblDoc_details_id, "
-        "           supplierdescription_tblProduct_ctblDoc_details ",
-        #        "           onstockingoing, "
-        #        "           onstockoutgoing, "
-        #        "           onstock ",
-        [customerorderid])
-
-    docdetailspre = cursor3.fetchall()
-    #    todocdetailspre = []
-    todocdetails = []
-    docdetails = []
-
-    for instancesingle in docdetailspre:
-        customerdescription = instancesingle[0]
-        productid = instancesingle[1]
-        supplierdescription = instancesingle[2]
-        ordered = instancesingle[3]
-        denod = instancesingle[4]
-        onstockingoing = instancesingle[5]
-        onstockoutgoing = instancesingle[6]
-        onstock = instancesingle[7]
-
-        if ordered <= denod:
-            todeno = 0.0
-        else:
-            if ordered <= onstock:
-                todeno = ordered - denod
-            else:
-                todeno = onstock
-
-        #        if ordered <= denod, 0.0, ( if ordered <= onstock, ordered-ondeno, onstock)
-
-        appendvar = (
-        customerdescription, productid, supplierdescription, ordered, denod, onstockingoing, onstockoutgoing, onstock,
-        todeno)
-        todocdetails.append(appendvar)
-
-    docdetails = todocdetails
-
-    # import pdb;
-    # pdb.set_trace()
-
-    rowsnumber = len(docdetails)
-    customerordernumber = customerorderid
-    return render(request, 'quotation/deliverynotepre.html', {'docdetails': docdetails,
-                                                              'customerordernumber': customerordernumber,
-                                                              'stockdetails': stockdetails,
-                                                              'rowsnumber': rowsnumber})
-
-
-
-
 def deliverynotemake(request): #from deliverynotepre form (buttonpress comes here)
     customerordernumber = request.POST['customerordernumber']
     selectedstockid = request.POST['selectedstockid']
     productidlistraw = request.POST['productidlist']
     productidlist = json.loads(productidlistraw)
 
+#lateststoctaking date for selected stock start
     cursor44 = connection.cursor()
     cursor44.execute(
         "SELECT  Docid_tblDoc, "
@@ -690,11 +523,11 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
 
     for instancesingle in results:
         laststocktakingdocid = instancesingle[0]
-    # import pdb;
-    # pdb.set_trace()
+# lateststoctaking date for selected stock start
+
 
     creatorid = request.user.id
-
+# itemlist from deliverynotepre form to temptable start
     cursor2 = connection.cursor()
     cursor2.execute("DROP TEMPORARY TABLE IF EXISTS denofromstock;")
     cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS denofromstock "
@@ -716,9 +549,9 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
     cursor2.execute("SELECT *  "
                     "FROM denofromstock ")
     tables = cursor2.fetchall()
-    #import pdb;
-    #pdb.set_trace()
+# itemlist from deliverynotepre form to temptable end
 
+#make new deno doc start
     pk = customerordernumber
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -851,7 +684,9 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
     results = cursor3.fetchall()
     for x in results:
         maxdocid = x[0]
+# make new deno doc end
 
+# make new denoitems start
     for x3 in tables:
         productid = x3[1]
         productqty = x3[2]
@@ -907,7 +742,7 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
             secondnum = x[6]
             thirdnum = x[7]
             note = x[8]
-            productid = x[13]
+            productidtodocdetails = x[13]
             currencyrate = x[16]
             suppliercompanyid = x[24]
 
@@ -937,68 +772,72 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
             # oldestlabelid determination start
             def oldestlabel():
 
-                cursor0 = connection.cursor()
-                cursor0.execute(
-                    "SELECT "
-                    "DDingoing.podocdetailsidforlabel_tbldocdetails as labelid, "
-                    "sum(DDingoing.Qty_tblDoc_details) as inqty, "
-                    #            "sum(DDoutgoing.outqty) as outqty, "
-                    #            "COALESCE(sum(DDingoing.Qty_tblDoc_details),0)-COALESCE(sum(DDoutgoing.outqty),0) as onstock 
-                    "D4.contactid as contactid "
+                # stockresults to temptable start
+                cursor333 = connection.cursor()
+                cursor333.execute("DROP TEMPORARY TABLE IF EXISTS stockresultstempforoldestlabel;")
+                cursor333.execute("CREATE TEMPORARY TABLE IF NOT EXISTS stockresultstempforoldestlabel "
+                                  "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                                  "     stockid INT(11) NOT NULL, "
+                                  "     productid INT(11) NULL, "
+                                  "     labelid INT(11) NULL, "
+                                  "     inqty DECIMAL(10,1) NULL,"
+                                  "     outqty DECIMAL(10,1) NULL)"
+                                  "      ENGINE=INNODB "
+                                  "    ; ")
 
-                    "FROM quotation_tbldoc_details as DDingoing "
+                cursor333.callproc("spstock", [])
+                docdetailsstock = cursor333.fetchall()
 
-                    #            "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails as outlabel, "
-                    #            "           Docid_tblDoc_details_id, "
-                    #            "           sum(Qty_tblDoc_details) as outqty "
+                for x in docdetailsstock:
+                    stockid = x[6]
+                    productidtotemp = x[1]
+                    labelid = x[3]
+                    inqty = x[4]
+                    outqty = x[5]
 
-                    #            "           FROM quotation_tbldoc_details as DD2 "
+                    if outqty == None:
+                        outqty = 0.0
 
-                    #            "           JOIN quotation_tbldoc as D2"
-                    #            "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
-                    #            "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
-                    #            "           GROUP BY outlabel, Docid_tblDoc_details_id "
+                    cursor333.execute("INSERT INTO stockresultstempforoldestlabel "
+                                      "(stockid, "
+                                      "productid, "
+                                      "labelid, "
+                                      "inqty,"
+                                      "outqty) VALUES ('" + str(stockid) + "', "
+                                                      "'" + str(productidtotemp) + "', "
+                                                      "'" + str(labelid) + "', "
+                                                      "'" + str(inqty) + "', "
+                                                      "'" + str(outqty) + "');")
 
-                    #            "           ) as DDoutgoing "
-                    #            "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.outlabel " #and outqty <> DDoutgoing.outqty "
 
-                    "JOIN (SELECT "
-                    "       D.Docid_tblDoc, "
-                    "       D2.Contactid_tblDoc_id as contactid, "
-                    "       D.obsolete_tbldoc as obsolete"
-                    ""
-                    "       FROM quotation_tbldoc as D "
+                # stockresults to temptable end
 
-                    "JOIN quotation_tbldoc as D2 "  # contactid lookup
-                    "ON D.wheretodocid_tblDoc = D2.Docid_tblDoc "
-                    "       WHERE D2.Contactid_tblDoc_id=9 "
+                cursor333.execute("SELECT "
 
-                    "     ) as D4 "
+                                  "labelid, "
+                                  "COALESCE(sum(inqty),0.0), "
+                                  "COALESCE(sum(outqty),0.0), "
+                                  "COALESCE(sum(inqty),0.0)-COALESCE(sum(outqty),0.0) as onstock "
 
-                    "ON DDingoing.Docid_tblDoc_details_id = D4.Docid_tblDoc "
+                                  "FROM stockresultstempforoldestlabel "
 
-                    "WHERE D4.obsolete=0 and DDingoing.Productid_tblDoc_details_id=%s   "
-                    "GROUP BY labelid, contactid "
-                    "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
-                    , [productid])
+                                  " WHERE stockid=%s and productid=%s and inqty>outqty  "
+                                  "GROUP BY labelid "
+                                  "ORDER BY labelid desc "
+                                  "LIMIT 1 ",
+                                  [selectedstockid, productidtodocdetails])
+                oldestlabelresult = cursor333.fetchall()
 
-                resultspre = cursor0.fetchall()
-                toresults = []
-                results = []
-
-                for instancesingle in resultspre:
+                for instancesingle in oldestlabelresult:
                     labelid = instancesingle[0]
-                    inqty = instancesingle[1]
-#                    outqty = instancesingle[2]
-#                    onstockqty = instancesingle[3]
+                    onstockqty = instancesingle[3]
 
-                    if inqty > 0:
-                        productqtyoldestlabel = inqty
-                        podocdetailsidforlabel = labelid
-                        break
-                    else:
-                        productqtyoldestlabel = 'nomore'
-                        podocdetailsidforlabel = 'nomore'
+                productqtyoldestlabel = inqty
+                podocdetailsidforlabel = labelid
+#                    break
+#                else:
+#                    productqtyoldestlabel = 'nomore'
+#                    podocdetailsidforlabel = 'nomore'
 
 
 
@@ -1052,30 +891,21 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
                      denotopodetailslink,
                      supplierdescriptionclone,
                      podocdetailsidforlabel])
-            #import pdb;
-            #pdb.set_trace()
                 return
+
             if discreteflag == 0: #indiscrete
                 productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
                 if productqty <= productqtyoldestlabel:
                     docdetailsinsert(productqty, podocdetailsidforlabel)
                     remnantqty = 0
 
-                #                    import pdb;
-#                    pdb.set_trace()
 
                 else:
                     docdetailsinsert(productqtyoldestlabel, podocdetailsidforlabel)
                     remnantqty = productqty - productqtyoldestlabel
-                    #import pdb;
-                    #pdb.set_trace()
 
                 while remnantqty > 0:
                     productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
-                    #import pdb;
-                    #pdb.set_trace()
-
-#                    time.sleep(2)
                     print(remnantqty)
                     if productqtyoldestlabel == 'nomore':
                         break
@@ -1088,13 +918,12 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
                         docdetailsinsert(productqtyoldestlabel, podocdetailsidforlabel)
                         remnantqty = remnantqty - productqtyoldestlabel
 
- #                   import pdb;
- #                   pdb.set_trace()
 
             else: #discrete
                 for x6 in range(productqty):
                     productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
                     docdetailsinsert(1, podocdetailsidforlabel)
+# make new denoitems end
 
     return render(request, 'quotation/deliverynotepreredirecturl.html', {'pk': pk})
 def deliverynotenewrowadd(request):
@@ -1557,4 +1386,52 @@ def deliverynotechoosestock(request):  # labels on stockform for particular prod
 
         results = toresults
 
+    return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
+
+def oldestlabeldelete(request):
+
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT "
+        "DDingoing.podocdetailsidforlabel_tbldocdetails as labelid, "
+        "sum(DDingoing.Qty_tblDoc_details) as inqty, "
+        #            "sum(DDoutgoing.outqty) as outqty, "
+        #            "COALESCE(sum(DDingoing.Qty_tblDoc_details),0)-COALESCE(sum(DDoutgoing.outqty),0) as onstock 
+        "D4.contactid as contactid "
+    
+        "FROM quotation_tbldoc_details as DDingoing "
+    
+        #            "LEFT JOIN (SELECT podocdetailsidforlabel_tbldocdetails as outlabel, "
+        #            "           Docid_tblDoc_details_id, "
+        #            "           sum(Qty_tblDoc_details) as outqty "
+    
+        #            "           FROM quotation_tbldoc_details as DD2 "
+    
+        #            "           JOIN quotation_tbldoc as D2"
+        #            "           ON DD2.Docid_tblDoc_details_id = D2.Docid_tblDoc "
+        #            "           WHERE obsolete_tbldoc=0 and wherefromdocid_tbldoc=788 and Productid_tblDoc_details_id=%s "
+        #            "           GROUP BY outlabel, Docid_tblDoc_details_id "
+    
+        #            "           ) as DDoutgoing "
+        #            "ON DDingoing.podocdetailsidforlabel_tbldocdetails = DDoutgoing.outlabel " #and outqty <> DDoutgoing.outqty "
+    
+        "JOIN (SELECT "
+        "       D.Docid_tblDoc, "
+        "       D2.Contactid_tblDoc_id as contactid, "
+        "       D.obsolete_tbldoc as obsolete"
+        ""
+        "       FROM quotation_tbldoc as D "
+    
+        "JOIN quotation_tbldoc as D2 "  # contactid lookup
+        "ON D.wheretodocid_tblDoc = D2.Docid_tblDoc "
+        "       WHERE D2.Contactid_tblDoc_id=9 "
+    
+        "     ) as D4 "
+    
+        "ON DDingoing.Docid_tblDoc_details_id = D4.Docid_tblDoc "
+    
+        "WHERE D4.obsolete=0 and DDingoing.Productid_tblDoc_details_id=%s   "
+        "GROUP BY labelid, contactid "
+        "order by DDingoing.podocdetailsidforlabel_tbldocdetails desc "
+        , [productid])
     return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})

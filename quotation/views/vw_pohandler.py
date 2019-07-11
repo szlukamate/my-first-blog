@@ -585,12 +585,6 @@ def pohandlerreception(request): #from pohandlerform
                              cordocid,
                              1])
 
-            #    cursor8 = connection.cursor()
-            #    cursor8.execute("SELECT Doc_detailsid_tblDoc_details "
-            #                    "FROM quotation_tbldoc_details "
-            #                    "WHERE dateofarrival_tbldocdetails = %s",
-            #                    [dateofarrival])
-            #    docdetailstodeno = cursor8.fetchall()
 
             cursor3 = connection.cursor()
             cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
