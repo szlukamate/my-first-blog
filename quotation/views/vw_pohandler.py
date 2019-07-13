@@ -280,64 +280,76 @@ def pohandlerreception(request): #from pohandlerform
             if discreteflag == 0: # if indiscret (batched non unique) no split
                 appendvar = (podocdetailsid, podocid, cordocid, dateofarrivaldate)
                 dateofarrivallistsplitted.append(appendvar)
-            else: # let's split!
+            else:
 
                 cursor4 = connection.cursor()
                 for x2 in range(int(qty)):
-                    cursor4.execute(
-                        "INSERT INTO quotation_tbldoc_details "
-                        "( Docid_tblDoc_details_id, "
-                        "`Qty_tblDoc_details`, "
-                        "`customerdescription_tblProduct_ctblDoc_details`, "
-                        "firstnum_tblDoc_details, "
-                        "`fourthnum_tblDoc_details`, "
-                        "`secondnum_tblDoc_details`, "
-                        "`thirdnum_tblDoc_details`, "
-                        "`Note_tblDoc_details`, "
-                        "purchase_price_tblproduct_ctblDoc_details, "
-                        "listprice_tblDoc_details, "
-                        "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-                        "Productid_tblDoc_details_id, "
-                        "currencyrate_tblcurrency_ctblDoc_details, "
-                        "unitsalespriceACU_tblDoc_details, "
-                        "unit_tbldocdetails, "
-                        "suppliercompanyid_tbldocdetails, "
-                        "podetailslink_tbldocdetails, "
-                        "creatorid_tbldocdetails, "
-                        "dateofarrival_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    if qty != 1:  # if already splitted dont split again
+                        # let's split!
 
-                        [docid,
-                         1,
-                         customerdescriptionclone,
-                         firstnum,
-                         fourthnum,
-                         secondnum,
-                         thirdnum,
-                         note,
-                         purchase_priceclone,
-                         listpricecomputed,
-                         currencyisocodeclone,
-                         productid,
-                         currencyrate,
-                         unitsalespriceACU,
-                         unitclone,
-                         suppliercompanyid,
-                         podetailslink,
-                         creatorid,
-                         dateofarrivaldate])
+                        cursor4.execute(
+                            "INSERT INTO quotation_tbldoc_details "
+                            "( Docid_tblDoc_details_id, "
+                            "`Qty_tblDoc_details`, "
+                            "`customerdescription_tblProduct_ctblDoc_details`, "
+                            "firstnum_tblDoc_details, "
+                            "`fourthnum_tblDoc_details`, "
+                            "`secondnum_tblDoc_details`, "
+                            "`thirdnum_tblDoc_details`, "
+                            "`Note_tblDoc_details`, "
+                            "purchase_price_tblproduct_ctblDoc_details, "
+                            "listprice_tblDoc_details, "
+                            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                            "Productid_tblDoc_details_id, "
+                            "currencyrate_tblcurrency_ctblDoc_details, "
+                            "unitsalespriceACU_tblDoc_details, "
+                            "unit_tbldocdetails, "
+                            "suppliercompanyid_tbldocdetails, "
+                            "podetailslink_tbldocdetails, "
+                            "creatorid_tbldocdetails, "
+                            "dateofarrival_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
-                    cursor3 = connection.cursor()
-                    cursor3.execute("SELECT max(Doc_detailsid_tblDoc_details) FROM quotation_tbldoc_details WHERE creatorid_tbldocdetails=%s", [creatorid])
-                    results = cursor3.fetchall()
-                    for x in results:
-                        maxdocdetailsid = x[0]
+                            [docid,
+                             1,
+                             customerdescriptionclone,
+                             firstnum,
+                             fourthnum,
+                             secondnum,
+                             thirdnum,
+                             note,
+                             purchase_priceclone,
+                             listpricecomputed,
+                             currencyisocodeclone,
+                             productid,
+                             currencyrate,
+                             unitsalespriceACU,
+                             unitclone,
+                             suppliercompanyid,
+                             podetailslink,
+                             creatorid,
+                             dateofarrivaldate])
 
-                    appendvar = (maxdocdetailsid, podocid, cordocid, dateofarrivaldate)
-                    dateofarrivallistsplitted.append(appendvar)
 
-                cursor2 = connection.cursor()
-                cursor2.execute(
-                    "DELETE FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [podocdetailsid])
+                    if qty != 1:  # if was splitted
+                        cursor3 = connection.cursor()
+                        cursor3.execute("SELECT max(Doc_detailsid_tblDoc_details) FROM quotation_tbldoc_details WHERE creatorid_tbldocdetails=%s", [creatorid])
+                        results = cursor3.fetchall()
+                        for x in results:
+                            maxdocdetailsid = x[0]
+
+
+                        appendvar = (maxdocdetailsid, podocid, cordocid, dateofarrivaldate)
+                        dateofarrivallistsplitted.append(appendvar)
+                    else:
+                        appendvar = (podocdetailsid, podocid, cordocid, dateofarrivaldate)
+                        dateofarrivallistsplitted.append(appendvar)
+
+
+                    if qty != 1:  # if was splitted
+                        # let's delete!
+                        cursor2 = connection.cursor()
+                        cursor2.execute(
+                            "DELETE FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [podocdetailsid])
 
 
 #splitting end
@@ -364,83 +376,6 @@ def pohandlerreception(request): #from pohandlerform
         dateofarrivaldate = dateofarrivallistsplitted[x11][3]
 
 
-        cursor2.execute("SELECT DD2cor.corqty as corqty, "
-                        "DD1po.Qty_tblDoc_details as poqty, "
-                        "DD2cor.denodqty as denodqty,"
-                        "DD2cor.stockidwherefrom "
-                        " "
-                        
-                        "FROM quotation_tbldoc_details as DD1po "
-
-                        "LEFT JOIN (SELECT "
-                        ""
-                        "           Doc_detailsid_tblDoc_details, "
-                        "           Denod.denodqty as denodqty, "
-                        "           Qty_tblDoc_details as corqty,"
-                        "           Docid_tblDoc_details_id, "
-                        "           Denodfromstock.stockidwherefrom as stockidwherefrom "
-                        ""
-                        "           FROM quotation_tbldoc_details as DD33cor "
-
-                            #denodfromstock        
-                                    "LEFT JOIN (SELECT "
-                                    
-                                    "           wheretodocid_tbldoc, "
-                                    "           DD2.denodqty as denodqty, "
-                        "                       companyin.companyid as stockidwherefrom "
-                                    
-                                    "           FROM quotation_tbldoc as Ddeno"
-
-"                                               JOIN (SELECT"
-                        "                                           Docid_tblDoc as docid, "
-                        "                                           lateststocktaking.companyid as companyid, "
-                        "                                           lateststocktaking.lateststocktaking as lateststocktaking "
-                        ""
-                        "                                           FROM quotation_tbldoc as D4 "
-
-                        "                                           JOIN (SELECT "
-                        "                                                            lateststocktaking_tblcompanies as lateststocktaking, "
-                        "                                                            C.Companyid_tblContacts_id as companyid, "
-                        "                                                            C.Contactid_tblContacts as contactid "
-
-                        "                                                            FROM quotation_tblcontacts as C "
-
-                        "                                                            JOIN quotation_tblcompanies as companies "
-                        "                                                            ON C.Companyid_tblContacts_id = companies.Companyid_tblCompanies "
-
-                        "                                                      ) as lateststocktaking "
-                        "                                           ON D4.Contactid_tblDoc_id = lateststocktaking.contactid "
-
-                        "                                   ) as companyin "
-                        "                       ON Ddeno.wherefromdocid_tblDoc = companyin.docid "
-
-                                    
-                                    "           LEFT JOIN   (SELECT "
-                                    "                       Docid_tblDoc_details_id as docid, "
-                                    "                       sum(Qty_tblDoc_details) as denodqty "
-                             
-                                    "                       FROM quotation_tbldoc_details"
-                                                                
-                                    "                       GROUP BY docid "
-                                    "                       ) as DD2 "
-                                    "           ON Ddeno.Docid_tblDoc = DD2.docid "
-                            
-                                    "           WHERE obsolete_tbldoc = 0 "
-#                                    "           GROUP BY wheretodocid_tbldoc "
-                                    "           ) AS Denodfromstock "
-                                    "ON DD33cor.Docid_tblDoc_details_id = Denodfromstock.wheretodocid_tbldoc "
-
-                        ""
-                        "           ) as DD2cor "
-                        "ON DD1po.podetailslink_tbldocdetails=DD2cor.Doc_detailsid_tblDoc_details "
-
-                        "WHERE DD1po.Doc_detailsid_tblDoc_details=%s",[podocdetailsid])
-        results5 = cursor2.fetchall()
-        for k in results5:
-            corqty = k[0]
-            poqty = k[1]
-            denodqty = k[2]
-            stockidwherefrom = k[3]
 
         cursor2.execute("INSERT INTO porows (podocdetailsid, "
                         "podocid, "
@@ -503,6 +438,145 @@ def pohandlerreception(request): #from pohandlerform
         podocid = x3[2]
         cordocid = x3[3]
         numberofitemstodeno = x3[6]
+
+        cursor2.execute("SELECT "
+                        "DD1po.Doc_detailsid_tblDoc_details, "
+                        "DD2cor.corqty as corqty, "
+                        "DD1po.Qty_tblDoc_details as poqty, "
+                        "DD2cor.denodqty as denodqty,"
+                        "DD2cor.stockidwherefrom, "
+                        "DD2cor.denodbacktostockqty as denodbacktostockqty,"
+                        "DD2cor.stockidback "
+                        " "
+
+                        "FROM quotation_tbldoc_details as DD1po "
+
+                        "LEFT JOIN (SELECT "
+                        ""
+                        "           Doc_detailsid_tblDoc_details, "
+                        "           Qty_tblDoc_details as corqty,"
+                        "           Docid_tblDoc_details_id, "
+                        "           Denodfromstock.denodqty as denodqty, "
+                        "           Denodfromstock.stockidwherefrom as stockidwherefrom, "
+                        "           Denodbacktostock.denodbacktostockqty as denodbacktostockqty, "
+                        "           Denodbacktostock.stockidback as stockidback, "
+                        "           DD33cor.Productid_tblDoc_details_id as productid "
+                        ""
+                        "           FROM quotation_tbldoc_details as DD33cor "
+
+                                    # denodfromstocktocor        
+                                    "LEFT JOIN (SELECT "
+            
+                                    "           wheretodocid_tbldoc, "
+                                    "           DD2.denodqty as denodqty, "
+                                    "           companyin.companyid as stockidwherefrom, "
+                                    "           DD2.productid as productid "
+            
+                                    "           FROM quotation_tbldoc as Ddeno"
+            
+"                                               JOIN (SELECT"
+                        "                                           Docid_tblDoc as docid, "
+                        "                                           lateststocktaking.companyid as companyid, "
+                        "                                           lateststocktaking.lateststocktaking as lateststocktaking "
+                        ""
+                        "                                           FROM quotation_tbldoc as D4 "
+
+                        "                                           JOIN (SELECT "
+                        "                                                            lateststocktaking_tblcompanies as lateststocktaking, "
+                        "                                                            C.Companyid_tblContacts_id as companyid, "
+                        "                                                            C.Contactid_tblContacts as contactid "
+
+                        "                                                            FROM quotation_tblcontacts as C "
+
+                        "                                                            JOIN quotation_tblcompanies as companies "
+                        "                                                            ON C.Companyid_tblContacts_id = companies.Companyid_tblCompanies "
+
+                        "                                                      ) as lateststocktaking "
+                        "                                           ON D4.Contactid_tblDoc_id = lateststocktaking.contactid "
+
+                        "                                   ) as companyin "
+                        "                       ON Ddeno.wherefromdocid_tblDoc = companyin.docid "
+            
+            
+                                    "           LEFT JOIN   (SELECT "
+                                    "                       Docid_tblDoc_details_id as docid, "
+                                    "                       sum(Qty_tblDoc_details) as denodqty, "
+                                    "                       Productid_tblDoc_details_id as productid "
+
+                                    "                       FROM quotation_tbldoc_details"
+            
+                                    "                       GROUP BY docid, productid "
+                                    "                       ) as DD2 "
+                                    "           ON Ddeno.Docid_tblDoc = DD2.docid "
+            
+                                    "           WHERE obsolete_tbldoc = 0 "
+                                    #                                    "           GROUP BY wheretodocid_tbldoc "
+                                    "           ) AS Denodfromstock "
+                                    "ON DD33cor.Docid_tblDoc_details_id = Denodfromstock.wheretodocid_tbldoc and DD33cor.Productid_tblDoc_details_id = Denodfromstock.productid "
+                                    # denodbacktostock        
+                                    "LEFT JOIN (SELECT "
+            
+                                    "           backtostockforcordocid_tbldoc, "
+                                    "           DD2backtostock.denodqty as denodbacktostockqty, "
+                                    "           companybacktostock.companyid as stockidback, "
+                                    "           DD2backtostock.productid as productid "
+            
+                                    "           FROM quotation_tbldoc as Ddenobacktostock"
+            
+"                                               JOIN (SELECT"
+                        "                                           Docid_tblDoc as docid, "
+                        "                                           lateststocktaking.companyid as companyid, "
+                        "                                           lateststocktaking.lateststocktaking as lateststocktaking "
+                        ""
+                        "                                           FROM quotation_tbldoc as D4 "
+
+                        "                                           JOIN (SELECT "
+                        "                                                            lateststocktaking_tblcompanies as lateststocktaking, "
+                        "                                                            C.Companyid_tblContacts_id as companyid, "
+                        "                                                            C.Contactid_tblContacts as contactid "
+
+                        "                                                            FROM quotation_tblcontacts as C "
+
+                        "                                                            JOIN quotation_tblcompanies as companies "
+                        "                                                            ON C.Companyid_tblContacts_id = companies.Companyid_tblCompanies "
+
+                        "                                                      ) as lateststocktaking "
+                        "                                           ON D4.Contactid_tblDoc_id = lateststocktaking.contactid "
+
+                        "                                   ) as companybacktostock "
+                        "                       ON Ddenobacktostock.wheretodocid_tblDoc = companybacktostock.docid "
+            
+            
+                                    "           LEFT JOIN   (SELECT "
+                                    "                       Docid_tblDoc_details_id as docid, "
+                                    "                       sum(Qty_tblDoc_details) as denodqty, "
+                                    "                       Productid_tblDoc_details_id as productid "
+            
+                                    "                       FROM quotation_tbldoc_details"
+            
+                                    "                       GROUP BY docid, productid "
+                                    "                       ) as DD2backtostock "
+                                    "           ON Ddenobacktostock.Docid_tblDoc = DD2backtostock.docid "
+            
+                                    "           WHERE obsolete_tbldoc = 0 "
+                                    #                                    "           GROUP BY wheretodocid_tbldoc "
+                                    "           ) AS Denodbacktostock "
+                                    "ON DD33cor.Docid_tblDoc_details_id = Denodbacktostock.backtostockforcordocid_tbldoc and DD33cor.Productid_tblDoc_details_id = Denodbacktostock.productid"
+
+                        ""
+                        "           ) as DD2cor "
+                        "ON DD1po.podetailslink_tbldocdetails=DD2cor.Doc_detailsid_tblDoc_details and DD1po.Productid_tblDoc_details_id = DD2cor.productid " 
+
+                        "WHERE DD1po.Doc_detailsid_tblDoc_details=%s", [podocdetailsid])
+        results5 = cursor2.fetchall()
+        for k in results5:
+            corqty = k[0]
+            poqty = k[1]
+            denodqty = k[2]
+            stockidwherefrom = k[3]
+
+        import pdb;
+        pdb.set_trace()
 
         if docmakercounter  == 0: #doc create only once even multiple docdetails
             docmakercounter = numberofitemstodeno
