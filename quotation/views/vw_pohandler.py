@@ -439,91 +439,172 @@ def pohandlerreception(request): #from pohandlerform
         cordocid = x3[3]
         numberofitemstodeno = x3[6]
 
+
+
         cursor2.execute("SELECT "
+                        "DD2cor.cordocid as cordocid, "
                         "DD1po.Doc_detailsid_tblDoc_details, "
                         "DD2cor.corqty as corqty, "
                         "DD1po.Qty_tblDoc_details as poqty, "
-                        "DD2cor.denodqty as denodqty,"
                         "DD2cor.stockidwherefrom, "
-                        "DD2cor.denodbacktostockqty as denodbacktostockqty,"
-                        "DD2cor.stockidback "
-                        " "
+                        "DD2cor.denodqty as denodfromstockqty "
 
                         "FROM quotation_tbldoc_details as DD1po "
 
                         "LEFT JOIN (SELECT "
                         ""
                         "           Doc_detailsid_tblDoc_details, "
-                        "           Qty_tblDoc_details as corqty,"
-                        "           Docid_tblDoc_details_id, "
+                        "           corqtysum.corqty as corqty, "
+                        "           corqtysum.cordocid as cordocid, "
                         "           Denodfromstock.denodqty as denodqty, "
                         "           Denodfromstock.stockidwherefrom as stockidwherefrom, "
-                        "           Denodbacktostock.denodbacktostockqty as denodbacktostockqty, "
-                        "           Denodbacktostock.stockidback as stockidback, "
                         "           DD33cor.Productid_tblDoc_details_id as productid "
                         ""
                         "           FROM quotation_tbldoc_details as DD33cor "
+
+                                    # corqtysum        
+                                    "LEFT JOIN (SELECT "
+            
+                                    "           Docid_tblDoc as cordocid, "
+                        "                       DD22.corqty as corqty,"
+                        "                       DD22.productid as productid "
+            
+                                    "           FROM quotation_tbldoc as Dcor"
+
+                                    "           LEFT JOIN   (SELECT "
+                                    "                       Docid_tblDoc_details_id as docid, "
+                                    "                       sum(Qty_tblDoc_details) as corqty, "
+                                    "                       Productid_tblDoc_details_id as productid "
+            
+                                    "                       FROM quotation_tbldoc_details"
+            
+                                    "                       GROUP BY docid, productid "
+                                    "                       ) as DD22 "
+                                    "           ON Dcor.Docid_tblDoc = DD22.docid "
+
+            
+                                    "          ) as corqtysum "
+                                    "ON DD33cor.Docid_tblDoc_details_id = corqtysum.cordocid and DD33cor.Productid_tblDoc_details_id = corqtysum.productid "
 
                                     # denodfromstocktocor        
                                     "LEFT JOIN (SELECT "
             
                                     "           wheretodocid_tbldoc, "
-                                    "           DD2.denodqty as denodqty, "
+                                    "           sum(DD2.denodqty) as denodqty, "
                                     "           companyin.companyid as stockidwherefrom, "
                                     "           DD2.productid as productid "
             
                                     "           FROM quotation_tbldoc as Ddeno"
             
-"                                               JOIN (SELECT"
-                        "                                           Docid_tblDoc as docid, "
-                        "                                           lateststocktaking.companyid as companyid, "
-                        "                                           lateststocktaking.lateststocktaking as lateststocktaking "
-                        ""
-                        "                                           FROM quotation_tbldoc as D4 "
-
-                        "                                           JOIN (SELECT "
-                        "                                                            lateststocktaking_tblcompanies as lateststocktaking, "
-                        "                                                            C.Companyid_tblContacts_id as companyid, "
-                        "                                                            C.Contactid_tblContacts as contactid "
-
-                        "                                                            FROM quotation_tblcontacts as C "
-
-                        "                                                            JOIN quotation_tblcompanies as companies "
-                        "                                                            ON C.Companyid_tblContacts_id = companies.Companyid_tblCompanies "
-
-                        "                                                      ) as lateststocktaking "
-                        "                                           ON D4.Contactid_tblDoc_id = lateststocktaking.contactid "
-
-                        "                                   ) as companyin "
-                        "                       ON Ddeno.wherefromdocid_tblDoc = companyin.docid "
+                                    "                                               JOIN (SELECT"
+                                    "                                           Docid_tblDoc as docid, "
+                                    "                                           lateststocktaking.companyid as companyid, "
+                                    "                                           lateststocktaking.lateststocktaking as lateststocktaking "
+                                    ""
+                                    "                                           FROM quotation_tbldoc as D4 "
+            
+                                    "                                           JOIN (SELECT "
+                                    "                                                            lateststocktaking_tblcompanies as lateststocktaking, "
+                                    "                                                            C.Companyid_tblContacts_id as companyid, "
+                                    "                                                            C.Contactid_tblContacts as contactid "
+            
+                                    "                                                            FROM quotation_tblcontacts as C "
+            
+                                    "                                                            JOIN quotation_tblcompanies as companies "
+                                    "                                                            ON C.Companyid_tblContacts_id = companies.Companyid_tblCompanies "
+            
+                                    "                                                      ) as lateststocktaking "
+                                    "                                           ON D4.Contactid_tblDoc_id = lateststocktaking.contactid "
+            
+                                    "                                   ) as companyin "
+                                    "                       ON Ddeno.wherefromdocid_tblDoc = companyin.docid "
             
             
                                     "           LEFT JOIN   (SELECT "
                                     "                       Docid_tblDoc_details_id as docid, "
                                     "                       sum(Qty_tblDoc_details) as denodqty, "
                                     "                       Productid_tblDoc_details_id as productid "
-
+            
                                     "                       FROM quotation_tbldoc_details"
             
                                     "                       GROUP BY docid, productid "
                                     "                       ) as DD2 "
                                     "           ON Ddeno.Docid_tblDoc = DD2.docid "
             
-                                    "           WHERE obsolete_tbldoc = 0 "
-                                    #                                    "           GROUP BY wheretodocid_tbldoc "
+                                    "           WHERE companyin.companyid in (9,10) and Ddeno.creationtime_tbldoc > companyin.lateststocktaking and obsolete_tbldoc=0 "
+            
+                                    "           GROUP BY wheretodocid_tbldoc, stockidwherefrom, productid "
+            
                                     "           ) AS Denodfromstock "
                                     "ON DD33cor.Docid_tblDoc_details_id = Denodfromstock.wheretodocid_tbldoc and DD33cor.Productid_tblDoc_details_id = Denodfromstock.productid "
-                                    # denodbacktostock        
-                                    "LEFT JOIN (SELECT "
-            
-                                    "           backtostockforcordocid_tbldoc, "
-                                    "           DD2backtostock.denodqty as denodbacktostockqty, "
-                                    "           companybacktostock.companyid as stockidback, "
-                                    "           DD2backtostock.productid as productid "
-            
-                                    "           FROM quotation_tbldoc as Ddenobacktostock"
-            
-"                                               JOIN (SELECT"
+                        ""
+                        "           ) as DD2cor "
+                        "ON DD1po.podetailslink_tbldocdetails=DD2cor.Doc_detailsid_tblDoc_details and DD1po.Productid_tblDoc_details_id = DD2cor.productid "
+
+                        "WHERE DD1po.Doc_detailsid_tblDoc_details=%s", [podocdetailsid])
+
+        results5 = cursor2.fetchall()
+
+        cursor2.execute("SELECT "
+                        "DD2cor.cordocid as cordocid, "
+                        "DD1po.Doc_detailsid_tblDoc_details, "
+                        "DD2cor.corqty as corqty, "
+                        "DD1po.Qty_tblDoc_details as poqty, "
+                        "DD2cor.stockidback, "
+#                        "DD2cor.denodqty as denodfromstockqty, "
+                        "DD2cor.Denodbacktostockqty as Denodbacktostockqty "
+
+                        "FROM quotation_tbldoc_details as DD1po "
+
+                        "LEFT JOIN (SELECT "
+                        ""
+                        "           Doc_detailsid_tblDoc_details, "
+                        "           corqtysum.corqty as corqty, "
+                        "           corqtysum.cordocid as cordocid, "
+#                        "           Denodfromstock.denodqty as denodqty, "
+#                        "           Denodfromstock.stockidwherefrom as stockidwherefrom, "
+                        "           DD33cor.Productid_tblDoc_details_id as productid, "
+                        "           Denodbacktostock.Denodbacktostockqty as Denodbacktostockqty, "
+                        "           Denodbacktostock.stockidback as stockidback "
+                        ""
+                        "           FROM quotation_tbldoc_details as DD33cor "
+
+                        # corqtysum        
+                        "LEFT JOIN (SELECT "
+
+                        "           Docid_tblDoc as cordocid, "
+                        "                       DD22.corqty as corqty,"
+                        "                       DD22.productid as productid "
+
+                        "           FROM quotation_tbldoc as Dcor"
+
+                        "           LEFT JOIN   (SELECT "
+                        "                       Docid_tblDoc_details_id as docid, "
+                        "                       sum(Qty_tblDoc_details) as corqty, "
+                        "                       Productid_tblDoc_details_id as productid "
+
+                        "                       FROM quotation_tbldoc_details"
+
+                        "                       GROUP BY docid, productid "
+                        "                       ) as DD22 "
+                        "           ON Dcor.Docid_tblDoc = DD22.docid "
+
+
+                        "          ) as corqtysum "
+                        "ON DD33cor.Docid_tblDoc_details_id = corqtysum.cordocid and DD33cor.Productid_tblDoc_details_id = corqtysum.productid "
+
+
+                        # denodbacktostock
+                        "LEFT JOIN (SELECT "
+
+                        "           backtostockforcordocid_tbldoc, "
+                        "           sum(DD2backtostock.denodqty) as denodbacktostockqty, "
+                        "           companybacktostock.companyid as stockidback, "
+                        "           DD2backtostock.productid as productid "
+
+                        "           FROM quotation_tbldoc as Ddenobacktostock"
+
+                        "                                               JOIN (SELECT"
                         "                                           Docid_tblDoc as docid, "
                         "                                           lateststocktaking.companyid as companyid, "
                         "                                           lateststocktaking.lateststocktaking as lateststocktaking "
@@ -545,35 +626,32 @@ def pohandlerreception(request): #from pohandlerform
 
                         "                                   ) as companybacktostock "
                         "                       ON Ddenobacktostock.wheretodocid_tblDoc = companybacktostock.docid "
-            
-            
-                                    "           LEFT JOIN   (SELECT "
-                                    "                       Docid_tblDoc_details_id as docid, "
-                                    "                       sum(Qty_tblDoc_details) as denodqty, "
-                                    "                       Productid_tblDoc_details_id as productid "
-            
-                                    "                       FROM quotation_tbldoc_details"
-            
-                                    "                       GROUP BY docid, productid "
-                                    "                       ) as DD2backtostock "
-                                    "           ON Ddenobacktostock.Docid_tblDoc = DD2backtostock.docid "
-            
-                                    "           WHERE obsolete_tbldoc = 0 "
-                                    #                                    "           GROUP BY wheretodocid_tbldoc "
-                                    "           ) AS Denodbacktostock "
-                                    "ON DD33cor.Docid_tblDoc_details_id = Denodbacktostock.backtostockforcordocid_tbldoc and DD33cor.Productid_tblDoc_details_id = Denodbacktostock.productid"
 
-                        ""
+
+                        "           LEFT JOIN   (SELECT "
+                        "                       Docid_tblDoc_details_id as docid, "
+                        "                       sum(Qty_tblDoc_details) as denodqty, "
+                        "                       Productid_tblDoc_details_id as productid "
+
+                        "                       FROM quotation_tbldoc_details"
+
+                        "                       GROUP BY docid, productid "
+                        "                       ) as DD2backtostock "
+                        "           ON Ddenobacktostock.Docid_tblDoc = DD2backtostock.docid "
+
+                        "           WHERE companybacktostock.companyid in (9,10) and Ddenobacktostock.creationtime_tbldoc > companybacktostock.lateststocktaking and obsolete_tbldoc=0 "
+
+                        "           GROUP BY backtostockforcordocid_tbldoc, stockidback, productid "
+
+                        "           ) AS Denodbacktostock "
+                        "ON DD33cor.Docid_tblDoc_details_id = Denodbacktostock.backtostockforcordocid_tbldoc and DD33cor.Productid_tblDoc_details_id = Denodbacktostock.productid"
+
                         "           ) as DD2cor "
-                        "ON DD1po.podetailslink_tbldocdetails=DD2cor.Doc_detailsid_tblDoc_details and DD1po.Productid_tblDoc_details_id = DD2cor.productid " 
+                        "ON DD1po.podetailslink_tbldocdetails=DD2cor.Doc_detailsid_tblDoc_details and DD1po.Productid_tblDoc_details_id = DD2cor.productid "
 
                         "WHERE DD1po.Doc_detailsid_tblDoc_details=%s", [podocdetailsid])
-        results5 = cursor2.fetchall()
-        for k in results5:
-            corqty = k[0]
-            poqty = k[1]
-            denodqty = k[2]
-            stockidwherefrom = k[3]
+
+        results6 = cursor2.fetchall()
 
         import pdb;
         pdb.set_trace()
@@ -751,7 +829,7 @@ def pohandlerreception(request): #from pohandlerform
 
                         "JOIN quotation_tbldoc as D "
                         "ON D.Docid_tblDoc=quotation_tbldoc_details.Docid_tblDoc_details_id "
-    
+
                         "WHERE obsolete_tbldoc=0 and Doc_detailsid_tblDoc_details=%s "
                         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                         [podocdetailsid])

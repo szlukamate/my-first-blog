@@ -29,7 +29,7 @@ def deliverynoteform(request, pk):
                 tbl = request.POST['tbl']
                 if tbl == "tblDoc_details":
                         cursor22 = connection.cursor()
-                        cursor22.callproc("spquotationdocdetailsfieldsupdate", [fieldname, fieldvalue, rowid])
+                        cursor22.callproc("spdeliverynotedocdetailsfieldsupdate", [fieldname, fieldvalue, rowid])
                         results23 = cursor22.fetchall()
                         print(results23)
                         #import pdb;
@@ -41,7 +41,7 @@ def deliverynoteform(request, pk):
 
                 elif tbl == "tblDoc":
                         cursor22 = connection.cursor()
-                        cursor22.callproc("spquotationdocfieldsupdate", [fieldname, fieldvalue, docid])
+                        cursor22.callproc("spdeliverynotedocfieldsupdate", [fieldname, fieldvalue, docid])
                         results23 = cursor22.fetchall()
                         print(results23)
 
