@@ -433,21 +433,34 @@ def pohandlerreception(request): #from pohandlerform
     #import pdb;
     #pdb.set_trace()
 
+    # temp table initialization before/outside the following for loop start
+    cursor2 = connection.cursor()
+    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS neededqtytemptable;")
+    cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS neededqtytemptable "
+                    "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    "     podocdetailsid INT(11) NOT NULL, "
+                    "     cororstockdocidto INT(11) NOT NULL, "
+                    "     podocidfrom INT(11) NOT NULL, "
+                    "     itemqty DECIMAL(10,1) NULL) "
+
+                    "      ENGINE=INNODB "
+                    "    ; ")
+    # temp table initialization before/outside the following for loop end
+
     for x3 in tables2:
         podocdetailsid = x3[1]
         podocid = x3[2]
         cordocid = x3[3]
         numberofitemstodeno = x3[6]
 
-
-
         cursor2.execute("SELECT "
                         "DD2cor.cordocid as cordocid, "
+                        "DD1po.Docid_tblDoc_details_id as podocid, "
                         "DD1po.Doc_detailsid_tblDoc_details, "
                         "DD2cor.corqty as corqty, "
                         "DD1po.Qty_tblDoc_details as poqty, "
-                        "DD2cor.fromstockdocid, "
-                        "DD2cor.denodqty as denodfromstockqty "
+                        "COALESCE(DD2cor.fromstockdocid,0), "
+                        "COALESCE(DD2cor.denodqty,0) as denodfromstockqty "
 
                         "FROM quotation_tbldoc_details as DD1po "
 
@@ -457,7 +470,6 @@ def pohandlerreception(request): #from pohandlerform
                         "           corqtysum.corqty as corqty, "
                         "           corqtysum.cordocid as cordocid, "
                         "           Denodfromstock.denodqty as denodqty, "
-#                        "           Denodfromstock.stockidwherefrom as stockidwherefrom, "
                         "           Denodfromstock.fromstockdocid as fromstockdocid, "
                         "           DD33cor.Productid_tblDoc_details_id as productid "
                         ""
@@ -548,12 +560,12 @@ def pohandlerreception(request): #from pohandlerform
 
         cursor2.execute("SELECT "
                         "DD2cor.cordocid as cordocid, "
+                        "DD1po.Docid_tblDoc_details_id as podocid, "
                         "DD1po.Doc_detailsid_tblDoc_details, "
                         "DD2cor.corqty as corqty, "
                         "DD1po.Qty_tblDoc_details as poqty, "
-                        "DD2cor.backtostockdocid, "
-#                        "DD2cor.denodqty as denodfromstockqty, "
-                        "DD2cor.Denodbacktostockqty as Denodbacktostockqty "
+                        "COALESCE(DD2cor.backtostockdocid,0), "
+                        "COALESCE(DD2cor.Denodbacktostockqty,0) as Denodbacktostockqty "
 
                         "FROM quotation_tbldoc_details as DD1po "
 
@@ -562,8 +574,6 @@ def pohandlerreception(request): #from pohandlerform
                         "           Doc_detailsid_tblDoc_details, "
                         "           corqtysum.corqty as corqty, "
                         "           corqtysum.cordocid as cordocid, "
-#                        "           Denodfromstock.denodqty as denodqty, "
-#                        "           Denodfromstock.stockidwherefrom as stockidwherefrom, "
                         "           DD33cor.Productid_tblDoc_details_id as productid, "
                         "           Denodbacktostock.Denodbacktostockqty as Denodbacktostockqty, "
                         "           Denodbacktostock.backtostockdocid as backtostockdocid "
@@ -653,6 +663,82 @@ def pohandlerreception(request): #from pohandlerform
                         "WHERE DD1po.Doc_detailsid_tblDoc_details=%s", [podocdetailsid])
 
         backtostockresult = cursor2.fetchall()
+        #import pdb;
+        #pdb.set_trace()
+
+        # items from stock and back to stock to list start
+        fromstocklist = [] #result to list
+        for x33 in fromstockresult:
+            cordocid = x33[0]
+            podocid = x33[1]
+            coritemqty = x33[3]
+            arriveditemqty = x33[4]
+            fromstockstockdocid = x33[5]
+            fromstockitemqty = x33[6]
+            appendvarfromstocklist = (cordocid, podocid, podocdetailsid, coritemqty, arriveditemqty, fromstockstockdocid, fromstockitemqty)
+            fromstocklist.append(appendvarfromstocklist)
+
+        backtostocklist = [] #result to list
+        for x332 in backtostockresult:
+            cordocid = x332[0]
+            podocid = x332[1]
+            coritemqty = x332[3]
+            arriveditemqty = x332[4]
+            backtotockstockdocid = x332[5]
+            backtostockitemqty = x332[6]
+            appendvarbacktostocklist = (cordocid, podocid, podocdetailsid, coritemqty, arriveditemqty, backtotockstockdocid, backtostockitemqty)
+            backtostocklist.append(appendvarbacktostocklist)
+
+        neededqtylist = []
+        sumofbacktostockqty = 0
+        for x333 in range(len(fromstocklist)):
+            cordocidfromstocklist = fromstocklist[x333][0]
+            podocidfromstocklist = fromstocklist[x333][1]
+            coritemqtyinfromstocklist = fromstocklist[x333][3]
+            arriveditemqtyinfromstocklist = fromstocklist[x333][4]
+            fromstockstockdocidinfromstocklist = fromstocklist[x333][5]
+            fromstockitemqtyinfromstocklist = fromstocklist[x333][6]
+            for x3333 in range(len(backtostocklist)):
+                coritemqtyinbacktostocklist = backtostocklist[x3333][3]
+                arriveditemqtyinbacktostocklist = backtostocklist[x3333][4]
+                fromstockstockdocidinbacktostocklist = backtostocklist[x3333][5]
+                fromstockitemqtyinbacktostocklist = backtostocklist[x3333][6]
+                if fromstockstockdocidinfromstocklist == fromstockstockdocidinbacktostocklist:
+                    fromstockitemqtyinfromstocklist = fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist
+            if fromstockitemqtyinfromstocklist != 0:
+                appendvarneededqtylist = (podocdetailsid, fromstockstockdocidinfromstocklist, podocidfromstocklist, fromstockitemqtyinfromstocklist)
+                neededqtylist.append(appendvarneededqtylist)
+            sumofbacktostockqty = sumofbacktostockqty + fromstockitemqtyinfromstocklist
+        appendvarneededqtylist = (podocdetailsid, cordocidfromstocklist, podocidfromstocklist, arriveditemqtyinfromstocklist-sumofbacktostockqty)
+        neededqtylist.append(appendvarneededqtylist)
+        # items from stock and back to stock to list start
+
+
+        # neededqtylist to temptable start
+        for x11 in range(len(neededqtylist)):
+            podocdetailsid = neededqtylist[x11][0]
+            cororstockdocidto = neededqtylist[x11][1]
+            podocidfrom = neededqtylist[x11][2]
+            itemqty = neededqtylist[x11][3]
+
+            cursor2.execute("INSERT INTO neededqtytemptable (podocdetailsid, "
+                            "cororstockdocidto, "
+                            "podocidfrom, "
+                            "itemqty) VALUES ('" + str(podocdetailsid) + "', "
+                                                              "'" + str(cororstockdocidto) + "', "
+                                                              "'" + str(podocidfrom) + "', "
+                                                              "'" + str(itemqty) + "');")
+
+        cursor2.execute("SELECT   "
+                        "auxid, "
+                        "podocdetailsid, "
+                        "cororstockdocidto, "
+                        "podocidfrom, "
+                        "itemqty "
+
+                        "FROM neededqtytemptable ")
+        tables = cursor2.fetchall()
+        # neededqtylist to temptable start
 
         import pdb;
         pdb.set_trace()
