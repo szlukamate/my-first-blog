@@ -441,7 +441,8 @@ def pohandlerreception(request): #from pohandlerform
                     "     podocdetailsid INT(11) NOT NULL, "
                     "     cororstockdocidto INT(11) NOT NULL, "
                     "     podocidfrom INT(11) NOT NULL, "
-                    "     itemqty DECIMAL(10,1) NULL) "
+                    "     itemqty DECIMAL(10,1) NULL, "
+                    "     numberofitemstodeno INT(11) NULL) "
 
                     "      ENGINE=INNODB "
                     "    ; ")
@@ -737,11 +738,53 @@ def pohandlerreception(request): #from pohandlerform
                         "itemqty "
 
                         "FROM neededqtytemptable ")
-        tables = cursor2.fetchall()
+        neededqtytemptable = cursor2.fetchall()
         # neededqtylist to temptable start
 
-        import pdb;
-        pdb.set_trace()
+    # docdetails per docid to neededqtytemptable start
+
+    for xx in neededqtytemptable:
+        auxid = xx[0]
+        podocidfrom = xx[3]
+        cororstockdocidto = xx[2]
+
+        #import pdb;
+        #pdb.set_trace()
+
+
+        cursor2.execute("SELECT count(auxid) "
+                        "FROM neededqtytemptable "
+                        "WHERE podocidfrom=%s and cororstockdocidto=%s "
+                        "GROUP BY podocidfrom, cororstockdocidto ", [podocidfrom, cororstockdocidto])
+        numberofitemstodenoresults = cursor2.fetchall()
+
+        for x2 in numberofitemstodenoresults:
+            numberofitemstodeno = x2[0]
+
+        cursor2.execute("UPDATE neededqtytemptable SET "
+                        "numberofitemstodeno= %s "
+                        "WHERE auxid =%s ", [numberofitemstodeno, auxid])
+
+# docdetails per docid to neededqtytemptable end
+
+    cursor2.execute("SELECT   "
+                    "auxid, "
+                    "podocdetailsid, "
+                    "cororstockdocidto, "
+                    "podocidfrom, "
+                    "itemqty, "
+                    "numberofitemstodeno "
+                    
+                    "FROM neededqtytemptable ")
+    neededqtytemptable = cursor2.fetchall()
+    import pdb;
+    pdb.set_trace()
+
+    for x31 in neededqtytemptable:
+        podocdetailsid = x31[1]
+        podocid = x31[3]
+        cordocid = x31[2]
+        numberofitemstodeno = x31[5]
 
         if docmakercounter  == 0: #doc create only once even multiple docdetails
             docmakercounter = numberofitemstodeno
