@@ -237,7 +237,6 @@ def pohandlerreception(request): #from pohandlerform
                         "serviceflag_tblproduct, "
                         "discreteflag_tblproduct "
                         
-                        
                         "FROM quotation_tbldoc_details "
                         "LEFT JOIN quotation_tblproduct as P "
                         "ON "
@@ -376,7 +375,6 @@ def pohandlerreception(request): #from pohandlerform
         dateofarrivaldate = dateofarrivallistsplitted[x11][3]
 
 
-
         cursor2.execute("INSERT INTO porows (podocdetailsid, "
                         "podocid, "
                         "cordocid, "
@@ -442,13 +440,14 @@ def pohandlerreception(request): #from pohandlerform
                     "     cororstockdocidto INT(11) NOT NULL, "
                     "     podocidfrom INT(11) NOT NULL, "
                     "     itemqty DECIMAL(10,1) NULL, "
-                    "     numberofitemstodeno INT(11) NULL) "
+                    "     numberofitemstodeno INT(11) NULL, "
+                    "     subjecttext VARCHAR(255) NULL) "
 
                     "      ENGINE=INNODB "
                     "    ; ")
     # temp table initialization before/outside the following for loop end
 
-    for x3 in tables2:
+    for x3 in tables2: #porows
         podocdetailsid = x3[1]
         podocid = x3[2]
         cordocid = x3[3]
@@ -664,8 +663,6 @@ def pohandlerreception(request): #from pohandlerform
                         "WHERE DD1po.Doc_detailsid_tblDoc_details=%s", [podocdetailsid])
 
         backtostockresult = cursor2.fetchall()
-        #import pdb;
-        #pdb.set_trace()
 
         # items from stock and back to stock to list start
         fromstocklist = [] #result to list
@@ -690,9 +687,44 @@ def pohandlerreception(request): #from pohandlerform
             appendvarbacktostocklist = (cordocid, podocid, podocdetailsid, coritemqty, arriveditemqty, backtotockstockdocid, backtostockitemqty)
             backtostocklist.append(appendvarbacktostocklist)
 
+        def subjectfordeno (denokind, cororstockdocid):
+
+            cursor77 = connection.cursor()
+            cursor77.execute("SELECT   "
+                            "subject_tbldoc, "
+                            "pretag_tbldockind, "
+                            "docnumber_tbldoc, "
+                            "companyname_tblcompanies_ctbldoc "
+
+                            "FROM quotation_tbldoc "
+
+                            "JOIN quotation_tbldoc_kind as DK "
+                            "ON quotation_tbldoc.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
+                            
+                            "WHERE docid_tbldoc=%s ",
+                            [cororstockdocid])
+            subjectresult = cursor77.fetchall()
+
+            for x2 in subjectresult:
+                subjectoriginal = x2[0]
+                pretag = x2[1]
+                docnumber = x2[2]
+                companyname = x2[3]
+
+            if denokind == 'directdeno':
+
+                subjecttext = subjectoriginal
+
+                return subjecttext
+            elif denokind == 'backtostockdeno':
+                subjecttext = 'Back - ' + companyname + ' ' + pretag + str(docnumber)
+
+                return subjecttext
+
         neededqtylist = []
         sumofbacktostockqty = 0
-        for x333 in range(len(fromstocklist)):
+        for x333 in range(len(fromstocklist)): # fromstock for a porow
+            neededitemqty = 0
             cordocidfromstocklist = fromstocklist[x333][0]
             podocidfromstocklist = fromstocklist[x333][1]
             coritemqtyinfromstocklist = fromstocklist[x333][3]
@@ -700,20 +732,23 @@ def pohandlerreception(request): #from pohandlerform
             fromstockstockdocidinfromstocklist = fromstocklist[x333][5]
             fromstockitemqtyinfromstocklist = fromstocklist[x333][6]
             for x3333 in range(len(backtostocklist)):
-                coritemqtyinbacktostocklist = backtostocklist[x3333][3]
                 arriveditemqtyinbacktostocklist = backtostocklist[x3333][4]
                 fromstockstockdocidinbacktostocklist = backtostocklist[x3333][5]
                 fromstockitemqtyinbacktostocklist = backtostocklist[x3333][6]
                 if fromstockstockdocidinfromstocklist == fromstockstockdocidinbacktostocklist:
-                    fromstockitemqtyinfromstocklist = fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist
-            if fromstockitemqtyinfromstocklist != 0:
-                appendvarneededqtylist = (podocdetailsid, fromstockstockdocidinfromstocklist, podocidfromstocklist, fromstockitemqtyinfromstocklist)
+                    neededitemqty = fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist # there is back item
+                else:
+                    neededitemqty = fromstockitemqtyinfromstocklist # there is no back item
+            if neededitemqty != 0:
+                appendvarneededqtylist = (podocdetailsid, fromstockstockdocidinfromstocklist, podocidfromstocklist, neededitemqty, subjectfordeno('backtostockdeno', cordocidfromstocklist))
                 neededqtylist.append(appendvarneededqtylist)
-            sumofbacktostockqty = sumofbacktostockqty + fromstockitemqtyinfromstocklist
-        appendvarneededqtylist = (podocdetailsid, cordocidfromstocklist, podocidfromstocklist, arriveditemqtyinfromstocklist-sumofbacktostockqty)
-        neededqtylist.append(appendvarneededqtylist)
+            sumofbacktostockqty = sumofbacktostockqty + neededitemqty
+        appendvarneededqtylist = (podocdetailsid, cordocidfromstocklist, podocidfromstocklist, arriveditemqtyinfromstocklist-sumofbacktostockqty, subjectfordeno('directdeno', cordocidfromstocklist))
+        neededqtylist.append(appendvarneededqtylist) # neededqtylist append for this porow
         # items from stock and back to stock to list start
 
+        import pdb;
+        pdb.set_trace()
 
         # neededqtylist to temptable start
         for x11 in range(len(neededqtylist)):
@@ -721,13 +756,16 @@ def pohandlerreception(request): #from pohandlerform
             cororstockdocidto = neededqtylist[x11][1]
             podocidfrom = neededqtylist[x11][2]
             itemqty = neededqtylist[x11][3]
+            subjecttext = neededqtylist[x11][4]
 
             cursor2.execute("INSERT INTO neededqtytemptable (podocdetailsid, "
                             "cororstockdocidto, "
                             "podocidfrom, "
+                            "subjecttext, "
                             "itemqty) VALUES ('" + str(podocdetailsid) + "', "
                                                               "'" + str(cororstockdocidto) + "', "
                                                               "'" + str(podocidfrom) + "', "
+                                                              "'" + str(subjecttext) + "', "
                                                               "'" + str(itemqty) + "');")
 
         cursor2.execute("SELECT   "
@@ -748,10 +786,6 @@ def pohandlerreception(request): #from pohandlerform
         podocidfrom = xx[3]
         cororstockdocidto = xx[2]
 
-        #import pdb;
-        #pdb.set_trace()
-
-
         cursor2.execute("SELECT count(auxid) "
                         "FROM neededqtytemptable "
                         "WHERE podocidfrom=%s and cororstockdocidto=%s "
@@ -765,7 +799,7 @@ def pohandlerreception(request): #from pohandlerform
                         "numberofitemstodeno= %s "
                         "WHERE auxid =%s ", [numberofitemstodeno, auxid])
 
-# docdetails per docid to neededqtytemptable end
+    # docdetails per docid to neededqtytemptable end
 
     cursor2.execute("SELECT   "
                     "auxid, "
@@ -773,18 +807,23 @@ def pohandlerreception(request): #from pohandlerform
                     "cororstockdocidto, "
                     "podocidfrom, "
                     "itemqty, "
-                    "numberofitemstodeno "
+                    "numberofitemstodeno, "
+                    "subjecttext "
                     
                     "FROM neededqtytemptable ")
     neededqtytemptable = cursor2.fetchall()
-    import pdb;
-    pdb.set_trace()
+
+    #import pdb;
+    #pdb.set_trace()
+
 
     for x31 in neededqtytemptable:
         podocdetailsid = x31[1]
         podocid = x31[3]
         cordocid = x31[2]
+        itemqty = x31[4]
         numberofitemstodeno = x31[5]
+        subjecttext = x31[6]
 
         if docmakercounter  == 0: #doc create only once even multiple docdetails
             docmakercounter = numberofitemstodeno
@@ -895,7 +934,7 @@ def pohandlerreception(request): #from pohandlerform
                              prefacetext,
                              backpagetext,
                              prefacespectext,
-                             subject,
+                             subjecttext,
                              docnumber,
                              total,
                              deliverydays,
@@ -1014,7 +1053,7 @@ def pohandlerreception(request): #from pohandlerform
                 "podocdetailsidforlabel_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
                 [maxdocid,
-                 qty,
+                 itemqty,
                  customerdescriptionclone,
                  firstnum,
                  fourthnum,

@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.~lock.190519.odt#" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_customerorder.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_customerorder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quotation/views/vw_pohandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_pohandler.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -12,21 +15,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/quotation/templates/quotation/deliverynote.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="65" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="65" />
-              <folding>
-                <element signature="n#style#0;n#p#3;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#4;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#15;n#div#1;n#div#3;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#fieldset#0;n#form#0;n#div#8;n#div#3;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/static/js/deliverynote.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -69,8 +57,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_customerorder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7875">
-              <caret line="540" column="27" selection-start-line="540" selection-start-column="27" selection-end-line="540" selection-end-column="27" />
+            <state relative-caret-position="215">
+              <caret line="80" selection-start-line="78" selection-end-line="80" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -81,8 +69,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="32" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
+            <state relative-caret-position="15">
+              <caret line="802" selection-start-line="802" selection-end-line="802" />
+              <folding>
+                <element signature="e#0#64#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="365" selection-start-line="365" selection-end-line="365" />
+              <folding>
+                <element signature="e#0#64#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -90,8 +93,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_pohandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="365">
-              <caret line="782" column="34" lean-forward="true" selection-start-line="782" selection-start-column="34" selection-end-line="782" selection-end-column="34" />
+            <state relative-caret-position="170">
+              <caret line="728" selection-start-line="728" selection-end-line="728" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -127,7 +130,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>cor</find>
       <find>cons</find>
       <find>supplier</find>
       <find>sordetailslink</find>
@@ -157,6 +159,7 @@
       <find>denoqty</find>
       <find>subj</find>
       <find>bactostockdocid</find>
+      <find>fromstockitemqtyinfromstocklist</find>
     </findStrings>
     <replaceStrings>
       <replace>quotation</replace>
@@ -175,6 +178,7 @@
       <replace>deliverynote</replace>
       <replace>companyidlookup</replace>
       <replace>backtostockdocid</replace>
+      <replace>neededitemqty</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -223,7 +227,6 @@
         <option value="$PROJECT_DIR$/quotation/views/vw_quotation.py" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/stock.html" />
         <option value="$PROJECT_DIR$/quotation/views/vw_stock.py" />
-        <option value="$PROJECT_DIR$/quotation/views/vw_customerorder.py" />
         <option value="$PROJECT_DIR$/quotation/static/css/customerorder.css" />
         <option value="$PROJECT_DIR$/quotation/urls.py" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/deliverynotepreredirecturl.html" />
@@ -232,6 +235,7 @@
         <option value="$PROJECT_DIR$/quotation/static/js/deliverynotepre.js" />
         <option value="$PROJECT_DIR$/quotation/templates/quotation/deliverynotepre.html" />
         <option value="$PROJECT_DIR$/quotation/static/js/deliverynote.js" />
+        <option value="$PROJECT_DIR$/quotation/views/vw_customerorder.py" />
         <option value="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" />
         <option value="$PROJECT_DIR$/quotation/views/vw_pohandler.py" />
       </list>
@@ -468,16 +472,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="79" column="24" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_quotation.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -659,23 +653,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_customerorder.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7875">
-          <caret line="540" column="27" selection-start-line="540" selection-start-column="27" selection-end-line="540" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="32" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_purchaseorder.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5715">
@@ -696,10 +673,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_customerorder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="80" selection-start-line="78" selection-end-line="80" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="365" selection-start-line="365" selection-end-line="365" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="802" selection-start-line="802" selection-end-line="802" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_pohandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="782" column="34" lean-forward="true" selection-start-line="782" selection-start-column="34" selection-end-line="782" selection-end-column="34" />
+        <state relative-caret-position="170">
+          <caret line="728" selection-start-line="728" selection-end-line="728" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>

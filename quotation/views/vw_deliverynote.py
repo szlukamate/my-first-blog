@@ -832,17 +832,9 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
                     labelid = instancesingle[0]
                     onstockqty = instancesingle[3]
 
-                productqtyoldestlabel = inqty
+                productqtyoldestlabel = onstockqty
                 podocdetailsidforlabel = labelid
-#                    break
-#                else:
-#                    productqtyoldestlabel = 'nomore'
-#                    podocdetailsidforlabel = 'nomore'
 
-
-
-                #import pdb;
-                #pdb.set_trace()
 
                 return productqtyoldestlabel, podocdetailsidforlabel
             # oldestlabelid determination end

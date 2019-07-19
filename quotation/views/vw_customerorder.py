@@ -75,7 +75,10 @@ def customerorderform(request, pk):
                     "pretag_tbldockind "
 
                     "FROM quotation_tbldoc as D "
-                    "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
+
+                    "JOIN quotation_tbldoc_kind as DK "
+                    "ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
+
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
                     [pk])
