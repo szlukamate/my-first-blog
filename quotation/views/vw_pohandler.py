@@ -361,6 +361,8 @@ def pohandlerreception(request): #from pohandlerform
                     "     podocdetailsid INT(11) NOT NULL, "
                     "     podocid INT(11) NULL, " 
                     "     cordocid INT(11) NULL, "
+                    "     productid INT(11) NULL, "
+                    "     arrivedqty DECIMAL(10,1) NULL,"
                     "     nop DECIMAL(10,1) NULL,"
                     "     dateofarrivaldate varchar(55) NULL, "
                     "     numberofitemstodeno INT(11) NULL) "
@@ -374,13 +376,30 @@ def pohandlerreception(request): #from pohandlerform
         cordocid = dateofarrivallistsplitted[x11][2]
         dateofarrivaldate = dateofarrivallistsplitted[x11][3]
 
+        cursor2.execute("SELECT   "
+                        "Productid_tblDoc_details_id,"
+                        "Qty_tblDoc_details "
+
+                         "FROM quotation_tbldoc_details "
+
+                         "WHERE Doc_detailsid_tblDoc_details=%s ",
+                         [podocdetailsid])
+        productidresult = cursor2.fetchall()
+
+        for x2 in productidresult:
+            productid = x2[0]
+            arrivedqty = x2[1]
 
         cursor2.execute("INSERT INTO porows (podocdetailsid, "
                         "podocid, "
                         "cordocid, "
+                        "productid, "
+                        "arrivedqty, "
                         "dateofarrivaldate) VALUES ('" + str(podocdetailsid) + "', "
                                                     "'" + str(podocid) + "', "
                                                     "'" + str(cordocid) + "', "
+                                                    "'" + str(productid) + "', "
+                                                    "'" + str(arrivedqty) + "', "
                                                     "'" + str(dateofarrivaldate) + "');")
 
     cursor2.execute("SELECT   "
@@ -388,13 +407,16 @@ def pohandlerreception(request): #from pohandlerform
                         "podocdetailsid, "
                         "podocid, "
                         "cordocid, "
+                        "productid, "
+                        "arrivedqty, "
                         "dateofarrivaldate "
 
                         "FROM porows ")
     tables = cursor2.fetchall()
 #dateofarrivallistsplitted to table end
 
-#docdetails per docid to table start
+
+    #docdetails per docid to table start
     for xx in tables:
         auxid = xx[0]
         podocid = xx[2]
@@ -414,7 +436,7 @@ def pohandlerreception(request): #from pohandlerform
     # import pdb;
     # pdb.set_trace()
 
-#docdetails per docid to table end
+    #docdetails per docid to table end
 
 #porows table:
     #auxid, numberofitemstodeno
@@ -451,15 +473,16 @@ def pohandlerreception(request): #from pohandlerform
         podocdetailsid = x3[1]
         podocid = x3[2]
         cordocid = x3[3]
+        productid = x3[4]
         numberofitemstodeno = x3[6]
 
         cursor2.execute("SELECT "
                         "DD2cor.cordocid as cordocid, "
                         "DD1po.Docid_tblDoc_details_id as podocid, "
-                        "DD1po.Doc_detailsid_tblDoc_details, "
+                        "DD1po.Doc_detailsid_tblDoc_details as docdetailsid, "
                         "DD2cor.corqty as corqty, "
                         "DD1po.Qty_tblDoc_details as poqty, "
-                        "COALESCE(DD2cor.fromstockdocid,0), "
+                        "COALESCE(DD2cor.fromstockdocid,0) as fromstockdocid, "
                         "COALESCE(DD2cor.denodqty,0) as denodfromstockqty "
 
                         "FROM quotation_tbldoc_details as DD1po "
@@ -554,9 +577,31 @@ def pohandlerreception(request): #from pohandlerform
                         "           ) as DD2cor "
                         "ON DD1po.podetailslink_tbldocdetails=DD2cor.Doc_detailsid_tblDoc_details and DD1po.Productid_tblDoc_details_id = DD2cor.productid "
 
-                        "WHERE DD1po.Doc_detailsid_tblDoc_details=%s", [podocdetailsid])
+                        "WHERE DD1po.Doc_detailsid_tblDoc_details=%s ", [podocdetailsid])
+
+#                        "GROUP BY cordocid, podocid, docdetailsid, corqty, fromstockdocid, denodfromstockqty    ", [podocdetailsid])
 
         fromstockresult = cursor2.fetchall()
+
+        toinoperatordocdetails = ""
+        for x in tables2:
+            toinoperatordocdetails = toinoperatordocdetails + str(x[1]) + ","
+        toinoperatordocdetails = toinoperatordocdetails[: -1]
+
+        cursor2.execute("SELECT   "
+                         "sum(arrivedqty) as sumarrivedqty "
+
+                         "FROM porows "
+
+                        "WHERE podocdetailsid IN (" + toinoperatordocdetails + ") "
+
+                        "GROUP BY cordocid, podocid, productid  ")
+        sumarrivedqtyresult = cursor2.fetchall()
+
+        for x2 in sumarrivedqtyresult:
+            sumarrivedqty = x2[0]
+
+
 
         cursor2.execute("SELECT "
                         "DD2cor.cordocid as cordocid, "
@@ -735,15 +780,37 @@ def pohandlerreception(request): #from pohandlerform
                 arriveditemqtyinbacktostocklist = backtostocklist[x3333][4]
                 fromstockstockdocidinbacktostocklist = backtostocklist[x3333][5]
                 fromstockitemqtyinbacktostocklist = backtostocklist[x3333][6]
-                if fromstockstockdocidinfromstocklist == fromstockstockdocidinbacktostocklist:
-                    neededitemqty = fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist # there is back item
-                else:
-                    neededitemqty = fromstockitemqtyinfromstocklist # there is no back item
-            if neededitemqty != 0:
-                appendvarneededqtylist = (podocdetailsid, fromstockstockdocidinfromstocklist, podocidfromstocklist, neededitemqty, subjectfordeno('backtostockdeno', cordocidfromstocklist))
+
+                if fromstockstockdocidinfromstocklist == fromstockstockdocidinbacktostocklist: # there is back item
+                    arrived product direct to order or back?
+                    if sumarrivedqty <= corqty:
+                        alltodirect()
+                    else:
+                        partdirectparttoback()
+
+
+
+
+
+                    neededitemqty = fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist
+                    if neededitemqty >= arriveditemqtyinfromstocklist: # f.e. 1000 cored 500 fromstock 400 backed = 100 needed
+                        defactobackqty = arriveditemqtyinfromstocklist # arrived only f.e. 1
+
+                    else:
+                        defactobackqty = neededitemqty
+
+                else: # there is no back item
+                    neededitemqty = fromstockitemqtyinfromstocklist
+                    if neededitemqty >= arriveditemqtyinfromstocklist: # f.e. 1000 cored 500 fromstock 0 backed = 500 needed
+                        defactobackqty = arriveditemqtyinfromstocklist  # arrived only f.e. 1
+                    else:
+                        defactobackqty = neededitemqty
+
+            if defactobackqty != 0:
+                appendvarneededqtylist = (podocdetailsid, fromstockstockdocidinfromstocklist, podocidfromstocklist, defactobackqty, subjectfordeno('backtostockdeno', cordocidfromstocklist))
                 neededqtylist.append(appendvarneededqtylist)
             sumofbacktostockqty = sumofbacktostockqty + neededitemqty
-        appendvarneededqtylist = (podocdetailsid, cordocidfromstocklist, podocidfromstocklist, arriveditemqtyinfromstocklist-sumofbacktostockqty, subjectfordeno('directdeno', cordocidfromstocklist))
+        appendvarneededqtylist = (podocdetailsid, cordocidfromstocklist, podocidfromstocklist, sumarrivedqty-sumofbacktostockqty, subjectfordeno('directdeno', cordocidfromstocklist))
         neededqtylist.append(appendvarneededqtylist) # neededqtylist append for this porow
         # items from stock and back to stock to list start
 
