@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.~lock.190719 pohandler backitems.odt#" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/quotation/views/vw_pohandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_pohandler.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -67,8 +65,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11790">
-              <caret line="802" selection-start-line="802" selection-end-line="802" />
+            <state relative-caret-position="755">
+              <caret line="942" lean-forward="true" selection-start-line="942" selection-end-line="942" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -79,8 +77,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5370">
-              <caret line="365" selection-start-line="365" selection-end-line="365" />
+            <state relative-caret-position="590">
+              <caret line="285" column="37" selection-start-line="285" selection-start-column="37" selection-end-line="285" selection-end-column="37" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -91,8 +89,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_pohandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="787" column="25" lean-forward="true" selection-start-line="787" selection-start-column="25" selection-end-line="787" selection-end-column="25" />
+            <state relative-caret-position="540">
+              <caret line="639" selection-start-line="639" selection-end-line="639" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -103,7 +101,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_purchaseorder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="620">
+            <state relative-caret-position="1500">
               <caret line="115" selection-start-line="113" selection-end-line="115" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
@@ -115,8 +113,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="37" selection-start-line="37" selection-end-line="37" />
+            <state>
+              <caret lean-forward="true" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -128,8 +126,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>supplier</find>
-      <find>sordetailslink</find>
       <find>podetailslink</find>
       <find>purchaseorder</find>
       <find>datep</find>
@@ -158,6 +154,8 @@
       <find>bactostockdocid</find>
       <find>fromstockitemqtyinfromstocklist</find>
       <find>backtostockforcordocid_tbldoc</find>
+      <find>defactobackqty</find>
+      <find>cordocidfromstocklist</find>
     </findStrings>
     <replaceStrings>
       <replace>quotation</replace>
@@ -651,36 +649,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11790">
-          <caret line="802" selection-start-line="802" selection-end-line="802" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5370">
-          <caret line="365" selection-start-line="365" selection-end-line="365" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_customerorder.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -692,8 +660,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_purchaseorder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="620">
+        <state relative-caret-position="1500">
           <caret line="115" selection-start-line="113" selection-end-line="115" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_stock.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_deliverynote.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="755">
+          <caret line="942" lean-forward="true" selection-start-line="942" selection-end-line="942" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/quotation/views/vw_doc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="590">
+          <caret line="285" column="37" selection-start-line="285" selection-start-column="37" selection-end-line="285" selection-end-column="37" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
@@ -702,8 +700,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/quotation/views/vw_pohandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="787" column="25" lean-forward="true" selection-start-line="787" selection-start-column="25" selection-end-line="787" selection-end-column="25" />
+        <state relative-caret-position="540">
+          <caret line="639" selection-start-line="639" selection-end-line="639" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>

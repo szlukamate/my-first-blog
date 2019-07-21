@@ -415,7 +415,7 @@ def pohandlerreception(request): #from pohandlerform
     tables = cursor2.fetchall()
 #dateofarrivallistsplitted to table end
 
-
+    '''
     #docdetails per docid to table start
     for xx in tables:
         auxid = xx[0]
@@ -437,23 +437,32 @@ def pohandlerreception(request): #from pohandlerform
     # pdb.set_trace()
 
     #docdetails per docid to table end
-
+    
 #porows table:
     #auxid, numberofitemstodeno
     #1 1
     #2 2
     #3 2
     #4 1
-
+    '''
 #deliverynote making start
-    cursor2.execute("SELECT *  "
+    cursor2.execute("SELECT "
+                        "auxid, "
+                        "podocdetailsid, "
+                        "podocid, "
+                        "cordocid, "
+                        "productid, "
+                        "arrivedqty, "
+                        "dateofarrivaldate,"
+                        "numberofitemstodeno "
+
                     "FROM porows ")
     tables2 = cursor2.fetchall()
     docmakercounter = 0
     #import pdb;
     #pdb.set_trace()
 
-    # temp table initialization before/outside the following for loop start
+    # neededqtytemptable declaration before/outside the following for loop start
     cursor2 = connection.cursor()
     cursor2.execute("DROP TEMPORARY TABLE IF EXISTS neededqtytemptable;")
     cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS neededqtytemptable "
@@ -467,14 +476,26 @@ def pohandlerreception(request): #from pohandlerform
 
                     "      ENGINE=INNODB "
                     "    ; ")
-    # temp table initialization before/outside the following for loop end
+    # neededqtytemptable declaration before/outside the following for loop end
+
+    # processedarrivedtemptable declaration before/outside the following for loop start
+    cursor2 = connection.cursor()
+    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS processedarrivedtemptable;")
+    cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS processedarrivedtemptable "
+                    "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    "     processedpodocdetailsid INT(11) NOT NULL) "
+
+                    "      ENGINE=INNODB "
+                    "    ; ")
+    # processedarrivedtemptable declaration before/outside the following for loop end
 
     for x3 in tables2: #porows
         podocdetailsid = x3[1]
         podocid = x3[2]
         cordocid = x3[3]
         productid = x3[4]
-        numberofitemstodeno = x3[6]
+        arrivedqty = x3[5]
+        numberofitemstodeno = x3[7]
 
         cursor2.execute("SELECT "
                         "DD2cor.cordocid as cordocid, "
@@ -579,29 +600,50 @@ def pohandlerreception(request): #from pohandlerform
 
                         "WHERE DD1po.Doc_detailsid_tblDoc_details=%s ", [podocdetailsid])
 
-#                        "GROUP BY cordocid, podocid, docdetailsid, corqty, fromstockdocid, denodfromstockqty    ", [podocdetailsid])
-
         fromstockresult = cursor2.fetchall()
 
+# sumarrivedqty determination and latching begin
         toinoperatordocdetails = ""
-        for x in tables2:
-            toinoperatordocdetails = toinoperatordocdetails + str(x[1]) + ","
-        toinoperatordocdetails = toinoperatordocdetails[: -1]
 
+        for x in tables2:
+            podocdetailsidforprocessedarriveds = x[1]
+            cursor2.execute("SELECT   "
+                            "processedpodocdetailsid "
+
+                            "FROM processedarrivedtemptable "
+
+                            "WHERE processedpodocdetailsid=%s ",
+                            [podocdetailsidforprocessedarriveds])
+            results = cursor2.fetchall()
+
+            if len(results) == 0:
+                cursor2.execute("INSERT INTO processedarrivedtemptable (processedpodocdetailsid) VALUES ('" + str(podocdetailsidforprocessedarriveds) + "');")
+                toinoperatordocdetails = toinoperatordocdetails + str(podocdetailsidforprocessedarriveds) + ","
+
+        if toinoperatordocdetails != "":
+            toinoperatordocdetails = toinoperatordocdetails[: -1]
+            searchphrase = " IN (" + toinoperatordocdetails + ")"
+        else:
+            searchphrase = "=0 "
         cursor2.execute("SELECT   "
                          "sum(arrivedqty) as sumarrivedqty "
 
                          "FROM porows "
 
-                        "WHERE podocdetailsid IN (" + toinoperatordocdetails + ") "
+                        "WHERE podocdetailsid" + searchphrase + " "
 
                         "GROUP BY cordocid, podocid, productid  ")
         sumarrivedqtyresult = cursor2.fetchall()
 
-        for x2 in sumarrivedqtyresult:
-            sumarrivedqty = x2[0]
+        if len(sumarrivedqtyresult) != 0:
+            for x2 in sumarrivedqtyresult:
+                sumarrivedqty = x2[0]
+        else:
+            sumarrivedqty = 0
+        import pdb;
+        pdb.set_trace()
 
-
+        # sumarrivedqty determination and latching end
 
         cursor2.execute("SELECT "
                         "DD2cor.cordocid as cordocid, "
@@ -731,6 +773,24 @@ def pohandlerreception(request): #from pohandlerform
             backtostockitemqty = x332[6]
             appendvarbacktostocklist = (cordocid, podocid, podocdetailsid, coritemqty, arriveditemqty, backtotockstockdocid, backtostockitemqty)
             backtostocklist.append(appendvarbacktostocklist)
+        def sumtodirect (directqty, neededqtylist, cordocidfromstocklist):
+            appendvarneededqtylist = (podocdetailsid, cordocid, podocidfromstocklist, directqty, subjectfordeno('directdeno', cordocidfromstocklist))
+            neededqtylist.append(appendvarneededqtylist)
+
+            return neededqtylist
+
+        def sumtoback (backqty, neededqtylist, fromstockstockdocidinbacktostocklist, cordocidfromstocklist):
+            appendvarneededqtylist = (podocdetailsid, fromstockstockdocidinbacktostocklist, podocidfromstocklist, backqty, subjectfordeno('backtostockdeno', cordocidfromstocklist))
+            neededqtylist.append(appendvarneededqtylist)
+
+            return neededqtylist
+
+        def sumtostock (stockitemqty, neededqtylist, surplusstockdocid, cordocidfromstocklist):
+            appendvarneededqtylist = (podocdetailsid, surplusstockdocid, podocidfromstocklist, stockitemqty, subjectfordeno('surplustostockdeno', cordocidfromstocklist))
+            neededqtylist.append(appendvarneededqtylist)
+
+            return neededqtylist
+
 
         def subjectfordeno (denokind, cororstockdocid):
 
@@ -763,6 +823,11 @@ def pohandlerreception(request): #from pohandlerform
                 return subjecttext
             elif denokind == 'backtostockdeno':
                 subjecttext = 'Back - ' + companyname + ' ' + pretag + str(docnumber)
+                return subjecttext
+
+
+            elif denokind == 'surplustostockdeno':
+                subjecttext = 'Surplus - ' + companyname + ' ' + pretag + str(docnumber)
 
                 return subjecttext
 
@@ -781,41 +846,35 @@ def pohandlerreception(request): #from pohandlerform
                 fromstockstockdocidinbacktostocklist = backtostocklist[x3333][5]
                 fromstockitemqtyinbacktostocklist = backtostocklist[x3333][6]
 
-                if fromstockstockdocidinfromstocklist == fromstockstockdocidinbacktostocklist: # there is back item
-                    arrived product direct to order or back?
-                    if sumarrivedqty <= corqty:
-                        alltodirect()
-                    else:
-                        partdirectparttoback()
 
-
-
-
-
+                if fromstockstockdocidinfromstocklist == fromstockstockdocidinbacktostocklist: # there is back item already
                     neededitemqty = fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist
-                    if neededitemqty >= arriveditemqtyinfromstocklist: # f.e. 1000 cored 500 fromstock 400 backed = 100 needed
-                        defactobackqty = arriveditemqtyinfromstocklist # arrived only f.e. 1
+                    if sumarrivedqty <= coritemqtyinfromstocklist:
+                        if neededitemqty == 0:
+                            sumtodirect(sumarrivedqty, neededqtylist, cordocidfromstocklist)
+                        else:
+                            sumtodirect(sumarrivedqty-neededitemqty, neededqtylist, cordocidfromstocklist)
+                            sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinbacktostocklist, cordocidfromstocklist )
 
                     else:
-                        defactobackqty = neededitemqty
+                        sumtostock(sumarrivedqty - corqty - neededitemqty, 1382) #surplusstockdocid)
+                        sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinbacktostocklist, cordocidfromstocklist)
 
-                else: # there is no back item
+                else: # there is no back item yet
+
                     neededitemqty = fromstockitemqtyinfromstocklist
-                    if neededitemqty >= arriveditemqtyinfromstocklist: # f.e. 1000 cored 500 fromstock 0 backed = 500 needed
-                        defactobackqty = arriveditemqtyinfromstocklist  # arrived only f.e. 1
+                    if sumarrivedqty <= coritemqtyinfromstocklist:
+
+                        if neededitemqty == 0:
+                            sumtodirect(sumarrivedqty, neededqtylist, cordocidfromstocklist)
+                        else:
+
+                            sumtodirect(sumarrivedqty - neededitemqty, neededqtylist, cordocidfromstocklist)
+                            sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinbacktostocklist, cordocidfromstocklist)
+
                     else:
-                        defactobackqty = neededitemqty
-
-            if defactobackqty != 0:
-                appendvarneededqtylist = (podocdetailsid, fromstockstockdocidinfromstocklist, podocidfromstocklist, defactobackqty, subjectfordeno('backtostockdeno', cordocidfromstocklist))
-                neededqtylist.append(appendvarneededqtylist)
-            sumofbacktostockqty = sumofbacktostockqty + neededitemqty
-        appendvarneededqtylist = (podocdetailsid, cordocidfromstocklist, podocidfromstocklist, sumarrivedqty-sumofbacktostockqty, subjectfordeno('directdeno', cordocidfromstocklist))
-        neededqtylist.append(appendvarneededqtylist) # neededqtylist append for this porow
-        # items from stock and back to stock to list start
-
-        import pdb;
-        pdb.set_trace()
+                        sumtostock(sumarrivedqty - corqty - neededitemqty, 1382)  # surplusstockdocid)
+                        sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinbacktostocklist)
 
         # neededqtylist to temptable start
         for x11 in range(len(neededqtylist)):
@@ -844,9 +903,11 @@ def pohandlerreception(request): #from pohandlerform
 
                         "FROM neededqtytemptable ")
         neededqtytemptable = cursor2.fetchall()
-        # neededqtylist to temptable start
+        # neededqtylist to temptable end
 
     # docdetails per docid to neededqtytemptable start
+    import pdb;
+    pdb.set_trace()
 
     for xx in neededqtytemptable:
         auxid = xx[0]
