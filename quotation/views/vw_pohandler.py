@@ -640,10 +640,8 @@ def pohandlerreception(request): #from pohandlerform
                 sumarrivedqty = x2[0]
         else:
             sumarrivedqty = 0
-        import pdb;
-        pdb.set_trace()
 
-        # sumarrivedqty determination and latching end
+# sumarrivedqty determination and latching end
 
         cursor2.execute("SELECT "
                         "DD2cor.cordocid as cordocid, "
@@ -779,8 +777,8 @@ def pohandlerreception(request): #from pohandlerform
 
             return neededqtylist
 
-        def sumtoback (backqty, neededqtylist, fromstockstockdocidinbacktostocklist, cordocidfromstocklist):
-            appendvarneededqtylist = (podocdetailsid, fromstockstockdocidinbacktostocklist, podocidfromstocklist, backqty, subjectfordeno('backtostockdeno', cordocidfromstocklist))
+        def sumtoback (backqty, neededqtylist, fromstockstockdocidinfromstocklist, cordocidfromstocklist):
+            appendvarneededqtylist = (podocdetailsid, fromstockstockdocidinfromstocklist, podocidfromstocklist, backqty, subjectfordeno('backtostockdeno', cordocidfromstocklist))
             neededqtylist.append(appendvarneededqtylist)
 
             return neededqtylist
@@ -849,32 +847,37 @@ def pohandlerreception(request): #from pohandlerform
 
                 if fromstockstockdocidinfromstocklist == fromstockstockdocidinbacktostocklist: # there is back item already
                     neededitemqty = fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist
-                    if sumarrivedqty <= coritemqtyinfromstocklist:
-                        if neededitemqty == 0:
-                            sumtodirect(sumarrivedqty, neededqtylist, cordocidfromstocklist)
-                        else:
-                            sumtodirect(sumarrivedqty-neededitemqty, neededqtylist, cordocidfromstocklist)
-                            sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinbacktostocklist, cordocidfromstocklist )
+                    if sumarrivedqty != 0:
 
-                    else:
-                        sumtostock(sumarrivedqty - corqty - neededitemqty, 1382) #surplusstockdocid)
-                        sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinbacktostocklist, cordocidfromstocklist)
+                        if sumarrivedqty <= coritemqtyinfromstocklist:
+
+                            if neededitemqty == 0:
+                                sumtodirect(sumarrivedqty, neededqtylist, cordocidfromstocklist)
+                            else:
+                                sumtodirect(sumarrivedqty-neededitemqty, neededqtylist, cordocidfromstocklist)
+                                sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinbacktostocklist, cordocidfromstocklist )
+
+                        else:
+                            sumtostock(sumarrivedqty - coritemqtyinfromstocklist - neededitemqty, neededqtylist, 1382, cordocidfromstocklist)  # surplusstockdocid)
+                            sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
+                            sumtodirect(coritemqtyinfromstocklist-neededitemqty, neededqtylist, cordocidfromstocklist)
 
                 else: # there is no back item yet
 
                     neededitemqty = fromstockitemqtyinfromstocklist
-                    if sumarrivedqty <= coritemqtyinfromstocklist:
+                    if sumarrivedqty != 0:
+                        if sumarrivedqty <= coritemqtyinfromstocklist:
 
-                        if neededitemqty == 0:
-                            sumtodirect(sumarrivedqty, neededqtylist, cordocidfromstocklist)
+                            if neededitemqty == 0:
+                                sumtodirect(sumarrivedqty, neededqtylist, cordocidfromstocklist)
+                            else:
+
+                                sumtodirect(sumarrivedqty - neededitemqty, neededqtylist, cordocidfromstocklist)
+                                sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist, cordocidfromstocklist)
+
                         else:
-
-                            sumtodirect(sumarrivedqty - neededitemqty, neededqtylist, cordocidfromstocklist)
-                            sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinbacktostocklist, cordocidfromstocklist)
-
-                    else:
-                        sumtostock(sumarrivedqty - corqty - neededitemqty, 1382)  # surplusstockdocid)
-                        sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinbacktostocklist)
+                            sumtostock(sumarrivedqty - coritemqtyinfromstocklist - neededitemqty, neededqtylist, 1382, cordocidfromstocklist)  # surplusstockdocid)
+                            sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
 
         # neededqtylist to temptable start
         for x11 in range(len(neededqtylist)):
@@ -899,6 +902,7 @@ def pohandlerreception(request): #from pohandlerform
                         "podocdetailsid, "
                         "cororstockdocidto, "
                         "podocidfrom, "
+                        "subjecttext, "
                         "itemqty "
 
                         "FROM neededqtytemptable ")
