@@ -930,6 +930,20 @@ def pohandlerreception(request): #from pohandlerform
                         neededitemqtyaggregated = neededitemqtyaggregated - fromstockitemqtyinbacktostocklist
 # neededitemqtyaggregated end
 
+# neededitemtodirectqtyaggregated start
+                neededitemtodirectqtyaggregated = 0
+                #neededitemtodirectqtyaggregated =
+
+# neededitemtodirectqtyaggregated end
+
+# neededtostockqtyaggregated start
+                neededtostockqtyaggregated = 0
+                #neededtostockqtyaggregated =
+
+# neededtostockqtyaggregated end
+
+qtyto
+
         neededqtylist = []
         sumofbacktostockqty = 0
         for x333 in range(len(fromstocklist)): # fromstock for a porow
@@ -955,8 +969,8 @@ def pohandlerreception(request): #from pohandlerform
                 neededitemqty = 0
                 neededtostockqty = 0
             else:
-                neededitemqty = (fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist) - underprogressqtyinneededqtytemptable('toback',fromstockstockdocidinfromstocklist, cordocidfromstocklist) #neededitemqty should be = neededitemtobackqty
                 neededitemtodirectqty = coritemqtyinfromstocklist - fromstockitemqtyinfromstocklist + neededitemqty - underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist)
+                neededitemqty = (fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist) - underprogressqtyinneededqtytemptable('toback',fromstockstockdocidinfromstocklist, cordocidfromstocklist) #neededitemqty should be = neededitemtobackqty
                 neededtostockqty = sumarrivedqty - (neededitemqty + neededitemtodirectqty)- underprogressqtyinneededqtytemptable('tosurplus',1382, cordocidfromstocklist) - underprogressqtyinneededqtytemptable('todirect',cordocidfromstocklist, cordocidfromstocklist) - underprogressqtyinneededqtytemptable('toback',fromstockstockdocidinfromstocklist, cordocidfromstocklist)
 
             if sumarrivedqty <= coritemqtyinfromstocklist:
