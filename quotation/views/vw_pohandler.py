@@ -938,11 +938,10 @@ def pohandlerreception(request): #from pohandlerform
 
 # neededtostockqtyaggregated start
                 neededtostockqtyaggregated = 0
-                #neededtostockqtyaggregated =
+                neededtostockqtyaggregated = sumarrivedqty - coritemqty
 
 # neededtostockqtyaggregated end
 
-qtyto
 
         neededqtylist = []
         sumofbacktostockqty = 0
@@ -964,72 +963,79 @@ qtyto
                     fromstockstockdocidinbacktostocklist = backtostocklist[x3333][5]
                     fromstockitemqtyinbacktostocklist = backtostocklist[x3333][6]
 
-            if sumarrivedqty <= coritemqtyinfromstocklist - neededitemqtyaggregated:
-                neededitemtodirectqty = coritemqtyinfromstocklist - underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist)
-                neededitemqty = 0
+            maxneededitemtodirectqty = coritemqtyinfromstocklist - neededitemqtyaggregated - underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist)
+            maxneededitemqty = (fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist) - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
+            maxneededitemtostockqty = neededtostockqtyaggregated
+
+            if sumarrivedqty >= maxneededitemtodirectqty:
+                neededitemtodirectqty = maxneededitemtodirectqty
+                carrytoback = sumarrivedqty - neededitemtodirectqty
+            else:
+                neededitemtodirectqty = sumarrivedqty
+                carrytoback = 0
+            if carrytoback >= maxneededitemqty:
+                neededitemqty = maxneededitemqty
+                carrytostockqty = carrytoback - neededitemqty
+            else:
+                neededitemqty = carrytoback
+                carrytostockqty = 0
+            if carrytostockqty < maxneededitemtostockqty:
+                neededtostockqty = carrytostockqty
+            else:
                 neededtostockqty = 0
-            else:
-                neededitemtodirectqty = coritemqtyinfromstocklist - fromstockitemqtyinfromstocklist + neededitemqty - underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist)
-                neededitemqty = (fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist) - underprogressqtyinneededqtytemptable('toback',fromstockstockdocidinfromstocklist, cordocidfromstocklist) #neededitemqty should be = neededitemtobackqty
-                neededtostockqty = sumarrivedqty - (neededitemqty + neededitemtodirectqty)- underprogressqtyinneededqtytemptable('tosurplus',1382, cordocidfromstocklist) - underprogressqtyinneededqtytemptable('todirect',cordocidfromstocklist, cordocidfromstocklist) - underprogressqtyinneededqtytemptable('toback',fromstockstockdocidinfromstocklist, cordocidfromstocklist)
 
-            if sumarrivedqty <= coritemqtyinfromstocklist:
+            sumtostock(neededtostockqty, neededqtylist, 1382, cordocidfromstocklist)  # surplusstockdocid)
+            sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
+            sumtodirect(neededitemtodirectqty, neededqtylist, cordocidfromstocklist)
 
-                if neededitemqty == 0:
-                    sumtodirect(sumarrivedqty, neededqtylist, cordocidfromstocklist)
-                else:
-                    sumtodirect(neededitemtodirectqty, neededqtylist, cordocidfromstocklist)
-                    sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist, cordocidfromstocklist )
+            #import pdb;
+            #pdb.set_trace()
 
-            else:
-                sumtostock(neededtostockqty, neededqtylist, 1382, cordocidfromstocklist)  # surplusstockdocid)
-                sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
-                sumtodirect(neededitemtodirectqty, neededqtylist, cordocidfromstocklist)
+            c = 1
 
-        #import pdb;
-        #pdb.set_trace()
+            # neededqtylist to temptable start
+            for x11 in range(len(neededqtylist)):
+                podocdetailsid = neededqtylist[x11][0]
+                cororstockdocidto = neededqtylist[x11][1]
+                podocidfrom = neededqtylist[x11][2]
+                itemqty = neededqtylist[x11][3]
+                subjecttext = neededqtylist[x11][4]
+                denorole = neededqtylist[x11][5]
+                cordocidroot = neededqtylist[x11][6]
 
-        # neededqtylist to temptable start
-        for x11 in range(len(neededqtylist)):
-            podocdetailsid = neededqtylist[x11][0]
-            cororstockdocidto = neededqtylist[x11][1]
-            podocidfrom = neededqtylist[x11][2]
-            itemqty = neededqtylist[x11][3]
-            subjecttext = neededqtylist[x11][4]
-            denorole = neededqtylist[x11][5]
-            cordocidroot = neededqtylist[x11][6]
+                cursor2.execute("INSERT INTO neededqtytemptable (podocdetailsid, "
+                                "cororstockdocidto, "
+                                "podocidfrom, "
+                                "subjecttext, "
+                                "denorole, "
+                                "cordocidroot, "
+                                "itemqty) VALUES ('" + str(podocdetailsid) + "', "
+                                                                  "'" + str(cororstockdocidto) + "', "
+                                                                  "'" + str(podocidfrom) + "', "
+                                                                  "'" + str(subjecttext) + "', "
+                                                                  "'" + str(denorole) + "', "
+                                                                  "'" + str(cordocidroot) + "', "
+                                                                  "'" + str(itemqty) + "');")
 
-            cursor2.execute("INSERT INTO neededqtytemptable (podocdetailsid, "
+            cursor2.execute("SELECT   "
+                            "auxid, "
+                            "podocdetailsid, "
                             "cororstockdocidto, "
                             "podocidfrom, "
                             "subjecttext, "
                             "denorole, "
                             "cordocidroot, "
-                            "itemqty) VALUES ('" + str(podocdetailsid) + "', "
-                                                              "'" + str(cororstockdocidto) + "', "
-                                                              "'" + str(podocidfrom) + "', "
-                                                              "'" + str(subjecttext) + "', "
-                                                              "'" + str(denorole) + "', "
-                                                              "'" + str(cordocidroot) + "', "
-                                                              "'" + str(itemqty) + "');")
+                            "itemqty "
+    
+                            "FROM neededqtytemptable "
+                            "ORDER BY auxid ")
 
-        cursor2.execute("SELECT   "
-                        "auxid, "
-                        "podocdetailsid, "
-                        "cororstockdocidto, "
-                        "podocidfrom, "
-                        "subjecttext, "
-                        "denorole, "
-                        "cordocidroot, "
-                        "itemqty "
+            neededqtytemptable = cursor2.fetchall()
+            # neededqtylist to temptable end
 
-                        "FROM neededqtytemptable ")
-        neededqtytemptable = cursor2.fetchall()
-        # neededqtylist to temptable end
-
-        import pdb;
-        pdb.set_trace()
-        d = 1
+            #import pdb;
+            #pdb.set_trace()
+            d = 1
 
 
 
@@ -1040,6 +1046,8 @@ qtyto
         podocidfrom = xx[3]
         cororstockdocidto = xx[2]
         denorole = xx[5]
+        cordocidroot = xx[6]
+
 
         cursor2.execute("SELECT count(auxid) "
                         "FROM neededqtytemptable "
@@ -1063,13 +1071,16 @@ qtyto
                     "podocidfrom, "
                     "itemqty, "
                     "numberofitemstodeno, "
-                    "subjecttext "
+                    "subjecttext, "
+                    "denorole, "
+                    "cordocidroot "
                     
-                    "FROM neededqtytemptable ")
+                    "FROM neededqtytemptable "
+                    "ORDER BY auxid ")
     neededqtytemptable = cursor2.fetchall()
 
-    #import pdb;
-    #pdb.set_trace()
+    import pdb;
+    pdb.set_trace()
 
 
     for x31 in neededqtytemptable:
@@ -1079,6 +1090,16 @@ qtyto
         itemqty = x31[4]
         numberofitemstodeno = x31[5]
         subjecttext = x31[6]
+        denorole = x31[7]
+        cordocidroot = x31[8]
+
+# backtostockforcordocid_tbldoc value pre begin
+        if denorole == 'toback':
+            backtostockforcordocidvalue = cordocidroot
+        else:
+            backtostockforcordocidvalue = None
+
+# backtostockforcordocid_tbldoc value pre end
 
         if docmakercounter  == 0: #doc create only once even multiple docdetails
             docmakercounter = numberofitemstodeno
@@ -1180,8 +1201,9 @@ qtyto
                             "doclinkparentid_tbldoc, "
                             "accountcurrencycode_tbldoc, "
                             "wherefromdocid_tbldoc, "
-                            "wheretodocid_tbldoc,"
-                            "denoenabledflag_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                            "wheretodocid_tbldoc, "
+                            "denoenabledflag_tbldoc, "
+                            "backtostockforcordocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                             [8, contactid,
                              companynameclone,
                              firstnameclone,
@@ -1207,7 +1229,8 @@ qtyto
                              accountcurrencycode,
                              podocid,
                              cordocid,
-                             1])
+                             1,
+                             backtostockforcordocidvalue])
 
 
             cursor3 = connection.cursor()
