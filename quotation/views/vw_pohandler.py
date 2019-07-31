@@ -198,8 +198,10 @@ def pohandlerreception(request): #from pohandlerform
     dateofarrivallist = json.loads(dateofarrivallistraw)
 
     creatorid = request.user.id
+    #import pdb;
+    #pdb.set_trace()
 
-#splitting start
+    #splitting start
     dateofarrivallistsplitted= []
     for x1 in range(0, len(dateofarrivallist), 4):
         podocdetailsid = dateofarrivallist[x1+0]
@@ -1094,8 +1096,8 @@ def pohandlerreception(request): #from pohandlerform
                     "ORDER BY auxid ")
     neededqtytemptable = cursor2.fetchall()
 
-    import pdb;
-    pdb.set_trace()
+    #import pdb;
+    #pdb.set_trace()
 
 
     for x31 in neededqtytemptable:
