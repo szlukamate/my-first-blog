@@ -122,7 +122,8 @@ def docsearchcontent(request):
                     "Dto.topretag, " #20
                     "Dto.todocnumber, "
                     "D1.stocktakingdeno_tbldoc, "
-                    "D1.denoenabledflag_tbldoc "
+                    "D1.denoenabledflag_tbldoc, "
+                    "D1.machinemadedocflag_tbldoc "
                    
                     "FROM quotation_tbldoc as D1 "
 

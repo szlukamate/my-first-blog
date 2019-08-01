@@ -14,6 +14,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 import subprocess
 import os
+import time
 # import pdb;
 # pdb.set_trace()
 def pohandlerframe(request):
@@ -476,7 +477,8 @@ def pohandlerreception(request): #from pohandlerform
                     "     numberofitemstodeno INT(11) NULL, "
                     "     subjecttext VARCHAR(255) NULL, "
                     "     denorole VARCHAR(255) NULL, "
-                    "     cordocidroot INT(11) NULL) "
+                    "     cordocidroot INT(11) NULL, "
+                    "     productid INT(11) NULL) "
 
                     "      ENGINE=INNODB "
                     "    ; ")
@@ -787,17 +789,17 @@ def pohandlerreception(request): #from pohandlerform
                                 "sum(itemqty) "
     
                                 "FROM neededqtytemptable "
-                                "WHERE cororstockdocidto=%s and cordocidroot=%s and denorole=%s "
-                                "GROUP BY cororstockdocidto, cordocidroot, denorole ",[corstockdocidparameter, cordocidrootparameter, denoroleparameter])
+                                "WHERE cororstockdocidto=%s and cordocidroot=%s and denorole=%s and productid=%s "
+                                "GROUP BY cororstockdocidto, cordocidroot, denorole, productid ",[corstockdocidparameter, cordocidrootparameter, denoroleparameter, productid])
                 results = cursor2.fetchall()
             if corstockdocidparameter == None:
                 cursor2.execute("SELECT   "
                                 "sum(itemqty) "
 
                                 "FROM neededqtytemptable "
-                                "WHERE cordocidroot=%s and denorole=%s "
-                                "GROUP BY cordocidroot, denorole ",
-                                [cordocidrootparameter, denoroleparameter])
+                                "WHERE cordocidroot=%s and denorole=%s and productid=%s "
+                                "GROUP BY cordocidroot, denorole, productid ",
+                                [cordocidrootparameter, denoroleparameter, productid])
                 results = cursor2.fetchall()
 
             #import pdb;
@@ -979,8 +981,9 @@ def pohandlerreception(request): #from pohandlerform
             underprogressqtyinneededqtytemptable('toback', None, cordocidfromstocklist) +
             underprogressqtyinneededqtytemptable('tosurplus', 1382, cordocidfromstocklist))
 
-            maxneededitemtodirectqty = coritemqtyinfromstocklist - neededitemqtyaggregated - underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist)
-            maxneededitemqty = (fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist) - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
+            maxneededitemtodirectqty = (coritemqtyinfromstocklist - (neededitemqtyaggregated + underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)) -
+                                       underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist))
+            maxneededitemqty = (sumarrivedqty - processedqty) - (fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist) - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
             maxneededitemtostockqty = neededtostockqtyaggregated - underprogressqtyinneededqtytemptable('tosurplus', 1382, cordocidfromstocklist)
 
             if (sumarrivedqty - processedqty) > maxneededitemtodirectqty:
@@ -1026,12 +1029,14 @@ def pohandlerreception(request): #from pohandlerform
                                 "subjecttext, "
                                 "denorole, "
                                 "cordocidroot, "
+                                "productid, "
                                 "itemqty) VALUES ('" + str(podocdetailsid) + "', "
                                                                   "'" + str(cororstockdocidto) + "', "
                                                                   "'" + str(podocidfrom) + "', "
                                                                   "'" + str(subjecttext) + "', "
                                                                   "'" + str(denorole) + "', "
                                                                   "'" + str(cordocidroot) + "', "
+                                                                  "'" + str(productid) + "', "
                                                                   "'" + str(itemqty) + "');")
 
             cursor2.execute("SELECT   "
@@ -1042,10 +1047,12 @@ def pohandlerreception(request): #from pohandlerform
                             "subjecttext, "
                             "denorole, "
                             "cordocidroot, "
-                            "itemqty "
+                            "itemqty, "
+                            "productid "
     
                             "FROM neededqtytemptable "
-                            "ORDER BY auxid ")
+                            "ORDER BY cororstockdocidto ")
+
 
             neededqtytemptable = cursor2.fetchall()
             # neededqtylist to temptable end
@@ -1054,7 +1061,7 @@ def pohandlerreception(request): #from pohandlerform
             pdb.set_trace()
             d = 1
 
-
+    time.sleep(0.200)
 
 
 # docdetails per docid to neededqtytemptable start
@@ -1064,11 +1071,13 @@ def pohandlerreception(request): #from pohandlerform
         cororstockdocidto = xx[2]
         denorole = xx[5]
         cordocidroot = xx[6]
+        productid = xx[8]
 
 
         cursor2.execute("SELECT count(auxid) "
                         "FROM neededqtytemptable "
-                        "WHERE podocidfrom=%s and cororstockdocidto=%s and denorole=%s"
+
+                        "WHERE podocidfrom=%s and cororstockdocidto=%s and denorole=%s "
                         "GROUP BY podocidfrom, cororstockdocidto, denorole ", [podocidfrom, cororstockdocidto, denorole])
         numberofitemstodenoresults = cursor2.fetchall()
 
@@ -1090,14 +1099,15 @@ def pohandlerreception(request): #from pohandlerform
                     "numberofitemstodeno, "
                     "subjecttext, "
                     "denorole, "
-                    "cordocidroot "
+                    "cordocidroot, "
+                    "productid "
                     
                     "FROM neededqtytemptable "
-                    "ORDER BY auxid ")
+                    "ORDER BY cororstockdocidto ")
     neededqtytemptable = cursor2.fetchall()
 
-    #import pdb;
-    #pdb.set_trace()
+    import pdb;
+    pdb.set_trace()
 
 
     for x31 in neededqtytemptable:
@@ -1109,6 +1119,7 @@ def pohandlerreception(request): #from pohandlerform
         subjecttext = x31[6]
         denorole = x31[7]
         cordocidroot = x31[8]
+        productid = x31[9]
 
 # backtostockforcordocid_tbldoc value pre begin
         if denorole == 'toback':
@@ -1220,7 +1231,8 @@ def pohandlerreception(request): #from pohandlerform
                             "wherefromdocid_tbldoc, "
                             "wheretodocid_tbldoc, "
                             "denoenabledflag_tbldoc, "
-                            "backtostockforcordocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                            "backtostockforcordocid_tbldoc, "
+                            "machinemadedocflag_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                             [8, contactid,
                              companynameclone,
                              firstnameclone,
@@ -1247,7 +1259,8 @@ def pohandlerreception(request): #from pohandlerform
                              podocid,
                              cordocid,
                              1,
-                             backtostockforcordocidvalue])
+                             backtostockforcordocidvalue,
+                             1])
 
 
             cursor3 = connection.cursor()
