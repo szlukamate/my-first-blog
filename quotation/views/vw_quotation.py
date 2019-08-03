@@ -575,7 +575,14 @@ def quotationemail(request, docid):
         emailbodytext = x[5]
 
     pdffilename = dockindname + '_' + pretag + str(docnumber) + '_Subject:_' + subject + '.pdf'
-    os.system('google-chrome --headless --print-to-pdf='+ pdffilename + ' http://127.0.0.1:8000/quotation/quotationprint/' + docid + '/')
+    subprocess.call("if [ ! -d 'emailattachmentspre/" + str(creatorid) + "' ]; then mkdir ./emailattachmentspre/" + str(creatorid) + "; fi", shell=True)
+    subprocess.call('google-chrome --headless --print-to-pdf=./emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://127.0.0.1:8000/quotation/quotationprint/' + docid + '/', shell=True)
+#    os.system('if [ 1 -eq 1 ]; then touch proba17.cv fi')
+#    os.system('touch proba16.cv')
+    #import pdb;
+    #pdb.set_trace()
+
+    #    os.system('google-chrome --headless --print-to-pdf=./emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://127.0.0.1:8000/quotation/quotationprint/' + docid + '/')
 
     return render(request, 'quotation/emailadd.html', {'doc': doc,
                                                        'pdffilename': pdffilename,
