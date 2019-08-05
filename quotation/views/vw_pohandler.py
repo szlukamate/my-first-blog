@@ -938,7 +938,7 @@ def pohandlerreception(request): #from pohandlerform
                     if len(backtostocklist) != 0:
                         fromstockitemqtyinbacktostocklist = backtostocklist[x3333][6]
                         neededitemqtyaggregated = neededitemqtyaggregated - fromstockitemqtyinbacktostocklist
-# neededitemqtyaggregated end
+# neededitemqtyaggregated  end
 
 # neededitemtodirectqtyaggregated start
                 neededitemtodirectqtyaggregated = 0
