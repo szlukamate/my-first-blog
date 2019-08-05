@@ -533,6 +533,34 @@ def quotationbackpage(request):
 
     return HttpResponse(json_data, content_type="application/json")
 def quotationemail(request, docid):
+    BASE_DIR = settings.BASE_DIR
+
+#applicable ipaddress begin
+    debugstate = settings.DEBUG
+
+    if debugstate == True:
+        wherephrase = 'ipaddressdebugtrue'
+    else:
+        wherephrase = 'ipaddressdebugfalse'
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "settingvalue_tblsettings "
+
+                    "FROM quotation_tblsettings "
+
+                    "WHERE settingname_tblsettings=%s ",
+                    [wherephrase])
+    results = cursor1.fetchall()
+    for x in results:
+        appliableipaddress = x[0]
+
+
+
+    #import pdb;
+    #pdb.set_trace()
+# applicable ipaddress  end
+
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
                     "docid_tbldoc, "
@@ -558,9 +586,6 @@ def quotationemail(request, docid):
         docnumber = x[5]
         subject = x[6]
 
-    #import pdb;
-    #pdb.set_trace()
-
     cursor10 = connection.cursor()
     cursor10.execute("SELECT id, "
                      "first_name, "
@@ -575,8 +600,8 @@ def quotationemail(request, docid):
         emailbodytext = x[5]
 
     pdffilename = dockindname + '_' + pretag + str(docnumber) + '_Subject:_' + subject + '.pdf'
-    subprocess.call("if [ ! -d 'emailattachmentspre/" + str(creatorid) + "' ]; then mkdir ./emailattachmentspre/" + str(creatorid) + "; fi", shell=True)
-    subprocess.call('google-chrome --headless --print-to-pdf=./emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://127.0.0.1:8000/quotation/quotationprint/' + docid + '/', shell=True)
+    subprocess.call("if [ ! -d '" + BASE_DIR + "emailattachmentspre/" + str(creatorid) + "' ]; then mkdir " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + "; fi", shell=True)
+    subprocess.call('google-chrome --headless --print-to-pdf=' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://' + appliableipaddress + ':8000/quotation/quotationprint/' + docid + '/', shell=True)
 #    os.system('if [ 1 -eq 1 ]; then touch proba17.cv fi')
 #    os.system('touch proba16.cv')
     #import pdb;

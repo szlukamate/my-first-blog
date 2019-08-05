@@ -42,7 +42,7 @@
 												{%  for docdetail in  docdetails %}
 
 															<tr>
-																<td><a href="{% url 'emailviewattachment' pk=docdetail.0 %}">{{ docdetail.1 }}</a></td>
+																<td><a href="{% url 'emailviewattachment' pk=docdetail.0 %}">{{ docdetail.1 }}/{{ docdetail.0 }}</a></td>
 															</tr>
 												{% endfor %}
 											</tbody>

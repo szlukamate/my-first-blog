@@ -13,11 +13,13 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import os
 import shutil
+#from mysite.settings import BASE_DIR
 
 # import pdb;
 # pdb.set_trace()
 
 def emailadd (request, pk):
+    BASE_DIR = settings.BASE_DIR
     creatorid = request.user.id
 
     cursor0 = connection.cursor()
@@ -231,12 +233,12 @@ def emailadd (request, pk):
 
     def attachmentstacking(filenameparameter, maxdocdetailsparameter):
 
-        oldname = './emailattachmentspre/' + str(creatorid) + '/' + filenameparameter
-        newname = './emailattachmentspre/' + str(creatorid) + '/' + str(maxdocdetailsparameter) + '.pdf'
+        oldname = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + filenameparameter
+        newname = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + str(maxdocdetailsparameter) + '.pdf'
         os.rename(oldname, newname)
 
-        oldpath = './emailattachmentspre/' + str(creatorid) + '/' + str(maxdocdetailsparameter) + '.pdf'
-        newpath = './emailattachments/' + str(maxdocdetailsparameter) + '.pdf'
+        oldpath = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + str(maxdocdetailsparameter) + '.pdf'
+        newpath = BASE_DIR + '/emailattachments/' + str(maxdocdetailsparameter) + '.pdf'
         shutil.move(oldpath, newpath)
         return
 
@@ -261,7 +263,7 @@ def emailadd (request, pk):
 
     email = EmailMessage(
         emailsubject, emailbodytextmodifiedbyuser, 'from@me.com', [addresseeemail], cc=[cc])
-    email.attach_file('./emailattachmentspre/' + str(creatorid) + '/' + pdffilename)
+    email.attach_file(BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename)
     if howmanyattachedfiles==1:
         email.attach_file('/home/szluka/djangogirls/' + filename)
 
@@ -402,6 +404,9 @@ def emailform(request, pk):
                                                         'creatordata': creatordata})
 
 def emailviewattachment(request, pk):
+    BASE_DIR = settings.BASE_DIR
+
+
     cursor3 = connection.cursor()
     cursor3.execute(
         "SELECT  "
@@ -424,7 +429,7 @@ def emailviewattachment(request, pk):
     fs = FileSystemStorage()
  #   filename = 'output.pdf'
 #    if fs.exists(attachmentname):
-    with fs.open('./emailattachments/' + str(docdetailsid) + '.pdf') as pdf:
+    with fs.open(BASE_DIR + '/emailattachments/' + str(docdetailsid) + '.pdf') as pdf:
         response = HttpResponse(pdf, content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename="output.pdf"'
         return response
@@ -432,13 +437,15 @@ def emailviewattachment(request, pk):
 #        return HttpResponseNotFound('The requested pdf was not found in our server.')
 
 def emailviewattachmentcandidate(request, pdffilename):
-    #import pdb;
-    #pdb.set_trace()
     creatorid = request.user.id
+    BASE_DIR = settings.BASE_DIR
 
     fs = FileSystemStorage()
  #   filename = 'output.pdf'
-    filename2='emailattachmentspre/' + str(creatorid) + '/' + pdffilename
+    filename2 = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename
+    #import pdb;
+    #pdb.set_trace()
+
     if fs.exists(filename2):
         with fs.open(filename2) as pdf:
             response = HttpResponse(pdf, content_type='application/pdf')
