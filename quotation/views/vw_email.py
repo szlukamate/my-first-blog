@@ -2,19 +2,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
 from django.contrib.auth.decorators import login_required
-#from .forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
 from array import *
 import simplejson as json
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import os
 import shutil
-#from mysite.settings import BASE_DIR
-
 # import pdb;
 # pdb.set_trace()
 
@@ -147,17 +144,14 @@ def emailadd (request, pk):
     #import pdb;
     #pdb.set_trace()
 
+
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
     results = cursor3.fetchall()
     for x in results:
         maxdocid = x[0]
 
-    def pdfeddocattachmentwrite(maxdocid, pdffilename):
-#        with open('/home/szluka/djangogirls/' + pdffilename, 'rb') as file:
-#            attachmentcontent = file.read()
-#        fs = FileSystemStorage()
-        #fs.delete(pdffilename)
+    def attachmentwrite(maxdocid, pdffilename):
 
         cursor4 = connection.cursor()
         cursor4.execute(
@@ -231,6 +225,13 @@ def emailadd (request, pk):
     #import pdb;
     #pdb.set_trace()
 
+    def attachmentmovingfromroot(filenameparameter): #uploaded to root this moves to /emailattachmentspre
+
+        oldpath = '' + filenameparameter
+        newpath = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + filenameparameter
+        shutil.move(oldpath, newpath)
+        return
+
     def attachmentstacking(filenameparameter, maxdocdetailsparameter):
 
         oldname = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + filenameparameter
@@ -247,11 +248,14 @@ def emailadd (request, pk):
     for x in request.FILES:
         howmanyattachedfiles=howmanyattachedfiles+1
     if howmanyattachedfiles==0: #only doc as pdf attached
-        maxdocdetailsid0 = pdfeddocattachmentwrite(maxdocid, pdffilename)
+        maxdocdetailsid0 = attachmentwrite(maxdocid, pdffilename)
 
     elif howmanyattachedfiles==1: #doc as pdf +1 attachment
-        pdfeddocattachmentwrite(maxdocid, pdffilename)
-        attachment1write(maxdocid)
+        maxdocdetailsid0 = attachmentwrite(maxdocid, pdffilename)
+        myfile = request.FILES['myfile']
+
+        maxdocdetailsid1 = attachmentwrite(maxdocid, myfile.name)
+#        attachment1write(maxdocid)
 
     elif howmanyattachedfiles == 2: #doc as pdf +2 attachments
         pdfeddocattachmentwrite(maxdocid, pdffilename)
@@ -261,47 +265,60 @@ def emailadd (request, pk):
     #import pdb;
     #pdb.set_trace()
 
-    email = EmailMessage(
-        emailsubject, emailbodytextmodifiedbyuser, 'from@me.com', [addresseeemail], cc=[cc])
-    email.attach_file(BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename)
-    if howmanyattachedfiles==1:
-        email.attach_file('/home/szluka/djangogirls/' + filename)
-
-
-    if howmanyattachedfiles == 2:
-        email.attach_file('/home/szluka/djangogirls/' + filename)
-        email.attach_file('/home/szluka/djangogirls/' + filename2)
-    email.send()
-
-    attachmentstacking(pdffilename, maxdocdetailsid0) #docpdf renaming and moving
+    docaspdffullpathfilename = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename
 
     fs = FileSystemStorage()
-    if fs.exists(pdffilename) :
-        fs.delete(pdffilename)
 
-    try:
-        filename
-    except NameError:
-        print
-        "well, it WASN'T defined after all!"
+    if fs.exists(docaspdffullpathfilename):
+
+
+        email = EmailMessage(
+            emailsubject, emailbodytextmodifiedbyuser, 'from@me.com', [addresseeemail], cc=[cc])
+        email.attach_file(docaspdffullpathfilename)
+        attachmentstacking(pdffilename, maxdocdetailsid0) #docpdf renaming and moving
+
+
+        if howmanyattachedfiles==1:
+            attachmentmovingfromroot(myfile.name)
+            filenamefullpathfilename = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + myfile.name
+            email.attach_file(filenamefullpathfilename)
+            attachmentstacking(myfile.name, maxdocdetailsid1) #attached file1 renaming and moving
+
+
+        if howmanyattachedfiles == 2:
+            email.attach_file('/home/szluka/djangogirls/' + filename)
+            email.attach_file('/home/szluka/djangogirls/' + filename2)
+        email.send()
+
+
+        if fs.exists(pdffilename) :
+            fs.delete(pdffilename)
+
+        try:
+            filename
+        except NameError:
+            print
+            "well, it WASN'T defined after all!"
+        else:
+            print
+            "sure, it was defined."
+            if fs.exists(filename):
+                fs.delete(filename)
+
+        try:
+            filename2
+        except NameError:
+            print
+            "well, it WASN'T defined after all!"
+        else:
+            print
+            "sure, it was defined."
+            if fs.exists(filename2):
+                fs.delete(filename2)
+
+        return redirect('emailform', pk=maxdocid)
     else:
-        print
-        "sure, it was defined."
-        if fs.exists(filename):
-            fs.delete(filename)
-
-    try:
-        filename2
-    except NameError:
-        print
-        "well, it WASN'T defined after all!"
-    else:
-        print
-        "sure, it was defined."
-        if fs.exists(filename2):
-            fs.delete(filename2)
-
-    return redirect('emailform', pk=maxdocid)
+        return HttpResponseNotFound('The requested pdf was not found in our server.')
 
 def emailform(request, pk):
         if request.method == "POST":
@@ -420,21 +437,16 @@ def emailviewattachment(request, pk):
     for x in docdetails:
         docdetailsid = x[0]
         attachmentname = x[1]
-    #import pdb;
-    #pdb.set_trace()
-
-#    with open(str(docdetailsid) + '.pdf', 'wb') as file:
-#        file.write(attachmentcontent)
 
     fs = FileSystemStorage()
- #   filename = 'output.pdf'
-#    if fs.exists(attachmentname):
-    with fs.open(BASE_DIR + '/emailattachments/' + str(docdetailsid) + '.pdf') as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="output.pdf"'
-        return response
-#    else:
-#        return HttpResponseNotFound('The requested pdf was not found in our server.')
+    storedfilename = BASE_DIR + '/emailattachments/' + str(docdetailsid) + '.pdf'
+    if fs.exists(storedfilename):
+        with fs.open(storedfilename) as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="output.pdf"'
+            return response
+    else:
+        return HttpResponseNotFound("The requested pdf was not found in our server.")
 
 def emailviewattachmentcandidate(request, pdffilename):
     creatorid = request.user.id
