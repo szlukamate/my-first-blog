@@ -600,7 +600,7 @@ def quotationemail(request, docid):
         emailbodytext = x[5]
 
     pdffilename = dockindname + '_' + pretag + str(docnumber) + '_Subject:_' + subject + '.pdf'
-    subprocess.call("if [ ! -d '" + BASE_DIR + "emailattachmentspre/" + str(creatorid) + "' ]; then mkdir " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + "; fi", shell=True)
+    subprocess.call("if [ ! -d '" + BASE_DIR + "emailattachmentspre/" + str(creatorid) + "' ]; then mkdir " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + "; else rm " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + " rm " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + "  fi", shell=True)
     subprocess.call('google-chrome --headless --print-to-pdf=' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://' + appliableipaddress + ':8000/quotation/quotationprint/' + docid + '/', shell=True)
 #    os.system('if [ 1 -eq 1 ]; then touch proba17.cv fi')
 #    os.system('touch proba16.cv')
