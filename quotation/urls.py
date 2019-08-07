@@ -99,4 +99,4 @@ urlpatterns = [
     url(r'^customerordernewrow/(?P<pkdocid>[0-9]+)/(?P<pkproductid>[0-9]+)/(?P<pkdocdetailsid>[0-9]+)/(?P<nextfirstnumonhtml>[0-9]+)/(?P<nextsecondnumonhtml>[0-9]+)/(?P<nextthirdnumonhtml>[0-9]+)/(?P<nextfourthnumonhtml>[0-9]+)/$',
         views.customerordernewrow, name='customerordernewrow'),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

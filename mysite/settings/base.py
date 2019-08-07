@@ -167,8 +167,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER ='szluka.matetest@gmail.com'
 EMAIL_HOST_PASSWORD ='kqxpzhke'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#MEDIA_URL = '/emailattachmentspre/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'emailattachmentspre')
 
 
 

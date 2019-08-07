@@ -16,6 +16,8 @@ import shutil
 # pdb.set_trace()
 
 def emailadd (request, pk):
+
+
     BASE_DIR = settings.BASE_DIR
     creatorid = request.user.id
 
@@ -106,7 +108,9 @@ def emailadd (request, pk):
     emailsubject = "Customer Quotation - Subject: " + originaldocsubject + " - Ref.: " + pretag + str(originaldocnumber) + " EMAIL-" + str(docnumber)
     addresseeemail = request.POST['addresseeemail']
     cc = request.POST['cc']
+
     pdffilename = request.POST['pdffilename']
+
     emailbodytextmodifiedbyuser = request.POST['emailbodytext']
     #import pdb;
     #pdb.set_trace()
@@ -175,62 +179,6 @@ def emailadd (request, pk):
         #pdb.set_trace()
 #d
         return maxdocdetailsid
-    def attachment1write(maxdocid):
-        myfile = request.FILES['myfile']
-        fs = FileSystemStorage()
-        if fs.exists(myfile.name):
-            fs.delete(myfile.name)
-        global filename
-        filename = fs.save(myfile.name, myfile)
-
-        with open('/home/szluka/djangogirls/' + filename, 'rb') as file:
-            attachmentcontent = file.read()
-        #fs.delete(myfile.name)
-
-        cursor4 = connection.cursor()
-        cursor4.execute(
-            "INSERT INTO quotation_tbldoc_details "
-            "( Docid_tblDoc_details_id, "
-            "attachmentname_tbldocdetails,"
-            "attachmentcontent_tbldocdetails) VALUES (%s,%s,%s)",
-            [maxdocid,
-             filename,
-             attachmentcontent])
-
-        return
-    def attachment2write(maxdocid):
-
-        myfile2 = request.FILES['myfile2']
-        fs2 = FileSystemStorage()
-        if fs2.exists(myfile2.name):
-            fs2.delete(myfile2.name)
-        global filename2
-        filename2 = fs2.save(myfile2.name, myfile2)
-        with open('/home/szluka/djangogirls/' + filename2, 'rb') as file:
-            attachmentcontent = file.read()
-        #fs2.delete(myfile2.name)
-
-        cursor4 = connection.cursor()
-        cursor4.execute(
-            "INSERT INTO quotation_tbldoc_details "
-            "( Docid_tblDoc_details_id, "
-            "attachmentname_tbldocdetails,"
-            "attachmentcontent_tbldocdetails) VALUES (%s,%s,%s)",
-            [maxdocid,
-             filename2,
-             attachmentcontent])
-
-        return
-
-    #import pdb;
-    #pdb.set_trace()
-
-    def attachmentmovingfromroot(filenameparameter): #uploaded to root this moves to /emailattachmentspre
-
-        oldpath = '' + filenameparameter
-        newpath = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + filenameparameter
-        shutil.move(oldpath, newpath)
-        return
 
     def attachmentstacking(filenameparameter, maxdocdetailsparameter):
 
@@ -251,19 +199,28 @@ def emailadd (request, pk):
         maxdocdetailsid0 = attachmentwrite(maxdocid, pdffilename)
 
     elif howmanyattachedfiles==1: #doc as pdf +1 attachment
-        maxdocdetailsid0 = attachmentwrite(maxdocid, pdffilename)
-        myfile = request.FILES['myfile']
+        maxdocdetailsid0 = attachmentwrite(maxdocid, pdffilename) #0
 
+        myfile = request.FILES['myfile'] #1
+        with open(BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + myfile.name, 'wb+') as destination: #save to disk from memory
+            for chunk in myfile.chunks():
+                destination.write(chunk)
         maxdocdetailsid1 = attachmentwrite(maxdocid, myfile.name)
-#        attachment1write(maxdocid)
 
     elif howmanyattachedfiles == 2: #doc as pdf +2 attachments
-        pdfeddocattachmentwrite(maxdocid, pdffilename)
-        attachment1write(maxdocid)
-        attachment2write(maxdocid)
+        maxdocdetailsid0 = attachmentwrite(maxdocid, pdffilename) #0
 
-    #import pdb;
-    #pdb.set_trace()
+        myfile = request.FILES['myfile'] #1
+        with open(BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + myfile.name, 'wb+') as destination: #save to disk from memory
+            for chunk in myfile.chunks():
+                destination.write(chunk)
+        maxdocdetailsid1 = attachmentwrite(maxdocid, myfile.name)
+
+        myfile2 = request.FILES['myfile2'] #2
+        with open(BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + myfile2.name, 'wb+') as destination: #save to disk from memory
+            for chunk in myfile2.chunks():
+                destination.write(chunk)
+        maxdocdetailsid2 = attachmentwrite(maxdocid, myfile2.name)
 
     docaspdffullpathfilename = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename
 
@@ -274,20 +231,33 @@ def emailadd (request, pk):
 
         email = EmailMessage(
             emailsubject, emailbodytextmodifiedbyuser, 'from@me.com', [addresseeemail], cc=[cc])
-        email.attach_file(docaspdffullpathfilename)
-        attachmentstacking(pdffilename, maxdocdetailsid0) #docpdf renaming and moving
 
+        if howmanyattachedfiles == 0:
+            email.attach_file(docaspdffullpathfilename)
+            attachmentstacking(pdffilename, maxdocdetailsid0) #docpdf renaming and moving
 
-        if howmanyattachedfiles==1:
-            attachmentmovingfromroot(myfile.name)
-            filenamefullpathfilename = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + myfile.name
+        if howmanyattachedfiles == 1:
+            email.attach_file(docaspdffullpathfilename) #0
+            attachmentstacking(pdffilename, maxdocdetailsid0) #docpdf renaming and moving
+
+            filenamefullpathfilename = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + myfile.name #1
             email.attach_file(filenamefullpathfilename)
             attachmentstacking(myfile.name, maxdocdetailsid1) #attached file1 renaming and moving
 
 
         if howmanyattachedfiles == 2:
-            email.attach_file('/home/szluka/djangogirls/' + filename)
-            email.attach_file('/home/szluka/djangogirls/' + filename2)
+            email.attach_file(docaspdffullpathfilename) #0
+            attachmentstacking(pdffilename, maxdocdetailsid0) #docpdf renaming and moving
+
+            filenamefullpathfilename = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + myfile.name #1
+            email.attach_file(filenamefullpathfilename)
+            attachmentstacking(myfile.name, maxdocdetailsid1) #attached file1 renaming and moving
+
+            filename2fullpathfilename = BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + myfile2.name #1
+            email.attach_file(filename2fullpathfilename)
+            attachmentstacking(myfile2.name, maxdocdetailsid2) #attached file1 renaming and moving
+
+
         email.send()
 
 
@@ -402,7 +372,7 @@ def emailform(request, pk):
             "ON "
             "quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
             "WHERE docid_tbldoc_details_id=%s "
-            "order by firstnum_tblDoc_details",
+            "order by Doc_detailsid_tblDoc_details",
             [pk])
         docdetails = cursor3.fetchall()
 
