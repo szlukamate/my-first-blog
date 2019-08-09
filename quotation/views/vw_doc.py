@@ -28,7 +28,7 @@ def docs(request):
                     "order by docid_tbldoc desc ")
     docs = cursor1.fetchall()
     return render(request, 'quotation/docs.html', {'docs': docs})
-
+@login_required
 def docsearch(request):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -56,7 +56,7 @@ def docsearch(request):
 
     return render(request, 'quotation/docsearch.html', {'companies': companies,
                                                         'dockindnames':dockindnames})
-
+@login_required
 def docsearchcontent(request):
     docnumber = request.POST['docnumber']
     dockindname = request.POST['dockindname']
