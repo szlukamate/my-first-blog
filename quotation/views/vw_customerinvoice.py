@@ -19,7 +19,7 @@ import os
 # import pdb;
 # pdb.set_trace()
 
-
+@login_required
 def customerinvoiceform(request, pk):
         if request.method == "POST":
                 fieldvalue = request.POST['fieldvalue']
@@ -195,7 +195,7 @@ def customerinvoiceform(request, pk):
                                                               'nextchapternums': nextchapternums,
                                                               'creatordata': creatordata,
                                                               'currencycodes': currencycodes})
-
+@login_required
 def customerinvoiceprint(request, docid):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -294,6 +294,7 @@ def customerinvoiceprint(request, docid):
     return render(request, 'quotation/deliverynoteprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount': docdetailscount,
                                                              'creatordata': creatordata})
+@login_required
 def customerinvoicebackpage(request):
 
 
@@ -315,6 +316,7 @@ def customerinvoicebackpage(request):
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")
+@login_required
 def customerinvoicepre(request, docid):
 
     cursor3 = connection.cursor()
@@ -425,7 +427,7 @@ def customerinvoicepre(request, docid):
                                                               'customerordernumber': customerordernumber,
                                                               'rowsnumber': rowsnumber})
 
-
+@login_required
 def customerinvoicemake(request):
     customerordernumber = request.POST['customerordernumber']
     productidlistraw = request.POST['productidlist']

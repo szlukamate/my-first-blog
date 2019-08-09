@@ -7,7 +7,7 @@ from collections import namedtuple
 from django.db import connection, transaction
 # import pdb;
 # pdb.set_trace()
-
+@login_required
 def coredata_prefaceforquotation(request):
         if request.method == "POST":
                 prefaceid = request.POST['prefaceid']
@@ -35,7 +35,7 @@ def coredata_prefaceforquotation(request):
         prefacesforquotation = cursor3.fetchall()
 
         return render(request, 'quotation/prefaceforquotation.html', {'prefacesforquotation': prefacesforquotation })
-
+@login_required
 def coredata_prefaceforquotationadd(request):
         cursor1 = connection.cursor()
         cursor1.execute(
@@ -43,6 +43,7 @@ def coredata_prefaceforquotationadd(request):
         transaction.commit()
 
         return redirect('coredata_prefaceforquotation')
+@login_required
 def coredata_prefaceforquotationremove(request, pk):
         cursor1 = connection.cursor()
         cursor1.execute(
@@ -53,6 +54,7 @@ def coredata_prefaceforquotationremove(request, pk):
         transaction.commit()
 
         return redirect('coredata_prefaceforquotation')
+@login_required
 def coredata_backpageforquotation(request):
         if request.method == "POST":
                 backpageid = request.POST['backpageid']
@@ -80,6 +82,7 @@ def coredata_backpageforquotation(request):
         backpagesforquotation = cursor3.fetchall()
 
         return render(request, 'quotation/backpageforquotation.html', {'backpagesforquotation': backpagesforquotation })
+@login_required
 def coredata_backpageforquotationadd(request):
         cursor1 = connection.cursor()
         cursor1.execute(
@@ -87,6 +90,7 @@ def coredata_backpageforquotationadd(request):
         transaction.commit()
 
         return redirect('coredata_backpageforquotation')
+@login_required
 def coredata_backpageforquotationremove(request, pk):
         cursor1 = connection.cursor()
         cursor1.execute(
@@ -97,6 +101,7 @@ def coredata_backpageforquotationremove(request, pk):
         transaction.commit()
 
         return redirect('coredata_backpageforquotation')
+@login_required
 def coredata_payment(request):
         if request.method == "POST":
                 paymentid = request.POST['paymentid']
@@ -124,6 +129,7 @@ def coredata_payment(request):
         payments = cursor3.fetchall()
 
         return render(request, 'quotation/payment.html', {'payments': payments })
+@login_required
 def coredata_paymentadd(request):
         cursor1 = connection.cursor()
         cursor1.execute(
@@ -131,6 +137,7 @@ def coredata_paymentadd(request):
         transaction.commit()
 
         return redirect('coredata_payment')
+@login_required
 def coredata_paymentremove(request, pk):
         cursor1 = connection.cursor()
         cursor1.execute(
@@ -141,6 +148,7 @@ def coredata_paymentremove(request, pk):
         transaction.commit()
 
         return redirect('coredata_payment')
+@login_required
 def coredata_currency(request):
         if request.method == "POST":
                 currencyid = request.POST['currencyid']
@@ -172,6 +180,7 @@ def coredata_currency(request):
         currencys = cursor3.fetchall()
 
         return render(request, 'quotation/currency.html', {'currencys': currencys })
+@login_required
 def coredata_currencyadd(request):
         cursor1 = connection.cursor()
         cursor1.execute(
@@ -179,6 +188,7 @@ def coredata_currencyadd(request):
         transaction.commit()
 
         return redirect('coredata_currency')
+@login_required
 def coredata_currencyremove(request, pk):
         cursor1 = connection.cursor()
         cursor1.execute(

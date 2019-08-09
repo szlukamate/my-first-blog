@@ -10,6 +10,7 @@ from django.http import HttpResponse
 
 # import pdb;
 # pdb.set_trace()
+@login_required
 def companies(request):
 
     cursor = connection.cursor()
@@ -17,7 +18,7 @@ def companies(request):
     companies = cursor.fetchall()
     transaction.commit()
     return render(request, 'quotation/companies.html', {'companies': companies})
-
+@login_required
 def companynew(request):
 
     cursor1 = connection.cursor()
@@ -25,7 +26,7 @@ def companynew(request):
     transaction.commit()
 
     return redirect('companies')
-
+@login_required
 def companyremove(request,pk):
     cursor1 = connection.cursor()
     cursor1.execute(
@@ -33,7 +34,7 @@ def companyremove(request,pk):
     transaction.commit()
 
     return redirect('companies')
-
+@login_required
 def companyedit(request, pk):
 
         if request.method == "POST":
@@ -182,7 +183,7 @@ def companyedit(request, pk):
                                                               'selecteddefaultbackpagenameforquotation': selecteddefaultbackpagenameforquotation,
                                                                 'defaultpaymentchoices': defaultpaymentchoices,
                                                                 'selecteddefaultpaymentname': selecteddefaultpaymentname})
-
+@login_required
 def companyuniversalselections (request):
 
     fieldvalue = request.POST['fieldvalue']
@@ -220,6 +221,7 @@ def companyuniversalselections (request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+@login_required
 def contactadd(request,pk):
 
     cursor1 = connection.cursor()
@@ -229,6 +231,7 @@ def contactadd(request,pk):
     transaction.commit()
 
     return redirect('companyedit', pk=pk)
+@login_required
 def contactsettodefaulttopurchaseorder(request):
     if request.method == "POST":
         rowid = request.POST['rowid']

@@ -17,6 +17,7 @@ import os
 
 # import pdb;
 # pdb.set_trace()
+@login_required
 def quotationform(request, pk):
 
     if request.method == "POST":
@@ -182,7 +183,7 @@ def quotationform(request, pk):
     return render(request, 'quotation/quotation.html', {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums' : nextchapternums,
                                                         'creatordata': creatordata,
                                                         'currencycodes': currencycodes})
-
+@login_required
 def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml ):
     cursor0 = connection.cursor()
     cursor0.execute(
@@ -274,7 +275,7 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
         transaction.commit()
 
     return redirect('quotationform', pk=pkdocid)
-
+@login_required
 def quotationnewrowadd(request):
     if request.method == "POST":
         docdetailsid = request.POST['docdetailsid']
@@ -302,7 +303,7 @@ def quotationnewrowadd(request):
     #return redirect('quotationform', pk=1)
 
     return render(request, 'quotation/quotationnewrowadd.html',{'products': products, 'docid': quotationid, 'nextchapternumset': nextchapternumset, 'docdetailsid' : docdetailsid })
-
+@login_required
 def quotationrowremove(request, pk):
     cursor2 = connection.cursor()
     cursor2.execute(
@@ -318,6 +319,7 @@ def quotationrowremove(request, pk):
     transaction.commit()
 
     return redirect('quotationform', pk=na)
+@login_required
 def searchquotationcontacts(request):
     if request.method == 'POST':
         search_text = request.POST['search_text']
@@ -341,6 +343,7 @@ def searchquotationcontacts(request):
     rownmbs=len(results)
 
     return render(request, 'quotation/ajax_search_quotation_contacts.html', {'results': results, 'rownmbs': rownmbs, 'docidinquotationjs': docidinquotationjs})
+@login_required
 def quotationupdatecontact(request, pkdocid, pkcontactid):
     cursor0 = connection.cursor()
     cursor0.execute(
@@ -391,7 +394,7 @@ def quotationupdatecontact(request, pkdocid, pkcontactid):
                                                 pkdocid,])
 
     return redirect('quotationform', pk=pkdocid)
-
+@login_required
 def quotationprint (request, docid):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -489,6 +492,7 @@ def quotationprint (request, docid):
     return render(request, 'quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount':docdetailscount,
                                                              'creatordata': creatordata})
+@login_required
 def quotationuniversalselections (request):
 
     fieldvalue = request.POST['fieldvalue']
@@ -511,6 +515,7 @@ def quotationuniversalselections (request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+@login_required
 def quotationbackpage(request):
 
 
@@ -532,6 +537,7 @@ def quotationbackpage(request):
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")
+@login_required
 def quotationemail(request, docid):
     BASE_DIR = settings.BASE_DIR
 
@@ -601,11 +607,12 @@ def quotationemail(request, docid):
 
     pdffilename = dockindname + '_' + pretag + str(docnumber) + '_Subject:_' + subject + '.pdf'
     subprocess.call("if [ ! -d '" + BASE_DIR + "emailattachmentspre/" + str(creatorid) + "' ]; then mkdir " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + "; else rm " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + " rm " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + "  fi", shell=True)
-    subprocess.call('google-chrome --headless --first-exec-after-boot --print-to-pdf=' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://' + appliableipaddress + ':8000/quotation/quotationprint/' + docid + '/', shell=True)
-#    os.system('if [ 1 -eq 1 ]; then touch proba17.cv fi')
+#    subprocess.call('google-chrome --headless --first-exec-after-boot --print-to-pdf=' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://' + appliableipaddress + ':8000/quotation/quotationprint/' + docid + '/', shell=True)
+    subprocess.call('node ' + BASE_DIR + "/nodeapps/190809createpdf.js ccccc", shell=True)
+#    os.system('if [ 1 -eq 1 ]; then    touch proba17.cv fi')
 #    os.system('touch proba16.cv')
-    #import pdb;
-    #pdb.set_trace()
+    import pdb;
+    pdb.set_trace()
 
     #    os.system('google-chrome --headless --print-to-pdf=./emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://127.0.0.1:8000/quotation/quotationprint/' + docid + '/')
 
@@ -614,6 +621,7 @@ def quotationemail(request, docid):
                                                        'emailbodytext': emailbodytext,
                                                        'creatordata': creatordata
                                                        })
+@login_required
 def quotationsaveasmodern(request, pk):
     creatorid = request.user.id
 
@@ -845,6 +853,7 @@ def quotationsaveasmodern(request, pk):
              unitclone,
              suppliercompanyid])
     return redirect('docselector', pk=maxdocid)
+@login_required
 def quotationsaveasorder(request, pk):
     creatorid = request.user.id
 

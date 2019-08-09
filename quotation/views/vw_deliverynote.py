@@ -19,7 +19,7 @@ import time
 # import pdb;
 # pdb.set_trace()
 
-
+@login_required
 def deliverynoteform(request, pk):
         if request.method == "POST":
                 fieldvalue = request.POST['fieldvalue']
@@ -205,7 +205,7 @@ def deliverynoteform(request, pk):
                                                               'nextchapternums': nextchapternums,
                                                               'creatordata': creatordata,
                                                               'currencycodes': currencycodes})
-
+@login_required
 def deliverynoteprint(request, docid):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -304,6 +304,7 @@ def deliverynoteprint(request, docid):
     return render(request, 'quotation/deliverynoteprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount': docdetailscount,
                                                              'creatordata': creatordata})
+@login_required
 def deliverynotebackpage(request):
 
 
@@ -325,6 +326,7 @@ def deliverynotebackpage(request):
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")
+@login_required
 def deliverynotepre(request):
 
     customerorderid = request.POST['customerorderid']
@@ -488,7 +490,7 @@ def deliverynotepre(request):
                                                               'stockdetails': stockdetails,
                                                               'rowsnumber': rowsnumber})
 
-
+@login_required
 def deliverynotemake(request): #from deliverynotepre form (buttonpress comes here)
     customerordernumber = request.POST['customerordernumber']
     selectedstockid = request.POST['selectedstockid']
@@ -918,6 +920,7 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
 # make new denoitems end
 
     return render(request, 'quotation/deliverynotepreredirecturl.html', {'pk': pk})
+@login_required
 def deliverynotenewrowadd(request):
     if request.method == "POST":
         docdetailsid = request.POST['docdetailsid']
@@ -945,6 +948,7 @@ def deliverynotenewrowadd(request):
     #return redirect('quotationform', pk=1)
 
     return render(request, 'quotation/deliverynotenewrowadd.html',{'products': products, 'docid': deliverynoteid, 'nextchapternumset': nextchapternumset, 'docdetailsid' : docdetailsid })
+@login_required
 def deliverynotenewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml,
                     nextthirdnumonhtml, nextfourthnumonhtml):
     cursor0 = connection.cursor()
@@ -1039,6 +1043,7 @@ def deliverynotenewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstn
         transaction.commit()
 
     return redirect('deliverynoteform', pk=pkdocid)
+@login_required
 def deliverynoterowremove(request, pk):
     cursor2 = connection.cursor()
     cursor2.execute(
@@ -1054,6 +1059,7 @@ def deliverynoterowremove(request, pk):
     transaction.commit()
 
     return redirect('deliverynoteform', pk=na)
+@login_required
 def deliverynotenewlabel(request):
     newlabelid = request.POST['newlabelid']
 #    deliverynotedocid = request.POST['deliverynotedocid']
@@ -1144,6 +1150,7 @@ def deliverynotenewlabel(request):
 #    pk=deliverynotedocid
 
     return render(request, 'quotation/deliverynoteparameterstostocktaking.html', {'parametertostocktaking': parametertostocktaking})
+@login_required
 def deliverynoteafternewlabel(request):
     newlabelid = request.POST['newlabelid']
     deliverynotedocid = request.POST['deliverynotedocid']
@@ -1271,7 +1278,7 @@ def deliverynoteafternewlabel(request):
 
     return render(request, 'quotation/deliverynotenewlabelredirecturl.html', {'pk': pk})
 
-
+@login_required
 def deliverynotechoosestock(request):  # labels on stockform for particular product
     productid = request.POST['productid']
 
@@ -1379,7 +1386,7 @@ def deliverynotechoosestock(request):  # labels on stockform for particular prod
         results = toresults
 
     return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
-
+@login_required
 def oldestlabeldelete(request):
 
     cursor0 = connection.cursor()

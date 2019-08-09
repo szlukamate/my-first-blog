@@ -17,10 +17,11 @@ import os
 import time
 # import pdb;
 # pdb.set_trace()
+@login_required
 def pohandlerframe(request):
 
     return render(request, 'quotation/pohandlerframe.html', {})
-
+@login_required
 def pohandlerfieldsupdate(request):
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
@@ -36,6 +37,7 @@ def pohandlerfieldsupdate(request):
         json_data = json.dumps(results23, indent=4, sort_keys=True, default=str)
 
         return HttpResponse(json_data, content_type="application/json")
+@login_required
 def pohandlersearchresults(request):
     receivedstatus = request.POST['receivedstatus']
     print(receivedstatus)
@@ -153,6 +155,7 @@ def pohandlersearchresults(request):
 
     return render(request, 'quotation/pohandler.html', {'pos': pos,
                                                         'porowsnumber': porowsnumber})
+@login_required
 def pohandlerrowsourceforarrivaldates(request):
     cursor0 = connection.cursor()
     cursor0.execute(
@@ -192,7 +195,7 @@ def pohandlerrowsourceforarrivaldates(request):
 
     return render(request, 'quotation/pohandlerrowsourceforarrivaldates.html', {'arrivaldates': arrivaldates, 'rownmbs': rownmbs})
 
-
+@login_required
 def pohandlerreception(request): #from pohandlerform
     dateofarrival = request.POST['dateofarrival']
     dateofarrivallistraw = request.POST['dateofarrivallist']
@@ -1382,6 +1385,7 @@ def pohandlerreception(request): #from pohandlerform
 #deliverynote making end
 
     return render(request, 'quotation/pohandlerreceptionredirecturl.html',{})
+@login_required
 def pohandlersplit(request):
         newqty = request.POST['newqty']
         rowid = request.POST['rowid']

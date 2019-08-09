@@ -9,6 +9,7 @@ import simplejson as json
 from django.http import HttpResponse
 # import pdb;
 # pdb.set_trace()
+@login_required
 def products(request, pkproductid):
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
@@ -93,7 +94,7 @@ def products(request, pkproductid):
     return render(request, 'quotation/products.html', {'products': products,
                                                        'currencycodes': currencycodes,
                                                        'supplierlist': supplierlist})
-
+@login_required
 def productupdatecurrencyisocode(request):
     if request.method == 'POST':
         productidinjs = request.POST['productidinjs']
@@ -126,7 +127,7 @@ def productupdatecurrencyisocode(request):
 
     return HttpResponse(json_data, content_type="application/json")
 
-
+@login_required
 def productlistpricefieldupdate(request):
     if request.method == 'POST':
         postselector = request.POST['postselector']
@@ -153,7 +154,7 @@ def productlistpricefieldupdate(request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
-
+@login_required
 def productnew(request):
     serviceflag = request.POST['serviceflag']
     discreteflag = request.POST['discreteflag']
@@ -167,7 +168,7 @@ def productnew(request):
     transaction.commit()
 
     return render(request, 'quotation/productnewredirecturl.html', {})
-
+@login_required
 def productremove(request,pkproductid):
     cursor1 = connection.cursor()
     cursor1.execute(
@@ -178,6 +179,7 @@ def productremove(request,pkproductid):
     transaction.commit()
 
     return redirect('products', pkproductid=0)
+@login_required
 def productupdatesupplier(request):
     if request.method == 'POST':
         productidinjs = request.POST['productidinjs']

@@ -14,7 +14,7 @@ import os
 import shutil
 # import pdb;
 # pdb.set_trace()
-
+@login_required
 def emailadd (request, pk):
 
 
@@ -289,7 +289,7 @@ def emailadd (request, pk):
         return redirect('emailform', pk=maxdocid)
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
-
+@login_required
 def emailform(request, pk):
         if request.method == "POST":
             fieldvalue = request.POST['fieldvalue']
@@ -389,7 +389,7 @@ def emailform(request, pk):
         return render(request, 'quotation/email.html', {'doc': doc,
                                                         'docdetails': docdetails,
                                                         'creatordata': creatordata})
-
+@login_required
 def emailviewattachment(request, pk):
     BASE_DIR = settings.BASE_DIR
 
@@ -417,7 +417,7 @@ def emailviewattachment(request, pk):
             return response
     else:
         return HttpResponseNotFound("The requested pdf was not found in our server.")
-
+@login_required
 def emailviewattachmentcandidate(request, pdffilename):
     creatorid = request.user.id
     BASE_DIR = settings.BASE_DIR

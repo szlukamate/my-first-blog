@@ -16,7 +16,7 @@ import subprocess
 import os
 # import pdb;
 # pdb.set_trace()
-
+@login_required
 def purchaseorderpre(request):
     cursor3 = connection.cursor()
     cursor3.execute("SELECT  "
@@ -88,7 +88,7 @@ def purchaseorderpre(request):
 
     return render(request, 'quotation/purchaseorderpre.html', {'customerorders': customerorders,
                                                                'customerordersnumber': customerordersnumber})
-
+@login_required
 def purchaseordermake(request):
     if request.method == 'POST':
         docdetailslistraw = request.POST['docdetailslist']
@@ -353,7 +353,7 @@ def purchaseordermake(request):
     return render(request, 'quotation/purchaseorderpreredirecturl.html',
                       {'maxdocid': maxdocid})
 
-
+@login_required
 def purchaseorderform(request, pk):
 
     if request.method == "POST":
@@ -598,7 +598,7 @@ def purchaseorderform(request, pk):
 
                                                             'currencycodes': currencycodes})
 
-
+@login_required
 def purchaseorderprint(request, docid):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -697,6 +697,7 @@ def purchaseorderprint(request, docid):
     return render(request, 'quotation/purchaseorderprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount': docdetailscount,
                                                              'creatordata': creatordata})
+@login_required
 def purchaseorderemail(request, docid):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -747,6 +748,7 @@ def purchaseorderemail(request, docid):
                                                        'emailbodytext': emailbodytext,
                                                        'creatordata': creatordata
                                                        })
+@login_required
 def purchaseorderrowremove(request, pk):
     cursor2 = connection.cursor()
     cursor2.execute(
@@ -762,6 +764,7 @@ def purchaseorderrowremove(request, pk):
     transaction.commit()
 
     return redirect('purchaseorderform', pk=na)
+@login_required
 def purchaseorderbackpage(request):
 
 

@@ -11,7 +11,7 @@ from django.http import HttpResponse
 
 # import pdb;
 # pdb.set_trace()
-
+@login_required
 def jobnumberform(request, pk):
         if request.method == "POST":
                 fieldvalue = request.POST['fieldvalue']

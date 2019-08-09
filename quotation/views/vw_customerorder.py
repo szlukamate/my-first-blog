@@ -18,6 +18,7 @@ import os
 
 # import pdb;
 # pdb.set_trace()
+@login_required
 def customerorderform(request, pk):
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
@@ -248,7 +249,7 @@ def customerorderform(request, pk):
                    'stockradiobuttonrows': stockradiobuttonrows,
                    'currencycodes': currencycodes})
 
-
+@login_required
 def customerordernewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml,
                     nextthirdnumonhtml, nextfourthnumonhtml):
     cursor0 = connection.cursor()
@@ -344,7 +345,7 @@ def customerordernewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirst
 
     return redirect('customerorderform', pk=pkdocid)
 
-
+@login_required
 def customerordernewrowadd(request):
     if request.method == "POST":
         docdetailsid = request.POST['docdetailsid']
@@ -376,7 +377,7 @@ def customerordernewrowadd(request):
                   {'products': products, 'docid': customerorderid, 'nextchapternumset': nextchapternumset,
                    'docdetailsid': docdetailsid})
 
-
+@login_required
 def customerorderrowremove(request, pk):
     cursor2 = connection.cursor()
     cursor2.execute(
@@ -393,7 +394,7 @@ def customerorderrowremove(request, pk):
 
     return redirect('customerorderform', pk=na)
 
-
+@login_required
 def searchcustomerordercontacts(request):
     customerorderbackpage
 
@@ -421,7 +422,7 @@ def searchcustomerordercontacts(request):
     return render(request, 'quotation/ajax_search_customerorder_contacts.html',
                   {'results': results, 'rownmbs': rownmbs, 'docidincustomerorderjs': docidincustomerorderjs})
 
-
+@login_required
 def customerorderupdatecontact(request, pkdocid, pkcontactid):
     cursor0 = connection.cursor()
     cursor0.execute(
@@ -473,7 +474,7 @@ def customerorderupdatecontact(request, pkdocid, pkcontactid):
 
     return redirect('customerorderform', pk=pkdocid)
 
-
+@login_required
 def customerorderprint(request, docid):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -570,7 +571,7 @@ def customerorderprint(request, docid):
                                                              'docdetailscount': docdetailscount,
                                                              'creatordata': creatordata})
 
-
+@login_required
 def customerorderuniversalselections(request):
     fieldvalue = request.POST['fieldvalue']
     customerorderdocid = request.POST['customerorderdocid']
@@ -593,7 +594,7 @@ def customerorderuniversalselections(request):
 
     return HttpResponse(json_data, content_type="application/json")
 
-
+@login_required
 def customerorderbackpage(request):
     if request.method == 'POST':
         customerorderid = request.POST['customerorderid']

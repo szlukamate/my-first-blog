@@ -18,7 +18,7 @@ import os
 
 # import pdb;
 # pdb.set_trace()
-
+@login_required
 def stockmain(request):
     cursor22 = connection.cursor()
     cursor22.callproc("spstock", [])
@@ -33,6 +33,7 @@ def stockmain(request):
     return render(request, 'quotation/stock.html', {'docdetails': docdetails,
                                                               'customerordernumber': customerordernumber,
                                                               'rowsnumber': rowsnumber})
+@login_required
 def stocklabellist(request): # labels on stockform for particular product
     productid = request.POST['productid']
 
@@ -145,7 +146,7 @@ def stocklabellist(request): # labels on stockform for particular product
 
     return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
 
-
+@login_required
 def stocktakingpreform(request): # Settings --> Stocktaking
     cursor3 = connection.cursor()
     cursor3.execute(
@@ -216,7 +217,7 @@ def stocktakingpreform(request): # Settings --> Stocktaking
                                                     'customerordernumber': customerordernumber,
                                                     'rowsnumber': rowsnumber})
 
-
+@login_required
 def stocknewdocforstocktaking(request): #create a new deno for stocktaking
     stockid = request.POST['stockid']
 
@@ -348,6 +349,7 @@ def stocknewdocforstocktaking(request): #create a new deno for stocktaking
             [maxdocid])
 
     return render(request, 'quotation/stocktakingpreformredirecturl.html', {})
+@login_required
 def stockcopyfromtimestampforstocktaking(request): #enabling a stocktaking
     stockid = request.POST['stockid']
     latestdisabledstocktakingdenotimestamp = request.POST['latestdisabledstocktakingdenotimestamp']

@@ -11,7 +11,7 @@ from django.http import HttpResponse
 
 # import pdb;
 # pdb.set_trace()
-
+@login_required
 def accountentryform(request, pk):
         if request.method == "POST":
                 fieldvalue = request.POST['fieldvalue']
@@ -121,6 +121,7 @@ def accountentryform(request, pk):
                                                         'debitaccountname': debitaccountname,
                                                         'creditaccountname': creditaccountname,
                                                         'creatordata': creatordata})
+@login_required
 def accountentryuniversalselections (request):
 
     fieldvalue = request.POST['fieldvalue']
@@ -135,6 +136,7 @@ def accountentryuniversalselections (request):
     json_data = json.dumps(results23)
 
     return HttpResponse(json_data, content_type="application/json")
+@login_required
 def accountincomestatement (request):
     def accountsum(accountnumberinitial):
         cursor22 = connection.cursor()

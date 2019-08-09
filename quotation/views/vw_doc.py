@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 ## import pdb;
 # pdb.set_trace()
-
+@login_required
 def docs(request):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT docid_tbldoc, Pcd_tblDoc, Town_tblDoc, "
@@ -192,7 +192,7 @@ def docsearchcontent(request):
                                                                'companiesrowsources': companiesrowsources,
                                                                'dockindrowsources': dockindrowsources})
 
-
+@login_required
 def docadd(request):
     if request.method == "POST":
         dockindidfornewdoc = request.POST['dockindidfornewdoc']
@@ -351,7 +351,7 @@ def docadd(request):
 
     return render(request, 'quotation/docadd.html', {'dockinds': dockinds, 'contacts': contacts})
 
-
+@login_required
 def docselector(request, pk):
     cursor = connection.cursor()
     cursor.execute("SELECT  quotation_tbldoc_kind.Doc_kindid_tbldoc_kind "
@@ -378,7 +378,7 @@ def docselector(request, pk):
     elif dockind == 8:  # Delivery Note
         return redirect('deliverynoteform', pk=pk)
 
-
+@login_required
 def docremove(request, pk):
     cursor1 = connection.cursor()
     cursor1.execute(
@@ -389,6 +389,7 @@ def docremove(request, pk):
     transaction.commit()
 
     return redirect('docsearch')
+@login_required
 def doclink(request, docid):
     fixstate = request.session.get('fixstate','0')
 
@@ -616,6 +617,7 @@ def doclink(request, docid):
                                                       'docslevel3': docslevel3,
                                                       'docslevel3widthforsvg': docslevel3widthforsvg,
                                                       'fixstate': fixstate})
+@login_required
 def doclinkfix(request, docid, fixstate):
     request.session['fixstate'] = fixstate  # set turn on/off fix
     request.session['fixtothis'] = docid #set

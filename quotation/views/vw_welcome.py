@@ -7,6 +7,6 @@ from collections import namedtuple
 from django.db import connection, transaction
 # import pdb;
 # pdb.set_trace()
-
+@login_required
 def welcome(request):
         return render(request, 'quotation/welcome.html', {})
