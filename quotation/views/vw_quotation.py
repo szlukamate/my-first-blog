@@ -394,7 +394,7 @@ def quotationupdatecontact(request, pkdocid, pkcontactid):
                                                 pkdocid,])
 
     return redirect('quotationform', pk=pkdocid)
-@login_required
+#@login_required
 def quotationprint (request, docid):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -606,13 +606,10 @@ def quotationemail(request, docid):
         emailbodytext = x[5]
 
     pdffilename = dockindname + '_' + pretag + str(docnumber) + '_Subject:_' + subject + '.pdf'
-    subprocess.call("if [ ! -d '" + BASE_DIR + "emailattachmentspre/" + str(creatorid) + "' ]; then mkdir " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + "; else rm " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + " rm " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + "  fi", shell=True)
+    subprocess.call('if [ ! -d "' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '" ]; then mkdir ' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '  ;else rm -rf ' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + ' && mkdir ' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + ';  fi', shell=True)
 #    subprocess.call('google-chrome --headless --first-exec-after-boot --print-to-pdf=' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://' + appliableipaddress + ':8000/quotation/quotationprint/' + docid + '/', shell=True)
-    subprocess.call('node ' + BASE_DIR + "/nodeapps/190809createpdf.js ccccc", shell=True)
-#    os.system('if [ 1 -eq 1 ]; then    touch proba17.cv fi')
-#    os.system('touch proba16.cv')
-    import pdb;
-    pdb.set_trace()
+    subprocess.call('node ' + BASE_DIR + "/nodeapps/190809createpdf.js " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + '/ ' + pdffilename + ' ' + appliableipaddress + ' ' + docid +'', shell=True)
+#    os.system('touch      proba16.cv')
 
     #    os.system('google-chrome --headless --print-to-pdf=./emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://127.0.0.1:8000/quotation/quotationprint/' + docid + '/')
 
