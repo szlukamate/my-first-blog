@@ -11,7 +11,7 @@ const puppeteer = require('puppeteer');
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(' http://' + myArgs[2] + ':8000/quotation/quotationprint/' + myArgs[3] + '/', {waitUntil: 'networkidle2'});
-  await page.pdf({path: '' + myArgs[0] + myArgs[1], format: 'A4'});
+  await page.pdf({path: '' + myArgs[0] + myArgs[1], format: 'A5'});
 
   await browser.close();
 })();
