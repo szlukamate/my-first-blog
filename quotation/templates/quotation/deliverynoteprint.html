@@ -83,6 +83,22 @@
 												<br>
 													<div  class="descriptiondiv">
 															<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
+
+															{% if tblDoc_details.24 == 1 %} <!-- Service -->
+
+															<p   name="podocdetailsidforlabel_tbldocdetails">{{ tblDoc_details.22}}</p>
+
+															{% else %}
+
+																{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
+																	<span style="color:black; white-space: nowrap;">Discrete Product</span>
+																{% else %} <!-- Indiscrete -->
+																	<span style="color:green; white-space: nowrap;">Indiscrete Product</span>
+																{% endif %}
+
+															{% endif %}
+
+
 													</div>
 													<div  class="qtydiv">
 															<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}} {{ tblDoc_details.15}}</p>

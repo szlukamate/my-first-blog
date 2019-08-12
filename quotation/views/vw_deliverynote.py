@@ -219,7 +219,7 @@ def deliverynoteprint(request, docid):
                     "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
                     "prefacespecforquotation_tbldoc, "
                     "subject_tbldoc, "
-                    "docnumber_tbldoc, "
+                    "docnumber_tbldoc, " #10
                     "creatorid_tbldoc, "
                     "creationtime_tbldoc, "
                     "title_tblcontacts_ctbldoc, "
@@ -229,7 +229,7 @@ def deliverynoteprint(request, docid):
                     "town_tblcompanies_ctbldoc, "
                     "address_tblcompanies_ctbldoc, "
                     "total_tbldoc, "
-                    "deliverydays_tbldoc, "
+                    "deliverydays_tbldoc, " #20
                     "paymenttextforquotation_tblpayment_ctbldoc, "
                     "currencycodeinreport_tbldoc, "
                     "currencyrateinreport_tbldoc "
@@ -254,23 +254,31 @@ def deliverynoteprint(request, docid):
         "`thirdnum_tblDoc_details`, "
         "`Note_tblDoc_details`, "
         "`creationtime_tblDoc_details`, "
-        "purchase_price_tblproduct_ctblDoc_details, "
+        "purchase_price_tblproduct_ctblDoc_details, " #10
         "listprice_tblDoc_details, "
         "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
         "Productid_tblDoc_details_id, "
         "Doc_detailsid_tblDoc_details, "
         "unit_tbldocdetails, "
-        "currencyrateinreport_tbldoc "
+        "currencyrateinreport_tbldoc, "
         "unitsalespriceACU_tblDoc_details, "
         "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2) as unitsalespricetoreport, "
         "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2)*Qty_tblDoc_details as salespricetoreport, "
-        "round((purchase_price_tblproduct_ctblDoc_details),2) as unitpurchasepricetoreport, "
-        "round((purchase_price_tblproduct_ctblDoc_details),2)*Qty_tblDoc_details as purchasepricetoreport "
+        "round((purchase_price_tblproduct_ctblDoc_details),2) as unitpurchasepricetoreport, " #20
+        "round((purchase_price_tblproduct_ctblDoc_details),2)*Qty_tblDoc_details as purchasepricetoreport, "
+        "podocdetailsidforlabel_tbldocdetails,"
+        "discreteflag_tblproduct,"
+        "serviceflag_tblproduct "
+        
 
         "FROM quotation_tbldoc_details "
+
         "LEFT JOIN quotation_tbldoc "
-        "ON "
-        "quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+        "ON quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+
+        "JOIN quotation_tblproduct "
+        "ON quotation_tbldoc_details.Productid_tblDoc_details_id = quotation_tblproduct.Productid_tblProduct "
+
         "WHERE docid_tbldoc_details_id=%s "
         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
         [docid])
