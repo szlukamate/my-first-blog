@@ -83,21 +83,29 @@
 												<br>
 													<div  class="descriptiondiv">
 															<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
+															{% for labelid in labelids %}
 
-															{% if tblDoc_details.24 == 1 %} <!-- Service -->
+																{% if tblDoc_details.13 == labelid.1 %} <!-- match productids -->
 
-															<p   name="podocdetailsidforlabel_tbldocdetails">{{ tblDoc_details.22}}</p>
+																	{% if tblDoc_details.24 == 1 %} <!-- Service -->
 
-															{% else %}
+																	<p   name="podocdetailsidforlabel_tbldocdetails">{{ tblDoc_details.22}}</p>
 
-																{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
-																	<span style="color:black; white-space: nowrap;">Discrete Product</span>
-																{% else %} <!-- Indiscrete -->
-																	<span style="color:green; white-space: nowrap;">Indiscrete Product</span>
+																	{% else %}
+
+																		{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
+																			<span style="color:black; white-space: nowrap;">Discrete Product</span>
+																		{% else %} <!-- Indiscrete -->
+																			<span style="white-space: nowrap !important;">Indiscrete Product {{ labelid.2}}</span>
+
+																		{% endif %}
+
+																	{% endif %}
+
+
 																{% endif %}
 
-															{% endif %}
-
+															{% endfor %}
 
 													</div>
 													<div  class="qtydiv">

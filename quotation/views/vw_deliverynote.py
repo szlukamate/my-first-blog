@@ -244,8 +244,10 @@ def deliverynoteprint(request, docid):
 
     cursor3 = connection.cursor()
     cursor3.execute(
-        "SELECT  `Doc_detailsid_tblDoc_details`, "
-        "`Qty_tblDoc_details`, "
+        "SELECT  "
+        " 1, "
+#        "`Doc_detailsid_tblDoc_details`, "
+        "sum(Qty_tblDoc_details), "
         "`Docid_tblDoc_details_id`, "
         "`customerdescription_tblProduct_ctblDoc_details`, "
         "`firstnum_tblDoc_details`, "
@@ -253,20 +255,27 @@ def deliverynoteprint(request, docid):
         "`secondnum_tblDoc_details`, "
         "`thirdnum_tblDoc_details`, "
         "`Note_tblDoc_details`, "
-        "`creationtime_tblDoc_details`, "
+        "1, "
+#        "`creationtime_tblDoc_details`, "
         "purchase_price_tblproduct_ctblDoc_details, " #10
         "listprice_tblDoc_details, "
         "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
         "Productid_tblDoc_details_id, "
-        "Doc_detailsid_tblDoc_details, "
+        "1, "
+#        "Doc_detailsid_tblDoc_details, "
         "unit_tbldocdetails, "
         "currencyrateinreport_tbldoc, "
         "unitsalespriceACU_tblDoc_details, "
-        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2) as unitsalespricetoreport, "
-        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2)*Qty_tblDoc_details as salespricetoreport, "
-        "round((purchase_price_tblproduct_ctblDoc_details),2) as unitpurchasepricetoreport, " #20
-        "round((purchase_price_tblproduct_ctblDoc_details),2)*Qty_tblDoc_details as purchasepricetoreport, "
-        "podocdetailsidforlabel_tbldocdetails,"
+        "1, "
+        "1, "
+        "1, " #20
+        "1, "
+#        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2) as unitsalespricetoreport, "
+#        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2)*Qty_tblDoc_details as salespricetoreport, "
+#        "round((purchase_price_tblproduct_ctblDoc_details),2) as unitpurchasepricetoreport, " #20
+#        "round((purchase_price_tblproduct_ctblDoc_details),2)*Qty_tblDoc_details as purchasepricetoreport, "
+        "1, "
+#        "podocdetailsidforlabel_tbldocdetails,"
         "discreteflag_tblproduct,"
         "serviceflag_tblproduct "
         
@@ -280,9 +289,48 @@ def deliverynoteprint(request, docid):
         "ON quotation_tbldoc_details.Productid_tblDoc_details_id = quotation_tblproduct.Productid_tblProduct "
 
         "WHERE docid_tbldoc_details_id=%s "
+
+        "GROUP BY "
+#        "`Doc_detailsid_tblDoc_details`, "
+#        "`Qty_tblDoc_details`, "
+        "`Docid_tblDoc_details_id`, "
+        "`customerdescription_tblProduct_ctblDoc_details`, "
+        "`firstnum_tblDoc_details`, "
+        "`fourthnum_tblDoc_details`, "
+        "`secondnum_tblDoc_details`, "
+        "`thirdnum_tblDoc_details`, "
+        "`Note_tblDoc_details`, "
+#        "`creationtime_tblDoc_details`, "
+        "purchase_price_tblproduct_ctblDoc_details, " #10
+        "listprice_tblDoc_details, "
+        "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+        "Productid_tblDoc_details_id, "
+#        "Doc_detailsid_tblDoc_details, "
+        "unit_tbldocdetails, "
+        "currencyrateinreport_tbldoc, "
+        "unitsalespriceACU_tblDoc_details, "
+#        "unitsalespricetoreport, "
+#        "salespricetoreport, "
+#        "unitpurchasepricetoreport, " #20
+#        "purchasepricetoreport, "
+#        "podocdetailsidforlabel_tbldocdetails,"
+        "discreteflag_tblproduct,"
+        "serviceflag_tblproduct "
+
         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
         [docid])
     docdetails = cursor3.fetchall()
+
+    cursor14 = connection.cursor()
+    cursor14.execute("SELECT "
+                    "`Docid_tblDoc_details_id`, "
+                    "Productid_tblDoc_details_id, "
+                    "podocdetailsidforlabel_tbldocdetails "
+
+                     "FROM quotation_tbldoc_details "
+
+                     "WHERE Docid_tblDoc_details_id=%s", [docid])
+    labelids = cursor14.fetchall()
 
     cursor4 = connection.cursor()
     cursor4.execute(
@@ -311,6 +359,7 @@ def deliverynoteprint(request, docid):
 
     return render(request, 'quotation/deliverynoteprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount': docdetailscount,
+                                                             'labelids': labelids,
                                                              'creatordata': creatordata})
 @login_required
 def deliverynotebackpage(request):
@@ -808,6 +857,7 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
                     if outqty == None:
                         outqty = 0.0
 
+
                     cursor333.execute("INSERT INTO stockresultstempforoldestlabel "
                                       "(stockid, "
                                       "productid, "
@@ -833,10 +883,12 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
 
                                   " WHERE stockid=%s and productid=%s and inqty>outqty  "
                                   "GROUP BY labelid "
-                                  "ORDER BY labelid desc "
+                                  "ORDER BY labelid asc "
                                   "LIMIT 1 ",
                                   [selectedstockid, productidtodocdetails])
                 oldestlabelresult = cursor333.fetchall()
+                import pdb;
+                pdb.set_trace()
 
                 for instancesingle in oldestlabelresult:
                     labelid = instancesingle[0]
@@ -895,8 +947,10 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
                      podocdetailsidforlabel])
                 return
 
+
             if discreteflag == 0: #indiscrete
                 productqtyoldestlabel, podocdetailsidforlabel = oldestlabel()
+
                 if productqty <= productqtyoldestlabel:
                     docdetailsinsert(productqty, podocdetailsidforlabel)
                     remnantqty = 0

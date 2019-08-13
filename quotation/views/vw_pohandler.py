@@ -1060,8 +1060,8 @@ def pohandlerreception(request): #from pohandlerform
             neededqtytemptable = cursor2.fetchall()
             # neededqtylist to temptable end
 
-            import pdb;
-            pdb.set_trace()
+            #import pdb;
+            #pdb.set_trace()
             d = 1
 
     time.sleep(0.200)
@@ -1109,8 +1109,8 @@ def pohandlerreception(request): #from pohandlerform
                     "ORDER BY cororstockdocidto ")
     neededqtytemptable = cursor2.fetchall()
 
-    import pdb;
-    pdb.set_trace()
+    #import pdb;
+    #pdb.set_trace()
 
 
     for x31 in neededqtytemptable:
