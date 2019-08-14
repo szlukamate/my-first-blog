@@ -325,7 +325,9 @@ def deliverynoteprint(request, docid):
     cursor14.execute("SELECT "
                     "`Docid_tblDoc_details_id`, "
                     "Productid_tblDoc_details_id, "
-                    "podocdetailsidforlabel_tbldocdetails "
+                    "podocdetailsidforlabel_tbldocdetails, "
+                    "Qty_tblDoc_details, "
+                    "unit_tbldocdetails "
 
                      "FROM quotation_tbldoc_details "
 
@@ -887,8 +889,6 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
                                   "LIMIT 1 ",
                                   [selectedstockid, productidtodocdetails])
                 oldestlabelresult = cursor333.fetchall()
-                import pdb;
-                pdb.set_trace()
 
                 for instancesingle in oldestlabelresult:
                     labelid = instancesingle[0]

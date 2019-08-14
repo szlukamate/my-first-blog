@@ -67,9 +67,9 @@
 
 									<div rowid="{{ forloop.counter0 }}" class="item-container">
 
-												<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{tblDoc_details.4}}.</span>
+												<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{forloop.counter}}.</span>
 
-												{% if tblDoc_details.6 > 0 or tblDoc_details.7 > 0 or tblDoc_details.5 > 0%}
+					<!--							{% if tblDoc_details.6 > 0 or tblDoc_details.7 > 0 or tblDoc_details.5 > 0%}
 												<span  class="chapternumbersspan" name="secondnum_tblDoc_details">{{tblDoc_details.6}}.</span>
 												{% endif %}
 
@@ -80,23 +80,52 @@
 												{% if tblDoc_details.5 > 0 %}
 												<span class="chapternumbersspan" name="fourthnum_tblDoc_details">{{tblDoc_details.5}}.</span>
 												{% endif %}
+-->
 												<br>
 													<div  class="descriptiondiv">
 															<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
+															{% spaceless %}
+
 															{% for labelid in labelids %}
 
 																{% if tblDoc_details.13 == labelid.1 %} <!-- match productids -->
 
 																	{% if tblDoc_details.24 == 1 %} <!-- Service -->
 
-																	<p   name="podocdetailsidforlabel_tbldocdetails">{{ tblDoc_details.22}}</p>
 
 																	{% else %}
 
 																		{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
-																			<span style="color:black; white-space: nowrap;">Discrete Product</span>
+
+																				<span >Unique Id: </span>
 																		{% else %} <!-- Indiscrete -->
-																			<span style="white-space: nowrap !important;">Indiscrete Product {{ labelid.2}}</span>
+
+																				<span >Batch Id: </span>
+																		{% endif %}
+
+																	{% endif %}
+
+
+																{% endif %}
+
+															{% endfor %}
+
+
+															{% for labelid in labelids %}
+
+																{% if tblDoc_details.13 == labelid.1 %} <!-- match productids -->
+
+																	{% if tblDoc_details.24 == 1 %} <!-- Service -->
+
+
+																	{% else %}
+
+																		{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
+
+																			<span >{{ labelid.2}} </span>
+																		{% else %} <!-- Indiscrete -->
+
+																			<span >{{ labelid.2}}:{{labelid.3}} {{labelid.4}} </span>
 
 																		{% endif %}
 
@@ -106,6 +135,7 @@
 																{% endif %}
 
 															{% endfor %}
+															{% endspaceless %}
 
 													</div>
 													<div  class="qtydiv">
