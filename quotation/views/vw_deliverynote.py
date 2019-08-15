@@ -334,6 +334,98 @@ def deliverynoteprint(request, docid):
                      "WHERE Docid_tblDoc_details_id=%s", [docid])
     labelids = cursor14.fetchall()
 
+# labelids to table begin
+    # aim: enablelabelkindflag set to 1 at first instance of product that the print form writes the "Unique id" or "batch id" text
+    #only once at thebeginning in line
+    cursor22 = connection.cursor()
+    cursor22.execute("DROP TEMPORARY TABLE IF EXISTS labelidtemptable;")
+    cursor22.execute("CREATE TEMPORARY TABLE IF NOT EXISTS labelidtemptable "
+                    "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    "     docid_tblLabelidtemptable INT(11) NOT NULL, "
+                    "     productid_tblLabelidtemptable INT(11) NOT NULL, "
+                    "     podocdetailsidforlabel_tblLabelidtemptable INT(11) NOT NULL, "
+                    "     qty_tblLabelidtemptable DECIMAL(10,1) NULL,"
+                    "     unit_tblLabelidtemptable varchar(20) NULL,"
+                    "     enablelabelkindflag_tblLabelidtemptable INT(11) NULL) "
+
+                    "      ENGINE=INNODB "
+                    "    ; ")
+
+    for x in labelids:
+        to_docid_tblLabelidtemptable = x[0]
+        to_productid_tblLabelidtemptable = x[1]
+        to_podocdetailsidforlabel_tblLabelidtemptable = x[2]
+        to_qty_tblLabelidtemptable = x[3]
+        to_unit_tblLabelidtemptable = x[4]
+
+        cursor22.execute("INSERT INTO labelidtemptable ("
+                        "docid_tblLabelidtemptable, "
+                        "productid_tblLabelidtemptable, "
+                        "podocdetailsidforlabel_tblLabelidtemptable, "
+                        "qty_tblLabelidtemptable, "
+                        "unit_tblLabelidtemptable) VALUES ('" + str(to_docid_tblLabelidtemptable) + "', "
+                                                          "'" + str(to_productid_tblLabelidtemptable) + "', "
+                                                          "'" + str(to_podocdetailsidforlabel_tblLabelidtemptable) + "', "
+                                                          "'" + str(to_qty_tblLabelidtemptable) + "', "
+                                                          "'" + str(to_unit_tblLabelidtemptable) + "');")
+
+    cursor22.execute("SELECT   "
+                        "auxid, "
+                        "docid_tblLabelidtemptable, "
+                        "productid_tblLabelidtemptable, "
+                        "podocdetailsidforlabel_tblLabelidtemptable, "
+                        "qty_tblLabelidtemptable, "
+                        "unit_tblLabelidtemptable "
+
+                    "FROM labelidtemptable ")
+    labelidtemptables = cursor22.fetchall()
+# labelids to table end
+
+# enablelabelkindflag update begin
+    for x in labelidtemptables:
+        auxid = x[0]
+        productid = x[2]
+
+        cursor22.execute("SELECT min(auxid) "
+                        "FROM labelidtemptable "
+                        "WHERE productid_tblLabelidtemptable=%s", [productid])
+        labelidtemptableresults = cursor22.fetchall()
+
+        for x2 in labelidtemptableresults:
+            minauxidforproduct = x2[0]
+
+        cursor22.execute("UPDATE labelidtemptable SET "
+                        "enablelabelkindflag_tblLabelidtemptable=1 "
+                        "WHERE auxid =%s ", [minauxidforproduct])
+        import pdb;
+        pdb.set_trace()
+
+        a = 1
+    # labelidtemptable table:
+    # auxid, enablelabelkindflag_tblLabelidtemptable,  productid_tblLabelidtemptable
+    # 1 1 9
+    # 2 null 9
+    # 3 null 9
+    # 4 1 33
+    # 5 null 33
+    cursor22.execute("SELECT   "
+                        "auxid, "
+                        "docid_tblLabelidtemptable, "
+                        "productid_tblLabelidtemptable, "
+                        "podocdetailsidforlabel_tblLabelidtemptable, "
+                        "qty_tblLabelidtemptable, "
+                        "unit_tblLabelidtemptable, "
+                        "enablelabelkindflag_tblLabelidtemptable "
+
+                    "FROM labelidtemptable ")
+    labelidtemptableswithenablelabelkindflagset = cursor22.fetchall()
+
+# enablelabelkindflag update end
+
+
+    import pdb;
+    pdb.set_trace()
+
     cursor4 = connection.cursor()
     cursor4.execute(
         "SELECT  COUNT(Doc_detailsid_tblDoc_details) AS numberofrows "
