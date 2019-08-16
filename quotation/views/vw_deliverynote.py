@@ -397,8 +397,6 @@ def deliverynoteprint(request, docid):
         cursor22.execute("UPDATE labelidtemptable SET "
                         "enablelabelkindflag_tblLabelidtemptable=1 "
                         "WHERE auxid =%s ", [minauxidforproduct])
-        import pdb;
-        pdb.set_trace()
 
         a = 1
     # labelidtemptable table:
@@ -423,8 +421,6 @@ def deliverynoteprint(request, docid):
 # enablelabelkindflag update end
 
 
-    import pdb;
-    pdb.set_trace()
 
     cursor4 = connection.cursor()
     cursor4.execute(
@@ -453,7 +449,7 @@ def deliverynoteprint(request, docid):
 
     return render(request, 'quotation/deliverynoteprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount': docdetailscount,
-                                                             'labelids': labelids,
+                                                             'labelidtemptableswithenablelabelkindflagset': labelidtemptableswithenablelabelkindflagset,
                                                              'creatordata': creatordata})
 @login_required
 def deliverynotebackpage(request):

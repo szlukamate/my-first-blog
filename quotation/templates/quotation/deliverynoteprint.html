@@ -86,12 +86,11 @@
 															<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
 															{% spaceless %}
 
-															{% for labelid in labelids %}
+															{% for labelid in labelidtemptableswithenablelabelkindflagset %}
 
-																{% if tblDoc_details.13 == labelid.1 %} <!-- match productids -->
+																{% if tblDoc_details.13 == labelid.2 and labelid.6 == 1%} <!-- match productids and enablekindflag is true -->
 
 																	{% if tblDoc_details.24 == 1 %} <!-- Service -->
-
 
 																	{% else %}
 
@@ -111,9 +110,9 @@
 															{% endfor %}
 
 
-															{% for labelid in labelids %}
+															{% for labelid in labelidtemptableswithenablelabelkindflagset %}
 
-																{% if tblDoc_details.13 == labelid.1 %} <!-- match productids -->
+																{% if tblDoc_details.13 == labelid.2 %} <!-- match productids -->
 
 																	{% if tblDoc_details.24 == 1 %} <!-- Service -->
 
@@ -122,10 +121,10 @@
 
 																		{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
 
-																			<span >{{ labelid.2}} </span>
+																			<span >{{ labelid.3}} </span>
 																		{% else %} <!-- Indiscrete -->
 
-																			<span >{{ labelid.2}}:{{labelid.3}} {{labelid.4}} </span>
+																			<span >{{ labelid.3}}:{{labelid.4}} </span>
 
 																		{% endif %}
 
