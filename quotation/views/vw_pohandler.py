@@ -927,7 +927,7 @@ def pohandlerreception(request): #from pohandlerform
 
                 return subjecttext
 
-#neededitemqtyaggregated start
+#neededitemqtyaggregated  start
         neededitemqtyaggregated = 0
         for x333 in range(len(fromstocklist)): # fromstock for a porow
             fromstockitemqtyinfromstocklist = fromstocklist[x333][6]
