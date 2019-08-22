@@ -317,7 +317,7 @@ def customerinvoicebackpage(request):
 
     return HttpResponse(json_data, content_type="application/json")
 @login_required
-def customerinvoicepre(request, docid):
+def customerinvoicemake(request, docid):
 
     cursor3 = connection.cursor()
     cursor3.execute(
@@ -428,7 +428,7 @@ def customerinvoicepre(request, docid):
                                                               'rowsnumber': rowsnumber})
 
 @login_required
-def customerinvoicemake(request):
+def customerinvoicemakexxx(request):
     customerordernumber = request.POST['customerordernumber']
     productidlistraw = request.POST['productidlist']
     productidlist = json.loads(productidlistraw)
