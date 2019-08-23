@@ -85,7 +85,7 @@ urlpatterns = [
     url(r'^customerorderupdatecontact/(?P<pkdocid>[0-9]+)/(?P<pkcontactid>[0-9]+)/$', views.customerorderupdatecontact,name='customerorderupdatecontact'),
     url('deliverynotemake', views.deliverynotemake, name='deliverynotemake'),
     url(r'stockmain/$', views.stockmain, name='stockmain'),
-    url(r'^customerinvoicemake/(?P<docid>[0-9]+)/$', views.customerinvoicepre, name='customerinvoicepre'),
+    url(r'^customerinvoicemake/(?P<docid>[0-9]+)/$', views.customerinvoicemake, name='customerinvoicemake'),
     url('stocklabellist', views.stocklabellist, name='stocklabellist'),
     url(r'stocktakingpreform/$', views.stocktakingpreform, name='stocktakingpreform'),
     url('stocknewdocforstocktaking', views.stocknewdocforstocktaking, name='stocknewdocforstocktaking'),
@@ -98,5 +98,6 @@ urlpatterns = [
     url('deliverynoteafternewlabel', views.deliverynoteafternewlabel, name='deliverynoteafternewlabel'),
     url(r'^customerordernewrow/(?P<pkdocid>[0-9]+)/(?P<pkproductid>[0-9]+)/(?P<pkdocdetailsid>[0-9]+)/(?P<nextfirstnumonhtml>[0-9]+)/(?P<nextsecondnumonhtml>[0-9]+)/(?P<nextthirdnumonhtml>[0-9]+)/(?P<nextfourthnumonhtml>[0-9]+)/$',
         views.customerordernewrow, name='customerordernewrow'),
+    url(r'^customerinvoiceform/(?P<pk>[0-9]+)/$', views.customerinvoiceform, name='customerinvoiceform'),
 
 ]

@@ -1,0 +1,137 @@
+
+#tabs1 {
+    width: 150mm;
+}
+#tabs2 {
+    width: 450mm;
+}
+
+#infoframe {
+position: absolute;
+left:200mm;
+}
+
+#total {
+position: absolute;
+top: 15mm;
+left:200mm;
+}
+#deliverydays {
+position: absolute;
+top: 25mm;
+left:200mm;
+}
+#payment {
+position: absolute;
+top: 35mm;
+left:200mm;
+}
+#currencyinreport {
+position: absolute;
+top: 45mm;
+left:200mm;
+}
+
+#labels{
+font-size: 9pt;
+//position: absolute;
+top: 0 mm;
+left: 0 mm;
+}
+#Purchasepricelabel{
+position: absolute;
+top: 12mm;
+left:160mm;
+}
+#newdeliverynoterowsdiv{
+position: absolute;
+right: 5mm;
+top: 1.7mm;
+}
+#listpricemarginlabel{
+position: absolute;
+top: 18mm;
+left:189mm;
+}
+#listpricelabel{
+position: absolute;
+top: 12mm;
+left: 203mm;
+}
+#currencycodelabel{
+position: absolute;
+top: 18mm;
+left: 230mm;
+}
+#purchasepriceACUlabel{
+position: absolute;
+top: 12mm;
+left: 244mm;
+}
+#currencyratelabel{
+position: absolute;
+top: 18mm;
+left: 273mm;
+}
+#unitsalespricemarginlabel{
+position: absolute;
+top: 12mm;
+left: 286mm;
+}
+#listpriceACUlabel{
+position: absolute;
+top: 18mm;
+left: 300mm;
+}
+#unitsalespriceACUlabel{
+position: absolute;
+top: 12mm;
+left: 328mm;
+}
+#discountlabel{
+position: absolute;
+top: 18mm;
+left: 358mm;
+}
+#supplierlabel{
+position: absolute;
+top: 12mm;
+left: 371mm;
+}
+#wherefromwheretolabel {
+position: absolute;
+top: 15mm;
+left:250mm;
+}
+#title {
+color:black;
+background-color: yellow;
+font-size: 173%;
+}
+#newlabelbutton:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid yellow;
+
+
+}
+#newlabelbutton:active {
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+#newlabelbutton {
+  background-color: yellow;
+  color: black;
+
+  font-size: 18px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 12px;
+    padding: 2px 8px;
+}
+.ui-dialog {
+    left: 50% !important;
+    top: 50% !important;
+    margin-left: -175px !important;
+    margin-top: -175px !important;
+}
