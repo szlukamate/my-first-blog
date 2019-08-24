@@ -8,9 +8,9 @@
 				<p>Contactid:{{ doc.0.1}} hidden</p>
 
 
-				<p align="center" id="title" >Delivery Note Form</p>{% csrf_token %}
+				<p align="center" id="title" >Customer Invoice Form</p>{% csrf_token %}
 						<div id="infoframe">
-							<p >Number of Delivery Note: {{ doc.0.25 }}{{ doc.0.10 }}</p>
+							<p >Number of Customer Invoice: {{ doc.0.25 }}{{ doc.0.10 }}</p>
 							<p >Creator: {{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
 							<p >Time of Creation: {{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
 							{% if doc.0.30 == 1 %} <!-- if stocktaking deno -->
@@ -55,10 +55,6 @@
 
 								</ul>
 							{% endblock sidebar %}
-									<form action="{% url 'customerinvoiceprint' docid=doc.0.0 %}">
-										<input type="submit" value="Print" />
-									</form>
-
 									<form action="{% url 'doclink' docid=doc.0.0 %}">
 										<input type="submit" value="Doclink" />
 									</form>

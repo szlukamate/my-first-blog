@@ -367,6 +367,8 @@ def docselector(request, pk):
         return redirect('quotationform', pk=pk)
     elif dockind == 2:  # CustomerOrder
         return redirect('customerorderform', pk=pk)
+    elif dockind == 3:  # CustomerInvoice
+        return redirect('customerinvoiceform', pk=pk)
     elif dockind == 4:  # Job Number
         return redirect('jobnumberform', pk=pk)
     elif dockind == 5:  # Email
