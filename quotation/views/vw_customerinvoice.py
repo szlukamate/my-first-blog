@@ -219,7 +219,7 @@ def customerinvoiceprint(request, docid):
                     "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
                     "prefacespecforquotation_tbldoc, "
                     "subject_tbldoc, "
-                    "docnumber_tbldoc, "
+                    "docnumber_tbldoc, "  # 10
                     "creatorid_tbldoc, "
                     "creationtime_tbldoc, "
                     "title_tblcontacts_ctbldoc, "
@@ -229,7 +229,7 @@ def customerinvoiceprint(request, docid):
                     "town_tblcompanies_ctbldoc, "
                     "address_tblcompanies_ctbldoc, "
                     "total_tbldoc, "
-                    "deliverydays_tbldoc, "
+                    "deliverydays_tbldoc, "  # 20
                     "paymenttextforquotation_tblpayment_ctbldoc, "
                     "currencycodeinreport_tbldoc, "
                     "currencyrateinreport_tbldoc "
@@ -244,8 +244,10 @@ def customerinvoiceprint(request, docid):
 
     cursor3 = connection.cursor()
     cursor3.execute(
-        "SELECT  `Doc_detailsid_tblDoc_details`, "
-        "`Qty_tblDoc_details`, "
+        "SELECT  "
+        " 1, "
+        #        "`Doc_detailsid_tblDoc_details`, "
+        "sum(Qty_tblDoc_details), "
         "`Docid_tblDoc_details_id`, "
         "`customerdescription_tblProduct_ctblDoc_details`, "
         "`firstnum_tblDoc_details`, "
@@ -253,28 +255,172 @@ def customerinvoiceprint(request, docid):
         "`secondnum_tblDoc_details`, "
         "`thirdnum_tblDoc_details`, "
         "`Note_tblDoc_details`, "
-        "`creationtime_tblDoc_details`, "
-        "purchase_price_tblproduct_ctblDoc_details, "
+        "1, "
+        #        "`creationtime_tblDoc_details`, "
+        "purchase_price_tblproduct_ctblDoc_details, "  # 10
         "listprice_tblDoc_details, "
         "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
         "Productid_tblDoc_details_id, "
-        "Doc_detailsid_tblDoc_details, "
+        "1, "
+        #        "Doc_detailsid_tblDoc_details, "
         "unit_tbldocdetails, "
-        "currencyrateinreport_tbldoc "
+        "currencyrateinreport_tbldoc, "
         "unitsalespriceACU_tblDoc_details, "
-        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2) as unitsalespricetoreport, "
-        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2)*Qty_tblDoc_details as salespricetoreport, "
-        "round((purchase_price_tblproduct_ctblDoc_details),2) as unitpurchasepricetoreport, "
-        "round((purchase_price_tblproduct_ctblDoc_details),2)*Qty_tblDoc_details as purchasepricetoreport "
+        "1, "
+        "1, "
+        "1, "  # 20
+        "1, "
+        #        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2) as unitsalespricetoreport, "
+        #        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2)*Qty_tblDoc_details as salespricetoreport, "
+        #        "round((purchase_price_tblproduct_ctblDoc_details),2) as unitpurchasepricetoreport, " #20
+        #        "round((purchase_price_tblproduct_ctblDoc_details),2)*Qty_tblDoc_details as purchasepricetoreport, "
+        "1, "
+        #        "podocdetailsidforlabel_tbldocdetails,"
+        "discreteflag_tblproduct,"
+        "serviceflag_tblproduct "
+
 
         "FROM quotation_tbldoc_details "
+
         "LEFT JOIN quotation_tbldoc "
-        "ON "
-        "quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+        "ON quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+
+        "JOIN quotation_tblproduct "
+        "ON quotation_tbldoc_details.Productid_tblDoc_details_id = quotation_tblproduct.Productid_tblProduct "
+
         "WHERE docid_tbldoc_details_id=%s "
+
+        "GROUP BY "
+        #        "`Doc_detailsid_tblDoc_details`, "
+        #        "`Qty_tblDoc_details`, "
+        "`Docid_tblDoc_details_id`, "
+        "`customerdescription_tblProduct_ctblDoc_details`, "
+        "`firstnum_tblDoc_details`, "
+        "`fourthnum_tblDoc_details`, "
+        "`secondnum_tblDoc_details`, "
+        "`thirdnum_tblDoc_details`, "
+        "`Note_tblDoc_details`, "
+        #        "`creationtime_tblDoc_details`, "
+        "purchase_price_tblproduct_ctblDoc_details, "  # 10
+        "listprice_tblDoc_details, "
+        "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+        "Productid_tblDoc_details_id, "
+        #        "Doc_detailsid_tblDoc_details, "
+        "unit_tbldocdetails, "
+        "currencyrateinreport_tbldoc, "
+        "unitsalespriceACU_tblDoc_details, "
+        #        "unitsalespricetoreport, "
+        #        "salespricetoreport, "
+        #        "unitpurchasepricetoreport, " #20
+        #        "purchasepricetoreport, "
+        #        "podocdetailsidforlabel_tbldocdetails,"
+        "discreteflag_tblproduct,"
+        "serviceflag_tblproduct "
+
         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
         [docid])
     docdetails = cursor3.fetchall()
+
+    cursor14 = connection.cursor()
+    cursor14.execute("SELECT "
+                     "`Docid_tblDoc_details_id`, "
+                     "Productid_tblDoc_details_id, "
+                     "podocdetailsidforlabel_tbldocdetails, "
+                     "Qty_tblDoc_details, "
+                     "unit_tbldocdetails "
+
+                     "FROM quotation_tbldoc_details "
+
+                     "WHERE Docid_tblDoc_details_id=%s", [docid])
+    labelids = cursor14.fetchall()
+
+    # labelids to table begin
+    # aim: enablelabelkindflag set to 1 at first instance of product that the print form writes the "Unique id" or "batch id" text
+    # only once at thebeginning in line
+    cursor22 = connection.cursor()
+    cursor22.execute("DROP TEMPORARY TABLE IF EXISTS labelidtemptable;")
+    cursor22.execute("CREATE TEMPORARY TABLE IF NOT EXISTS labelidtemptable "
+                     "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                     "     docid_tblLabelidtemptable INT(11) NOT NULL, "
+                     "     productid_tblLabelidtemptable INT(11) NOT NULL, "
+                     "     podocdetailsidforlabel_tblLabelidtemptable INT(11) NOT NULL, "
+                     "     qty_tblLabelidtemptable DECIMAL(10,1) NULL,"
+                     "     unit_tblLabelidtemptable varchar(20) NULL,"
+                     "     enablelabelkindflag_tblLabelidtemptable INT(11) NULL) "
+
+                     "      ENGINE=INNODB "
+                     "    ; ")
+
+    for x in labelids:
+        to_docid_tblLabelidtemptable = x[0]
+        to_productid_tblLabelidtemptable = x[1]
+        to_podocdetailsidforlabel_tblLabelidtemptable = x[2]
+        to_qty_tblLabelidtemptable = x[3]
+        to_unit_tblLabelidtemptable = x[4]
+
+        cursor22.execute("INSERT INTO labelidtemptable ("
+                         "docid_tblLabelidtemptable, "
+                         "productid_tblLabelidtemptable, "
+                         "podocdetailsidforlabel_tblLabelidtemptable, "
+                         "qty_tblLabelidtemptable, "
+                         "unit_tblLabelidtemptable) VALUES ('" + str(to_docid_tblLabelidtemptable) + "', "
+                                                                                                     "'" + str(
+            to_productid_tblLabelidtemptable) + "', "
+                                                "'" + str(to_podocdetailsidforlabel_tblLabelidtemptable) + "', "
+                                                                                                           "'" + str(
+            to_qty_tblLabelidtemptable) + "', "
+                                          "'" + str(to_unit_tblLabelidtemptable) + "');")
+
+    cursor22.execute("SELECT   "
+                     "auxid, "
+                     "docid_tblLabelidtemptable, "
+                     "productid_tblLabelidtemptable, "
+                     "podocdetailsidforlabel_tblLabelidtemptable, "
+                     "qty_tblLabelidtemptable, "
+                     "unit_tblLabelidtemptable "
+
+                     "FROM labelidtemptable ")
+    labelidtemptables = cursor22.fetchall()
+    # labelids to table end
+
+    # enablelabelkindflag update begin
+    for x in labelidtemptables:
+        auxid = x[0]
+        productid = x[2]
+
+        cursor22.execute("SELECT min(auxid) "
+                         "FROM labelidtemptable "
+                         "WHERE productid_tblLabelidtemptable=%s", [productid])
+        labelidtemptableresults = cursor22.fetchall()
+
+        for x2 in labelidtemptableresults:
+            minauxidforproduct = x2[0]
+
+        cursor22.execute("UPDATE labelidtemptable SET "
+                         "enablelabelkindflag_tblLabelidtemptable=1 "
+                         "WHERE auxid =%s ", [minauxidforproduct])
+
+        a = 1
+    # labelidtemptable table:
+    # auxid, enablelabelkindflag_tblLabelidtemptable,  productid_tblLabelidtemptable
+    # 1 1 9
+    # 2 null 9
+    # 3 null 9
+    # 4 1 33
+    # 5 null 33
+    cursor22.execute("SELECT   "
+                     "auxid, "
+                     "docid_tblLabelidtemptable, "
+                     "productid_tblLabelidtemptable, "
+                     "podocdetailsidforlabel_tblLabelidtemptable, "
+                     "qty_tblLabelidtemptable, "
+                     "unit_tblLabelidtemptable, "
+                     "enablelabelkindflag_tblLabelidtemptable "
+
+                     "FROM labelidtemptable ")
+    labelidtemptableswithenablelabelkindflagset = cursor22.fetchall()
+
+    # enablelabelkindflag update end
 
     cursor4 = connection.cursor()
     cursor4.execute(
@@ -301,9 +447,12 @@ def customerinvoiceprint(request, docid):
                     "WHERE id=%s ", [creatorid])
     creatordata = cursor5.fetchall()
 
-    return render(request, 'quotation/deliverynoteprint.html', {'doc': doc, 'docdetails': docdetails,
-                                                             'docdetailscount': docdetailscount,
-                                                             'creatordata': creatordata})
+    return render(request, 'quotation/customerinvoiceprint.html', {'doc': doc, 'docdetails': docdetails,
+                                                                'docdetailscount': docdetailscount,
+                                                                'labelidtemptableswithenablelabelkindflagset': labelidtemptableswithenablelabelkindflagset,
+                                                                'creatordata': creatordata})
+
+
 @login_required
 def customerinvoicebackpage(request):
 
@@ -602,15 +751,11 @@ def customerinvoicemake(request, docid):
                  podocdetailsidforlabel,
                  supplierdescriptionclone])
 
-    import pdb;
-    pdb.set_trace()
-#
 
     rowsnumber = len(docdetails)
     customerordernumber = docid
-    return render(request, 'quotation/customerinvoicepre.html', {'docdetails': docdetails,
-                                                              'customerordernumber': customerordernumber,
-                                                              'rowsnumber': rowsnumber})
+    return redirect('customerinvoiceform', pk=maxdocid)
+
 
 @login_required
 def customerinvoicemakexxx(request):

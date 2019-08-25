@@ -100,5 +100,6 @@ urlpatterns = [
         views.customerordernewrow, name='customerordernewrow'),
     url(r'^customerinvoiceform/(?P<pk>[0-9]+)/$', views.customerinvoiceform, name='customerinvoiceform'),
     url(r'^customerinvoicerowremove/(?P<pk>[0-9]+)/$', views.customerinvoicerowremove, name='customerinvoicerowremove'),
+    url(r'^customerinvoiceprint/(?P<docid>[0-9]+)/$', views.customerinvoiceprint, name='customerinvoiceprint'),
 
 ]

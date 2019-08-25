@@ -1,0 +1,523 @@
+body {
+//      background: rgb(204,204,204);
+        background: white;
+        width:  fit-content;
+        height: fit-content;
+    }
+//    @page { size: 168mm 237,6mm ; margin : 0px }
+//    @page { size: 142.8mm 201.96mm ; margin : 0px }
+    @page { size: 144mm 206mm ; margin : 0px }
+
+.page {
+      background: white;
+      margin: 0 auto;
+      margin-bottom: 0.5cm;
+      box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+      width: 21cm;
+      height: 29.7cm;
+      position: relative;
+      page-break-after: always;
+
+    }
+
+.item-container-frame{
+      position: relative;
+       top:30mm;
+       left: 20mm;
+       right_20mm;
+
+}
+
+.chapternumbersdiv {
+      position: relative;
+      top: 50mm;
+    left: 20.6mm;
+
+   }
+
+.chapternumbersspan {
+   font-family: "Arial", Times, serif;
+   font-size: 14px;
+   margin-left: -4px;
+
+
+}
+
+
+.descriptiondiv {
+      position: relative;
+      top: 0mm;
+    width: 90mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+    margin-left: -4px;
+    white-space: pre-line;
+
+}
+.qtydiv {
+      position: absolute;
+      top: 0mm;
+    left: 100mm;
+    width: 20mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+}
+.unitsalespricediv {
+      position: absolute;
+      top: 0mm;
+    left: 115mm;
+    width: 200mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+}
+.salespricediv {
+      position: absolute;
+      top: 0mm;
+    left: 142mm;
+    width: 200mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+}
+
+.firstpagefooterdiv{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      height:45mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+}
+.firstpagefooterdiv hr {
+position:relative;
+top 0;
+margin-left: 20mm;
+margin-right: 20mm;
+border-top: 3px double #8c8b8b;
+}
+
+ .firstpagefooterspan1{
+      position:relative;
+      width: 180mm;
+      left:60mm;
+      bottom: 18mm;
+
+ }
+
+ .firstpagefooterspan2{
+      position:relative;
+      width: 180mm;
+      bottom: 18mm;
+      left:90mm;
+      font-style: italic;
+ }
+
+.firstpagefooterspan3{
+      position:relative;
+      width: 180mm;
+      bottom: 18mm;
+      left: 110mm;
+      font-style: italic;
+
+ }
+.middlepagesfooterdiv{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      height:45mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+}
+ .middlepagesfooterspan1{
+      position:relative;
+      width: 180mm;
+      bottom: 20mm;
+      left:60mm;
+
+ }
+.middlepagesfooterspan2{
+      position:relative;
+      width: 180mm;
+      bottom: 18mm;
+      left:90mm;
+      font-style: italic;
+ }
+.middlepagesfooterspan3{
+      position:relative;
+      width: 180mm;
+      bottom: 18mm;
+      left: 110mm;
+      font-style: italic;
+
+ }
+
+
+hr {
+position:relative;
+top 0;
+margin: 20mm;
+border-top: 3px double #8c8b8b;
+}
+
+// obs
+.header {
+
+      position: relative;
+      top: 23mm;
+      width: 170mm;
+      height: 11mm;
+      left: 20mm;
+      border:2px solid #000;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+      //margin-bottom: 10mm;
+      //margin-top:20mm;
+
+}
+// obs
+.headerlabels {
+      position: relative;
+      top: 3mm;
+}
+
+.headerlabelunitprice {
+        position: absolute;
+        top: -2mm;
+        left: 115mm;
+
+}
+
+.headerlabelsalesprice {
+        position: absolute;
+        top: -2mm;
+        left: 142mm;
+
+}
+.headerlabelscurrencycodespanforunitprice{
+        position: absolute;
+        top: 2mm;
+        left: 115mm;
+}
+.headerlabelscurrencycodespanforsalesprice{
+        position: absolute;
+        top: 2mm;
+        left: 142mm;
+}
+
+#logo {
+      position: relative;
+      margin: 20mm;
+      width:170mm;
+      height:30mm;
+//        visibility: hidden;
+
+}
+
+
+
+#companyname {
+      font-family: "Arial", Times, serif;
+      font-size: 20px;
+      font-weight: bold;
+      margin-left: 20mm;
+      width: 75mm;
+
+}
+#contactname {
+      font-family: "Arial", Times, serif;
+      font-size: 20px;
+      font-weight: bold;
+      margin-left: 20mm;
+      width: 75mm;
+//      border:1px solid #ff0000;
+}
+#pcdandtown {
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#address {
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#mobile {
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#email {
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#subject {
+        position: relative;
+        top: 7mm;
+        font-family: "Arial", Times, serif;
+        font-size: 16px;
+        margin-left: 20mm;
+
+ }
+#salutation {
+        position: relative;
+        top: 8mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+      margin-left: 20mm;
+}
+#preface {
+        position: relative;
+        top: 10mm;
+        font-family: "Arial", Times, serif;
+        font-size: 16px;
+        margin-left: 20mm;
+        overflow: auto;
+        resize: none;
+        outline: none;
+        border: none;
+        background-color: white;
+        color: #000;
+        line-height: 20px; /* 4px +12px + 4px */
+
+}
+
+#numberofdeliverynotelabel {
+      position: absolute;
+      top:72mm;
+      left:100mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+      width: 30mm;
+//      white-space: pre;
+//      word-wrap:break-word;
+//      border:1px solid #ff0000;
+}
+#numberofdeliverynote {
+      position: absolute;
+      top:77mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+}
+#ourcontactlabel {
+      position: absolute;
+      top:82mm;
+      left:100mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+}
+#ourcontact {
+      position: absolute;
+      top:82mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+}
+#subscriptiontext {
+      position: absolute;
+      top:91mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      white-space: pre;
+}
+#creationtimelabel {
+      position: absolute;
+      top:108mm;
+      left:100mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+}
+#creationtime {
+      position: absolute;
+      top:108mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+}
+#pageslabel {
+      position: absolute;
+      top:118mm;
+      left:100mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+}
+#pages {
+      position: absolute;
+      top:118mm;
+      left:140mm;
+      font-family: "Arial", Times, serif;
+      font-size: 16px;
+}
+#prefacespec {
+        position: relative;
+        top: 20mm;
+        font-family: "Arial", Times, serif;
+        font-size: 16px;
+        margin-left: 20mm;
+        overflow: hidden;
+        resize: none;
+        outline: none;
+        border: none;
+        background-color: white;
+        color: #000;
+        line-height: 20px; /* 4px +12px + 4px */
+        display:block;
+        white-space: pre;
+
+}
+.totalhr {
+//position:static;
+//top 0;
+margin: 0mm;
+margin-left:20mm;
+margin-right:20mm;
+color: blue;
+right: 21mm;
+}
+.totallabel {
+        position: relative;
+        left: 110mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#backpagetexthtml {
+
+        white-space: pre;
+
+}
+.backpagefooterdiv{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+//      text-align:Center;
+      height:20mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+
+}
+.backpagefooterspan2{
+      position:relative;
+      width: 180mm;
+      bottom: 0mm;
+      left: 90mm;
+      font-style: italic;
+  }
+ .backpagefooterspan3{
+      position:relative;
+      width: 180mm;
+      bottom: 0mm;
+      left: 110mm;
+      font-style: italic;
+
+
+ }
+
+.backpagetextcontainer{
+      position: relative;
+       top:30mm;
+       left: 20mm;
+       right_20mm;
+   font-family: "Arial", Times, serif;
+   font-size: 14px;
+   white-space: pre;
+
+}
+.backpagesignature{
+      position: absolute;
+       bottom:70mm;
+       left: 120mm;
+       right_20mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   white-space: pre;
+
+}
+.backpagesignature p {
+   margin: 0;
+    padding: 0;
+}
+
+.backpagetextcontainer p {
+      margin: 15;
+
+}
+@media print
+{
+body * { visibility: hidden;}
+.page * { visibility: visible;}
+
+}
+#title {
+        position: absolute;
+      margin-left: 74mm;
+      margin-top: 10mm;
+        color:black;
+        font-size: 200%;
+      font-family: "Arial", Times, serif;
+
+}
+.frameissuedbyandcustomer {
+
+      position: relative;
+      top: 25mm;
+      width: 170mm;
+      height: 55mm;
+      left: 20mm;
+      border:2px solid #000;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+      //margin-bottom: 10mm;
+      //margin-top:20mm;
+        padding: 0px;
+        margin: 0px;
+
+}
+.innerframeissuedby {
+
+      position: relative;
+      top: 0mm;
+      width: 83mm;
+      height: 53mm;
+      left: 0mm;
+      border: 1px solid #000;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+      //margin-bottom: 10mm;
+      //margin-top:20mm;
+      padding: 0px;
+        margin: 0px;
+
+}
+.frameissuedbyandcustomerlabels {
+      position: relative;
+      top: 1mm;
+      left: 1mm;
+}

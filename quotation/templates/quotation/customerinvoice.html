@@ -55,6 +55,11 @@
 
 								</ul>
 							{% endblock sidebar %}
+									<form action="{% url 'customerinvoiceprint' docid=doc.0.0 %}">
+										<input type="submit" value="Print" />
+									</form>
+
+
 									<form action="{% url 'doclink' docid=doc.0.0 %}">
 										<input type="submit" value="Doclink" />
 									</form>
