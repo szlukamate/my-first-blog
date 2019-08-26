@@ -483,9 +483,93 @@ body * { visibility: hidden;}
 .frameissuedbyandcustomer {
 
       position: relative;
-      top: 25mm;
+      top: 0mm;
       width: 170mm;
       height: 55mm;
+      left: 20mm;
+      border:2px solid #000;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+      margin-bottom: 10mm;
+      //margin-top:20mm;
+        padding: 0px;
+      //  margin: 0px;
+
+}
+.innerframeissuedby {
+
+      position: absolute;
+      top: 1mm;
+      width: 82mm;
+      height: 52mm;
+      left: 1mm;
+      border: 1px solid #000;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+      //margin-bottom: 10mm;
+      //margin-top:20mm;
+      padding: 0px;
+        margin: 0px;
+
+}
+.innerframeissuedbylabels {
+      position: relative;
+      top: 1mm;
+      left: 1mm;
+}
+.issuedbytexts {
+      position: relative;
+      top: 0mm;
+      left: 0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
+}
+.innerframecustomer {
+
+      position: absolute;
+      top: 1mm;
+      width: 84.5mm;
+      height: 52mm;
+      left: 84mm;
+      border: 1px solid #000;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+      //margin-bottom: 10mm;
+      //margin-top:20mm;
+      padding: 0px;
+        margin: 0px;
+
+}
+.innerframecustomerlabels {
+      position: relative;
+      top: 1mm;
+      left: 1mm;
+}
+.customertexts {
+      position: relative;
+      top: 0mm;
+      left: 0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
+}
+.frameaccessories {
+
+      position: relative;
+      top: 0mm;
+      width: 170mm;
+      height: 20mm;
       left: 20mm;
       border:2px solid #000;
       font-family: "Times New Roman", Times, serif;
@@ -498,26 +582,83 @@ body * { visibility: hidden;}
         margin: 0px;
 
 }
-.innerframeissuedby {
+.framedivonfirstpage {
+      position: absolute;
+      top: 25mm;
 
-      position: relative;
-      top: 0mm;
-      width: 83mm;
-      height: 53mm;
-      left: 0mm;
-      border: 1px solid #000;
+}
+//.frameaccessorieslabels {
+//      position: absolute;
+//      top: 0mm;
+//      font-family: "Times New Roman", Times, serif;
+//      font-size: 14px;
+//      font-style: italic;
+//      font-weight: bold;
+//
+//}
+#methodofpaymentlabel {
+      position: absolute;
+      width: 16mm;
+      left: 1mm;
+        margin-top:0mm;
       font-family: "Times New Roman", Times, serif;
       font-size: 14px;
       font-style: italic;
       font-weight: bold;
-      //margin-bottom: 10mm;
-      //margin-top:20mm;
-      padding: 0px;
-        margin: 0px;
 
 }
-.frameissuedbyandcustomerlabels {
-      position: relative;
-      top: 1mm;
-      left: 1mm;
+#methodofpaymenttext {
+      position: absolute;
+      width: 16mm;
+      left: 0mm;
+        margin-top:0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
+}
+#dateofcompletionlabel {
+      position: absolute;
+      width: 16mm;
+      left: 25mm;
+        margin-top:0mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#dateofcompletiontext {
+      position: absolute;
+      width: 16mm;
+      left: 0mm;
+        margin-top:0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
+}
+#dateofinvoicelabel {
+      position: absolute;
+      width: 16mm;
+      left: 50mm;
+        margin-top:0mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#dateofinvoicetext {
+      position: absolute;
+      width: 16mm;
+      left: 0mm;
+        margin-top:0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
 }

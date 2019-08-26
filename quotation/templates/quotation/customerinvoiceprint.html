@@ -16,26 +16,64 @@
 		<!-- wrap first page ˇ-->
 		<div class="page">
 				<p id="title" >Copy of Invoice</p>
-<div class="frameissuedbyandcustomer" >
-	<div class="frameissuedbyandcustomerlabels" >
-		<div class="innerframeissuedby">
-			<span>Issued By:</span>
-		</div>
-		<span style="margin-left: 44mm" >Customer:</span>
-		<span class="headerlabelunitprice" >Unit Price</span>
-		<span class="headerlabelscurrencycodespanforunitprice">in ' + currencycode + '</span>
-		<span class="headerlabelsalesprice" >Sales Price</span>
-		<span class="headerlabelscurrencycodespanforsalesprice">in ' + currencycode + '</span>
+<div class="framedivonfirstpage" >
+
+	<div class="frameissuedbyandcustomer" >
+			<div class="innerframeissuedby">
+				<div class="innerframeissuedbylabels">
+					<span>Issued By:</span>
+						<div class="issuedbytexts">
+
+							<p >Gofri Dealer Ltd </p>
+							<p >6726 Szeged </p>
+							<p >Akácfa u. 16.</p>
+							<p >+36309680468</p>
+							<p >szluka.mate@gmail.com</p>
+
+						</div>
+				</div>
+			</div>
+			<div class="innerframecustomer">
+				<div class="innerframecustomerlabels">
+					<span >Customer:</span>
+						<div class="customertexts">
+
+							<p name="companyname">{{ doc.0.3}} </p>
+							<p name="contactname">To: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}} </p>
+							<p name="pcdandtown">{{ doc.0.16}} {{ doc.0.17}}</p>
+							<p name="address">{{ doc.0.18}}</p>
+							<p name="mobile">{{ doc.0.14}}</p>
+							<p name="email">{{ doc.0.15}}</p>
+
+						</div>
+
+				</div>
+			</div>
+
 
 	</div>
 
+	<div class="frameaccessories">
+		<div id="methodofpaymentlabel">
+			<span >Method of Payment:</span>
+				<div id="methodofpaymenttext">
+					<p >{{ doc.0.21}}</p>
+				</div>
+		</div>
+		<div id="dateofcompletionlabel">
+			<span >Date of Completion:</span>
+				<div id="dateofcompletiontext">
+					<p >{{ doc.0.24|date:'Y-m-d'}}</p>
+				</div>
+		</div>
+		<div id="dateofinvoicelabel">
+			<span >Date of Invoice:</span>
+				<div id="dateofinvoicetext">
+					<p >{{ doc.0.12|date:'Y-m-d'}}</p>
+				</div>
+		</div>
+	</div>
 </div>
-				<p id="companyname">{{ doc.0.3}} </p>
-				<p id="contactname">To: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}} </p>
-				<p id="pcdandtown">{{ doc.0.16}} {{ doc.0.17}}</p>
-				<p id="address">{{ doc.0.18}}</p>
-				<p id="mobile">{{ doc.0.14}}</p>
-				<p id="email">{{ doc.0.15}}</p>
 
 				<p id="numberofdeliverynotelabel">Number of Delivery Note:</p>
 				<p id="numberofdeliverynote">DENO-{{ doc.0.10}}</p>
@@ -48,16 +86,8 @@
 				<p id="pages"></p>
 
 
-				<p id="subject">Subject: Purchase Order
-					{% if doc.0.9 != "" %}
-						 -
-
-					{% endif %}
-					{{ doc.0.9 }}</p>
-				<p id="salutation"> Dear {{ doc.0.13}} {{ doc.0.5}},</p>
 
 				<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
-				<p><textarea id="preface" rows="18" cols="70" wrap="off" disabled>{{ doc.0.6}}</textarea></p>
 				<div class="firstpagefooterdiv" >
 					<hr>
 					<span class="firstpagefooterspan1" >Please see the conditions in details on the last page<br></span>

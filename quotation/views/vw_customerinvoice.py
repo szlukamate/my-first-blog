@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+import datetime
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
 from django.contrib.auth.decorators import login_required
 from quotation.forms import quotationroweditForm
@@ -81,7 +82,8 @@ def customerinvoiceform(request, pk):
                     "Dfrom.companyname_tblcompanies_ctbldoc as companywherefromdeno, "
                     "Dto.companyname_tblcompanies_ctbldoc as companywheretodeno, "
                     "D.stocktakingdeno_tbldoc, "  # 30
-                    "D.denoenabledflag_tbldoc "
+                    "D.denoenabledflag_tbldoc,"
+                    "D.dateofcompletion_tbldoc "
 
                     "FROM quotation_tbldoc as D "
                     "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
@@ -232,7 +234,8 @@ def customerinvoiceprint(request, docid):
                     "deliverydays_tbldoc, "  # 20
                     "paymenttextforquotation_tblpayment_ctbldoc, "
                     "currencycodeinreport_tbldoc, "
-                    "currencyrateinreport_tbldoc "
+                    "currencyrateinreport_tbldoc, "
+                    "dateofcompletion_tbldoc "
 
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
@@ -479,6 +482,7 @@ def customerinvoicebackpage(request):
 def customerinvoicemake(request, docid):
 
     creatorid = request.user.id
+    today = datetime.date.today()
 
     cursor222 = connection.cursor()
     cursor222.execute("DROP TEMPORARY TABLE IF EXISTS denoddocdetailstemptable;")
@@ -609,7 +613,8 @@ def customerinvoicemake(request, docid):
                     "currencyrateinreport_tbldoc, "
                     "doclinkparentid_tbldoc, "
                     "accountcurrencycode_tbldoc, "
-                    "wheretodocid_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "wheretodocid_tbldoc, "
+                    "dateofcompletion_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [3, contactid,
                      companynameclone,
                      firstnameclone,
@@ -633,7 +638,8 @@ def customerinvoicemake(request, docid):
                      currencyrateinreport,
                      docid,
                      accountcurrencycode,
-                     docid])
+                     docid,
+                     today])
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
@@ -751,6 +757,8 @@ def customerinvoicemake(request, docid):
                  podocdetailsidforlabel,
                  supplierdescriptionclone])
 
+    #import pdb;
+    #pdb.set_trace()
 
     rowsnumber = len(docdetails)
     customerordernumber = docid

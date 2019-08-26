@@ -114,7 +114,7 @@ $('#title').click(function() {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var fieldvalue = $(this).val();
-        var docid = $('#deliverynotedocid').text();
+        var docid = $('#customerinvoicedocid').text();
         var fieldname = $(this).attr( "name" );
         var tbl="tblDoc";
 
