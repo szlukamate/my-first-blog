@@ -27,6 +27,9 @@ def customerinvoiceform(request, pk):
         docid = request.POST['docid']
         fieldname = request.POST['fieldname']
         tbl = request.POST['tbl']
+        #import pdb;
+        #pdb.set_trace()
+
         if tbl == "tblDoc_details":
             cursor22 = connection.cursor()
             cursor22.callproc("spcustomerinvoicedocdetailsfieldsupdate", [fieldname, fieldvalue, rowid])
@@ -35,7 +38,7 @@ def customerinvoiceform(request, pk):
             # import pdb;
             # pdb.set_trace()
 
-            json_data = json.dumps(results23)
+            json_data = json.dumps(results23, indent=4, sort_keys=True, default=str)
 
             return HttpResponse(json_data, content_type="application/json")
 
@@ -45,7 +48,7 @@ def customerinvoiceform(request, pk):
             results23 = cursor22.fetchall()
             print(results23)
 
-            json_data = json.dumps(results23)
+            json_data = json.dumps(results23, indent=4, sort_keys=True, default=str)
 
             return HttpResponse(json_data, content_type="application/json")
 
@@ -83,7 +86,8 @@ def customerinvoiceform(request, pk):
                     "Dto.companyname_tblcompanies_ctbldoc as companywheretodeno, "
                     "D.stocktakingdeno_tbldoc, "  # 30
                     "D.denoenabledflag_tbldoc,"
-                    "D.dateofcompletion_tbldoc "
+                    "D.dateofcompletion_tbldoc,"
+                    "D.deadlineforpayment_tbldoc "
 
                     "FROM quotation_tbldoc as D "
                     "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
