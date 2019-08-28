@@ -86,8 +86,9 @@ def customerinvoiceform(request, pk):
                     "Dto.companyname_tblcompanies_ctbldoc as companywheretodeno, "
                     "D.stocktakingdeno_tbldoc, "  # 30
                     "D.denoenabledflag_tbldoc,"
-                    "D.dateofcompletion_tbldoc,"
-                    "D.deadlineforpayment_tbldoc "
+                    "D.dateofcompletiononcustomerinvoice_tbldoc,"
+                    "D.deadlineforpaymentoncustomerinvoice_tbldoc,"
+                    "D.numberoforderoncustomerinvoice_tbldoc "
 
                     "FROM quotation_tbldoc as D "
                     "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
@@ -239,7 +240,8 @@ def customerinvoiceprint(request, docid):
                     "paymenttextforquotation_tblpayment_ctbldoc, "
                     "currencycodeinreport_tbldoc, "
                     "currencyrateinreport_tbldoc, "
-                    "dateofcompletion_tbldoc "
+                    "dateofcompletiononcustomerinvoice_tbldoc,"
+                    "deadlineforpaymentoncustomerinvoice_tbldoc "
 
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
@@ -546,9 +548,16 @@ def customerinvoicemake(request, docid):
                     "email_tblcontacts_ctbldoc, "
                     "pcd_tblcompanies_ctbldoc, "
                     "town_tblcompanies_ctbldoc, "  # 20
-                    "address_tblcompanies_ctbldoc "
+                    "address_tblcompanies_ctbldoc,"
+                    "Doc_kindid_tblDoc_id, "
+                    "pretag_tbldockind, "
+                    "deferredpaymentdaysincustomerorder_tbldoc "
 
                     "FROM quotation_tbldoc "
+                    
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
                     "WHERE docid_tbldoc=%s "
                     "order by docid_tbldoc desc",
                     [pk])
@@ -559,6 +568,7 @@ def customerinvoicemake(request, docid):
         backpagetext = x[3]
         prefacespectext = x[4]
         subject = x[5]
+        docnumber = x[6]
         total = x[7]
         deliverydays = x[8]
         paymenttext = x[9]
@@ -575,8 +585,13 @@ def customerinvoicemake(request, docid):
         pcdclone = x[19]
         townclone = x[20]
         addressclone = x[21]
-        # import pdb;
-        # pdb.set_trace()
+        pretag = x[23]
+        deferredpaymentdaysincustomerorder = x[24]
+
+    ordernumber = pretag + str(docnumber)
+    deadlineforpayment = today + datetime.timedelta(days=deferredpaymentdaysincustomerorder)
+    #import pdb;
+    #pdb.set_trace()
 
     cursor8 = connection.cursor()
     cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
@@ -618,7 +633,9 @@ def customerinvoicemake(request, docid):
                     "doclinkparentid_tbldoc, "
                     "accountcurrencycode_tbldoc, "
                     "wheretodocid_tbldoc, "
-                    "dateofcompletion_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "dateofcompletiononcustomerinvoice_tbldoc,"
+                    "numberoforderoncustomerinvoice_tbldoc, "
+                    "deadlineforpaymentoncustomerinvoice_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [3, contactid,
                      companynameclone,
                      firstnameclone,
@@ -643,7 +660,9 @@ def customerinvoicemake(request, docid):
                      docid,
                      accountcurrencycode,
                      docid,
-                     today])
+                     today,
+                     ordernumber,
+                     deadlineforpayment])
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])

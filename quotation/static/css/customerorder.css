@@ -156,3 +156,8 @@ font-size: 173%;
     margin-left: -175px !important;
     margin-top: -175px !important;
 }
+#deferredpaymentdays {
+position: absolute;
+top: 55mm;
+left:200mm;
+}

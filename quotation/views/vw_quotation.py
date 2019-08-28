@@ -60,7 +60,7 @@ def quotationform(request, pk):
                     "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
                     "prefacespecforquotation_tbldoc, "
                     "subject_tbldoc, "
-                    "docnumber_tbldoc, "
+                    "docnumber_tbldoc, "#10
                     "creatorid_tbldoc, "
                     "creationtime_tbldoc, "
                     "title_tblcontacts_ctbldoc, "
@@ -70,12 +70,14 @@ def quotationform(request, pk):
                     "town_tblcompanies_ctbldoc, "
                     "address_tblcompanies_ctbldoc, "
                     "total_tbldoc, "
-                    "deliverydays_tbldoc, "
+                    "deliverydays_tbldoc, "#20
                     "paymenttextforquotation_tblpayment_ctbldoc, "
                     "currencycodeinreport_tbldoc, "
                     "currencyrateinreport_tbldoc, "
                     "accountcurrencycode_tbldoc, "
-                    "pretag_tbldockind "
+                    "pretag_tbldockind, "
+                    "deferredpaymentdaysinquotation_tbldoc "
+
                     "FROM quotation_tbldoc as D "
                     "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
                     "WHERE docid_tbldoc=%s "

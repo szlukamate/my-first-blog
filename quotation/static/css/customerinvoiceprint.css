@@ -662,3 +662,25 @@ body * { visibility: hidden;}
       font-weight: normal;
 
 }
+#deadlineforpayment {
+      position: absolute;
+      width: 22mm;
+      left: 75mm;
+        margin-top:0mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#deadlineforpaymenttext {
+      position: absolute;
+      width: 16mm;
+      left: 0mm;
+        margin-top:0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
+}
