@@ -166,7 +166,8 @@ margin: 20mm;
 border-top: 3px double #8c8b8b;
 }
 
-// obs
+
+
 .header {
 
       position: relative;
@@ -183,7 +184,7 @@ border-top: 3px double #8c8b8b;
       //margin-top:20mm;
 
 }
-// obs
+
 .headerlabels {
       position: relative;
       top: 3mm;
@@ -662,7 +663,7 @@ body * { visibility: hidden;}
       font-weight: normal;
 
 }
-#deadlineforpayment {
+#deadlineforpaymentlabel {
       position: absolute;
       width: 22mm;
       left: 75mm;
@@ -682,5 +683,87 @@ body * { visibility: hidden;}
       font-size: 14px;
       font-style: normal;
       font-weight: normal;
+
+}
+#numberoforderlabel {
+      position: absolute;
+      width: 22mm;
+      left: 100mm;
+        margin-top:0mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#numberofordertext {
+      position: absolute;
+      width: 16mm;
+      left: 0mm;
+        margin-top:0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
+}
+#dateoforderlabel {
+      position: absolute;
+      width: 22mm;
+      left: 125mm;
+        margin-top:0mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#dateofordertext {
+      position: absolute;
+      width: 16mm;
+      left: 0mm;
+        margin-top:0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
+}
+#currencylabel {
+      position: absolute;
+      width: 22mm;
+      left: 150mm;
+        margin-top:0mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#currencytext {
+      position: absolute;
+      width: 16mm;
+      left: 0mm;
+        margin-top:0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
+}
+#remarks {
+        position: relative;
+        top: 0mm;
+        width: 170mm;
+        font-family: "Arial", Times, serif;
+        font-size: 16px;
+        margin-left: 20mm;
+        overflow: auto;
+        resize: none;
+         outline: none;
+          border:2px solid #000;
+        background-color: white;
+        color: #000;
+        line-height: 20px; /* 4px +12px + 4px */
 
 }

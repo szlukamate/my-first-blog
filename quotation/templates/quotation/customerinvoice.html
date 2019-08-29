@@ -77,10 +77,8 @@
 
 						  </ul>
 						  <div id="tabs2fragment-1">
-							  <label for="prefacespecforquotation_tbldoc" >Prefacespec</label>
-							  <textarea rows="10" cols="60" class="updateabletbldoc" name="prefacespecforquotation_tbldoc">{{ doc.0.8}}</textarea>
-							  <label for="subject_tbldoc" >Subject</label>
-							  <input type="text" class="updateabletbldoc" value="{{ doc.0.9}}" name="subject_tbldoc" >
+							  <label for="remarksincustomerinvoice_tbldoc" >Prefacespec</label>
+							  <textarea rows="10" cols="60" class="updateabletbldoc" name="remarksincustomerinvoice_tbldoc">{{ doc.0.38}}</textarea>
 
 							  <div id="total">
 								  	<select class="selection" fieldname="total_tbldoc" >
@@ -101,16 +99,6 @@
 										<option value="Total_On">Total_On</option>
 								  </select>
 							  </div>
-							  <div id="currencyinreport">
-								  <label for="currencyinreport" >CurrencyinReport:</label>
-								  <select class="selection" fieldname="currencycodeinreport_tbldoc" >
-										<option value="" disabled selected>{{ doc.0.22}}</option>
-										{% for currencycode in currencycodes %}
-											<option value="{{ currencycode.1 }}">{{ currencycode.1}}</option>
-										{% endfor %}
-								  </select>
-								  <input type="text" class="updateabletbldoc" value="{{ doc.0.23}}" name="currencyrateinreport_tbldoc" size="3">
-							  </div>
 							  <div id="dateofcompletion">
 								  <label for="dateofcompletion_tbldoc" >Date of Completion:</label>
 								  <input type="text" class="updateabletbldoc" value="{{ doc.0.32|date:'Y-m-d'}}" name="dateofcompletiononcustomerinvoice_tbldoc" size="8">
@@ -122,6 +110,24 @@
 							  <div id="numberoforder">
 								  <label for="numberoforderoncustomerinvoice_tbldoc" >Number of Order:</label>
 								  <input type="text" class="updateabletbldoc" value="{{ doc.0.34}}" name="numberoforderoncustomerinvoice_tbldoc" size="8">
+							  </div>
+							  <div id="dateoforder">
+								  <label for="dateoforderoncustomerinvoice_tbldoc" >Date of Order:</label>
+								  <input type="text" class="updateabletbldoc" value="{{ doc.0.35|date:'Y-m-d'}}" name="dateoforderoncustomerinvoice_tbldoc" size="8">
+							  </div>
+							  <div id="currency">
+								  <label for="currency" >Currency:</label>
+								  <select class="selection" fieldname="currencyincustomerinvoice_tbldoc" >
+										<option value="" disabled selected>{{ doc.0.36}}</option>
+										{% for currencycode in currencycodes %}
+											<option value="{{ currencycode.1 }}">{{ currencycode.1}}</option>
+										{% endfor %}
+								  </select>
+							  </div>
+
+							  <div id="currencyrateforitems">
+								  <label for="currencyrateforitemsincustomerinvoice_tbldoc" >Currencyrate for Items:</label>
+								  <input type="text" class="updateabletbldoc" value="{{ doc.0.37}}" name="currencyrateforitemsincustomerinvoice_tbldoc" size="5">
 							  </div>
 
 

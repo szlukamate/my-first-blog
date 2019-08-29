@@ -150,3 +150,18 @@ position: absolute;
 top: 25mm;
 left:270mm;
 }
+#dateoforder {
+position: absolute;
+top: 35mm;
+left:270mm;
+}
+#currency {
+position: absolute;
+top: 45mm;
+left:270mm;
+}
+#currencyrateforitems {
+position: absolute;
+top: 55mm;
+left:270mm;
+}

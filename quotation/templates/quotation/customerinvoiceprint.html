@@ -72,23 +72,37 @@
 					<p >{{ doc.0.12|date:'Y-m-d'}}</p>
 				</div>
 		</div>
-		<div id="deadlineforpayment">
+		<div id="deadlineforpaymentlabel">
 			<span >Deadline for Payment:</span>
 				<div id="deadlineforpaymenttext">
 					<p >{{ doc.0.25|date:'Y-m-d'}}</p>
 				</div>
 		</div>
+		<div id="numberoforderlabel">
+			<span >Number of Order:</span>
+				<div id="numberofordertext">
+					<p >{{ doc.0.26}}</p>
+				</div>
+		</div>
+		<div id="dateoforderlabel">
+			<span >Date of Order:</span>
+				<div id="dateofordertext">
+					<p >{{ doc.0.27|date:'Y-m-d'}}</p>
+				</div>
+		</div>
+		<div id="currencylabel">
+			<span >Currency:</span>
+				<div id="currencytext">
+					<p >{{ doc.0.28}}</p>
+				</div>
+		</div>
 
+	</div>
+	<div id="frameremarks">
+		<p><textarea id="remarks" rows="18" cols="70" wrap="off" disabled>{{ doc.0.29}}</textarea></p>
 	</div>
 </div>
 
-				<p id="numberofdeliverynotelabel">Number of Delivery Note:</p>
-				<p id="numberofdeliverynote">DENO-{{ doc.0.10}}</p>
-				<p id="ourcontactlabel">Our Contact:</p>
-				<p id="ourcontact">{{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
-				<p id="subscriptiontext">{{ creatordata.0.4 }}</p>
-				<p id="creationtimelabel">Time of Creation:</p>
-				<p id="creationtime">{{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
 				<p id="pageslabel">Pages:</p>
 				<p id="pages"></p>
 
@@ -107,10 +121,6 @@
 
 						{% for tblDoc_details in docdetails %}
 						<div class="item-container-for-measure" rowid="{{ forloop.counter0 }}">
-						{% if forloop.counter0 == 0 %} <!-- only at first item -->
-
-							<div id="prefacespec" contentEditable="true">{{ doc.0.8}}</div>
-						{% endif %}
 
 							<span name="htmlinsertbefore" rowid="{{ forloop.counter0 }}"></span>
 

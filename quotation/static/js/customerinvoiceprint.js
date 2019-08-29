@@ -1,5 +1,5 @@
 /*
-deliverynoteprint.js
+customerinvoiceprint.js
 */
 
             var msg="Hello Javascript2";

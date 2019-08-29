@@ -1,5 +1,5 @@
 /*
-deliverynote.js
+customerinvoice.js
 */
 
             var msg="Hello Javascript2";
@@ -267,9 +267,9 @@ $('#title').click(function() {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var fieldvalue = $(this).val();
-        var quotationdocid = $('#quotationdocid').text();
+        var quotationdocid = $('#customerinvoicedocid').text();
         var fieldname = $(this).attr( "fieldname" );
-        console.log('quotationdocid:' + quotationdocid);
+//        console.log('quotationdocid:' + quotationdocid);
             $.ajax({
             type: 'POST',
             url: 'quotationuniversalselections/',

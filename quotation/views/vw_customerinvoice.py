@@ -88,7 +88,11 @@ def customerinvoiceform(request, pk):
                     "D.denoenabledflag_tbldoc,"
                     "D.dateofcompletiononcustomerinvoice_tbldoc,"
                     "D.deadlineforpaymentoncustomerinvoice_tbldoc,"
-                    "D.numberoforderoncustomerinvoice_tbldoc "
+                    "D.numberoforderoncustomerinvoice_tbldoc, "
+                    "D.dateoforderoncustomerinvoice_tbldoc, "
+                    "D.currencyincustomerinvoice_tbldoc, "
+                    "D.currencyrateforitemsincustomerinvoice_tbldoc, "
+                    "D.remarksincustomerinvoice_tbldoc "
 
                     "FROM quotation_tbldoc as D "
                     "JOIN quotation_tbldoc_kind as DK ON D.Doc_kindid_tblDoc_id = DK.Doc_kindid_tblDoc_kind "
@@ -241,7 +245,11 @@ def customerinvoiceprint(request, docid):
                     "currencycodeinreport_tbldoc, "
                     "currencyrateinreport_tbldoc, "
                     "dateofcompletiononcustomerinvoice_tbldoc,"
-                    "deadlineforpaymentoncustomerinvoice_tbldoc "
+                    "deadlineforpaymentoncustomerinvoice_tbldoc," #25
+                    "numberoforderoncustomerinvoice_tbldoc, "
+                    "dateoforderoncustomerinvoice_tbldoc, "
+                    "currencyincustomerinvoice_tbldoc,"
+                    "remarksincustomerinvoice_tbldoc "
 
                     "FROM quotation_tbldoc "
                     "WHERE docid_tbldoc=%s "
@@ -486,7 +494,7 @@ def customerinvoicebackpage(request):
     return HttpResponse(json_data, content_type="application/json")
 @login_required
 def customerinvoicemake(request, docid):
-
+# invoice items to temptable begin
     creatorid = request.user.id
     today = datetime.date.today()
 
@@ -522,7 +530,9 @@ def customerinvoicemake(request, docid):
     cursor222.execute("SELECT *  "
                     "FROM denoddocdetailstemptable ")
     denoddocdetailstemptableresult = cursor222.fetchall()
+# invoice items to temptable end
 
+# select order doc variables begin
     pk = docid
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -551,7 +561,8 @@ def customerinvoicemake(request, docid):
                     "address_tblcompanies_ctbldoc,"
                     "Doc_kindid_tblDoc_id, "
                     "pretag_tbldockind, "
-                    "deferredpaymentdaysincustomerorder_tbldoc "
+                    "deferredpaymentdaysincustomerorder_tbldoc, "
+                    "creationtime_tbldoc "
 
                     "FROM quotation_tbldoc "
                     
@@ -587,9 +598,13 @@ def customerinvoicemake(request, docid):
         addressclone = x[21]
         pretag = x[23]
         deferredpaymentdaysincustomerorder = x[24]
+        dateofordertimestamp = x[25]
+# select order doc variables end
 
     ordernumber = pretag + str(docnumber)
     deadlineforpayment = today + datetime.timedelta(days=deferredpaymentdaysincustomerorder)
+    dateoforder = dateofordertimestamp.strftime('%Y-%m-%d')
+
     #import pdb;
     #pdb.set_trace()
 
@@ -635,7 +650,8 @@ def customerinvoicemake(request, docid):
                     "wheretodocid_tbldoc, "
                     "dateofcompletiononcustomerinvoice_tbldoc,"
                     "numberoforderoncustomerinvoice_tbldoc, "
-                    "deadlineforpaymentoncustomerinvoice_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "deadlineforpaymentoncustomerinvoice_tbldoc, "
+                    "dateoforderoncustomerinvoice_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [3, contactid,
                      companynameclone,
                      firstnameclone,
@@ -662,7 +678,8 @@ def customerinvoicemake(request, docid):
                      docid,
                      today,
                      ordernumber,
-                     deadlineforpayment])
+                     deadlineforpayment,
+                     dateoforder])
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
