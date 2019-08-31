@@ -493,7 +493,7 @@ body * { visibility: hidden;}
       font-size: 14px;
       font-style: italic;
       font-weight: bold;
-      margin-bottom: 10mm;
+      margin-bottom: 5mm;
       //margin-top:20mm;
         padding: 0px;
       //  margin: 0px;
@@ -577,10 +577,9 @@ body * { visibility: hidden;}
       font-size: 14px;
       font-style: italic;
       font-weight: bold;
-      //margin-bottom: 10mm;
+      margin-bottom: 5mm;
       //margin-top:20mm;
         padding: 0px;
-        margin: 0px;
 
 }
 .framedivonfirstpage {
@@ -751,19 +750,95 @@ body * { visibility: hidden;}
       font-weight: normal;
 
 }
-#remarks {
+#frameremarks {
         position: relative;
+        line-height: 5mm;
         top: 0mm;
         width: 170mm;
-        font-family: "Arial", Times, serif;
-        font-size: 16px;
         margin-left: 20mm;
-        overflow: auto;
-        resize: none;
-         outline: none;
           border:2px solid #000;
         background-color: white;
         color: #000;
-        line-height: 20px; /* 4px +12px + 4px */
+      margin-bottom: 5mm;
+}
+#remarkstextarea {
+        position: relative;
+        line-height: 5mm;
+        top: 0mm;
+        width: 165mm;
+        font-family: "Arial", Times, serif;
+        font-size: 16px;
+        margin-left: 0mm;
+        overflow: auto;
+        overflow: hidden;
+        resize: none;
+         outline: none;
+        background-color: white;
+        color: #000;
+        border: none;
+        outline: none;
+
+}
+#remarkslabel {
+      position: absolute;
+      width: 22mm;
+      left: 1mm;
+        margin-top:0mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#remarkstext {
+      position: absolute;
+//      width: 16mm;
+        top: 0mm;
+      left: 0mm;
+        margin-top:0mm;
+      font-family: "Arial", Times, serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: normal;
+
+}
+#frameheaderonfirstpage {
+
+      position: relative;
+      top: 0mm;
+      width: 170mm;
+      height: 8mm;
+      left: 20mm;
+      border:2px solid #000;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+      //margin-bottom: 10mm;
+      margin-top:0mm;
+        padding: 0px;
+        margin: 0px;
+
+}
+#positionnumberlabel {
+      position: absolute;
+      width: 16mm;
+      left: 1mm;
+        margin-top:2mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#descriptionlabel {
+      position: absolute;
+      width: 16mm;
+      left: 20mm;
+        margin-top:2mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
 
 }

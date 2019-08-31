@@ -10,6 +10,20 @@ $(window).on("load", function(){
 });
 
 $(function () {
+// remarks frame height begin
+var text = $("#remarkstextarea").text();
+var div = $('<div id="temp" style="width:85mm;  white-space:pre-line; "></div>');
+div.text(text);
+$('body').append(div);
+var divHeight = $('#temp').height();
+div.remove();
+console.log(divHeight);
+console.log(text);
+
+
+$("#remarkstextarea").height( divHeight );
+$("#frameremarks").height( divHeight + 20 );
+// remarks frame height end
 
 var height;
 var sumheight=0;

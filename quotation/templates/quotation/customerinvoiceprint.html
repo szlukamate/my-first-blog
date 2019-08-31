@@ -15,93 +15,109 @@
 
 		<!-- wrap first page ˇ-->
 		<div class="page">
-				<p id="title" >Copy of Invoice</p>
-<div class="framedivonfirstpage" >
+			<p id="title" >Copy of Invoice</p>
+			<div class="framedivonfirstpage" >
 
-	<div class="frameissuedbyandcustomer" >
-			<div class="innerframeissuedby">
-				<div class="innerframeissuedbylabels">
-					<span>Issued By:</span>
-						<div class="issuedbytexts">
+				<div class="frameissuedbyandcustomer" >
+						<div class="innerframeissuedby">
+							<div class="innerframeissuedbylabels">
+								<span>Issued By:</span>
+									<div class="issuedbytexts">
 
-							<p >Gofri Dealer Ltd </p>
-							<p >6726 Szeged </p>
-							<p >Akácfa u. 16.</p>
-							<p >+36309680468</p>
-							<p >szluka.mate@gmail.com</p>
+										<p >Gofri Dealer Ltd </p>
+										<p >6726 Szeged </p>
+										<p >Akácfa u. 16.</p>
+										<p >+36309680468</p>
+										<p >szluka.mate@gmail.com</p>
 
+									</div>
+							</div>
 						</div>
-				</div>
-			</div>
-			<div class="innerframecustomer">
-				<div class="innerframecustomerlabels">
-					<span >Customer:</span>
-						<div class="customertexts">
+						<div class="innerframecustomer">
+							<div class="innerframecustomerlabels">
+								<span >Customer:</span>
+									<div class="customertexts">
 
-							<p name="companyname">{{ doc.0.3}} </p>
-							<p name="contactname">To: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}} </p>
-							<p name="pcdandtown">{{ doc.0.16}} {{ doc.0.17}}</p>
-							<p name="address">{{ doc.0.18}}</p>
-							<p name="mobile">{{ doc.0.14}}</p>
-							<p name="email">{{ doc.0.15}}</p>
+										<p name="companyname">{{ doc.0.3}} </p>
+										<p name="contactname">To: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}} </p>
+										<p name="pcdandtown">{{ doc.0.16}} {{ doc.0.17}}</p>
+										<p name="address">{{ doc.0.18}}</p>
+										<p name="mobile">{{ doc.0.14}}</p>
+										<p name="email">{{ doc.0.15}}</p>
 
+									</div>
+
+							</div>
 						</div>
 
+
 				</div>
+
+				<div class="frameaccessories">
+					<div id="methodofpaymentlabel">
+						<span >Method of Payment:</span>
+							<div id="methodofpaymenttext">
+								<p >{{ doc.0.21}}</p>
+							</div>
+					</div>
+					<div id="dateofcompletionlabel">
+						<span >Date of Completion:</span>
+							<div id="dateofcompletiontext">
+								<p >{{ doc.0.24|date:'Y-m-d'}}</p>
+							</div>
+					</div>
+					<div id="dateofinvoicelabel">
+						<span >Date of Invoice:</span>
+							<div id="dateofinvoicetext">
+								<p >{{ doc.0.12|date:'Y-m-d'}}</p>
+							</div>
+					</div>
+					<div id="deadlineforpaymentlabel">
+						<span >Deadline for Payment:</span>
+							<div id="deadlineforpaymenttext">
+								<p >{{ doc.0.25|date:'Y-m-d'}}</p>
+							</div>
+					</div>
+					<div id="numberoforderlabel">
+						<span >Number of Order:</span>
+							<div id="numberofordertext">
+								<p >{{ doc.0.26}}</p>
+							</div>
+					</div>
+					<div id="dateoforderlabel">
+						<span >Date of Order:</span>
+							<div id="dateofordertext">
+								<p >{{ doc.0.27|date:'Y-m-d'}}</p>
+							</div>
+					</div>
+					<div id="currencylabel">
+						<span >Currency:</span>
+							<div id="currencytext">
+								<p >{{ doc.0.28}}</p>
+							</div>
+					</div>
+
+				</div>
+				<div id="frameremarks">
+					<div id="remarkslabel">
+						<span >Remarks:</span>
+							<div id="remarkstext">
+								<p><textarea id="remarkstextarea" rows="18" cols="70" wrap="off" disabled>{{ doc.0.29}}</textarea></p>
+							</div>
+					</div>
+				</div>
+				<div id="frameheaderonfirstpage">
+					<div id="positionnumberlabel">
+						<span >Pos.</span>
+					</div>
+					<div id="descriptionlabel">
+						<span >Description</span>
+					</div>
+
+				</div>
+
 			</div>
 
-
-	</div>
-
-	<div class="frameaccessories">
-		<div id="methodofpaymentlabel">
-			<span >Method of Payment:</span>
-				<div id="methodofpaymenttext">
-					<p >{{ doc.0.21}}</p>
-				</div>
-		</div>
-		<div id="dateofcompletionlabel">
-			<span >Date of Completion:</span>
-				<div id="dateofcompletiontext">
-					<p >{{ doc.0.24|date:'Y-m-d'}}</p>
-				</div>
-		</div>
-		<div id="dateofinvoicelabel">
-			<span >Date of Invoice:</span>
-				<div id="dateofinvoicetext">
-					<p >{{ doc.0.12|date:'Y-m-d'}}</p>
-				</div>
-		</div>
-		<div id="deadlineforpaymentlabel">
-			<span >Deadline for Payment:</span>
-				<div id="deadlineforpaymenttext">
-					<p >{{ doc.0.25|date:'Y-m-d'}}</p>
-				</div>
-		</div>
-		<div id="numberoforderlabel">
-			<span >Number of Order:</span>
-				<div id="numberofordertext">
-					<p >{{ doc.0.26}}</p>
-				</div>
-		</div>
-		<div id="dateoforderlabel">
-			<span >Date of Order:</span>
-				<div id="dateofordertext">
-					<p >{{ doc.0.27|date:'Y-m-d'}}</p>
-				</div>
-		</div>
-		<div id="currencylabel">
-			<span >Currency:</span>
-				<div id="currencytext">
-					<p >{{ doc.0.28}}</p>
-				</div>
-		</div>
-
-	</div>
-	<div id="frameremarks">
-		<p><textarea id="remarks" rows="18" cols="70" wrap="off" disabled>{{ doc.0.29}}</textarea></p>
-	</div>
-</div>
 
 				<p id="pageslabel">Pages:</p>
 				<p id="pages"></p>
