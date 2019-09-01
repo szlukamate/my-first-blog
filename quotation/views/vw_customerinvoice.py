@@ -354,6 +354,7 @@ def customerinvoiceprint(request, docid):
     # labelids to table begin
     # aim: enablelabelkindflag set to 1 at first instance of product that the print form writes the "Unique id" or "batch id" text
     # only once at thebeginning in line
+    #
     cursor22 = connection.cursor()
     cursor22.execute("DROP TEMPORARY TABLE IF EXISTS labelidtemptable;")
     cursor22.execute("CREATE TEMPORARY TABLE IF NOT EXISTS labelidtemptable "
@@ -363,7 +364,9 @@ def customerinvoiceprint(request, docid):
                      "     podocdetailsidforlabel_tblLabelidtemptable INT(11) NOT NULL, "
                      "     qty_tblLabelidtemptable DECIMAL(10,1) NULL,"
                      "     unit_tblLabelidtemptable varchar(20) NULL,"
-                     "     enablelabelkindflag_tblLabelidtemptable INT(11) NULL) "
+                     "     enablelabelkindflag_tblLabelidtemptable INT(11) NULL,"
+                     "      fromstockflag_tblLabelidtemptable INT(11) NULL,"
+                     "      fromstockname_tblLabelidtemptable varchar(200) NULL) "
 
                      "      ENGINE=INNODB "
                      "    ; ")
@@ -374,6 +377,59 @@ def customerinvoiceprint(request, docid):
         to_podocdetailsidforlabel_tblLabelidtemptable = x[2]
         to_qty_tblLabelidtemptable = x[3]
         to_unit_tblLabelidtemptable = x[4]
+
+        # check labelid from stock or not begin
+        if to_podocdetailsidforlabel_tblLabelidtemptable != None:
+            cursor22.execute("SELECT   "
+                             "D.stockflag as stockflag "
+                             
+                             "FROM quotation_tbldoc_details DD "
+
+                             "JOIN (SELECT "
+                             "      docid_tbldoc, "
+                                   "Contactid_tblDoc_id, "
+                             "      CONT.stockflag as stockflag "
+                                    
+                                   "FROM quotation_tbldoc "
+                             ""
+                             "      JOIN (SELECT "
+                             ""
+                             "           Contactid_tblContacts, "
+                             "           Companyid_tblContacts_id,"
+                             "           COMP.stockflag as stockflag "
+
+                                         "FROM quotation_tblcontacts "
+                             
+                             "           JOIN (SELECT "
+                                             "Companyid_tblCompanies, "
+                             "                stockflag_tblcompanies as stockflag "
+
+                                             "FROM quotation_tblcompanies "
+                             "               ) as COMP "
+                             "           ON quotation_tblcontacts.Companyid_tblContacts_id = COMP.Companyid_tblCompanies "
+                             
+            
+                                        ") as CONT"
+                             "      ON quotation_tbldoc.Contactid_tblDoc_id = CONT.Contactid_tblContacts"
+                                   ") as D "                          
+                             "ON DD.Docid_tblDoc_details_id = D.docid_tbldoc "
+                             
+                             "JOIN quotation_tbldoc "
+                             "ON DD.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+
+                             "WHERE podocdetailsidforlabel_tbldocdetails=%s and Doc_kindid_tblDoc_id=8 "
+                             "ORDER BY creationtime_tblDoc_details desc "
+                             "LIMIT 1", [to_podocdetailsidforlabel_tblLabelidtemptable])
+            stockflagresults = cursor22.fetchall()
+
+
+            for x in stockflagresults:
+                stockflag = x[0]
+
+            import pdb;
+            pdb.set_trace()
+
+        # check labelid from stock or not end
 
         cursor22.execute("INSERT INTO labelidtemptable ("
                          "docid_tblLabelidtemptable, "
@@ -432,7 +488,9 @@ def customerinvoiceprint(request, docid):
                      "podocdetailsidforlabel_tblLabelidtemptable, "
                      "qty_tblLabelidtemptable, "
                      "unit_tblLabelidtemptable, "
-                     "enablelabelkindflag_tblLabelidtemptable "
+                     "enablelabelkindflag_tblLabelidtemptable,"
+                     "fromstockflag_tblLabelidtemptable,"
+                     "fromstockname_tblLabelidtemptable "
 
                      "FROM labelidtemptable ")
     labelidtemptableswithenablelabelkindflagset = cursor22.fetchall()

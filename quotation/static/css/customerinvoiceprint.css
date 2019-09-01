@@ -842,3 +842,80 @@ body * { visibility: hidden;}
       font-weight: bold;
 
 }
+#unitlabel {
+      position: absolute;
+      width: 16mm;
+      left: 55mm;
+        margin-top:2mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#quantitylabel {
+      position: absolute;
+      width: 16mm;
+      left: 65mm;
+        margin-top:2mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#unitpricelabel {
+      position: absolute;
+      width: 16mm;
+      left: 75mm;
+        margin-top:2mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#netpricelabel {
+      position: absolute;
+      width: 16mm;
+      left: 95mm;
+        margin-top:2mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#vatpercentlabel {
+      position: absolute;
+      width: 16mm;
+      left: 115mm;
+        margin-top:2mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#vatvaluelabel {
+      position: absolute;
+      width: 18mm;
+      left: 125mm;
+        margin-top:2mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+#grosspricelabel {
+      position: absolute;
+      width: 18mm;
+      left: 145mm;
+        margin-top:2mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: bold;
+
+}
