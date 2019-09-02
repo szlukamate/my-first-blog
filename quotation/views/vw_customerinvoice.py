@@ -366,7 +366,8 @@ def customerinvoiceprint(request, docid):
                      "     unit_tblLabelidtemptable varchar(20) NULL,"
                      "     enablelabelkindflag_tblLabelidtemptable INT(11) NULL,"
                      "      fromstockflag_tblLabelidtemptable INT(11) NULL,"
-                     "      fromstockname_tblLabelidtemptable varchar(200) NULL) "
+                     "      fromstockname_tblLabelidtemptable varchar(200) NULL, "
+                     "      fromstocknameprintingenabled_tblLabelidtemptable INT(11) NULL) "
 
                      "      ENGINE=INNODB "
                      "    ; ")
@@ -380,54 +381,92 @@ def customerinvoiceprint(request, docid):
 
         # check labelid from stock or not begin
         if to_podocdetailsidforlabel_tblLabelidtemptable != None:
+
             cursor22.execute("SELECT   "
-                             "D.stockflag as stockflag "
-                             
+                             "customerorderdocidforcustomerinvoice_tbldoc "
+                             ""
+                             "FROM quotation_tbldoc "
+                             ""
+                             "WHERE Docid_tblDoc = %s ", [to_docid_tblLabelidtemptable])
+            customerorderdocidresults = cursor22.fetchall()
+
+
+            for x in customerorderdocidresults:
+                customerorderdocid = x[0]
+
+
+            cursor22.execute("SELECT   "
+                             "D2.stockflag as stockflag, "
+                             "D2.stockname as stockname "
+                                                 
                              "FROM quotation_tbldoc_details DD "
-
+                             
                              "JOIN (SELECT "
-                             "      docid_tbldoc, "
-                                   "Contactid_tblDoc_id, "
-                             "      CONT.stockflag as stockflag "
+                             "      quotation_tbldoc.Docid_tblDoc, "
+                             "      D1.stockflag as stockflag, "
+                             "      D1.stockname as stockname "
+                             ""
+                             "      FROM quotation_tbldoc "
+
+                                     "JOIN (SELECT "
+                                     
+                                     "       D0.docid_tbldoc, "
+                                     "       D.stockflag as stockflag, "
+                                     "       D.stockname as stockname "
+                                     
+                                     "       FROM quotation_tbldoc D0 "
+                                     
+                                     
+                                             "JOIN (SELECT "
+                                             "      docid_tbldoc, "
+                                                   "Contactid_tblDoc_id, "
+                                             "      CONT.stockflag as stockflag, "
+                                             "      CONT.stockname as stockname "
+                                                    
+                                                   "FROM quotation_tbldoc "
+                                             ""
+                                             "      JOIN (SELECT "
+                                             ""
+                                             "           Contactid_tblContacts, "
+                                             "           Companyid_tblContacts_id,"
+                                             "           COMP.stockflag as stockflag,"
+                                             "           COMP.stockname as stockname "
+                
+                                                         "FROM quotation_tblcontacts "
+                                             
+                                             "           JOIN (SELECT "
+                                                             "Companyid_tblCompanies, "
+                                             "                stockflag_tblcompanies as stockflag, "
+                                                            " companyname_tblcompanies as stockname "                
+
+                                                             "FROM quotation_tblcompanies "
+                                             "               ) as COMP "
+                                             "           ON quotation_tblcontacts.Companyid_tblContacts_id = COMP.Companyid_tblCompanies "
+                                             
+                            
+                                                        ") as CONT"
+                                             "      ON quotation_tbldoc.Contactid_tblDoc_id = CONT.Contactid_tblContacts "
+                                                   ") as D "                          
+                                             "ON D0.docid_tbldoc = D.docid_tbldoc "
                                     
-                                   "FROM quotation_tbldoc "
-                             ""
-                             "      JOIN (SELECT "
-                             ""
-                             "           Contactid_tblContacts, "
-                             "           Companyid_tblContacts_id,"
-                             "           COMP.stockflag as stockflag "
+                                           ") as D1 "
+                                     "ON quotation_tbldoc.wherefromdocid_tbldoc = D1.docid_tbldoc "
 
-                                         "FROM quotation_tblcontacts "
-                             
-                             "           JOIN (SELECT "
-                                             "Companyid_tblCompanies, "
-                             "                stockflag_tblcompanies as stockflag "
 
-                                             "FROM quotation_tblcompanies "
-                             "               ) as COMP "
-                             "           ON quotation_tblcontacts.Companyid_tblContacts_id = COMP.Companyid_tblCompanies "
-                             
-            
-                                        ") as CONT"
-                             "      ON quotation_tbldoc.Contactid_tblDoc_id = CONT.Contactid_tblContacts"
-                                   ") as D "                          
-                             "ON DD.Docid_tblDoc_details_id = D.docid_tbldoc "
+                             "      ) as D2 "
+                             "ON DD.Docid_tblDoc_details_id = D2.Docid_tblDoc "
                              
                              "JOIN quotation_tbldoc "
-                             "ON DD.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+                             "ON DD.Docid_tblDoc_details_id=quotation_tbldoc.Docid_tblDoc "
 
-                             "WHERE podocdetailsidforlabel_tbldocdetails=%s and Doc_kindid_tblDoc_id=8 "
-                             "ORDER BY creationtime_tblDoc_details desc "
-                             "LIMIT 1", [to_podocdetailsidforlabel_tblLabelidtemptable])
+                             "WHERE podocdetailsidforlabel_tbldocdetails=%s and Doc_kindid_tblDoc_id=8 and wheretodocid_tbldoc=%s ", [to_podocdetailsidforlabel_tblLabelidtemptable, customerorderdocid])
             stockflagresults = cursor22.fetchall()
 
 
             for x in stockflagresults:
-                stockflag = x[0]
+                fromstockflag = x[0]
+                fromstockname = x[1]
 
-            import pdb;
-            pdb.set_trace()
 
         # check labelid from stock or not end
 
@@ -436,13 +475,15 @@ def customerinvoiceprint(request, docid):
                          "productid_tblLabelidtemptable, "
                          "podocdetailsidforlabel_tblLabelidtemptable, "
                          "qty_tblLabelidtemptable, "
+                         "fromstockflag_tblLabelidtemptable, "
+                         "fromstockname_tblLabelidtemptable, "
                          "unit_tblLabelidtemptable) VALUES ('" + str(to_docid_tblLabelidtemptable) + "', "
-                                                                                                     "'" + str(
-            to_productid_tblLabelidtemptable) + "', "
-                                                "'" + str(to_podocdetailsidforlabel_tblLabelidtemptable) + "', "
-                                                                                                           "'" + str(
-            to_qty_tblLabelidtemptable) + "', "
-                                          "'" + str(to_unit_tblLabelidtemptable) + "');")
+                                                           "'" + str(to_productid_tblLabelidtemptable) + "', "
+                                                           "'" + str(to_podocdetailsidforlabel_tblLabelidtemptable) + "', "
+                                                           "'" + str(to_qty_tblLabelidtemptable) + "', "
+                                                           "'" + str(fromstockflag) + "', "
+                                                           "'" + str(fromstockname) + "', "
+                                                           "'" + str(to_unit_tblLabelidtemptable) + "');")
 
     cursor22.execute("SELECT   "
                      "auxid, "
@@ -450,17 +491,20 @@ def customerinvoiceprint(request, docid):
                      "productid_tblLabelidtemptable, "
                      "podocdetailsidforlabel_tblLabelidtemptable, "
                      "qty_tblLabelidtemptable, "
-                     "unit_tblLabelidtemptable "
+                     "unit_tblLabelidtemptable, "
+                     "fromstockflag_tblLabelidtemptable, "
+                     "fromstockname_tblLabelidtemptable. "
+                     "fromstocknameprintingenabled_tblLabelidtemptable "
 
                      "FROM labelidtemptable ")
     labelidtemptables = cursor22.fetchall()
     # labelids to table end
 
-    # enablelabelkindflag update begin
+    # enablelabelkindflag and fromstocknameprintingenabled update begin
     for x in labelidtemptables:
         auxid = x[0]
         productid = x[2]
-
+        #enablelabelkindflag set begin
         cursor22.execute("SELECT min(auxid) "
                          "FROM labelidtemptable "
                          "WHERE productid_tblLabelidtemptable=%s", [productid])
@@ -468,19 +512,21 @@ def customerinvoiceprint(request, docid):
 
         for x2 in labelidtemptableresults:
             minauxidforproduct = x2[0]
-
         cursor22.execute("UPDATE labelidtemptable SET "
                          "enablelabelkindflag_tblLabelidtemptable=1 "
                          "WHERE auxid =%s ", [minauxidforproduct])
+        # enablelabelkindflag set end
 
         a = 1
-    # labelidtemptable table:
-    # auxid, enablelabelkindflag_tblLabelidtemptable,  productid_tblLabelidtemptable
-    # 1 1 9
-    # 2 null 9
-    # 3 null 9
-    # 4 1 33
-    # 5 null 33
+        #enablelabelkindflag signs that the labelkind discrete or indiscrete
+        # labelidtemptable table:
+        # auxid, enablelabelkindflag_tblLabelidtemptable,  productid_tblLabelidtemptable, fromstocknameprintingenabled_tblLabelidtemptable, fromstockname_tblLabelidtemptable
+        # 1 1 9 1 centralstock
+        # 2 null 9 null centralstock
+        # 3 null 9 1 stock2
+        # 4 1 33 1 stock2
+        # 5 null 33 null stock2
+
     cursor22.execute("SELECT   "
                      "auxid, "
                      "docid_tblLabelidtemptable, "
@@ -490,12 +536,13 @@ def customerinvoiceprint(request, docid):
                      "unit_tblLabelidtemptable, "
                      "enablelabelkindflag_tblLabelidtemptable,"
                      "fromstockflag_tblLabelidtemptable,"
-                     "fromstockname_tblLabelidtemptable "
+                     "fromstockname_tblLabelidtemptable, "
+                     "fromstocknameprintingenabled_tblLabelidtemptable "
 
                      "FROM labelidtemptable ")
     labelidtemptableswithenablelabelkindflagset = cursor22.fetchall()
 
-    # enablelabelkindflag update end
+    # enablelabelkindflag and fromstocknameprintingenabled update end
 
     cursor4 = connection.cursor()
     cursor4.execute(
@@ -709,7 +756,8 @@ def customerinvoicemake(request, docid):
                     "dateofcompletiononcustomerinvoice_tbldoc,"
                     "numberoforderoncustomerinvoice_tbldoc, "
                     "deadlineforpaymentoncustomerinvoice_tbldoc, "
-                    "dateoforderoncustomerinvoice_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "dateoforderoncustomerinvoice_tbldoc,"
+                    "customerorderdocidforcustomerinvoice_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [3, contactid,
                      companynameclone,
                      firstnameclone,
@@ -737,7 +785,8 @@ def customerinvoicemake(request, docid):
                      today,
                      ordernumber,
                      deadlineforpayment,
-                     dateoforder])
+                     dateoforder,
+                     docid])
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
