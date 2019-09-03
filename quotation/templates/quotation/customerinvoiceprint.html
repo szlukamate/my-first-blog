@@ -217,12 +217,26 @@
 
 																	{% else %}
 
+																		{% if labelid.9 == 1 and labelid.7 == 1 %} <!-- fromstocknameprintingenabled and fromstockflag are true -->
+
+
+																			{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
+
+																					<span >/From {{ labelid.8}}/ </span>
+																			{% else %} <!-- Indiscrete -->
+
+																					<span >/From {{ labelid.8}}/ </span>
+																			{% endif %}
+
+																		{% endif %}
+
+
 																		{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
 
-																			<span >{{ labelid.8}} {{ labelid.3}} </span>
+																			<span >{{ labelid.3}} </span>
 																		{% else %} <!-- Indiscrete -->
 
-																			<span >[{{ labelid.8}} {{ labelid.3}}:{{labelid.4}}] </span>
+																			<span >{{ labelid.3}}:{{labelid.4}} </span>
 
 																		{% endif %}
 

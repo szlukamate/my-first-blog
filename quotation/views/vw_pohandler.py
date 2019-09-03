@@ -421,36 +421,7 @@ def pohandlerreception(request): #from pohandlerform
     tables = cursor2.fetchall()
 #dateofarrivallistsplitted to table end
 
-    '''
-    #docdetails per docid to table start
-    for xx in tables:
-        auxid = xx[0]
-        podocid = xx[2]
-        cordocid = xx[3]
-        cursor2.execute("SELECT count(auxid) "
-                        "FROM porows "
-                        "WHERE podocid=%s and cordocid=%s "
-                        "GROUP BY podocid, cordocid ",[podocid, cordocid])
-        numberofitemstodenoresults = cursor2.fetchall()
 
-        for x2 in numberofitemstodenoresults:
-            numberofitemstodeno= x2[0]
-
-        cursor2.execute("UPDATE porows SET " 
-                        "numberofitemstodeno= %s "
-                        "WHERE auxid =%s ", [numberofitemstodeno, auxid])
-    # import pdb;
-    # pdb.set_trace()
-
-    #docdetails per docid to table end
-    
-#porows table:
-    #auxid, numberofitemstodeno
-    #1 1
-    #2 2
-    #3 2
-    #4 1
-    '''
 #deliverynote making start
     cursor2.execute("SELECT "
                         "auxid, "
@@ -766,6 +737,7 @@ def pohandlerreception(request): #from pohandlerform
             backtostockitemqty = x332[6]
             appendvarbacktostocklist = (cordocid, podocid, podocdetailsid, coritemqty, arriveditemqty, backtotockstockdocid, backtostockitemqty)
             backtostocklist.append(appendvarbacktostocklist)
+
         def istherethislabelinneededqtylist ():
             if len(neededqtylist) == 0:
                 checktext = 'no'
@@ -982,11 +954,18 @@ def pohandlerreception(request): #from pohandlerform
             processedqty = (underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist) +
             underprogressqtyinneededqtytemptable('toback', None, cordocidfromstocklist) +
             underprogressqtyinneededqtytemptable('tosurplus', 1382, cordocidfromstocklist))
+            processable = sumarrivedqty - processedqty
 
-            maxneededitemtodirectqty = (coritemqtyinfromstocklist - (neededitemqtyaggregated + underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)) -
-                                       underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist))
-            maxneededitemqty = (sumarrivedqty - processedqty) - (fromstockitemqtyinfromstocklist - fromstockitemqtyinbacktostocklist) - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
-            maxneededitemtostockqty = neededtostockqtyaggregated - underprogressqtyinneededqtytemptable('tosurplus', 1382, cordocidfromstocklist)
+            maxneededitemtodirectqty = (coritemqtyinfromstocklist - fromstockitemqtyinfromstocklist -
+                                        underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist))
+#            maxneededitemtodirectqty = (coritemqtyinfromstocklist - (neededitemqtyaggregated + underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)) -
+#                                       underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist))
+            maxneededitemqty = fromstockitemqtyinfromstocklist - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
+#            maxneededitemqty = processable - fromstockitemqtyinbacktostocklist - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
+#            if fromstockitemqtyinfromstocklist == 1000:
+#                maxneededitemqty = 22
+
+            maxneededitemtostockqty = processable - maxneededitemtodirectqty - maxneededitemqty - underprogressqtyinneededqtytemptable('tosurplus', 1382, cordocidfromstocklist)
 
             if (sumarrivedqty - processedqty) > maxneededitemtodirectqty:
                 neededitemtodirectqty = maxneededitemtodirectqty
@@ -1010,10 +989,10 @@ def pohandlerreception(request): #from pohandlerform
             sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
             sumtodirect(neededitemtodirectqty, neededqtylist, cordocidfromstocklist)
 
-            #import pdb;
-            #pdb.set_trace()
+            import pdb;
+            pdb.set_trace()
 
-            c = 1
+            c = 11
 
 # neededqtylist to temptable start
             for x11 in range(len(neededqtylist)):
@@ -1059,9 +1038,9 @@ def pohandlerreception(request): #from pohandlerform
             neededqtytemptable = cursor2.fetchall()
 # neededqtylist to temptable end
 
-            #import pdb;
-            #pdb.set_trace()
-            d = 1
+    #import pdb;
+    #pdb.set_trace()
+    d = 1
 
     time.sleep(0.200) # to avoid something mismatch in timing in mysql/django(???)
 

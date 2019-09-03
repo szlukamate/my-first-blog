@@ -493,7 +493,7 @@ def customerinvoiceprint(request, docid):
                      "qty_tblLabelidtemptable, "
                      "unit_tblLabelidtemptable, "
                      "fromstockflag_tblLabelidtemptable, "
-                     "fromstockname_tblLabelidtemptable. "
+                     "fromstockname_tblLabelidtemptable, "
                      "fromstocknameprintingenabled_tblLabelidtemptable "
 
                      "FROM labelidtemptable ")
@@ -504,6 +504,8 @@ def customerinvoiceprint(request, docid):
     for x in labelidtemptables:
         auxid = x[0]
         productid = x[2]
+        fromstockname = x[7]
+
         #enablelabelkindflag set begin
         cursor22.execute("SELECT min(auxid) "
                          "FROM labelidtemptable "
@@ -516,6 +518,19 @@ def customerinvoiceprint(request, docid):
                          "enablelabelkindflag_tblLabelidtemptable=1 "
                          "WHERE auxid =%s ", [minauxidforproduct])
         # enablelabelkindflag set end
+
+        #fromstocknameprintingenabled set begin
+        cursor22.execute("SELECT min(auxid) "
+                         "FROM labelidtemptable "
+                         "WHERE productid_tblLabelidtemptable=%s and fromstockname_tblLabelidtemptable=%s ", [productid, fromstockname])
+        labelidtemptableresults = cursor22.fetchall()
+
+        for x2 in labelidtemptableresults:
+            minauxidforproductandfromstockname = x2[0]
+        cursor22.execute("UPDATE labelidtemptable SET "
+                         "fromstocknameprintingenabled_tblLabelidtemptable=1 "
+                         "WHERE auxid =%s ", [minauxidforproductandfromstockname])
+        #fromstocknameprintingenabled set end
 
         a = 1
         #enablelabelkindflag signs that the labelkind discrete or indiscrete
@@ -541,6 +556,9 @@ def customerinvoiceprint(request, docid):
 
                      "FROM labelidtemptable ")
     labelidtemptableswithenablelabelkindflagset = cursor22.fetchall()
+
+    #import pdb;
+    #pdb.set_trace()
 
     # enablelabelkindflag and fromstocknameprintingenabled update end
 
