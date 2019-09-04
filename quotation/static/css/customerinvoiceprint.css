@@ -27,6 +27,9 @@ body {
        right_20mm;
 
 }
+.item-container-for-measure{
+
+}
 
 .chapternumbersdiv {
       position: relative;
@@ -802,10 +805,9 @@ body * { visibility: hidden;}
       font-weight: normal;
 
 }
-#frameheaderonfirstpage {
+#frameheader {
 
       position: relative;
-      top: 0mm;
       width: 170mm;
       height: 8mm;
       left: 20mm;
@@ -815,9 +817,8 @@ body * { visibility: hidden;}
       font-style: italic;
       font-weight: bold;
       //margin-bottom: 10mm;
-      margin-top:0mm;
-        padding: 0px;
-        margin: 0px;
+        padding: 0mm;
+        top: 23mm;
 
 }
 #positionnumberlabel {
@@ -917,5 +918,9 @@ body * { visibility: hidden;}
       font-size: 14px;
       font-style: italic;
       font-weight: bold;
+
+}
+#invoicehead{
+      position: relative;
 
 }

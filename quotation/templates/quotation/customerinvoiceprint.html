@@ -8,13 +8,14 @@
 
 	   </head>
     <body>
-	<p id="deliverynoteid" hidden>{{ doc.0.0}}</p>
+	<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
+	<p id="customerinvoiceid" hidden>{{ doc.0.0}}</p>
 	<p id="total" hidden>{{ doc.0.19}}</p>{% csrf_token %}
 	<p id="currencycodeinreport_tbldoc" hidden>{{ doc.0.22}}</p>
 	<p id="currencyrateinreport_tbldoc" hidden>{{ doc.0.23}}</p>
 
-		<!-- wrap first page ˇ-->
-		<div class="page">
+		<!-- /obsolete/ wrap first page ˇ-->
+		<div id="invoicehead">
 			<p id="title" >Copy of Invoice</p>
 			<div class="framedivonfirstpage" >
 
@@ -106,7 +107,8 @@
 							</div>
 					</div>
 				</div>
-				<div id="frameheaderonfirstpage">
+<!--
+				<div id="frameheader">
 					<div id="positionnumberlabel">
 						<span >Pos.</span>
 					</div>
@@ -136,16 +138,10 @@
 					</div>
 
 				</div>
-
+-->
 			</div>
+<!--
 
-
-				<p id="pageslabel">Pages:</p>
-				<p id="pages"></p>
-
-
-
-				<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
 				<div class="firstpagefooterdiv" >
 					<hr>
 					<span class="firstpagefooterspan1" >Please see the conditions in details on the last page<br></span>
@@ -153,8 +149,12 @@
 					<span class="firstpagefooterspan3" >Description3</span>
 
 				</div>
+-->
+
 		</div>
-		<!-- first page wrapping end^ -->
+
+
+		<!-- /obsolete commont/ first page wrapping end^ -->
 
 						{% for tblDoc_details in docdetails %}
 						<div class="item-container-for-measure" rowid="{{ forloop.counter0 }}">
@@ -167,18 +167,6 @@
 
 												<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{forloop.counter}}.</span>
 
-					<!--							{% if tblDoc_details.6 > 0 or tblDoc_details.7 > 0 or tblDoc_details.5 > 0%}
-												<span  class="chapternumbersspan" name="secondnum_tblDoc_details">{{tblDoc_details.6}}.</span>
-												{% endif %}
-
-												{% if tblDoc_details.7 > 0 or tblDoc_details.5 > 0 %}
-												<span class="chapternumbersspan" name="thirdnum_tblDoc_details">{{tblDoc_details.7}}.</span>
-												{% endif %}
-
-												{% if tblDoc_details.5 > 0 %}
-												<span class="chapternumbersspan" name="fourthnum_tblDoc_details">{{tblDoc_details.5}}.</span>
-												{% endif %}
--->
 												<br>
 													<div  class="descriptiondiv">
 															<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>

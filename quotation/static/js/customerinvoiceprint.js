@@ -17,9 +17,6 @@ div.text(text);
 $('body').append(div);
 var divHeight = $('#temp').height();
 div.remove();
-console.log(divHeight);
-console.log(text);
-
 
 $("#remarkstextarea").height( divHeight );
 $("#frameremarks").height( divHeight + 20 );
@@ -41,16 +38,25 @@ var currencycode=$('#currencycodeinreport_tbldoc').text();
 main();
 
     function main(){
+
         backpagehandling();
         for (i = 0; i <= itemnumbers; i++) {
             measureitemcontainer();
             totalcount(i);
-            if (sumheight > 600 ) { // sumheight: sum height of items inspected via cycle
+
+            if (sumheight > 100  && pagenumber == 1) { // some items to first page if there is enough room
+
+                wrapfirstpage();
+            }
+            if (sumheight > 600  ) { // remain items to more pages, sumheight: sum height of items inspected via cycle
+
                 wrap();
             }
+
             if (i == itemnumbers) { //last page
             towrap.push(i); //last record to wrap we put to array and wrap
             wrap();
+
             pagenumberer();
             totalprint();
 
@@ -63,13 +69,14 @@ main();
     }
     function backpagehandling(){
 
-            var deliverynoteid = $('#deliverynoteid').text();
+            var customerinvoiceid = $('#customerinvoiceid').text();
+
             $.ajax({
                 type: 'POST',
-                url: 'deliverynotebackpage/',
+                url: 'customerinvoicebackpage/',
 
                 data: {
-                'deliverynoteid' : deliverynoteid,
+                'customerinvoiceid' : customerinvoiceid,
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
 
@@ -109,6 +116,23 @@ main();
         total=total + Number(val);
     }
 
+    function wrapfirstpage(){
+        pagenumber++;
+        minitemwrapped=towrap[0];
+        maxitemwrapped=towrap[towrap.length-1];
+          for (j = 0; j < towrap.length; j++) {
+
+            wrapphrase= wrapphrase + "div[id=\"invoicehead\"], div[class=\"item-container-for-measure\"][rowid=\"" + towrap[j] + "\"], "
+            }
+        wrapphrase = wrapphrase.slice(0, -2); // remove comma from end (-2 cause there is an adding space)
+        jQuery.globalEval( "$('" + wrapphrase + "').wrapAll('<div class=\"page\"> </div>');" );
+        sumheight=0;
+        towrap.length=0;
+        wrapphrase="";
+        headerinsert(minitemwrapped); // which item insertbefore
+        footerinsert(maxitemwrapped, pagenumber);
+
+    }
     function wrap(){
         pagenumber++;
         minitemwrapped=towrap[0];
@@ -128,7 +152,7 @@ main();
     }
     function headerinsert(rowid){
 
-    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div class="header" ><div class="headerlabels" ><span style="margin-left: 35mm" >Description</span><span style="margin-left: 44mm" >Qty</span><span class="headerlabelunitprice" >Unit Price</span><span class="headerlabelscurrencycodespanforunitprice">in ' + currencycode + '</span><span class="headerlabelsalesprice" >Sales Price</span><span class="headerlabelscurrencycodespanforsalesprice">in ' + currencycode + '</span></div></div>');
+    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div id="frameheader"><div id="positionnumberlabel"><span >Pos.</span></div><div id="descriptionlabel"><span >Description</span></div><div id="unitlabel"><span >Unit</span></div><div id="quantitylabel"><span >Qty.</span></div><div id="unitpricelabel"><span >Unit Price</span></div><div id="netpricelabel"><span >Net Price</span></div><div id="vatpercentlabel"><span >VAT</span></div><div id="vatvaluelabel"><span >VAT Value</span></div><div id="grosspricelabel"><span >Gross Price</span></div></div>');
     }
     function footerinsert(rowid, pagenumber){
     $('span[name="htmlinsertafter"][rowid="' + rowid + '"').html('<div class="middlepagesfooterdiv" ><hr><span class="middlepagesfooterspan1">Please see the conditions in details on the last page<br></span><span pagenumber=\"' + pagenumber + '\" class="middlepagesfooterspan2">Description2</span><span class="middlepagesfooterspan3">Description3</span></div>');

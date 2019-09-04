@@ -598,7 +598,7 @@ def customerinvoicebackpage(request):
 
 
     if request.method == 'POST':
-        deliverynoteid = request.POST['deliverynoteid']
+        customerinvoiceid = request.POST['customerinvoiceid']
     cursor0 = connection.cursor()
     cursor0.execute(
         "SELECT "
@@ -609,7 +609,7 @@ def customerinvoicebackpage(request):
         "deliverydays_tbldoc "
         "FROM quotation_tbldoc "
         "WHERE docid_tbldoc=%s ",
-        [deliverynoteid])
+        [customerinvoiceid])
 
     doc = cursor0.fetchall()
     json_data = json.dumps(doc)
