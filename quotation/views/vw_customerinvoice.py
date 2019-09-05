@@ -283,18 +283,18 @@ def customerinvoiceprint(request, docid):
         "unit_tbldocdetails, "
         "currencyrateinreport_tbldoc, "
         "unitsalespriceACU_tblDoc_details, "
-        "1, "
+        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2) as unitsalespricetoreport, "
         "1, "
         "1, "  # 20
         "1, "
-        #        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2) as unitsalespricetoreport, "
         #        "round((unitsalespriceACU_tblDoc_details/currencyrateinreport_tbldoc),2)*Qty_tblDoc_details as salespricetoreport, "
         #        "round((purchase_price_tblproduct_ctblDoc_details),2) as unitpurchasepricetoreport, " #20
         #        "round((purchase_price_tblproduct_ctblDoc_details),2)*Qty_tblDoc_details as purchasepricetoreport, "
         "1, "
         #        "podocdetailsidforlabel_tbldocdetails,"
         "discreteflag_tblproduct,"
-        "serviceflag_tblproduct "
+        "serviceflag_tblproduct, "
+        "currencyrateforitemsincustomerinvoice_tbldoc "
 
 
         "FROM quotation_tbldoc_details "
@@ -337,6 +337,8 @@ def customerinvoiceprint(request, docid):
         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
         [docid])
     docdetails = cursor3.fetchall()
+
+    docdetailscount = len(docdetails)
 
     cursor14 = connection.cursor()
     cursor14.execute("SELECT "
@@ -562,20 +564,6 @@ def customerinvoiceprint(request, docid):
 
     # enablelabelkindflag and fromstocknameprintingenabled update end
 
-    cursor4 = connection.cursor()
-    cursor4.execute(
-        "SELECT  COUNT(Doc_detailsid_tblDoc_details) AS numberofrows "
-        "FROM quotation_tbldoc_details "
-        "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
-        "ON "
-        "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
-        "WHERE docid_tbldoc_details_id=%s "
-        "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
-        [docid])
-    results = cursor4.fetchall()
-
-    for instancesingle in results:
-        docdetailscount = instancesingle[0]
 
     cursor5 = connection.cursor()
     cursor5.execute("SELECT id, "

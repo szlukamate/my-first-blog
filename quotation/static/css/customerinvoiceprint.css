@@ -28,6 +28,7 @@ body {
 
 }
 .item-container-for-measure{
+//      position: relative;
 
 }
 
@@ -50,7 +51,7 @@ body {
 .descriptiondiv {
       position: relative;
       top: 0mm;
-    width: 90mm;
+    width: 60mm;
    font-family: "Arial", Times, serif;
    font-size: 12px;
    overflow-wrap: break-word;
@@ -61,7 +62,7 @@ body {
 .qtydiv {
       position: absolute;
       top: 0mm;
-    left: 100mm;
+    left: 60mm;
     width: 20mm;
    font-family: "Arial", Times, serif;
    font-size: 12px;
@@ -586,7 +587,7 @@ body * { visibility: hidden;}
 
 }
 .framedivonfirstpage {
-      position: absolute;
+      position: relative;
       top: 25mm;
 
 }
@@ -846,7 +847,7 @@ body * { visibility: hidden;}
 #unitlabel {
       position: absolute;
       width: 16mm;
-      left: 55mm;
+      left: 65mm;
         margin-top:2mm;
       font-family: "Times New Roman", Times, serif;
       font-size: 14px;
@@ -857,7 +858,7 @@ body * { visibility: hidden;}
 #quantitylabel {
       position: absolute;
       width: 16mm;
-      left: 65mm;
+      left: 58mm;
         margin-top:2mm;
       font-family: "Times New Roman", Times, serif;
       font-size: 14px;
@@ -921,6 +922,6 @@ body * { visibility: hidden;}
 
 }
 #invoicehead{
-
+      position: relative;
 
 }

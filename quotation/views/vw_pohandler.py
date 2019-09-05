@@ -989,8 +989,8 @@ def pohandlerreception(request): #from pohandlerform
             sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
             sumtodirect(neededitemtodirectqty, neededqtylist, cordocidfromstocklist)
 
-            import pdb;
-            pdb.set_trace()
+            #import pdb;
+            #pdb.set_trace()
 
             c = 11
 
