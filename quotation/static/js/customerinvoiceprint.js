@@ -204,6 +204,13 @@ main();
     }
     $('#dispatchinvoicebutton').click(function() {
                 var customerinvoiceid= $('#customerinvoiceid').text();
+                var dateofinvoicevalue= $('#dateofinvoicevalue').text();
+                var dateofcompletionvalue= $('#dateofcompletionvalue').text();
+                var deadlineforpaymentvalue= $('#deadlineforpaymentvalue').text();
+                var methodofpaymentvalue= $('#methodofpaymentvalue').text();
+                var currencyvalue= $('#currencyvalue').text();
+                var remarkstextarea= $('#remarkstextarea').text();
+                var numberofordervalue= $('#numberofordervalue').text();
                     console.log(customerinvoiceid);
 
 
@@ -222,6 +229,13 @@ main();
 
                 data: {
                 'customerinvoiceid' : customerinvoiceid,
+                'dateofinvoicevalue' : dateofinvoicevalue,
+                'dateofcompletionvalue' : dateofcompletionvalue,
+                'deadlineforpaymentvalue' : deadlineforpaymentvalue,
+                'methodofpaymentvalue' : methodofpaymentvalue,
+                'currencyvalue' : currencyvalue,
+                'remarkstextarea' : remarkstextarea,
+                'numberofordervalue' : numberofordervalue,
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },

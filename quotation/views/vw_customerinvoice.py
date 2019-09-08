@@ -15,8 +15,8 @@ from django.template.loader import render_to_string
 from django.conf import settings
 import subprocess
 import os
-
-
+import xml.etree.ElementTree as ET
+import xml.dom.minidom as x12
 # import pdb;
 # pdb.set_trace()
 @login_required
@@ -937,5 +937,61 @@ def customerinvoicerowremove(request, pk):
     return redirect('customerinvoiceform', pk=na)
 def customerinvoicedispatch(request):
     customerinvoiceid = request.POST['customerinvoiceid']
+    dateofinvoicevalue = request.POST['dateofinvoicevalue']
+    dateofcompletionvalue = request.POST['dateofcompletionvalue']
+    deadlineforpaymentvalue = request.POST['deadlineforpaymentvalue']
+    methodofpaymentvalue = request.POST['methodofpaymentvalue']
+    currencyvalue = request.POST['currencyvalue']
+    remarkstextarea = request.POST['remarkstextarea']
+    numberofordervalue = request.POST['numberofordervalue']
+    #import pdb;
+    #pdb.set_trace()
 
-    return render(request, 'customerinvoicedispatchredirecturl.html', {'pk': customerinvoiceid})
+    root = ET.Element("xmlszamla")
+    beallitasok = ET.SubElement(root, "beallitasok")
+
+    ET.SubElement(beallitasok, "felhasznalo").text = "szluka.mate@gmail.com"
+    ET.SubElement(beallitasok, "jelszo").text = "bklmgiok"
+    ET.SubElement(beallitasok, "szamlaagentkulcs").text = "8y3knm3ht4znt5ns8m3ht4zcdywfrm3ht4zycnwgxm"
+    ET.SubElement(beallitasok, "szamlaLetoltes").text = "true"
+    ET.SubElement(beallitasok, "valaszVerzio").text = "1"
+
+    fejlec = ET.SubElement(root, "fejlec")
+
+    ET.SubElement(fejlec, "keltDatum").text = "" + dateofinvoicevalue + ""
+    ET.SubElement(fejlec, "teljesitesDatum").text = "" + dateofcompletionvalue + ""
+    ET.SubElement(fejlec, "fizetesiHataridoDatum").text = "" + deadlineforpaymentvalue + ""
+    ET.SubElement(fejlec, "fizmod").text = "" + methodofpaymentvalue + ""
+    ET.SubElement(fejlec, "penznem").text = "" + currencyvalue + ""
+    ET.SubElement(fejlec, "szamlaNyelve").text = "en"
+    ET.SubElement(fejlec, "megjegyzes").text = "" + remarkstextarea + ""
+    ET.SubElement(fejlec, "arfolyamBank").text = "MNB"
+    ET.SubElement(fejlec, "arfolyam").text = "0.0"
+    ET.SubElement(fejlec, "rendelesSzam").text = "" + numberofordervalue + ""
+
+    tree = ET.ElementTree(root)
+
+    BASE_DIR = settings.BASE_DIR
+    xmlfilename = BASE_DIR + '/xmlfiles/' + 'xmlfile.xml'
+    tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
+
+
+#2  begin
+
+    file = open(xmlfilename, 'r')
+    xml_string = file.read()
+    file.close()
+
+    parsed_xml = x12.parseString(xml_string)
+    pretty_xml_as_string = parsed_xml.toprettyxml()
+
+    file = open("./newfilename.xml", 'w')
+    file.write(pretty_xml_as_string)
+    file.close()
+
+#2 end
+
+
+
+
+    return render(request, 'quotation/customerinvoicedispatchredirecturl.html', {'pk': customerinvoiceid})

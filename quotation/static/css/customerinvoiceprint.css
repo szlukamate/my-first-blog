@@ -990,7 +990,7 @@ body * { visibility: hidden;}
 
 #dispatchinvoicebutton {
   position: fixed;
-    left: 280mm;
+    left: 75%;
   background-color: orange;
   color: black;
 
