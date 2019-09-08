@@ -12,8 +12,11 @@
 	<p id="itemnumberp" itemnumber="{{ docdetailscount }}" hidden></p>
 	<p id="customerinvoiceid" hidden>{{ doc.0.0}}</p>
 	<p id="total" hidden>{{ doc.0.19}}</p>{% csrf_token %}
-	<p id="currencycodeinreport_tbldoc" hidden>{{ doc.0.22}}</p>
-	<p id="currencyrateinreport_tbldoc" hidden>{{ doc.0.23}}</p>
+	<p id="currencycodeinreport_tbldoc" hidden>{{ doc.0.28}}</p>
+
+	<button id="dispatchinvoicebutton" type="submit">
+	   <span>Dispatch Invoice</span>
+	</button>
 
 		<!-- /obsolete/ wrap first page ˇ-->
 		<div id="invoicehead">
@@ -244,8 +247,17 @@
 													<div  class="unitsalespricediv">
 															<p   name="unitsalesprice" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.18}}</p>
 													</div>
-													<div  class="salespricediv">
-															<p   name="salesprice" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.20}}</p>
+													<div  class="netpricediv">
+															<p   name="netpricediv" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.19}}</p>
+													</div>
+													<div  class="vatpercentdiv">
+															<p   name="vatpercentdiv" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.26}}</p>
+													</div>
+													<div  class="vatvaluediv">
+															<p   name="vatvaluediv" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.27}}</p>
+													</div>
+													<div  class="grosspricediv">
+															<p   name="grosspricediv" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.28}}</p>
 													</div>
 
 													<div  class="totalhtmlinsertdiv">

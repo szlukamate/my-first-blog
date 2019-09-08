@@ -71,20 +71,62 @@ body {
 .unitsalespricediv {
       position: absolute;
       top: 0mm;
-    left: 115mm;
-    width: 200mm;
+    left: 74mm;
+    width: 18mm;
    font-family: "Arial", Times, serif;
-   font-size: 12px;
+   font-size: 10px;
    overflow-wrap: break-word;
+      border:1px solid #000;
+      text-align: right;
+
 }
-.salespricediv {
+.netpricediv {
+      position: absolute;
+      top: 0mm;
+    left: 93mm;
+    width: 18mm;
+   font-family: "Arial", Times, serif;
+   font-size: 10px;
+   overflow-wrap: break-word;
+      border:1px solid #000;
+      text-align: right;
+
+}
+.vatpercentdiv {
+      position: absolute;
+      top: 0mm;
+    left: 112mm;
+    width: 9mm;
+   font-family: "Arial", Times, serif;
+   font-size: 10px;
+   overflow-wrap: break-word;
+      border:1px solid #000;
+      text-align: right;
+
+}
+.vatvaluediv {
+      position: absolute;
+      top: 0mm;
+    left: 122mm;
+    width: 18mm;
+   font-family: "Arial", Times, serif;
+   font-size: 10px;
+   overflow-wrap: break-word;
+      border:1px solid #000;
+      text-align: right;
+
+}
+.grosspricediv {
       position: absolute;
       top: 0mm;
     left: 142mm;
-    width: 200mm;
+    width: 21mm;
    font-family: "Arial", Times, serif;
-   font-size: 12px;
+   font-size: 10px;
    overflow-wrap: break-word;
+      border:1px solid #000;
+      text-align: right;
+
 }
 
 .firstpagefooterdiv{
@@ -399,6 +441,15 @@ color: blue;
 right: 21mm;
 }
 .totallabel {
+        position: relative;
+        left: 110mm;
+      font-family: "Times New Roman", Times, serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: bold;
+
+}
+.vattotallabel {
         position: relative;
         left: 110mm;
       font-family: "Times New Roman", Times, serif;
@@ -880,7 +931,7 @@ body * { visibility: hidden;}
 #netpricelabel {
       position: absolute;
       width: 16mm;
-      left: 95mm;
+      left: 96mm;
         margin-top:2mm;
       font-family: "Times New Roman", Times, serif;
       font-size: 14px;
@@ -891,7 +942,7 @@ body * { visibility: hidden;}
 #vatpercentlabel {
       position: absolute;
       width: 16mm;
-      left: 115mm;
+      left: 112mm;
         margin-top:2mm;
       font-family: "Times New Roman", Times, serif;
       font-size: 14px;
@@ -902,7 +953,7 @@ body * { visibility: hidden;}
 #vatvaluelabel {
       position: absolute;
       width: 18mm;
-      left: 125mm;
+      left: 123mm;
         margin-top:2mm;
       font-family: "Times New Roman", Times, serif;
       font-size: 14px;
@@ -924,4 +975,27 @@ body * { visibility: hidden;}
 #invoicehead{
       position: relative;
 
+}
+#dispatchinvoicebutton:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid #4286f4;
+
+
+}
+#dispatchinvoicebutton:active {
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+#dispatchinvoicebutton {
+  position: fixed;
+    left: 280mm;
+  background-color: orange;
+  color: black;
+
+  font-size: 18px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 12px;
+    padding: 2px 8px;
 }

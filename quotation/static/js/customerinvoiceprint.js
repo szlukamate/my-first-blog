@@ -34,6 +34,7 @@ var maxitemwrapped;
 var pagenumber=1;
 var wrapfirstpagedone=0;
 var total=0;
+var vattotal=0;
 var totalflag="Total_Off"
 var currencycode=$('#currencycodeinreport_tbldoc').text();
 main();
@@ -56,7 +57,7 @@ main();
 
             if (i == itemnumbers) { //last page
             towrap.push(i); //last record to wrap we put to array and wrap
-                    console.log(wrapfirstpagedone);
+  //                  console.log(wrapfirstpagedone);
 
             if (wrapfirstpagedone == 0) {
             wrapfirstpage();
@@ -69,7 +70,7 @@ main();
             return;
             }
             towrap.push(i); //if there is room on page only goes to wrap array
-                    console.log(sumheight);
+ //                   console.log(sumheight);
 
         }
 
@@ -112,14 +113,26 @@ main();
     }
 
     function totalprint(){
-        totalflag=$('#total').text();
+        var totalflag=$('#total').text();
+
+
+//        var totalunfixed = Number(totalunfixed);
+        var totalfixed = total.toFixed(2);
+        var vattotalfixed = vattotal.toFixed(2);
+//                    console.log(vattotalfixed);
+
+
         if (totalflag == "Total_On") {
-         $('span[name="totalhtmlinsertspan"][rowid="' + itemnumbers + '"').html('<hr class=\"totalhr\" ><div ><span class="totallabel" >Total: ' + total + ' ' + currencycode + '+VAT</span></div>');
+         $('span[name="totalhtmlinsertspan"][rowid="' + itemnumbers + '"').html('<hr class=\"totalhr\" ><div ><span class="totallabel" >Gross Price Total: ' + totalfixed + ' ' + currencycode + '<br></span><span class="totallabel" >VAT Value Total: ' + vattotalfixed + ' ' + currencycode + '</span></div>');
         }
     }
     function totalcount(i){
-        var val=$('p[name="salesprice"][rowid="' + i + '"').text();
+        var val=$('p[name="grosspricediv"][rowid="' + i + '"').text();
+        var vatval=$('p[name="vatvaluediv"][rowid="' + i + '"').text();
         total=total + Number(val);
+        vattotal=vattotal + Number(vatval);
+//                            console.log(val);
+
     }
 
     function wrapfirstpage(){
@@ -160,7 +173,7 @@ main();
     }
     function headerinsert(rowid){
 
-    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div id="frameheader"><div id="positionnumberlabel"><span >Pos.</span></div><div id="descriptionlabel"><span >Description</span></div><div id="unitlabel"><span >Unit</span></div><div id="quantitylabel"><span >Qty.</span></div><div id="unitpricelabel"><span >Unit Price</span></div><div id="netpricelabel"><span >Net Price</span></div><div id="vatpercentlabel"><span >VAT</span></div><div id="vatvaluelabel"><span >VAT Value</span></div><div id="grosspricelabel"><span >Gross Price</span></div></div>');
+    $('span[name="htmlinsertbefore"][rowid="' + rowid + '"').html('<div id="frameheader"><div id="positionnumberlabel"><span >Pos.</span></div><div id="descriptionlabel"><span >Description</span></div><div id="unitlabel"><span >Unit</span></div><div id="quantitylabel"><span >Qty.</span></div><div id="unitpricelabel"><span >Unit Price</span></div><div id="netpricelabel"><span >Net Price</span></div><div id="vatpercentlabel"><span >VAT%</span></div><div id="vatvaluelabel"><span >VAT Value</span></div><div id="grosspricelabel"><span >Gross Price</span></div></div>');
     }
     function footerinsert(rowid, pagenumber){
 
@@ -189,6 +202,44 @@ main();
 //            $('span[class="backpagefooterspan3"]').text( "Number of Invoice: " + $('#numberofcustomerinvoice').text()); // backpage footer filling
 
     }
+    $('#dispatchinvoicebutton').click(function() {
+                var customerinvoiceid= $('#customerinvoiceid').text();
+                    console.log(customerinvoiceid);
+
+
+        main();
+
+            function main(){
+
+
+
+            }
+
+
+            $.ajax({
+                type: 'POST',
+                url: 'customerinvoicedispatch',
+
+                data: {
+                'customerinvoiceid' : customerinvoiceid,
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(url){
+                window.location.href = url;
+
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+
+
+    });
+
 });
 
 

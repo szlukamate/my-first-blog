@@ -171,6 +171,7 @@
 												<label id="unitsalespriceACUlabel" for="unitsalespriceACU" style="padding-left: 13px;">Unitsalesprice{{ doc.0.22}}</label><br>
 												<label id="discountlabel" for="Discount" style="padding-left: 13px;">Discount</label><br>
 												<label id="supplierlabel" for="Supplier" style="padding-left: 13px;">Supplier</label><br>
+												<label id="vatpercentlabel" for="VAT" style="padding-left: 13px;">VAT%</label><br>
 											</div>
 
 											{% for tblDoc_details in  docdetails %}
@@ -199,6 +200,7 @@
 											<input type="text" style="color:white; background-color: Green;" class="updateabletbldocdetails" value="{{ tblDoc_details.18}}"  name="unitsalespriceACU_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.22}}" name="Discount" size="3" disabled>
 											<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.24}}" name="Supplier" size="6" disabled>
+											<input type="text" style="color:black; background-color: yellow;" value="{{ tblDoc_details.27}}" class="updateabletbldocdetails" name="vatpercentincustomerinvoice_tbldocdetails" rowid="{{ tblDoc_details.0}}" size="2">
 											{% if tblDoc_details.26 != 0 %} <!-- if service not show -->
 							  				<span>LabelId: {{ tblDoc_details.26}}</span>
 											{% endif %}
