@@ -43,12 +43,15 @@
 								<span >Customer:</span>
 									<div class="customertexts">
 
-										<p name="companyname">{{ doc.0.3}} </p>
-										<p name="contactname">To: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}} </p>
-										<p name="pcdandtown">{{ doc.0.16}} {{ doc.0.17}}</p>
-										<p name="address">{{ doc.0.18}}</p>
-										<p name="mobile">{{ doc.0.14}}</p>
-										<p name="email">{{ doc.0.15}}</p>
+										<p id="companyname">{{ doc.0.3}} </p>
+										<p id="contactname">To: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}} </p>
+										<p id="pcdandtown">{{ doc.0.16}} {{ doc.0.17}}</p>
+										<p id="pcd" hidden>{{ doc.0.16}}</p>
+										<p id="town" hidden>{{ doc.0.17}}</p>
+
+										<p id="address">{{ doc.0.18}}</p>
+										<p id="mobile">{{ doc.0.14}}</p>
+										<p id="email">{{ doc.0.15}}</p>
 
 									</div>
 
@@ -172,8 +175,8 @@
 												<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{forloop.counter}}.</span>
 
 												<br>
-													<div  class="descriptiondiv">
-															<p   name="Product_description_tblProduct_ctblDoc_details">{{ tblDoc_details.3}}</p>
+													<div  class="descriptiondiv" loopid="{{ forloop.counter }}">
+															<p   name="Product_description_tblProduct_ctblDoc_details" >{{ tblDoc_details.3}}</p>
 															{% spaceless %}
 
 															{% for labelid in labelidtemptableswithenablelabelkindflagset %}
@@ -243,6 +246,7 @@
 													</div>
 													<div  class="qtydiv">
 															<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}} {{ tblDoc_details.15}}</p>
+															<p   name="unit_tblDoc_details" loopid="{{ forloop.counter }}" hidden>{{ tblDoc_details.15}}</p>
 													</div>
 													<div  class="unitsalespricediv">
 															<p   name="unitsalesprice" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.18}}</p>

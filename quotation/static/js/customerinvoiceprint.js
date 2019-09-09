@@ -211,7 +211,17 @@ main();
                 var currencyvalue= $('#currencyvalue').text();
                 var remarkstextarea= $('#remarkstextarea').text();
                 var numberofordervalue= $('#numberofordervalue').text();
-                    console.log(customerinvoiceid);
+                var companynameandcontactname= $('#companyname').text() + "- " + $('#contactname').text();
+                var pcd= $('#pcd').text();
+                var town= $('#town').text();
+                var address= $('#address').text();
+                var itemnumber= $('#itemnumberp').attr( "itemnumber" );
+                var description;
+                var unit;
+                var itemdataliststringified;
+                var itemdataliststringifiedescaped;
+                var itemdatalist=[];
+
 
 
         main();
@@ -219,38 +229,68 @@ main();
             function main(){
 
 
+                for (i = 1; i <= itemnumber; i++) {
+                    itemdatacollect(i);
+
+                }
+                itemdataliststringified = JSON.stringify(itemdatalist);
+
+                datatransmit();
+
+            }
+            function itemdatacollect(i){
+              description=$('.descriptiondiv[loopid="' + i + '"]').text();
+              unit=$('p[name="unit_tblDoc_details"][loopid="' + i + '"]').text();
+              itemdatalist.push(description, unit);
 
             }
 
+            function datatransmit(){
+            itemdataliststringifiedescaped = itemdataliststringified.replace(/\\n/g, "\\n")
+                                                                  .replace(/\\'/g, "\\'")
+                                                                  .replace(/\\"/g, '\\"')
+                                                                  .replace(/\\&/g, "\\&")
+                                                                  .replace(/\\r/g, "\\r")
+                                                                  .replace(/\\t/g, "\\t")
+                                                                  .replace(/\\b/g, "\\b")
+                                                                  .replace(/\\f/g, "\\f");
+            console.log('itemdataliststringified: ' + itemdataliststringified);
+            console.log('itemdataliststringifiedescaped: ' + itemdataliststringifiedescaped);
 
-            $.ajax({
-                type: 'POST',
-                url: 'customerinvoicedispatch',
+                $.ajax({
+                    type: 'POST',
+                    url: 'customerinvoicedispatch',
 
-                data: {
-                'customerinvoiceid' : customerinvoiceid,
-                'dateofinvoicevalue' : dateofinvoicevalue,
-                'dateofcompletionvalue' : dateofcompletionvalue,
-                'deadlineforpaymentvalue' : deadlineforpaymentvalue,
-                'methodofpaymentvalue' : methodofpaymentvalue,
-                'currencyvalue' : currencyvalue,
-                'remarkstextarea' : remarkstextarea,
-                'numberofordervalue' : numberofordervalue,
+                    data: {
+                    'customerinvoiceid' : customerinvoiceid,
+                    'dateofinvoicevalue' : dateofinvoicevalue,
+                    'dateofcompletionvalue' : dateofcompletionvalue,
+                    'deadlineforpaymentvalue' : deadlineforpaymentvalue,
+                    'methodofpaymentvalue' : methodofpaymentvalue,
+                    'currencyvalue' : currencyvalue,
+                    'remarkstextarea' : remarkstextarea,
+                    'numberofordervalue' : numberofordervalue,
+                    'companynameandcontactname' : companynameandcontactname,
+                    'pcd' : pcd,
+                    'town' : town,
+                    'address' : address,
+                    'itemnumber' : itemnumber,
+                    'itemdatalist': itemdataliststringifiedescaped,
 
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                },
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
 
-                success: function(url){
-                window.location.href = url;
+                    success: function(url){
+                    window.location.href = url;
 
-                },
-                error: function(){
-                    alert('failure');
-                },
-                datatype: 'html'
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html'
 
-            });
-
+                });
+            }
 
     });
 

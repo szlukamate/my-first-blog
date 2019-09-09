@@ -944,10 +944,21 @@ def customerinvoicedispatch(request):
     currencyvalue = request.POST['currencyvalue']
     remarkstextarea = request.POST['remarkstextarea']
     numberofordervalue = request.POST['numberofordervalue']
+    companynameandcontactname = request.POST['companynameandcontactname']
+    pcd = request.POST['pcd']
+    town = request.POST['town']
+    address = request.POST['address']
+    itemnumber = request.POST['itemnumber']
+    itemdatalistraw = request.POST['itemdatalist']
+    itemdatalist = json.loads(itemdatalistraw)
+
+
+
     #import pdb;
     #pdb.set_trace()
 
     root = ET.Element("xmlszamla")
+
     beallitasok = ET.SubElement(root, "beallitasok")
 
     ET.SubElement(beallitasok, "felhasznalo").text = "szluka.mate@gmail.com"
@@ -968,6 +979,57 @@ def customerinvoicedispatch(request):
     ET.SubElement(fejlec, "arfolyamBank").text = "MNB"
     ET.SubElement(fejlec, "arfolyam").text = "0.0"
     ET.SubElement(fejlec, "rendelesSzam").text = "" + numberofordervalue + ""
+    ET.SubElement(fejlec, "dijbekeroSzamlaszam").text = "dbszsz"
+    ET.SubElement(fejlec, "elolegszamla").text = "false"
+    ET.SubElement(fejlec, "vegszamla").text = "false"
+    ET.SubElement(fejlec, "helyesbitoszamla").text = "false"
+    ET.SubElement(fejlec, "helyesbitettSzamlaszam").text = "hbszsz"
+    ET.SubElement(fejlec, "dijbekero").text = "false"
+    ET.SubElement(fejlec, "szamlaszamElotag").text = "szszet"
+
+    elado = ET.SubElement(root, "elado")
+
+    ET.SubElement(elado, "bank").text = "BB"
+    ET.SubElement(elado, "bankszamlaszam").text = "11111111-22222222-33333333"
+    ET.SubElement(elado, "emailReplyto").text = "szluka.mate@gmail.com"
+    ET.SubElement(fejlec, "emailTargy").text = "Incoming Invoice"
+    ET.SubElement(fejlec, "emailSzoveg").text = "FYKI"
+
+    vevo = ET.SubElement(root, "vevo")
+
+    ET.SubElement(vevo, "nev").text = "" + companynameandcontactname + ""
+    ET.SubElement(vevo, "irsz").text = "" + pcd + ""
+    ET.SubElement(vevo, "telepules").text = "" + town + ""
+    ET.SubElement(vevo, "cim").text = "" + address + ""
+    ET.SubElement(vevo, "email").text = "szluka.mate@gmail.com"
+    ET.SubElement(vevo, "sendEmail").text = "false"
+    ET.SubElement(vevo, "adoszam").text = "12345678-1-42"
+    ET.SubElement(vevo, "postazasiNev").text = "" + companynameandcontactname + ""
+    ET.SubElement(vevo, "postazasiIrsz").text = "" + pcd + ""
+    ET.SubElement(vevo, "postazasiTelepules").text = "" + town + ""
+    ET.SubElement(vevo, "postazasiCim").text = "" + address + ""
+    ET.SubElement(vevo, "telefonszam").text = "+3611111111"
+    ET.SubElement(vevo, "megjegyzes").text = "1"
+
+    tetelek = ET.SubElement(root, "tetelek")
+    for x in range(int(itemnumber)):
+        tetel = ET.SubElement(tetelek, "tetel")
+
+        description = itemdatalist[1*x - 1]
+        unit = itemdatalist[2*x - 1]
+
+        import pdb;
+        pdb.set_trace()
+
+        ET.SubElement(tetel, "megnevezes").text = "" + description + ""
+        ET.SubElement(tetel, "mennyisegiEgyseg").text = "" + unit + ""
+        ET.SubElement(tetel, "nettoEgysegar").text = "1"
+        ET.SubElement(tetel, "afakulcs").text = "1"
+        ET.SubElement(tetel, "nettoErtek").text = "1"
+        ET.SubElement(tetel, "afaErtek").text = ""
+        ET.SubElement(tetel, "bruttoErtek").text = "bé"
+        ET.SubElement(tetel, "megjegyzes").text = "megj"
+
 
     tree = ET.ElementTree(root)
 
@@ -976,7 +1038,7 @@ def customerinvoicedispatch(request):
     tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
 
 
-#2  begin
+#2    begin
 
     file = open(xmlfilename, 'r')
     xml_string = file.read()
@@ -991,6 +1053,8 @@ def customerinvoicedispatch(request):
 
 #2 end
 
+    #import pdb;
+    #pdb.set_trace()
 
 
 

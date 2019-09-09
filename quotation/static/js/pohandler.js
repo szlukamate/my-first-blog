@@ -229,7 +229,7 @@ $(document).ready(function () {
                 porowsnumberfunc();
 
                 for (i = 1; i <= porowsnumber; i++) {
-                    getifchecked();
+                    getifchecked();  // more precisely: getifchecked => getarrived
 
                 }
 

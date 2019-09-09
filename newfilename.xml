@@ -18,5 +18,84 @@
 		<arfolyamBank>MNB</arfolyamBank>
 		<arfolyam>0.0</arfolyam>
 		<rendelesSzam>COR-177</rendelesSzam>
+		<dijbekeroSzamlaszam>dbszsz</dijbekeroSzamlaszam>
+		<elolegszamla>false</elolegszamla>
+		<vegszamla>false</vegszamla>
+		<helyesbitoszamla>false</helyesbitoszamla>
+		<helyesbitettSzamlaszam>hbszsz</helyesbitettSzamlaszam>
+		<dijbekero>false</dijbekero>
+		<szamlaszamElotag>szszet</szamlaszamElotag>
+		<emailTargy>Incoming Invoice</emailTargy>
+		<emailSzoveg>FYKI</emailSzoveg>
 	</fejlec>
+	<elado>
+		<bank>BB</bank>
+		<bankszamlaszam>11111111-22222222-33333333</bankszamlaszam>
+		<emailReplyto>szluka.mate@gmail.com</emailReplyto>
+	</elado>
+	<vevo>
+		<nev>Gipsz Bt. - To: Mr Jakab Gipsz </nev>
+		<irsz>6711</irsz>
+		<telepules>Pitricsom</telepules>
+		<cim>Fő u. 1.</cim>
+		<email>szluka.mate@gmail.com</email>
+		<sendEmail>false</sendEmail>
+		<adoszam>12345678-1-42</adoszam>
+		<postazasiNev>Gipsz Bt. - To: Mr Jakab Gipsz </postazasiNev>
+		<postazasiIrsz>6711</postazasiIrsz>
+		<postazasiTelepules>Pitricsom</postazasiTelepules>
+		<postazasiCim>Fő u. 1.</postazasiCim>
+		<telefonszam>+3611111111</telefonszam>
+		<megjegyzes>1</megjegyzes>
+	</vevo>
+	<tetelek>
+		<tetel>
+			<megnevezes>pc(s)</megnevezes>
+			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
+			<nettoEgysegar>1</nettoEgysegar>
+			<afakulcs>1</afakulcs>
+			<nettoErtek>1</nettoErtek>
+			<afaErtek/>
+			<bruttoErtek>bé</bruttoErtek>
+			<megjegyzes>megj</megjegyzes>
+		</tetel>
+		<tetel>
+			<megnevezes>
+															Ipod EUR
+															Unique Id: /From Central Stock/ 85112 85113 85114 
+
+													</megnevezes>
+			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
+			<nettoEgysegar>1</nettoEgysegar>
+			<afakulcs>1</afakulcs>
+			<nettoErtek>1</nettoErtek>
+			<afaErtek/>
+			<bruttoErtek>bé</bruttoErtek>
+			<megjegyzes>megj</megjegyzes>
+		</tetel>
+		<tetel>
+			<megnevezes>pc(s)</megnevezes>
+			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
+			<nettoEgysegar>1</nettoEgysegar>
+			<afakulcs>1</afakulcs>
+			<nettoErtek>1</nettoErtek>
+			<afaErtek/>
+			<bruttoErtek>bé</bruttoErtek>
+			<megjegyzes>megj</megjegyzes>
+		</tetel>
+		<tetel>
+			<megnevezes>
+															Setup AWS EC2 Ubuntu serverr
+															
+
+													</megnevezes>
+			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
+			<nettoEgysegar>1</nettoEgysegar>
+			<afakulcs>1</afakulcs>
+			<nettoErtek>1</nettoErtek>
+			<afaErtek/>
+			<bruttoErtek>bé</bruttoErtek>
+			<megjegyzes>megj</megjegyzes>
+		</tetel>
+	</tetelek>
 </xmlszamla>
