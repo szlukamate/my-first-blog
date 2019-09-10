@@ -175,7 +175,7 @@
 												<span  class="chapternumbersspan" name="firstnum_tblDoc_details">{{forloop.counter}}.</span>
 
 												<br>
-													<div  class="descriptiondiv" loopid="{{ forloop.counter }}">
+													<div  class="descriptiondiv" rowid="{{ forloop.counter0 }}">
 															<p   name="Product_description_tblProduct_ctblDoc_details" >{{ tblDoc_details.3}}</p>
 															{% spaceless %}
 
@@ -246,7 +246,8 @@
 													</div>
 													<div  class="qtydiv">
 															<p   name="Qty_tblDoc_details">{{ tblDoc_details.1}} {{ tblDoc_details.15}}</p>
-															<p   name="unit_tblDoc_details" loopid="{{ forloop.counter }}" hidden>{{ tblDoc_details.15}}</p>
+															<p   name="unit_tblDoc_details" rowid="{{ forloop.counter0 }}" hidden>{{ tblDoc_details.15}}</p>
+															<p   name="qty" rowid="{{ forloop.counter0 }}" hidden>{{ tblDoc_details.1}}</p>
 													</div>
 													<div  class="unitsalespricediv">
 															<p   name="unitsalesprice" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.18}}</p>

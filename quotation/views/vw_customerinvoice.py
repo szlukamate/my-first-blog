@@ -958,14 +958,18 @@ def customerinvoicedispatch(request):
     #pdb.set_trace()
 
     root = ET.Element("xmlszamla")
+    root.set('xmlns','http://www.szamlazz.hu/xmlszamla')
+    root.set('xmlns:xsi','http://www.w3.org/2001/XMLSchema-instance')
+    root.set('xsi:schemaLocation','http://www.szamlazz.hu/xmlszamla xmlszamla.xsd')
 
     beallitasok = ET.SubElement(root, "beallitasok")
 
     ET.SubElement(beallitasok, "felhasznalo").text = "szluka.mate@gmail.com"
     ET.SubElement(beallitasok, "jelszo").text = "bklmgiok"
     ET.SubElement(beallitasok, "szamlaagentkulcs").text = "8y3knm3ht4znt5ns8m3ht4zcdywfrm3ht4zycnwgxm"
+    ET.SubElement(beallitasok, "eszamla").text = "true"
     ET.SubElement(beallitasok, "szamlaLetoltes").text = "true"
-    ET.SubElement(beallitasok, "valaszVerzio").text = "1"
+    ET.SubElement(beallitasok, "valaszVerzio").text = "2"
 
     fejlec = ET.SubElement(root, "fejlec")
 
@@ -985,15 +989,15 @@ def customerinvoicedispatch(request):
     ET.SubElement(fejlec, "helyesbitoszamla").text = "false"
     ET.SubElement(fejlec, "helyesbitettSzamlaszam").text = "hbszsz"
     ET.SubElement(fejlec, "dijbekero").text = "false"
-    ET.SubElement(fejlec, "szamlaszamElotag").text = "szszet"
+    ET.SubElement(fejlec, "szamlaszamElotag").text = "GIPS"
 
     elado = ET.SubElement(root, "elado")
 
     ET.SubElement(elado, "bank").text = "BB"
     ET.SubElement(elado, "bankszamlaszam").text = "11111111-22222222-33333333"
     ET.SubElement(elado, "emailReplyto").text = "szluka.mate@gmail.com"
-    ET.SubElement(fejlec, "emailTargy").text = "Incoming Invoice"
-    ET.SubElement(fejlec, "emailSzoveg").text = "FYKI"
+    ET.SubElement(elado, "emailTargy").text = "Incoming Invoice"
+    ET.SubElement(elado, "emailSzoveg").text = "FYKI"
 
     vevo = ET.SubElement(root, "vevo")
 
@@ -1015,20 +1019,28 @@ def customerinvoicedispatch(request):
     for x in range(int(itemnumber)):
         tetel = ET.SubElement(tetelek, "tetel")
 
-        description = itemdatalist[1*x - 1]
-        unit = itemdatalist[2*x - 1]
+        description = itemdatalist[(8*x+0)]
+        unit = itemdatalist[8*x+1]
+        unitsalesprice = itemdatalist[8*x+2]
+        vatpercent = itemdatalist[8*x+3]
+        netprice = itemdatalist[8*x+4]
+        vatvalue = itemdatalist[8*x+5]
+        grossprice = itemdatalist[8*x+6]
+        qty = itemdatalist[8*x+7]
 
-        import pdb;
-        pdb.set_trace()
+
+        #import pdb;
+        #pdb.set_trace()
 
         ET.SubElement(tetel, "megnevezes").text = "" + description + ""
+        ET.SubElement(tetel, "mennyiseg").text = "" + qty + ""
         ET.SubElement(tetel, "mennyisegiEgyseg").text = "" + unit + ""
-        ET.SubElement(tetel, "nettoEgysegar").text = "1"
-        ET.SubElement(tetel, "afakulcs").text = "1"
-        ET.SubElement(tetel, "nettoErtek").text = "1"
-        ET.SubElement(tetel, "afaErtek").text = ""
-        ET.SubElement(tetel, "bruttoErtek").text = "bé"
-        ET.SubElement(tetel, "megjegyzes").text = "megj"
+        ET.SubElement(tetel, "nettoEgysegar").text = "" + unitsalesprice + ""
+        ET.SubElement(tetel, "afakulcs").text ="" + vatpercent + ""
+        ET.SubElement(tetel, "nettoErtek").text = "" + netprice + ""
+        ET.SubElement(tetel, "afaErtek").text = "" + vatvalue + ""
+        ET.SubElement(tetel, "bruttoErtek").text = "" + grossprice + ""
+        ET.SubElement(tetel, "megjegyzes").text = " "
 
 
     tree = ET.ElementTree(root)
@@ -1038,7 +1050,7 @@ def customerinvoicedispatch(request):
     tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
 
 
-#2    begin
+#2 begin
 
     file = open(xmlfilename, 'r')
     xml_string = file.read()

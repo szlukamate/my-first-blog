@@ -218,6 +218,7 @@ main();
                 var itemnumber= $('#itemnumberp').attr( "itemnumber" );
                 var description;
                 var unit;
+                var unitsalesprice;
                 var itemdataliststringified;
                 var itemdataliststringifiedescaped;
                 var itemdatalist=[];
@@ -239,9 +240,15 @@ main();
 
             }
             function itemdatacollect(i){
-              description=$('.descriptiondiv[loopid="' + i + '"]').text();
-              unit=$('p[name="unit_tblDoc_details"][loopid="' + i + '"]').text();
-              itemdatalist.push(description, unit);
+              description=$('.descriptiondiv[rowid="' + (i - 1) + '"]').text();
+              unit=$('p[name="unit_tblDoc_details"][rowid="' + (i - 1) + '"]').text();
+              unitsalesprice=$('p[name="unitsalesprice"][rowid="' + (i - 1) + '"]').text();
+              vatpercent=$('p[name="vatpercentdiv"][rowid="' + (i - 1) + '"]').text();
+              netprice=$('p[name="netpricediv"][rowid="' + (i - 1) + '"]').text();
+              vatvalue=$('p[name="vatvaluediv"][rowid="' + (i - 1) + '"]').text();
+              grossprice=$('p[name="grosspricediv"][rowid="' + (i - 1) + '"]').text();
+              qty=$('p[name="qty"][rowid="' + (i - 1) + '"]').text();
+              itemdatalist.push(description, unit, unitsalesprice, vatpercent, netprice, vatvalue, grossprice, qty);
 
             }
 

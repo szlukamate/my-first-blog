@@ -1,18 +1,19 @@
 <?xml version="1.0" ?>
-<xmlszamla>
+<xmlszamla xmlns="http://www.szamlazz.hu/xmlszamla" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.szamlazz.hu/xmlszamla xmlszamla.xsd">
 	<beallitasok>
 		<felhasznalo>szluka.mate@gmail.com</felhasznalo>
 		<jelszo>bklmgiok</jelszo>
 		<szamlaagentkulcs>8y3knm3ht4znt5ns8m3ht4zcdywfrm3ht4zycnwgxm</szamlaagentkulcs>
+		<eszamla>true</eszamla>
 		<szamlaLetoltes>true</szamlaLetoltes>
-		<valaszVerzio>1</valaszVerzio>
+		<valaszVerzio>2</valaszVerzio>
 	</beallitasok>
 	<fejlec>
-		<keltDatum>2019-09-07</keltDatum>
-		<teljesitesDatum>2019-09-07</teljesitesDatum>
-		<fizetesiHataridoDatum>2019-09-17</fizetesiHataridoDatum>
+		<keltDatum>2019-09-10</keltDatum>
+		<teljesitesDatum>2019-09-10</teljesitesDatum>
+		<fizetesiHataridoDatum>2019-09-20</fizetesiHataridoDatum>
 		<fizmod>Wire transfer</fizmod>
-		<penznem>USD</penznem>
+		<penznem>HUF</penznem>
 		<szamlaNyelve>en</szamlaNyelve>
 		<megjegyzes>None</megjegyzes>
 		<arfolyamBank>MNB</arfolyamBank>
@@ -24,14 +25,14 @@
 		<helyesbitoszamla>false</helyesbitoszamla>
 		<helyesbitettSzamlaszam>hbszsz</helyesbitettSzamlaszam>
 		<dijbekero>false</dijbekero>
-		<szamlaszamElotag>szszet</szamlaszamElotag>
-		<emailTargy>Incoming Invoice</emailTargy>
-		<emailSzoveg>FYKI</emailSzoveg>
+		<szamlaszamElotag>GIPS</szamlaszamElotag>
 	</fejlec>
 	<elado>
 		<bank>BB</bank>
 		<bankszamlaszam>11111111-22222222-33333333</bankszamlaszam>
 		<emailReplyto>szluka.mate@gmail.com</emailReplyto>
+		<emailTargy>Incoming Invoice</emailTargy>
+		<emailSzoveg>FYKI</emailSzoveg>
 	</elado>
 	<vevo>
 		<nev>Gipsz Bt. - To: Mr Jakab Gipsz </nev>
@@ -50,38 +51,19 @@
 	</vevo>
 	<tetelek>
 		<tetel>
-			<megnevezes>pc(s)</megnevezes>
-			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>1</nettoEgysegar>
-			<afakulcs>1</afakulcs>
-			<nettoErtek>1</nettoErtek>
-			<afaErtek/>
-			<bruttoErtek>bé</bruttoErtek>
-			<megjegyzes>megj</megjegyzes>
-		</tetel>
-		<tetel>
 			<megnevezes>
 															Ipod EUR
 															Unique Id: /From Central Stock/ 85112 85113 85114 
 
 													</megnevezes>
+			<mennyiseg>4.0</mennyiseg>
 			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>1</nettoEgysegar>
-			<afakulcs>1</afakulcs>
-			<nettoErtek>1</nettoErtek>
-			<afaErtek/>
-			<bruttoErtek>bé</bruttoErtek>
-			<megjegyzes>megj</megjegyzes>
-		</tetel>
-		<tetel>
-			<megnevezes>pc(s)</megnevezes>
-			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>1</nettoEgysegar>
-			<afakulcs>1</afakulcs>
-			<nettoErtek>1</nettoErtek>
-			<afaErtek/>
-			<bruttoErtek>bé</bruttoErtek>
-			<megjegyzes>megj</megjegyzes>
+			<nettoEgysegar>103716.0</nettoEgysegar>
+			<afakulcs>27</afakulcs>
+			<nettoErtek>414864.0</nettoErtek>
+			<afaErtek>112013.28</afaErtek>
+			<bruttoErtek>526877.28</bruttoErtek>
+			<megjegyzes> </megjegyzes>
 		</tetel>
 		<tetel>
 			<megnevezes>
@@ -89,13 +71,44 @@
 															
 
 													</megnevezes>
+			<mennyiseg>3.0</mennyiseg>
 			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>1</nettoEgysegar>
-			<afakulcs>1</afakulcs>
-			<nettoErtek>1</nettoErtek>
-			<afaErtek/>
-			<bruttoErtek>bé</bruttoErtek>
-			<megjegyzes>megj</megjegyzes>
+			<nettoEgysegar>10640.0</nettoEgysegar>
+			<afakulcs>27</afakulcs>
+			<nettoErtek>31920.0</nettoErtek>
+			<afaErtek>8618.4</afaErtek>
+			<bruttoErtek>40538.4</bruttoErtek>
+			<megjegyzes> </megjegyzes>
+		</tetel>
+		<tetel>
+			<megnevezes>
+															Iphone
+															Unique Id: 85047 85048 /From Central Stock/ 85004 85005 85006 
+
+													</megnevezes>
+			<mennyiseg>5.0</mennyiseg>
+			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
+			<nettoEgysegar>120000.0</nettoEgysegar>
+			<afakulcs>27</afakulcs>
+			<nettoErtek>600000.0</nettoErtek>
+			<afaErtek>162000.0</afaErtek>
+			<bruttoErtek>762000.0</bruttoErtek>
+			<megjegyzes> </megjegyzes>
+		</tetel>
+		<tetel>
+			<megnevezes>
+															Szlukabit MousePad
+															Batch Id: /From Stock2/ 84989:3.0 /From Central Stock/ 83152:7.0 
+
+													</megnevezes>
+			<mennyiseg>10.0</mennyiseg>
+			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
+			<nettoEgysegar>280.0</nettoEgysegar>
+			<afakulcs>27</afakulcs>
+			<nettoErtek>2800.0</nettoErtek>
+			<afaErtek>756.0</afaErtek>
+			<bruttoErtek>3556.0</bruttoErtek>
+			<megjegyzes> </megjegyzes>
 		</tetel>
 	</tetelek>
 </xmlszamla>
