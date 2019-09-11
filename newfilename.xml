@@ -13,9 +13,13 @@
 		<teljesitesDatum>2019-09-10</teljesitesDatum>
 		<fizetesiHataridoDatum>2019-09-20</fizetesiHataridoDatum>
 		<fizmod>Wire transfer</fizmod>
-		<penznem>HUF</penznem>
+		<penznem>USD</penznem>
 		<szamlaNyelve>en</szamlaNyelve>
-		<megjegyzes>None</megjegyzes>
+		<megjegyzes>None
+j
+
+j
+</megjegyzes>
 		<arfolyamBank>MNB</arfolyamBank>
 		<arfolyam>0.0</arfolyam>
 		<rendelesSzam>COR-177</rendelesSzam>
@@ -55,60 +59,96 @@
 															Ipod EUR
 															Unique Id: /From Central Stock/ 85112 85113 85114 
 
+
 													</megnevezes>
-			<mennyiseg>4.0</mennyiseg>
+			<mennyiseg>2.0</mennyiseg>
 			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>103716.0</nettoEgysegar>
+			<nettoEgysegar>357.64</nettoEgysegar>
 			<afakulcs>27</afakulcs>
-			<nettoErtek>414864.0</nettoErtek>
-			<afaErtek>112013.28</afaErtek>
-			<bruttoErtek>526877.28</bruttoErtek>
-			<megjegyzes> </megjegyzes>
+			<nettoErtek>715.28</nettoErtek>
+			<afaErtek>193.1256</afaErtek>
+			<bruttoErtek>908.4056</bruttoErtek>
+			<megjegyzes>ssssdd </megjegyzes>
 		</tetel>
 		<tetel>
 			<megnevezes>
-															Setup AWS EC2 Ubuntu serverr
+															Ipod EUR
+															Unique Id: /From Central Stock/ 85112 85113 85114 
+
+
+													</megnevezes>
+			<mennyiseg>1.0</mennyiseg>
+			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
+			<nettoEgysegar>357.64</nettoEgysegar>
+			<afakulcs>27</afakulcs>
+			<nettoErtek>357.64</nettoErtek>
+			<afaErtek>96.5628</afaErtek>
+			<bruttoErtek>454.2028</bruttoErtek>
+			<megjegyzes>ssssdd </megjegyzes>
+		</tetel>
+		<tetel>
+			<megnevezes>
+															Ipod EUR
+															Unique Id: /From Central Stock/ 85112 85113 85114 
+
+
+													</megnevezes>
+			<mennyiseg>1.0</mennyiseg>
+			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
+			<nettoEgysegar>357.64</nettoEgysegar>
+			<afakulcs>27</afakulcs>
+			<nettoErtek>357.64</nettoErtek>
+			<afaErtek>96.5628</afaErtek>
+			<bruttoErtek>454.2028</bruttoErtek>
+			<megjegyzes>ssssdd </megjegyzes>
+		</tetel>
+		<tetel>
+			<megnevezes>
+															Setup AWS EC2 Ubuntu serverr g
 															
+
 
 													</megnevezes>
 			<mennyiseg>3.0</mennyiseg>
 			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>10640.0</nettoEgysegar>
+			<nettoEgysegar>36.69</nettoEgysegar>
 			<afakulcs>27</afakulcs>
-			<nettoErtek>31920.0</nettoErtek>
-			<afaErtek>8618.4</afaErtek>
-			<bruttoErtek>40538.4</bruttoErtek>
-			<megjegyzes> </megjegyzes>
+			<nettoErtek>110.07</nettoErtek>
+			<afaErtek>29.7189</afaErtek>
+			<bruttoErtek>139.7889</bruttoErtek>
+			<megjegyzes>ssssdd </megjegyzes>
 		</tetel>
 		<tetel>
 			<megnevezes>
 															Iphone
 															Unique Id: 85047 85048 /From Central Stock/ 85004 85005 85006 
 
+
 													</megnevezes>
 			<mennyiseg>5.0</mennyiseg>
 			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>120000.0</nettoEgysegar>
+			<nettoEgysegar>413.79</nettoEgysegar>
 			<afakulcs>27</afakulcs>
-			<nettoErtek>600000.0</nettoErtek>
-			<afaErtek>162000.0</afaErtek>
-			<bruttoErtek>762000.0</bruttoErtek>
-			<megjegyzes> </megjegyzes>
+			<nettoErtek>2068.95</nettoErtek>
+			<afaErtek>558.6165</afaErtek>
+			<bruttoErtek>2627.5665</bruttoErtek>
+			<megjegyzes>ssssdd </megjegyzes>
 		</tetel>
 		<tetel>
 			<megnevezes>
 															Szlukabit MousePad
 															Batch Id: /From Stock2/ 84989:3.0 /From Central Stock/ 83152:7.0 
 
+
 													</megnevezes>
 			<mennyiseg>10.0</mennyiseg>
 			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>280.0</nettoEgysegar>
+			<nettoEgysegar>0.97</nettoEgysegar>
 			<afakulcs>27</afakulcs>
-			<nettoErtek>2800.0</nettoErtek>
-			<afaErtek>756.0</afaErtek>
-			<bruttoErtek>3556.0</bruttoErtek>
-			<megjegyzes> </megjegyzes>
+			<nettoErtek>9.7</nettoErtek>
+			<afaErtek>2.619</afaErtek>
+			<bruttoErtek>12.319</bruttoErtek>
+			<megjegyzes>ssssdd </megjegyzes>
 		</tetel>
 	</tetelek>
 </xmlszamla>

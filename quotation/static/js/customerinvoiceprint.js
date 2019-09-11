@@ -46,7 +46,7 @@ main();
             measureitemcontainer();
             totalcount(i);
 
-            if (sumheight > 200  && pagenumber == 1) { // some items to first page if there is enough room
+            if (sumheight > 400  && pagenumber == 1 && wrapfirstpagedone == 0 ) { // some items to first page if there is enough room
 
                 wrapfirstpage();
             }
@@ -54,6 +54,7 @@ main();
 
                 wrap();
             }
+                            console.log(wrapfirstpagedone);
 
             if (i == itemnumbers) { //last page
             towrap.push(i); //last record to wrap we put to array and wrap
@@ -138,6 +139,8 @@ main();
     function wrapfirstpage(){
 //        pagenumber++;
         wrapfirstpagedone = 1;
+                            console.log('wrapfirstpagedoneloop');
+
         minitemwrapped=towrap[0];
         maxitemwrapped=towrap[towrap.length-1];
           for (j = 0; j < towrap.length; j++) {
@@ -145,6 +148,7 @@ main();
             wrapphrase= wrapphrase + "div[id=\"invoicehead\"], div[class=\"item-container-for-measure\"][rowid=\"" + towrap[j] + "\"], "
             }
         wrapphrase = wrapphrase.slice(0, -2); // remove comma from end (-2 cause there is an adding space)
+
         jQuery.globalEval( "$('" + wrapphrase + "').wrapAll('<div class=\"page\"> </div>');" );
         sumheight=0;
         towrap.length=0;
@@ -154,6 +158,8 @@ main();
 
     }
     function wrap(){
+                            console.log('wraploop');
+
         pagenumber++;
         minitemwrapped=towrap[0];
         maxitemwrapped=towrap[towrap.length-1];

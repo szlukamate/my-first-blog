@@ -1040,7 +1040,7 @@ def customerinvoicedispatch(request):
         ET.SubElement(tetel, "nettoErtek").text = "" + netprice + ""
         ET.SubElement(tetel, "afaErtek").text = "" + vatvalue + ""
         ET.SubElement(tetel, "bruttoErtek").text = "" + grossprice + ""
-        ET.SubElement(tetel, "megjegyzes").text = " "
+        ET.SubElement(tetel, "megjegyzes").text = "ssssdd "
 
 
     tree = ET.ElementTree(root)
@@ -1050,7 +1050,7 @@ def customerinvoicedispatch(request):
     tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
 
 
-#2 begin
+#2  begin
 
     file = open(xmlfilename, 'r')
     xml_string = file.read()
