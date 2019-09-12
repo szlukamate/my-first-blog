@@ -177,76 +177,84 @@
 												<br>
 													<div  class="descriptiondiv" rowid="{{ forloop.counter0 }}">
 															<p   name="Product_description_tblProduct_ctblDoc_details" >{{ tblDoc_details.3}}</p>
-															{% spaceless %}
-
-															{% for labelid in labelidtemptableswithenablelabelkindflagset %}
-
-																{% if tblDoc_details.13 == labelid.2 and labelid.6 == 1%} <!-- match productids and enablekindflag is true -->
-
-																	{% if tblDoc_details.24 == 1 %} <!-- Service -->
-
-																	{% else %}
-
-																		{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
-
-																				<span >Unique Id: </span>
-																		{% else %} <!-- Indiscrete -->
-
-																				<span >Batch Id: </span>
-																		{% endif %}
-
-																	{% endif %}
-
-
-																{% endif %}
-
-															{% endfor %}
-
-
-															{% for labelid in labelidtemptableswithenablelabelkindflagset %}
-
-																{% if tblDoc_details.13 == labelid.2 %} <!-- match productids -->
-
-																	{% if tblDoc_details.24 == 1 %} <!-- Service -->
-
-
-																	{% else %}
-
-																		{% if labelid.9 == 1 and labelid.7 == 1 %} <!-- fromstocknameprintingenabled and fromstockflag are true -->
-
-
-																			{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
-
-																					<span >/From {{ labelid.8}}/ </span>
-																			{% else %} <!-- Indiscrete -->
-
-																					<span >/From {{ labelid.8}}/ </span>
-																			{% endif %}
-
-																		{% endif %}
-
-
-																		{% if tblDoc_details.23 == 1 %} <!-- Discrete -->
-
-																			<span >{{ labelid.3}} </span>
-																		{% else %} <!-- Indiscrete -->
-
-																			<span >{{ labelid.3}}:{{labelid.4}} </span>
-
-																		{% endif %}
-
-																	{% endif %}
-
-
-																{% endif %}
-
-															{% endfor %}
-															{% endspaceless %}
 
 
 													</div>
-													<div  class="notediv">
-														<p   name="note" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.8}}</p>
+													<div  class="notediv" rowid="{{ forloop.counter0 }}">
+														<p   name="note">{{ tblDoc_details.8}}</p>
+
+													</div>
+													<div  class="labeldiv" rowid="{{ forloop.counter0 }}">
+														<p   name="label"></p>
+                                                        {% spaceless %}
+
+                                                        {% for labelid in labelidtemptableswithenablelabelkindflagset %}
+
+                                                            {% if tblDoc_details.13 == labelid.2 and labelid.6 == 1 and tblDoc_details.8 == labelid.10 %} <!-- match productids and enablelabelkindflag is true and note.doc_details==note.labelid (note and productid need to be matched)-->
+
+                                                                {% if tblDoc_details.24 == 1 %} <!-- Service -->
+
+                                                                            <span >Service Id: </span>
+
+                                                                {% else %}
+
+                                                                    {% if tblDoc_details.23 == 1 %} <!-- Discrete -->
+
+                                                                            <span >Unique Id: </span>
+                                                                    {% else %} <!-- Indiscrete -->
+
+                                                                            <span >Batch Id: </span>
+                                                                    {% endif %}
+
+                                                                {% endif %}
+
+
+                                                            {% endif %}
+
+                                                        {% endfor %}
+
+
+                                                        {% for labelid in labelidtemptableswithenablelabelkindflagset %}
+
+                                                            {% if tblDoc_details.13 == labelid.2 and tblDoc_details.8 == labelid.10 %} <!-- match productids and note.doc_details==note.labelid (note and productid need to be matched) -->
+
+                                                                {% if tblDoc_details.24 == 1 %} <!-- Service -->
+
+                                                                        <span >{{ labelid.3}}:{{labelid.4}} </span>
+
+                                                                {% else %}
+
+                                                                    {% if labelid.9 == 1 and labelid.7 == 1 %} <!-- fromstocknameprintingenabled and fromstockflag are true -->
+
+
+                                                                        {% if tblDoc_details.23 == 1 %} <!-- Discrete -->
+
+                                                                                <span >/From {{ labelid.8}}/ </span>
+                                                                        {% else %} <!-- Indiscrete -->
+
+                                                                                <span >/From {{ labelid.8}}/ </span>
+                                                                        {% endif %}
+
+                                                                    {% endif %}
+
+
+                                                                    {% if tblDoc_details.23 == 1 %} <!-- Discrete -->
+
+                                                                        <span >{{ labelid.3}} </span>
+                                                                    {% else %} <!-- Indiscrete -->
+
+                                                                        <span >{{ labelid.3}}:{{labelid.4}} </span>
+
+                                                                    {% endif %}
+
+                                                                {% endif %}
+
+
+                                                            {% endif %}
+
+                                                        {% endfor %}
+                                                        {% endspaceless %}
+
 													</div>
 
 													<div  class="qtydiv">

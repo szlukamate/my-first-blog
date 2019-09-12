@@ -1012,3 +1012,15 @@ body * { visibility: hidden;}
   color: red;
 
 }
+.labeldiv {
+      position: relative;
+      top: 0mm;
+    width: 60mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+    margin-left: -4px;
+    white-space: pre-line;
+  color: green;
+
+}

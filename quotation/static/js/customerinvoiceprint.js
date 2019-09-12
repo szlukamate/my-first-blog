@@ -46,7 +46,7 @@ main();
             measureitemcontainer();
             totalcount(i);
 
-            if (sumheight > 400  && pagenumber == 1 && wrapfirstpagedone == 0 ) { // some items to first page if there is enough room
+            if (sumheight > 350  && pagenumber == 1 && wrapfirstpagedone == 0 ) { // some items to first page if there is enough room
 
                 wrapfirstpage();
             }
@@ -254,7 +254,9 @@ main();
               vatvalue=$('p[name="vatvaluediv"][rowid="' + (i - 1) + '"]').text();
               grossprice=$('p[name="grosspricediv"][rowid="' + (i - 1) + '"]').text();
               qty=$('p[name="qty"][rowid="' + (i - 1) + '"]').text();
-              itemdatalist.push(description, unit, unitsalesprice, vatpercent, netprice, vatvalue, grossprice, qty);
+              note=$('.notediv[rowid="' + (i - 1) + '"]').text();
+              itemdatalist.push(description, unit, unitsalesprice, vatpercent, netprice, vatvalue, grossprice, qty, note);
+                    console.log(itemdatalist);
 
             }
 

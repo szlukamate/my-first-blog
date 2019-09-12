@@ -143,7 +143,7 @@ def customerinvoiceform(request, pk):
                     "unit_tbldocdetails, "
                     "companyname_tblcompanies, "
                     "supplierdescription_tblProduct_ctblDoc_details, " #25
-                    "IF (serviceflag_tblproduct=1, 0, podocdetailsidforlabel_tbldocdetails), "
+                    "podocdetailsidforlabel_tbldocdetails, "
                     "vatpercentincustomerinvoice_tbldocdetails "
 
                     "FROM quotation_tbldoc_details as DD "
@@ -348,16 +348,21 @@ def customerinvoiceprint(request, docid):
                      "Productid_tblDoc_details_id, "
                      "podocdetailsidforlabel_tbldocdetails, "
                      "Qty_tblDoc_details, "
-                     "unit_tbldocdetails "
+                     "unit_tbldocdetails, "
+                     "Doc_detailsid_tblDoc_details, "
+                     "Note_tblDoc_details "
 
                      "FROM quotation_tbldoc_details "
 
                      "WHERE Docid_tblDoc_details_id=%s", [docid])
     labelids = cursor14.fetchall()
 
+    #import pdb;
+    #pdb.set_trace()
+
     # labelids to table begin
     # aim: enablelabelkindflag set to 1 at first instance of product that the print form writes the "Unique id" or "batch id" text
-    # only once at thebeginning in line
+    # only once at thebeginning in  line
     #
     cursor22 = connection.cursor()
     cursor22.execute("DROP TEMPORARY TABLE IF EXISTS labelidtemptable;")
@@ -371,7 +376,8 @@ def customerinvoiceprint(request, docid):
                      "     enablelabelkindflag_tblLabelidtemptable INT(11) NULL,"
                      "      fromstockflag_tblLabelidtemptable INT(11) NULL,"
                      "      fromstockname_tblLabelidtemptable varchar(200) NULL, "
-                     "      fromstocknameprintingenabled_tblLabelidtemptable INT(11) NULL) "
+                     "      fromstocknameprintingenabled_tblLabelidtemptable INT(11) NULL, "
+                     "      note_tblLabelidtemptable varchar(200) NULL) "
 
                      "      ENGINE=INNODB "
                      "    ; ")
@@ -382,6 +388,7 @@ def customerinvoiceprint(request, docid):
         to_podocdetailsidforlabel_tblLabelidtemptable = x[2]
         to_qty_tblLabelidtemptable = x[3]
         to_unit_tblLabelidtemptable = x[4]
+        to_note_tblLabelidtemptable = x[6]
 
         # check labelid from stock or not begin
         if to_podocdetailsidforlabel_tblLabelidtemptable != None:
@@ -481,12 +488,14 @@ def customerinvoiceprint(request, docid):
                          "qty_tblLabelidtemptable, "
                          "fromstockflag_tblLabelidtemptable, "
                          "fromstockname_tblLabelidtemptable, "
+                         "note_tblLabelidtemptable, "
                          "unit_tblLabelidtemptable) VALUES ('" + str(to_docid_tblLabelidtemptable) + "', "
                                                            "'" + str(to_productid_tblLabelidtemptable) + "', "
                                                            "'" + str(to_podocdetailsidforlabel_tblLabelidtemptable) + "', "
                                                            "'" + str(to_qty_tblLabelidtemptable) + "', "
                                                            "'" + str(fromstockflag) + "', "
                                                            "'" + str(fromstockname) + "', "
+                                                           "'" + str(to_note_tblLabelidtemptable) + "', "
                                                            "'" + str(to_unit_tblLabelidtemptable) + "');")
 
     cursor22.execute("SELECT   "
@@ -498,22 +507,25 @@ def customerinvoiceprint(request, docid):
                      "unit_tblLabelidtemptable, "
                      "fromstockflag_tblLabelidtemptable, "
                      "fromstockname_tblLabelidtemptable, "
-                     "fromstocknameprintingenabled_tblLabelidtemptable "
+                     "fromstocknameprintingenabled_tblLabelidtemptable, "
+                     "note_tblLabelidtemptable "
 
                      "FROM labelidtemptable ")
     labelidtemptables = cursor22.fetchall()
     # labelids to table end
+
 
     # enablelabelkindflag and fromstocknameprintingenabled update begin
     for x in labelidtemptables:
         auxid = x[0]
         productid = x[2]
         fromstockname = x[7]
+        note = x[9]
 
         #enablelabelkindflag set begin
         cursor22.execute("SELECT min(auxid) "
                          "FROM labelidtemptable "
-                         "WHERE productid_tblLabelidtemptable=%s", [productid])
+                         "WHERE productid_tblLabelidtemptable=%s and note_tblLabelidtemptable=%s ", [productid, note])
         labelidtemptableresults = cursor22.fetchall()
 
         for x2 in labelidtemptableresults:
@@ -539,12 +551,18 @@ def customerinvoiceprint(request, docid):
         a = 1
         #enablelabelkindflag signs that the labelkind discrete or indiscrete
         # labelidtemptable table:
-        # auxid, enablelabelkindflag_tblLabelidtemptable,  productid_tblLabelidtemptable, fromstocknameprintingenabled_tblLabelidtemptable, fromstockname_tblLabelidtemptable
-        # 1 1 9 1 centralstock
-        # 2 null 9 null centralstock
-        # 3 null 9 1 stock2
-        # 4 1 33 1 stock2
-        # 5 null 33 null stock2
+        # auxid, enablelabelkindflag_tblLabelidtemptable,  productid_tblLabelidtemptable, fromstocknameprintingenabled_tblLabelidtemptable, fromstockname_tblLabelidtemptable, note_tblLabelidtemptable
+        # 1 1 9 1 note12 centralstock
+        # 2 null 9 null note12 centralstock
+        # 3 null 9 1 note12 stock2
+        # 4 1 33 1 note12 stock2
+        # 5 null 33 null note12 stock2
+
+        # 6 1 9 1 note14 centralstock
+        # 7 null 9 null note14 centralstock
+        # 8 null 9 1 note14 stock2
+        # 9 1 33 1 note14 stock2
+        # 10 null 33 null note14 stock2
 
     cursor22.execute("SELECT   "
                      "auxid, "
@@ -556,7 +574,8 @@ def customerinvoiceprint(request, docid):
                      "enablelabelkindflag_tblLabelidtemptable,"
                      "fromstockflag_tblLabelidtemptable,"
                      "fromstockname_tblLabelidtemptable, "
-                     "fromstocknameprintingenabled_tblLabelidtemptable "
+                     "fromstocknameprintingenabled_tblLabelidtemptable,"
+                     "note_tblLabelidtemptable " #10
 
                      "FROM labelidtemptable ")
     labelidtemptableswithenablelabelkindflagset = cursor22.fetchall()
@@ -619,6 +638,7 @@ def customerinvoicemake(request, docid):
                     "      ENGINE=INNODB "
                     "    ; ")
 
+    # which deno belongs to this order begin
     pk = docid
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -630,10 +650,14 @@ def customerinvoicemake(request, docid):
                     "JOIN quotation_tbldoc_details "
                     "ON quotation_tbldoc.Docid_tblDoc = quotation_tbldoc_details.Docid_tblDoc_details_id "
 
-                    "WHERE wheretodocid_tbldoc=%s and obsolete_tbldoc = 0 "
+                    "WHERE wheretodocid_tbldoc=%s and obsolete_tbldoc = 0 and Doc_kindid_tblDoc_id = 8 "
                     "order by docid_tbldoc desc",
                     [pk])
     denoddocdetails = cursor1.fetchall()
+    # which deno belongs to this order end
+
+    #import pdb;
+    #pdb.set_trace()
 
     for x in denoddocdetails:
         denoddocdetailsid = x[1]
@@ -1019,14 +1043,15 @@ def customerinvoicedispatch(request):
     for x in range(int(itemnumber)):
         tetel = ET.SubElement(tetelek, "tetel")
 
-        description = itemdatalist[(8*x+0)]
-        unit = itemdatalist[8*x+1]
-        unitsalesprice = itemdatalist[8*x+2]
-        vatpercent = itemdatalist[8*x+3]
-        netprice = itemdatalist[8*x+4]
-        vatvalue = itemdatalist[8*x+5]
-        grossprice = itemdatalist[8*x+6]
-        qty = itemdatalist[8*x+7]
+        description = itemdatalist[(9*x+0)]
+        unit = itemdatalist[9*x+1]
+        unitsalesprice = itemdatalist[9*x+2]
+        vatpercent = itemdatalist[9*x+3]
+        netprice = itemdatalist[9*x+4]
+        vatvalue = itemdatalist[9*x+5]
+        grossprice = itemdatalist[9*x+6]
+        qty = itemdatalist[9*x+7]
+        note = itemdatalist[9*x+8]
 
 
         #import pdb;
@@ -1040,7 +1065,7 @@ def customerinvoicedispatch(request):
         ET.SubElement(tetel, "nettoErtek").text = "" + netprice + ""
         ET.SubElement(tetel, "afaErtek").text = "" + vatvalue + ""
         ET.SubElement(tetel, "bruttoErtek").text = "" + grossprice + ""
-        ET.SubElement(tetel, "megjegyzes").text = "ssssdd "
+        ET.SubElement(tetel, "megjegyzes").text = "" + note + ""
 
 
     tree = ET.ElementTree(root)
@@ -1050,7 +1075,7 @@ def customerinvoicedispatch(request):
     tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
 
 
-#2  begin
+#2   begin
 
     file = open(xmlfilename, 'r')
     xml_string = file.read()
