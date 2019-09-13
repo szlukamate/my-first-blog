@@ -254,8 +254,9 @@ main();
               vatvalue=$('p[name="vatvaluediv"][rowid="' + (i - 1) + '"]').text();
               grossprice=$('p[name="grosspricediv"][rowid="' + (i - 1) + '"]').text();
               qty=$('p[name="qty"][rowid="' + (i - 1) + '"]').text();
-              note=$('.notediv[rowid="' + (i - 1) + '"]').text();
-              itemdatalist.push(description, unit, unitsalesprice, vatpercent, netprice, vatvalue, grossprice, qty, note);
+              note=$('p[name="note"][rowid="' + (i - 1) + '"]').text();
+              label=$('p[name="label"][rowid="' + (i - 1) + '"]').text();
+              itemdatalist.push(description, unit, unitsalesprice, vatpercent, netprice, vatvalue, grossprice, qty, note, label);
                     console.log(itemdatalist);
 
             }

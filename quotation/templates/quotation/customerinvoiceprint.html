@@ -181,12 +181,11 @@
 
 													</div>
 													<div  class="notediv" rowid="{{ forloop.counter0 }}">
-														<p   name="note">{{ tblDoc_details.8}}</p>
+														<p   name="note" rowid="{{ forloop.counter0 }}">{{ tblDoc_details.8}}</p>
 
 													</div>
 													<div  class="labeldiv" rowid="{{ forloop.counter0 }}">
-														<p   name="label"></p>
-                                                        {% spaceless %}
+														<p   name="label" rowid="{{ forloop.counter0 }}">{% spaceless %}
 
                                                         {% for labelid in labelidtemptableswithenablelabelkindflagset %}
 
@@ -253,8 +252,7 @@
                                                             {% endif %}
 
                                                         {% endfor %}
-                                                        {% endspaceless %}
-
+                                                        {% endspaceless %}</p>
 													</div>
 
 													<div  class="qtydiv">

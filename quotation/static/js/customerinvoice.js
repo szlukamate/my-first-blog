@@ -63,10 +63,27 @@ $(function () {
         }
     });
 
-$('#title').click(function() {
-    $('#title').hide();
+    //check exists pdf for xml begin
+    var base_dir = $('#base_dir').text();
+    var docid = $('#customerinvoicedocid').text();
 
-});
+    var filename = '..' + base_dir;// + '/customerinvoicexmlfiles/';// + docid + '.xml';
+                                console.log(filename);
+
+    $.ajax({
+        url: 'home/',
+        type:'HEAD',
+        error: function()
+        {
+                                console.log('no');//file not exists
+        },
+        success: function()
+        {
+                                console.log('yes');//file exists
+        }
+    });
+    //check exists pdf for xml end
+
    $('.updateabletbldocdetails').change(function() {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();

@@ -21,6 +21,8 @@ import xml.dom.minidom as x12
 # pdb.set_trace()
 @login_required
 def customerinvoiceform(request, pk):
+    base_dir = settings.BASE_DIR
+
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
         rowid = request.POST['rowid']
@@ -210,6 +212,7 @@ def customerinvoiceform(request, pk):
 
     return render(request, 'quotation/customerinvoice.html', {'doc': doc,
                                                            'docdetails': docdetails,
+                                                           'base_dir': base_dir,
                                                            'companyid': companyid,
                                                            'nextchapternums': nextchapternums,
                                                            'creatordata': creatordata,
@@ -218,6 +221,7 @@ def customerinvoiceform(request, pk):
 
 @login_required
 def customerinvoiceprint(request, docid):
+
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
                     "Docid_tblDoc, "
@@ -1043,15 +1047,16 @@ def customerinvoicedispatch(request):
     for x in range(int(itemnumber)):
         tetel = ET.SubElement(tetelek, "tetel")
 
-        description = itemdatalist[(9*x+0)]
-        unit = itemdatalist[9*x+1]
-        unitsalesprice = itemdatalist[9*x+2]
-        vatpercent = itemdatalist[9*x+3]
-        netprice = itemdatalist[9*x+4]
-        vatvalue = itemdatalist[9*x+5]
-        grossprice = itemdatalist[9*x+6]
-        qty = itemdatalist[9*x+7]
-        note = itemdatalist[9*x+8]
+        description = itemdatalist[(10*x+0)]
+        unit = itemdatalist[10*x+1]
+        unitsalesprice = itemdatalist[10*x+2]
+        vatpercent = itemdatalist[10*x+3]
+        netprice = itemdatalist[10*x+4]
+        vatvalue = itemdatalist[10*x+5]
+        grossprice = itemdatalist[10*x+6]
+        qty = itemdatalist[10*x+7]
+        note = itemdatalist[10*x+8]
+        label = itemdatalist[10*x+9]
 
 
         #import pdb;
@@ -1065,17 +1070,17 @@ def customerinvoicedispatch(request):
         ET.SubElement(tetel, "nettoErtek").text = "" + netprice + ""
         ET.SubElement(tetel, "afaErtek").text = "" + vatvalue + ""
         ET.SubElement(tetel, "bruttoErtek").text = "" + grossprice + ""
-        ET.SubElement(tetel, "megjegyzes").text = "" + note + ""
+        ET.SubElement(tetel, "megjegyzes").text = "" + note + "\n" + label + ""
 
 
     tree = ET.ElementTree(root)
 
     BASE_DIR = settings.BASE_DIR
-    xmlfilename = BASE_DIR + '/xmlfiles/' + 'xmlfile.xml'
+    xmlfilename = BASE_DIR + '/customerinvoicexmlfiles/' + customerinvoiceid + '.xml'
     tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
 
 
-#2   begin
+# making prettyxml begin
 
     file = open(xmlfilename, 'r')
     xml_string = file.read()
@@ -1084,11 +1089,11 @@ def customerinvoicedispatch(request):
     parsed_xml = x12.parseString(xml_string)
     pretty_xml_as_string = parsed_xml.toprettyxml()
 
-    file = open("./newfilename.xml", 'w')
+    file = open(xmlfilename, 'w')
     file.write(pretty_xml_as_string)
     file.close()
 
-#2 end
+# making prettyxml begin
 
     #import pdb;
     #pdb.set_trace()
