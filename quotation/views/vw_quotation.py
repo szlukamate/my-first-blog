@@ -581,9 +581,12 @@ def quotationemail(request, docid):
                     "title_tblcontacts_ctbldoc, "
                     "lastname_tblcontacts_ctbldoc, "
                     "emailbodytextmodifiedbyuser_tbldoc "
+
                     "FROM quotation_tbldoc "
+
                     "JOIN quotation_tbldoc_kind "
                     "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
                     "WHERE docid_tbldoc=%s ",
                     [docid])
     doc = cursor1.fetchall()
@@ -601,7 +604,9 @@ def quotationemail(request, docid):
                      "email, "
                      "subscriptiontext_tblauth_user, "
                      "emailbodytext_tblauth_user "
+
                      "FROM auth_user "
+
                     "WHERE id=%s ", [creatorid])
     creatordata = cursor10.fetchall()
     for x in creatordata:
@@ -609,11 +614,7 @@ def quotationemail(request, docid):
 
     pdffilename = dockindname + '_' + pretag + str(docnumber) + '_Subject:_' + subject + '.pdf'
     subprocess.call('if [ ! -d "' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '" ]; then mkdir ' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '  ;else rm -rf ' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + ' && mkdir ' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + ';  fi', shell=True)
-#    subprocess.call('google-chrome --headless --first-exec-after-boot --print-to-pdf=' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://' + appliableipaddress + ':8000/quotation/quotationprint/' + docid + '/', shell=True)
     subprocess.call('node ' + BASE_DIR + "/nodeapps/190809createpdf.js " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + '/ ' + pdffilename + ' ' + appliableipaddress + ' ' + docid +'', shell=True)
-#    os.system('touch      proba16.cv')
-
-    #    os.system('google-chrome --headless --print-to-pdf=./emailattachmentspre/' + str(creatorid) + '/' + pdffilename + ' http://127.0.0.1:8000/quotation/quotationprint/' + docid + '/')
 
     return render(request, 'quotation/emailadd.html', {'doc': doc,
                                                        'pdffilename': pdffilename,

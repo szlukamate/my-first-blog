@@ -38,11 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'quotation',
+    'corsheaders',
    # 'ist',
    # 'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -169,6 +172,11 @@ EMAIL_HOST_PASSWORD ='kqxpzhke'
 
 #MEDIA_URL = '/emailattachmentspre/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'emailattachmentspre')
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = ('https://google.com',
+                         'https://hostname.example.com',
+                         'https://www.szamlazz.hu')
 
 
 

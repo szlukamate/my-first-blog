@@ -21,7 +21,8 @@ import xml.dom.minidom as x12
 # pdb.set_trace()
 @login_required
 def customerinvoiceform(request, pk):
-    base_dir = settings.BASE_DIR
+    BASE_DIR = settings.BASE_DIR
+    creatorid = request.user.id
 
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
@@ -210,10 +211,28 @@ def customerinvoiceform(request, pk):
     else:
         nextchapternums[3] = nextchapternums[3] + 1
 
+# if exists the xml dispatch begin
+    xmlfilenameincustomerinvoicexmlfilesdictonary = BASE_DIR + '/customerinvoicexmlfiles/' + str(creatorid) + '/' + pk + '.xml' #if exists...
+    xmlfilenameincustomerinvoicepdfsdictonary = BASE_DIR + '/customerinvoicepdfs/' + pk + '.xml' #if exists...
+
+    fs = FileSystemStorage()
+
+    if fs.exists(xmlfilenameincustomerinvoicexmlfilesdictonary):
+        if fs.exists(xmlfilenameincustomerinvoicepdfsdictonary):
+            # dispatch xml
+            dispatchthexml = 1
+            print ('yes')
+    else:
+        # dont dispatch xml
+        dispatchthexml = 0
+        print ('no')
+# if exists the xml dispatch end
+
     return render(request, 'quotation/customerinvoice.html', {'doc': doc,
                                                            'docdetails': docdetails,
-                                                           'base_dir': base_dir,
+                                                           'base_dir': BASE_DIR,
                                                            'companyid': companyid,
+                                                           'dispatchthexml': dispatchthexml,
                                                            'nextchapternums': nextchapternums,
                                                            'creatordata': creatordata,
                                                            'currencycodes': currencycodes})
@@ -980,7 +999,8 @@ def customerinvoicedispatch(request):
     itemdatalistraw = request.POST['itemdatalist']
     itemdatalist = json.loads(itemdatalistraw)
 
-
+    creatorid = request.user.id
+    BASE_DIR = settings.BASE_DIR
 
     #import pdb;
     #pdb.set_trace()
@@ -1074,9 +1094,10 @@ def customerinvoicedispatch(request):
 
 
     tree = ET.ElementTree(root)
+    # delete/make folder with creatorid
+    subprocess.call('if [ ! -d "' + BASE_DIR + '/customerinvoicexmlfiles/' + str(creatorid) + '" ]; then mkdir ' + BASE_DIR + '/customerinvoicexmlfiles/' + str(creatorid) + '  ;else rm -rf ' + BASE_DIR + '/customerinvoicexmlfiles/' + str(creatorid) + ' && mkdir ' + BASE_DIR + '/customerinvoicexmlfiles/' + str(creatorid) + ';  fi', shell=True)
 
-    BASE_DIR = settings.BASE_DIR
-    xmlfilename = BASE_DIR + '/customerinvoicexmlfiles/' + customerinvoiceid + '.xml'
+    xmlfilename = BASE_DIR + '/customerinvoicexmlfiles/' + str(creatorid) + '/' + customerinvoiceid + '.xml'
     tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
 
 

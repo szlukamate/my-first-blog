@@ -8,7 +8,10 @@
 				<p>Contactid:{{ doc.0.1}} hidden</p>
             	<p id="base_dir" hidden>{{ base_dir}}</p>
 
-
+				<form action="https://www.szamlazz.hu/szamla/" id="szamlazzform" method="post" enctype="multipart/form-data">
+					XML file: <input type="file" name="action-xmlagentxmlfile"><br><br>
+					<input type="submit" name="generate" value="Issue invoice">
+				</form>
 
 				<p align="center" id="title" >Customer Invoice Form</p>{% csrf_token %}
 						<div id="infoframe">

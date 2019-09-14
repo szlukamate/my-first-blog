@@ -15,9 +15,19 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
+  // pre-fill FormData from the form
+  var form = $('#szamlazzform')[0];
+  let formData = new FormData(form);
+                    console.log(formData);
+
+  // send it out
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST","https://www.szamlazz.hu/szamla/");
+  xhr.send(formData);
+
+  xhr.onload = () => alert(xhr.response);
+
 //$("#tabs").tabs({ active: 0 });
-
-
     var index1 = 'qpsstats-active-tab1';
     //  Define friendly data store name
     var dataStore1 = window.sessionStorage;
