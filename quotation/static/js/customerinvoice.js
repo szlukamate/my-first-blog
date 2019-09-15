@@ -23,9 +23,13 @@ $(function () {
   // send it out
   let xhr = new XMLHttpRequest();
   xhr.open("POST","https://www.szamlazz.hu/szamla/");
+  xhr.withCredentials = true;
+  //xhr.setRequestHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:8000/quotation/customerinvoiceform/2425/');
+  //xhr.setRequestHeader('Access-Control-Allow-Credentials', 'true');
   xhr.send(formData);
 
   xhr.onload = () => alert(xhr.response);
+
 
 //$("#tabs").tabs({ active: 0 });
     var index1 = 'qpsstats-active-tab1';

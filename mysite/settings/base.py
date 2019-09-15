@@ -173,10 +173,10 @@ EMAIL_HOST_PASSWORD ='kqxpzhke'
 #MEDIA_URL = '/emailattachmentspre/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'emailattachmentspre')
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = ('https://google.com',
-                         'https://hostname.example.com',
-                         'https://www.szamlazz.hu')
+#CORS_ORIGIN_ALLOW_ALL = True
+#CORS_ORIGIN_WHITELIST = ('https://google.com',
+#                         'https://hostname.example.com',
+#                         'https://www.szamlazz.hu')
 
 
 
