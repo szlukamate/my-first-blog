@@ -213,20 +213,24 @@ def customerinvoiceform(request, pk):
 
 # if exists the xml dispatch begin
     xmlfilenameincustomerinvoicexmlfilesdictonary = BASE_DIR + '/customerinvoicexmlfiles/' + str(creatorid) + '/' + pk + '.xml' #if exists...
-    xmlfilenameincustomerinvoicepdfsdictonary = BASE_DIR + '/customerinvoicepdfs/' + pk + '.xml' #if exists...
+    xmlfilenameincustomerinvoicepdfsdictonary = BASE_DIR + '/customerinvoicepdfs/' + pk + '.pdf' #if exists...
 
     fs = FileSystemStorage()
 
     if fs.exists(xmlfilenameincustomerinvoicexmlfilesdictonary):
         if fs.exists(xmlfilenameincustomerinvoicepdfsdictonary):
-            # dispatch xml
+            dispatchthexml = 0
+            print ('there is already pdf')
+        else:
             dispatchthexml = 1
-            print ('yes')
+            print ('exists xml but pdf...')
+
     else:
-        # dont dispatch xml
         dispatchthexml = 0
-        print ('no')
+        print ('no xml')
 # if exists the xml dispatch end
+    #import pdb;
+    #pdb.set_trace()
 
     return render(request, 'quotation/customerinvoice.html', {'doc': doc,
                                                            'docdetails': docdetails,
@@ -966,7 +970,7 @@ def customerinvoicemake(request, docid):
     customerordernumber = docid
     return redirect('customerinvoiceform', pk=maxdocid)
 
-
+@login_required
 def customerinvoicerowremove(request, pk):
     cursor2 = connection.cursor()
     cursor2.execute(
@@ -982,6 +986,7 @@ def customerinvoicerowremove(request, pk):
     transaction.commit()
 
     return redirect('customerinvoiceform', pk=na)
+@login_required
 def customerinvoicedispatch(request):
     customerinvoiceid = request.POST['customerinvoiceid']
     dateofinvoicevalue = request.POST['dateofinvoicevalue']
@@ -1122,3 +1127,33 @@ def customerinvoicedispatch(request):
 
 
     return render(request, 'quotation/customerinvoicedispatchredirecturl.html', {'pk': customerinvoiceid})
+@login_required
+def customerinvoicexmlresponsepdfstacking(request):
+    customerinvoicedocid = request.POST['customerinvoicedocid']
+    #customerinvoicedocid = int(customerinvoicedocid)m
+    pdfstring = request.POST['pdfstring']
+    #import pdb;
+    #pdb.set_trace()
+
+
+    BASE_DIR = settings.BASE_DIR
+
+    xmlstringtopdffilename = BASE_DIR + '/customerinvoicepdfs/' + customerinvoicedocid + '.pdf'
+    file = open(xmlstringtopdffilename, 'w')
+    file.write(pdfstring)
+    file.close()
+
+    return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': customerinvoicedocid})
+@login_required
+def customerinvoiceviewpdf(request, pk):
+    BASE_DIR = settings.BASE_DIR
+
+    fs = FileSystemStorage()
+    storedfilename = BASE_DIR + '/customerinvoicepdfs/' + str(pk) + '.pdf'
+    if fs.exists(storedfilename):
+        with fs.open(storedfilename) as pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="output.pdf"'
+            return response
+    else:
+        return HttpResponseNotFound("The requested pdf was not found in our server.")

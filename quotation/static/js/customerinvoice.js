@@ -15,21 +15,54 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
-  // pre-fill FormData from the form
-  var form = $('#szamlazzform')[0];
-  let formData = new FormData(form);
-                    console.log(formData);
 
-  // send it out
-  let xhr = new XMLHttpRequest();
-  xhr.open("POST","https://www.szamlazz.hu/szamla/");
-  xhr.withCredentials = true;
-  //xhr.setRequestHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:8000/quotation/customerinvoiceform/2425/');
-  //xhr.setRequestHeader('Access-Control-Allow-Credentials', 'true');
-  xhr.send(formData);
+// customerinvoice xml begin
+  var dispatchthexml = $('#dispatchthexml').text();
+ console.log(dispatchthexml);
 
-  xhr.onload = () => alert(xhr.response);
+  if (dispatchthexml == '1') {
 
+      // pre-fill FormData from the form
+      var form = $('#szamlazzform')[0];
+      let formData = new FormData(form);
+                        console.log(formData);
+
+      // send it out
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST","https://cors-anywhere.herokuapp.com/https://www.szamlazz.hu/szamla/"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
+      xhr.send(formData);
+      xhr.responseType = "arraybuffer";
+      xhr.onload = function (){ // if the response received the pdf is read and sent to stack
+      $xml = $( $.parseXML( xhr.response ) );
+      pdfstringbase64 = $xml.find('pdf').text()
+                        console.log(pdfstringbase64);
+      pdfstring = atob(pdfstringbase64) // base64 decoding
+/*
+        $.ajax({ // stack the pdf in def call
+            type: 'POST',
+            url: 'customerinvoicexmlresponsepdfstacking',
+
+            data: {
+            'customerinvoicedocid' : $('#customerinvoicedocid').text(),
+            'pdfstring' : pdfstring,
+            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+            },
+
+            success: function(url){
+            window.location.href = url;
+
+            },
+            error: function(){
+
+                alert('failure');
+            },
+            datatype: 'html'
+
+        });
+*/
+      };
+  };
+// customerinvoice xml begin
 
 //$("#tabs").tabs({ active: 0 });
     var index1 = 'qpsstats-active-tab1';
@@ -77,26 +110,6 @@ $(function () {
         }
     });
 
-    //check exists pdf for xml begin
-    var base_dir = $('#base_dir').text();
-    var docid = $('#customerinvoicedocid').text();
-
-    var filename = '..' + base_dir;// + '/customerinvoicexmlfiles/';// + docid + '.xml';
-                                console.log(filename);
-
-    $.ajax({
-        url: 'home/',
-        type:'HEAD',
-        error: function()
-        {
-                                console.log('no');//file not exists
-        },
-        success: function()
-        {
-                                console.log('yes');//file exists
-        }
-    });
-    //check exists pdf for xml end
 
    $('.updateabletbldocdetails').change(function() {
 
