@@ -17,14 +17,62 @@ import subprocess
 import os
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
+import base64
 # import pdb;
 # pdb.set_trace()
 @login_required
 def customerinvoiceform(request, pk):
+
     BASE_DIR = settings.BASE_DIR
     creatorid = request.user.id
 
+    xmlfilenameincustomerinvoicexmlfilesdictonary = BASE_DIR + '/customerinvoicexmlfiles/' + str(creatorid) + '/' + pk + '.xml'  # if exists...
+    xmlfilenameincustomerinvoicepdfsdictonary = BASE_DIR + '/customerinvoicepdfs/' + pk + '.pdf'  # if exists...
+    fs = FileSystemStorage()
+
     if request.method == "POST":
+        selector = request.POST['selector']
+        #import pdb;
+        #pdb.set_trace()
+
+        if selector == "dispatchthexmlcheck":
+            # xml dispatch controlflag (dispatchthexml) check  begin
+
+            if fs.exists(xmlfilenameincustomerinvoicexmlfilesdictonary):
+                if fs.exists(xmlfilenameincustomerinvoicepdfsdictonary):
+                    dispatchthexml = 0
+                    print ('there is already pdf')
+                    xmlfilecontent = 'empty: exist xml and pdf too'
+                else:
+                    file = open(xmlfilenameincustomerinvoicexmlfilesdictonary, 'r')
+                    xmlfilecontent = file.read()
+                    file.close()
+
+                    dispatchthexml = 1
+                    print ('exists xml but pdf...')
+
+            else:
+                dispatchthexml = 0
+                print ('no xml')
+                xmlfilecontent = 'empty: no xml'
+            data = []
+            data.append(dispatchthexml)
+            data.append(xmlfilecontent)
+            #data[1] = 44
+            print (data)
+            json_data = json.dumps(data)
+
+            #    if fs.exists(xmlfilenameincustomerinvoicexmlfilesdictonary):
+            #        file = open(xmlfilenameincustomerinvoicexmlfilesdictonary, 'r')
+            #        xmlfilecontent = file.read()
+            #        file.close()
+            #    else:
+            #        xmlfilecontent = 'empty'
+
+            return HttpResponse(json_data, content_type="application/json")
+
+            # xml dispatch controlflag (dispatchthexml) check end
+
         fieldvalue = request.POST['fieldvalue']
         rowid = request.POST['rowid']
         docid = request.POST['docid']
@@ -54,6 +102,8 @@ def customerinvoiceform(request, pk):
             json_data = json.dumps(results23, indent=4, sort_keys=True, default=str)
 
             return HttpResponse(json_data, content_type="application/json")
+
+
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -211,24 +261,6 @@ def customerinvoiceform(request, pk):
     else:
         nextchapternums[3] = nextchapternums[3] + 1
 
-# if exists the xml dispatch begin
-    xmlfilenameincustomerinvoicexmlfilesdictonary = BASE_DIR + '/customerinvoicexmlfiles/' + str(creatorid) + '/' + pk + '.xml' #if exists...
-    xmlfilenameincustomerinvoicepdfsdictonary = BASE_DIR + '/customerinvoicepdfs/' + pk + '.pdf' #if exists...
-
-    fs = FileSystemStorage()
-
-    if fs.exists(xmlfilenameincustomerinvoicexmlfilesdictonary):
-        if fs.exists(xmlfilenameincustomerinvoicepdfsdictonary):
-            dispatchthexml = 0
-            print ('there is already pdf')
-        else:
-            dispatchthexml = 1
-            print ('exists xml but pdf...')
-
-    else:
-        dispatchthexml = 0
-        print ('no xml')
-# if exists the xml dispatch end
     #import pdb;
     #pdb.set_trace()
 
@@ -236,7 +268,6 @@ def customerinvoiceform(request, pk):
                                                            'docdetails': docdetails,
                                                            'base_dir': BASE_DIR,
                                                            'companyid': companyid,
-                                                           'dispatchthexml': dispatchthexml,
                                                            'nextchapternums': nextchapternums,
                                                            'creatordata': creatordata,
                                                            'currencycodes': currencycodes})
@@ -1130,8 +1161,8 @@ def customerinvoicedispatch(request):
 @login_required
 def customerinvoicexmlresponsepdfstacking(request):
     customerinvoicedocid = request.POST['customerinvoicedocid']
-    #customerinvoicedocid = int(customerinvoicedocid)m
-    pdfstring = request.POST['pdfstring']
+    pdfstringbase64 = request.POST['pdfstringbase64']
+    pdfstring = base64.b64decode(pdfstringbase64)
     #import pdb;
     #pdb.set_trace()
 
@@ -1139,7 +1170,7 @@ def customerinvoicexmlresponsepdfstacking(request):
     BASE_DIR = settings.BASE_DIR
 
     xmlstringtopdffilename = BASE_DIR + '/customerinvoicepdfs/' + customerinvoicedocid + '.pdf'
-    file = open(xmlstringtopdffilename, 'w')
+    file = open(xmlstringtopdffilename, 'wb')
     file.write(pdfstring)
     file.close()
 

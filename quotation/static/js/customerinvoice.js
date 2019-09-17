@@ -17,52 +17,82 @@ $(window).on("unload", function(){
 $(function () {
 
 // customerinvoice xml begin
-  var dispatchthexml = $('#dispatchthexml').text();
- console.log(dispatchthexml);
+           var dispatchthexml = 0;
 
-  if (dispatchthexml == '1') {
-
-      // pre-fill FormData from the form
-      var form = $('#szamlazzform')[0];
-      let formData = new FormData(form);
-                        console.log(formData);
-
-      // send it out
-      let xhr = new XMLHttpRequest();
-      xhr.open("POST","https://cors-anywhere.herokuapp.com/https://www.szamlazz.hu/szamla/"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
-      xhr.send(formData);
-      xhr.responseType = "arraybuffer";
-      xhr.onload = function (){ // if the response received the pdf is read and sent to stack
-      $xml = $( $.parseXML( xhr.response ) );
-      pdfstringbase64 = $xml.find('pdf').text()
-                        console.log(pdfstringbase64);
-      pdfstring = atob(pdfstringbase64) // base64 decoding
-/*
-        $.ajax({ // stack the pdf in def call
+            //dispatchthexml variable check from def begin
+           $.ajax({
             type: 'POST',
-            url: 'customerinvoicexmlresponsepdfstacking',
+            url: '',
 
             data: {
-            'customerinvoicedocid' : $('#customerinvoicedocid').text(),
-            'pdfstring' : pdfstring,
-            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-            },
+           'selector' : 'dispatchthexmlcheck',
+           'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+           },
+           success: updatesuccess,
+           error: updateerror,
+           ContentType: 'json'
+          });
 
-            success: function(url){
-            window.location.href = url;
+        function updatesuccess (json, textStatus, jqXHR){
+            dispatchthexml = json[0]; //if there is xml and pdf dont send xml again (dispatchthexml = 0)
+                                    console.log(dispatchthexml);
 
-            },
-            error: function(){
+              if (dispatchthexml == '1') {
 
-                alert('failure');
-            },
-            datatype: 'html'
+                  // pre-fill FormData from the form
+ //                                   console.log(formData);
+                  var xmlfilecontent =json[1];
+//                                    console.log('xmlfilecontent: ' + xmlfilecontent);
 
-        });
-*/
-      };
-  };
-// customerinvoice xml begin
+                  var form = $('#szamlazzform')[0];
+                  var blob = new Blob([xmlfilecontent], { type: "text/xml"});
+                  form.append("webmasterfile", blob);
+                  let formData = new FormData(form);
+
+                  // send it out
+                  let xhr = new XMLHttpRequest();
+                  xhr.open("POST","https://cors-anywhere.herokuapp.com/https://www.szamlazz.hu/szamla/"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
+                  xhr.send(formData);
+
+                  xhr.onload = function (){ // if the response received the pdf is read and sent to stack
+                  $xml = $( $.parseXML( xhr.response ) );
+                  pdfstringbase64 = $xml.find('pdf').text()
+                                    console.log(pdfstringbase64);
+                  //pdfstring = pdfstringbase64
+
+                    $.ajax({ // stack the pdf in def call
+                        type: 'POST',
+                        url: 'customerinvoicexmlresponsepdfstacking',
+
+                        data: {
+                        'customerinvoicedocid' : $('#customerinvoicedocid').text(),
+                        'pdfstringbase64' : pdfstringbase64,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                        },
+
+                        success: function(url){
+                        window.location.href = url; // show invoice pdf
+
+                        },
+                        error: function(){
+
+                            alert('failure');
+                        },
+                        datatype: 'html'
+
+                    });
+
+                  };
+              };
+
+
+        };
+        function updateerror (){
+            console.log('Failure in saving');
+        };
+            //dispatchthexml variable check from def end
+
+// customerinvoice xml end
 
 //$("#tabs").tabs({ active: 0 });
     var index1 = 'qpsstats-active-tab1';
@@ -129,6 +159,7 @@ $(function () {
            'rowid' : rowid,
            'docid' : 0,
            'fieldname': fieldname,
+           'selector' : 'update',
            'csrfmiddlewaretoken': CSRFtoken,
            },
            success: updatesuccess,
@@ -172,6 +203,7 @@ $(function () {
            'rowid' : 0,
            'docid' : docid,
            'fieldname': fieldname,
+           'selector' : 'update',
            'csrfmiddlewaretoken': CSRFtoken,
            },
            success: updatesuccess,
