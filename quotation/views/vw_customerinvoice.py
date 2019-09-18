@@ -261,12 +261,21 @@ def customerinvoiceform(request, pk):
     else:
         nextchapternums[3] = nextchapternums[3] + 1
 
-    #import pdb;
-    #pdb.set_trace()
+    if fs.exists(xmlfilenameincustomerinvoicepdfsdictonary):
+        pdfexists = 1
+    else:
+        pdfexists = 0
+
+    if fs.exists(xmlfilenameincustomerinvoicexmlfilesdictonary):
+        xmlexists = 1
+    else:
+        xmlexists = 0
 
     return render(request, 'quotation/customerinvoice.html', {'doc': doc,
                                                            'docdetails': docdetails,
                                                            'base_dir': BASE_DIR,
+                                                           'pdfexists': pdfexists,
+                                                           'xmlexists': xmlexists,
                                                            'companyid': companyid,
                                                            'nextchapternums': nextchapternums,
                                                            'creatordata': creatordata,
@@ -1188,3 +1197,9 @@ def customerinvoiceviewpdf(request, pk):
             return response
     else:
         return HttpResponseNotFound("The requested pdf was not found in our server.")
+@login_required
+def customerinvoiceshowpdfbutton(request):
+    BASE_DIR = settings.BASE_DIR
+
+    customerinvoicedocid = request.POST['customerinvoicedocid']
+    return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': customerinvoicedocid}) #same redirect when xmlresponse arrives therefore same redirecturl.html

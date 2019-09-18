@@ -15,6 +15,28 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
+        var xmlexists = $('#xmlexists').text();
+        var pdfexists = $('#pdfexists').text();
+
+//                    console.log(xmlexists, pdfexists);
+
+    $( "#dialog-message" ).dialog({
+      autoOpen: false,
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+
+            if ( xmlexists == 1 && pdfexists == 0 ) { // Dispatching...
+                $( "#dialog-message" ).dialog("option", "buttons", {}); //remove OK button
+                $( "#dialog-message" ).dialog( "open" );
+            }
+
+
+
 
 // customerinvoice xml begin
            var dispatchthexml = 0;
@@ -45,10 +67,11 @@ $(function () {
 //                                    console.log('xmlfilecontent: ' + xmlfilecontent);
 
                   var form = $('#szamlazzform')[0];
-                  var blob = new Blob([xmlfilecontent], { type: "text/xml"});
-                  form.append("webmasterfile", blob);
+                  var blob = new Blob([xmlfilecontent], { type: "file"});
                   let formData = new FormData(form);
+                  formData.append("action-xmlagentxmlfile", blob, "xml");
 
+///*
                   // send it out
                   let xhr = new XMLHttpRequest();
                   xhr.open("POST","https://cors-anywhere.herokuapp.com/https://www.szamlazz.hu/szamla/"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
@@ -83,6 +106,7 @@ $(function () {
                     });
 
                   };
+//*/
               };
 
 
@@ -579,5 +603,31 @@ $(function () {
 
 
     });
+
+
+    $('#showpdfbutton').click(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'customerinvoiceshowpdfbutton',
+
+                    data: {
+                    'customerinvoicedocid' : $('#customerinvoicedocid').text(),
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(url){
+                    window.location.href = url;
+
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+
+    });
+
 
 });

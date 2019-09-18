@@ -9,9 +9,9 @@
 		<valaszVerzio>2</valaszVerzio>
 	</beallitasok>
 	<fejlec>
-		<keltDatum>2019-09-12</keltDatum>
-		<teljesitesDatum>2019-09-12</teljesitesDatum>
-		<fizetesiHataridoDatum>2019-09-22</fizetesiHataridoDatum>
+		<keltDatum>2019-09-18</keltDatum>
+		<teljesitesDatum>2019-09-18</teljesitesDatum>
+		<fizetesiHataridoDatum>2019-09-28</fizetesiHataridoDatum>
 		<fizmod>Wire transfer</fizmod>
 		<penznem>HUF</penznem>
 		<szamlaNyelve>en</szamlaNyelve>
@@ -52,70 +52,6 @@
 	<tetelek>
 		<tetel>
 			<megnevezes>
-															Ipod EUR
-
-
-													</megnevezes>
-			<mennyiseg>1.0</mennyiseg>
-			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>103716.0</nettoEgysegar>
-			<afakulcs>27</afakulcs>
-			<nettoErtek>103716.0</nettoErtek>
-			<afaErtek>28003.32</afaErtek>
-			<bruttoErtek>131719.32</bruttoErtek>
-			<megjegyzes>w3
-Unique Id: /From Central Stock/ 85112 </megjegyzes>
-		</tetel>
-		<tetel>
-			<megnevezes>
-															Ipod EUR
-
-
-													</megnevezes>
-			<mennyiseg>2.0</mennyiseg>
-			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>103716.0</nettoEgysegar>
-			<afakulcs>27</afakulcs>
-			<nettoErtek>207432.0</nettoErtek>
-			<afaErtek>56006.64</afaErtek>
-			<bruttoErtek>263438.64</bruttoErtek>
-			<megjegyzes>Defaultnote
-Unique Id: 85113 85114 </megjegyzes>
-		</tetel>
-		<tetel>
-			<megnevezes>
-															Setup AWS EC2 Ubuntu serverr
-
-
-													</megnevezes>
-			<mennyiseg>3.0</mennyiseg>
-			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>10640.0</nettoEgysegar>
-			<afakulcs>27</afakulcs>
-			<nettoErtek>31920.0</nettoErtek>
-			<afaErtek>8618.4</afaErtek>
-			<bruttoErtek>40538.4</bruttoErtek>
-			<megjegyzes>Defaultnote
-Service Id: 84996:3.0 </megjegyzes>
-		</tetel>
-		<tetel>
-			<megnevezes>
-															Iphone
-
-
-													</megnevezes>
-			<mennyiseg>5.0</mennyiseg>
-			<mennyisegiEgyseg>pc(s)</mennyisegiEgyseg>
-			<nettoEgysegar>120000.0</nettoEgysegar>
-			<afakulcs>27</afakulcs>
-			<nettoErtek>600000.0</nettoErtek>
-			<afaErtek>162000.0</afaErtek>
-			<bruttoErtek>762000.0</bruttoErtek>
-			<megjegyzes>Defaultnote
-Unique Id: 85047 85048 /From Central Stock/ 85004 85005 85006 </megjegyzes>
-		</tetel>
-		<tetel>
-			<megnevezes>
 															Szlukabit MousePad
 
 
@@ -128,7 +64,7 @@ Unique Id: 85047 85048 /From Central Stock/ 85004 85005 85006 </megjegyzes>
 			<afaErtek>756.0</afaErtek>
 			<bruttoErtek>3556.0</bruttoErtek>
 			<megjegyzes>Defaultnote
-Batch Id: /From Stock2/ 84989:3.0 /From Central Stock/ 83152:7.0 </megjegyzes>
+Batch Id: /From Central Stock/ 83152:10.0 </megjegyzes>
 		</tetel>
 	</tetelek>
 </xmlszamla>

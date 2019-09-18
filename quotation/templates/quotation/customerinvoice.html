@@ -8,9 +8,10 @@
 				<p>Contactid:{{ doc.0.1}} hidden</p>
             	<p id="base_dir" hidden>{{ base_dir}}</p>
             	<p id="xmlfilecontent" hidden>{{ xmlfilecontent}}</p>
+            	<p id="xmlexists" hidden>{{ xmlexists}}</p>
+            	<p id="pdfexists" hidden>{{ pdfexists}}</p>
 
-				<form action="https://www.szamlazz.hu/szamla/" id="szamlazzform" method="post" enctype="multipart/form-data">
-					XML file: <input type="file" name="action-xmlagentxmlfile"><br><br>
+				<form action="https://www.szamlazz.hu/szamla/" id="szamlazzform" method="post" enctype="multipart/form-data" hidden>
 					<input type="submit" name="generate" value="Issue invoice">
 				</form>
 
@@ -28,6 +29,7 @@
 							<button id="newlabelbutton" type="submit">
 							   <span>+ New label</span>
 							</button>
+
 							{% endif %}
 
 						</div>
@@ -61,10 +63,21 @@
 
 								</ul>
 							{% endblock sidebar %}
-									<form action="{% url 'customerinvoiceprint' docid=doc.0.0 %}">
-										<input type="submit" value="Print" />
-									</form>
-
+								{% if pdfexists == 1 %} <!-- if enabled -->
+								<button id="showpdfbutton" type="submit">
+								   <span>Show Pdf</span>
+								</button>
+								{% else %}
+									{% if xmlexists == 1 %} <!-- if xmlexists the printbutton disable -->
+										<form action="{% url 'customerinvoiceprint' docid=doc.0.0 %}">
+											<input type="submit" value="Print" disabled/>
+										</form>
+									{% else %}
+										<form action="{% url 'customerinvoiceprint' docid=doc.0.0 %}">
+											<input type="submit" value="Print" />
+										</form>
+									{% endif %}
+								{% endif %}
 
 									<form action="{% url 'doclink' docid=doc.0.0 %}">
 										<input type="submit" value="Doclink" />
@@ -282,7 +295,8 @@
 								</fieldset>
 							  </form>
 							</div>
-
+							<div id="dialog-message" title="Dispatching...">
+							</div>
 				<script type="text/javascript" src="{% static 'js/customerinvoice.js' %}"></script>
                 <link rel="stylesheet" href="{% static 'css/customerinvoice.css' %}">
 

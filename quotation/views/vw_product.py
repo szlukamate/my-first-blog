@@ -47,8 +47,10 @@ def products(request, pkproductid):
                        "serviceflag_tblproduct "
 
                        "FROM quotation_tblproduct "
-                       "JOIN quotation_tblcompanies "
+
+                       "LEFT JOIN quotation_tblcompanies "
                        "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
+
                        "WHERE obsolete_tblproduct=0 "
                        "order by productid_tblproduct"
 

@@ -613,6 +613,9 @@ def quotationemail(request, docid):
         emailbodytext = x[5]
 
     pdffilename = dockindname + '_' + pretag + str(docnumber) + '_Subject:_' + subject + '.pdf'
+    #import pdb;
+    #pdb.set_trace()
+
     subprocess.call('if [ ! -d "' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '" ]; then mkdir ' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + '  ;else rm -rf ' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + ' && mkdir ' + BASE_DIR + '/emailattachmentspre/' + str(creatorid) + ';  fi', shell=True)
     subprocess.call('node ' + BASE_DIR + "/nodeapps/190809createpdf.js " + BASE_DIR + "/emailattachmentspre/" + str(creatorid) + '/ ' + pdffilename + ' ' + appliableipaddress + ' ' + docid +'', shell=True)
 
