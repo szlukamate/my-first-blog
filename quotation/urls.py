@@ -106,6 +106,6 @@ urlpatterns = [
     url('customerinvoicexmlresponsepdfstacking', views.customerinvoicexmlresponsepdfstacking, name='customerinvoicexmlresponsepdfstacking'),
     url(r'^customerinvoiceviewpdf/(?P<pk>[0-9]+)/$', views.customerinvoiceviewpdf, name='customerinvoiceviewpdf'),
     url('customerinvoiceshowpdfbutton', views.customerinvoiceshowpdfbutton, name='customerinvoiceshowpdfbutton'),
-
+    url('quotationissuetrackingsystem', views.quotationissuetrackingsystem, name='quotationissuetrackingsystem'),
 
 ]

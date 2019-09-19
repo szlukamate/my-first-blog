@@ -14,6 +14,8 @@ from django.template.loader import render_to_string
 from django.conf import settings
 import subprocess
 import os
+import xml.etree.ElementTree as ET
+import xml.dom.minidom as x12
 
 # import pdb;
 # pdb.set_trace()
@@ -1064,3 +1066,35 @@ def quotationsaveasorder(request, pk):
              suppliercompanyid,
              supplierdescriptionclone])
     return redirect('docselector', pk=maxdocid)
+@login_required
+def quotationissuetrackingsystem(request):
+    creatorid = request.user.id
+    BASE_DIR = settings.BASE_DIR
+
+    if request.method == "POST":
+        xmlresponsestring = request.POST['xmlresponsestring']
+        quotationid = request.POST['quotationid']
+
+    # delete/make folder with creatorid
+    subprocess.call('if [ ! -d "' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '" ]; then mkdir ' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '  ;else rm -rf ' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + ' && mkdir ' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + ';  fi', shell=True)
+
+    # making prettyxml begin
+    xmlitems = ET.fromstring(xmlresponsestring)
+
+    xmlfilename = BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '/' + quotationid + '.xml'
+    #tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
+
+    #file = open(xmlfilename, 'r')
+    #xml_string = file.read()
+    #file.close()
+
+    parsed_xml = x12.parseString(xmlresponsestring)
+    pretty_xml_as_string = parsed_xml.toprettyxml()
+
+    file = open(xmlfilename, 'w')
+    file.write(pretty_xml_as_string)
+    file.close()
+    # making prettyxml begin
+
+    return render(request, 'quotation/quotationissuetrackingsystem.html',{'docid': quotationid,
+                                                                          'xmlitems': xmlitems})

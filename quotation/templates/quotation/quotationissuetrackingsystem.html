@@ -1,0 +1,39 @@
+{% load staticfiles%}
+	{% block content %}
+          
+
+				<p align="center" id="title" style="font-size:160%;">Quotation Newrow Add Form</p>{% csrf_token %}
+							<div class="container" style="max-height: 200px; overflow:scroll;">
+										<table class="table table-striped">
+											<thead>
+
+												<tr>
+													<td>Prodjectid</td>
+													<td>Prodject Name</td>
+													<td>Margin</td>
+													<td>listprice</td>
+													<td>Customer Description</td>
+													<td>Supplier Description</td>
+													<td>Currency</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												{%  for xmlitem in  xmlitems %}
+
+													<tr>
+														<td  >{{ xmlitem.0.text }}</td>
+														<td  >{{ xmlitem.1.attrib['name'] }}</td>
+													</tr>
+
+
+
+												{% endfor %}
+											</tbody>
+
+										</table>
+							</div>
+
+											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
+
+	{% endblock %}

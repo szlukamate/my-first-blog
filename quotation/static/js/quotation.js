@@ -308,4 +308,74 @@ $('#title').click(function() {
 
    });
 
+    $('#itsbutton').click(function() {
+/*
+        var quotationid=$('#quotationdocid').text();
+
+            $.ajax({
+                type: 'POST',
+                url: 'quotationnewrowadd',
+
+                data: {
+                'quotationid' : quotationid,
+                'docdetailsid' : 0, // New row in docdetails the 0 shows it (the quotationnewrowadd def in vw_quotation.py recognizes it)
+                'nextfirstnumonhtml' : $('#nextfirstnumonhtml').val(),
+                'nextsecondnumonhtml' : $('#nextsecondnumonhtml').val(),
+                'nextthirdnumonhtml' : $('#nextthirdnumonhtml').val(),
+                'nextfourthnumonhtml' : $('#nextfourthnumonhtml').val(),
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(data){
+
+                    $('#quotationtemplate').html(data);
+                    console.log(data);
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+*/
+        var quotationid=$('#quotationdocid').text();
+
+                  // send it out
+                  let xhr = new XMLHttpRequest();
+                  xhr.open("GET","https://cors-anywhere.herokuapp.com/http://13.58.18.245:3000//time_entries.xml"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
+                  xhr.send();
+
+                  xhr.onload = function (){
+                                    console.log(xhr.response);
+
+                    $.ajax({ // stack the pdf in def call
+                        type: 'POST',
+                        url: 'quotationissuetrackingsystem',
+
+                        data: {
+                        'quotationid' : quotationid,
+                        'xmlresponsestring' : xhr.response,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                        },
+
+                        success: function(data){
+                    $('#quotationtemplate').html(data);
+//                    console.log(data);
+
+                        },
+                        error: function(){
+
+                            alert('failure');
+                        },
+                        datatype: 'html'
+
+                    });
+
+                  };
+
+
+    });
+
+
 });
