@@ -343,7 +343,7 @@ $('#title').click(function() {
 
                   // send it out
                   let xhr = new XMLHttpRequest();
-                  xhr.open("GET","https://cors-anywhere.herokuapp.com/http://13.58.18.245:3000//time_entries.xml"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
+                  xhr.open("GET","https://cors-anywhere.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?project_id=4&limit=2"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
                   xhr.send();
 
                   xhr.onload = function (){
