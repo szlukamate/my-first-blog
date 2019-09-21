@@ -8,13 +8,13 @@
 											<thead>
 
 												<tr>
-													<td>Prodjectid</td>
-													<td>Prodject Name</td>
-													<td>Margin</td>
-													<td>listprice</td>
-													<td>Customer Description</td>
-													<td>Supplier Description</td>
-													<td>Currency</td>
+													<td>Time Entry/Issue Id</td>
+													<td>Project Name</td>
+													<td>User Name</td>
+													<td>Activity Name</td>
+													<td>Hours</td>
+													<td>Comments</td>
+													<td>Spent On</td>
 												</tr>
 											</thead>
 
@@ -22,8 +22,13 @@
 												{%  for xmlitem in  xmlitems %}
 
 													<tr>
-														<td  >{{ xmlitem.0.text }}</td>
+														<td  >{{ xmlitem.0.text }}/{{ xmlitem.2.attrib.id }}</td>
 														<td  >{{ xmlitem.1.attrib.name }}</td>
+														<td  >{{ xmlitem.3.attrib.name }}</td>
+														<td  >{{ xmlitem.4.attrib.name }}</td>
+														<td  >{{ xmlitem.5.text }}</td>
+														<td  >{{ xmlitem.6.text }}</td>
+														<td  >{{ xmlitem.7.text }}</td>
 													</tr>
 
 

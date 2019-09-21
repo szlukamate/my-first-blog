@@ -1,16 +1,21 @@
 <?xml version="1.0" ?>
-<time_entries limit="2" offset="0" total_count="6" type="array">
+<time_entries limit="25" offset="0" total_count="5" type="array">
 	<time_entry>
 		<id>11</id>
 		<project id="4" name="2019 Farewell Party"/>
 		<issue id="4"/>
 		<user id="7" name="Gofri Maker"/>
 		<activity id="9" name="Development"/>
-		<hours>0.45</hours>
+		<hours>0.35</hours>
 		<comments>Mazsola mess declaration</comments>
 		<spent_on>2019-09-19</spent_on>
 		<created_on>2019-09-19T15:42:26Z</created_on>
-		<updated_on>2019-09-19T15:42:26Z</updated_on>
+		<updated_on>2019-09-21T12:33:28Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value/>
+			</custom_field>
+		</custom_fields>
 	</time_entry>
 	<time_entry>
 		<id>10</id>
@@ -23,5 +28,61 @@
 		<spent_on>2019-09-19</spent_on>
 		<created_on>2019-09-19T15:35:17Z</created_on>
 		<updated_on>2019-09-19T15:35:17Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value/>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>9</id>
+		<project id="4" name="2019 Farewell Party"/>
+		<issue id="3"/>
+		<user id="1" name="Redmine Admin"/>
+		<activity id="8" name="Design"/>
+		<hours>0.2</hours>
+		<comments>Thinking</comments>
+		<spent_on>2019-09-19</spent_on>
+		<created_on>2019-09-19T15:11:26Z</created_on>
+		<updated_on>2019-09-19T15:11:26Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value/>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>8</id>
+		<project id="4" name="2019 Farewell Party"/>
+		<issue id="3"/>
+		<user id="1" name="Redmine Admin"/>
+		<activity id="8" name="Design"/>
+		<hours>0.3</hours>
+		<comments>Tesco Online</comments>
+		<spent_on>2019-09-19</spent_on>
+		<created_on>2019-09-19T15:10:08Z</created_on>
+		<updated_on>2019-09-19T15:10:08Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value/>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>7</id>
+		<project id="4" name="2019 Farewell Party"/>
+		<issue id="3"/>
+		<user id="1" name="Redmine Admin"/>
+		<activity id="9" name="Development"/>
+		<hours>1.0</hours>
+		<comments>Let's go!</comments>
+		<spent_on>2019-09-19</spent_on>
+		<created_on>2019-09-19T14:49:28Z</created_on>
+		<updated_on>2019-09-19T14:49:28Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value/>
+			</custom_field>
+		</custom_fields>
 	</time_entry>
 </time_entries>
