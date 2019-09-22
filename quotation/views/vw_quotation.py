@@ -1071,16 +1071,68 @@ def quotationissuetrackingsystem(request):
     creatorid = request.user.id
     BASE_DIR = settings.BASE_DIR
 
-    if request.method == "POST":
-        xmlresponsestring = request.POST['xmlresponsestring']
-        quotationid = request.POST['quotationid']
+    cursor2 = connection.cursor()
+    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS issuetrackingsystemtemptable;")
+    cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS issuetrackingsystemtemptable "
+                    "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    "     timeentryid INT(11) NOT NULL, "
+                    "     projectname VARCHAR(255) NULL, "
+                    "     issueid INT(11) NULL, "
+                    "     username VARCHAR(255) NULL, "
+                    "     activityname VARCHAR(255) NULL, "
+                    "     hours VARCHAR(10) NULL, "
+                    "     comments VARCHAR(255) NULL, "
+                    "     spenton VARCHAR(20) NULL) "
+                    "      ENGINE=INNODB "
+                    "    ; ")
+
+    xmlresponsestring = request.POST['xmlresponsestring']
+    quotationid = request.POST['quotationid']
 
     # delete/make folder with creatorid
     subprocess.call('if [ ! -d "' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '" ]; then mkdir ' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '  ;else rm -rf ' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + ' && mkdir ' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + ';  fi', shell=True)
 
-    # making prettyxml begin
-    xmlitems = ET.fromstring(xmlresponsestring)
+    xmlitemsfromelementtree = ET.fromstring(xmlresponsestring)
+    issuetrackingsystemnumberofitems = len(xmlitemsfromelementtree)
+    for x11 in range(len(xmlitemsfromelementtree)):
+        timeentryid = xmlitemsfromelementtree[x11][0].text
+        projectname = xmlitemsfromelementtree[x11][1].attrib['name']
+        issueid = xmlitemsfromelementtree[x11][2].attrib['id']
+        username = xmlitemsfromelementtree[x11][3].attrib['name']
+        activityname = xmlitemsfromelementtree[x11][4].attrib['name']
+        hours = xmlitemsfromelementtree[x11][5].text
+        comments = xmlitemsfromelementtree[x11][6].text
+        spenton = xmlitemsfromelementtree[x11][7].text
 
+
+        cursor2.execute("INSERT INTO issuetrackingsystemtemptable "
+                        "(timeentryid, projectname, issueid, username, activityname, hours, comments, spenton) VALUES ('" + str(timeentryid) + "', "
+                                                            "'" + str(projectname) + "', "
+                                                            "'" + str(issueid) + "', "
+                                                            "'" + str(username) + "', "
+                                                            "'" + str(activityname) + "', "
+                                                            "'" + str(hours) + "', "
+                                                            "'" + str(comments) + "', "
+                                                            "'" + str(spenton) + "');")
+
+
+    cursor2.execute("SELECT "
+                    "timeentryid, "
+                    "projectname, "
+                    "issueid, "
+                    "username, "
+                    "activityname, "
+                    "hours, "
+                    "comments, "
+                    "spenton "
+                    
+                    "FROM issuetrackingsystemtemptable ")
+    xmlitems = cursor2.fetchall()
+
+    #import pdb;
+    #pdb.set_trace()
+
+    # making prettyxml begin
     xmlfilename = BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '/' + quotationid + '.xml'
     #tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
 
@@ -1097,4 +1149,28 @@ def quotationissuetrackingsystem(request):
     # making prettyxml begin
 
     return render(request, 'quotation/quotationissuetrackingsystem.html',{'docid': quotationid,
+                                                                          'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
                                                                           'xmlitems': xmlitems})
+@login_required
+def quotationissuetrackingsystemitemstoquotation(request):
+    issuetrackingsystemnumberofitems = request.POST['issuetrackingsystemnumberofitems']
+    itemdatalistraw = request.POST['itemdatalist']
+    itemdatalist = json.loads(itemdatalistraw)
+
+    for x in range(int(issuetrackingsystemnumberofitems-1)):
+
+        timeentryandissueid = itemdatalist[(7*x+0)]
+        projectname = itemdatalist[7*x+1]
+        username = itemdatalist[7*x+2]
+        activityname = itemdatalist[7*x+3]
+        hours = itemdatalist[7*x+4]
+        comments = itemdatalist[7*x+5]
+        spenton = itemdatalist[7*x+6]
+        import pdb;
+        pdb.set_trace()
+
+
+    creatorid = request.user.id
+    BASE_DIR = settings.BASE_DIR
+
+    return render(request, 'quotation/customerinvoicedispatchredirecturl.html', {'pk': 11})

@@ -1,8 +1,9 @@
 {% load staticfiles%}
 	{% block content %}
           
+				<p id="issuetrackingsystemnumberofitems" hidden>{{ issuetrackingsystemnumberofitems}}</p>
 
-				<p align="center" id="title" style="font-size:160%;">Quotation Newrow Add Form</p>{% csrf_token %}
+				<p align="center" id="title" style="font-size:160%;">Time Entry Items</p>{% csrf_token %}
 							<div class="container" style="max-height: 200px; overflow:scroll;">
 										<table class="table table-striped">
 											<thead>
@@ -19,16 +20,20 @@
 											</thead>
 
 											<tbody>
+												<button class="timeentriestoquotationbutton" type="submit" rowid="{{ po.0}}">
+												   <span>Time Entries to Quotation</span>
+												</button>
+
 												{%  for xmlitem in  xmlitems %}
 
 													<tr>
-														<td  >{{ xmlitem.0.text }}/{{ xmlitem.2.attrib.id }}</td>
-														<td  >{{ xmlitem.1.attrib.name }}</td>
-														<td  >{{ xmlitem.3.attrib.name }}</td>
-														<td  >{{ xmlitem.4.attrib.name }}</td>
-														<td  >{{ xmlitem.5.text }}</td>
-														<td  >{{ xmlitem.6.text }}</td>
-														<td  >{{ xmlitem.7.text }}</td>
+														<td  class="timeentryandissueid" rowid="{{ forloop.counter0 }}">{{ xmlitem.0 }}/{{ xmlitem.2 }}</td>
+														<td  class="projectname" rowid="{{ forloop.counter0 }}">{{ xmlitem.1 }}</td>
+														<td  class="username" rowid="{{ forloop.counter0 }}">{{ xmlitem.3 }}</td>
+														<td  class="activityname" rowid="{{ forloop.counter0 }}">{{ xmlitem.4 }}</td>
+														<td  class="hours" rowid="{{ forloop.counter0 }}">{{ xmlitem.5 }}</td>
+														<td  class="comments" rowid="{{ forloop.counter0 }}">{{ xmlitem.6 }}</td>
+														<td  class="spenton" rowid="{{ forloop.counter0 }}">{{ xmlitem.7 }}</td>
 													</tr>
 
 
@@ -38,7 +43,4 @@
 
 										</table>
 							</div>
-
-											<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
-
 	{% endblock %}

@@ -349,7 +349,7 @@ $('#title').click(function() {
                   xhr.onload = function (){
                                     console.log(xhr.response);
 
-                    $.ajax({ // stack the pdf in def call
+                    $.ajax({
                         type: 'POST',
                         url: 'quotationissuetrackingsystem',
 
@@ -373,6 +373,71 @@ $('#title').click(function() {
                     });
 
                   };
+
+
+    });
+
+    $('body').on("click", ".timeentriestoquotationbutton", function() {
+                var issuetrackingsystemnumberofitems= $('#issuetrackingsystemnumberofitems').text();
+                var itemdatalist=[];
+                var itemdataliststringified;
+
+        main();
+
+            function main(){
+
+
+                for (i = 1; i <= issuetrackingsystemnumberofitems; i++) {
+                    itemdatacollect(i);
+
+                }
+                itemdataliststringified = JSON.stringify(itemdatalist);
+
+                datatransmit();
+
+            }
+            function itemdatacollect(i){
+              timeentryandissueid=$('td[class="timeentryandissueid"][rowid="' + (i - 1) + '"]').text();
+              projectname=$('td[class="projectname"][rowid="' + (i - 1) + '"]').text();
+              username=$('td[class="username"][rowid="' + (i - 1) + '"]').text();
+              activityname=$('td[class="activityname"][rowid="' + (i - 1) + '"]').text();
+              hours=$('td[class="hours"][rowid="' + (i - 1) + '"]').text();
+              comments=$('td[class="comments"][rowid="' + (i - 1) + '"]').text();
+              spenton=$('td[class="spenton"][rowid="' + (i - 1) + '"]').text();
+              itemdatalist.push(timeentryandissueid, projectname, username, activityname, hours, comments, spenton);
+
+            }
+
+            function datatransmit(){
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'quotationissuetrackingsystemitemstoquotation',
+
+                    data: {
+                    'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
+                    'itemdatalist': itemdataliststringified,
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(url){
+                    console.log('success');
+
+//                    window.location.href = url;
+
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+            }
+
+
+
+
 
 
     });

@@ -154,6 +154,7 @@ $(document).ready(function () {
 
         $('input[name2="dateofarrivalinput"][rowid="' + pohandlerarrivalbuttonrowid + '"]').val(fillingdateval);
         $('input[class="updateable"][rowid="' + pohandlerarrivalbuttonrowid + '"]').trigger('change');
+                    console.log('na3');
 
 
 
