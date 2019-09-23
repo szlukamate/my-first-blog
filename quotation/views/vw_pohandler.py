@@ -371,10 +371,12 @@ def pohandlerreception(request): #from pohandlerform
                     "     arrivedqty DECIMAL(10,1) NULL,"
                     "     nop DECIMAL(10,1) NULL,"
                     "     dateofarrivaldate varchar(55) NULL, "
-                    "     numberofitemstodeno INT(11) NULL) "
+                    "     numberofitemstodeno INT(11) NULL, "
+                    "     note varchar(255) NULL) "
       
                     "      ENGINE=INNODB "
                     "    ; ")
+
 
     for x11 in range(len(dateofarrivallistsplitted)):
         podocdetailsid = dateofarrivallistsplitted[x11][0]
@@ -384,7 +386,8 @@ def pohandlerreception(request): #from pohandlerform
 
         cursor2.execute("SELECT   "
                         "Productid_tblDoc_details_id,"
-                        "Qty_tblDoc_details "
+                        "Qty_tblDoc_details, "
+                        "Note_tblDoc_details "
 
                          "FROM quotation_tbldoc_details "
 
@@ -395,18 +398,21 @@ def pohandlerreception(request): #from pohandlerform
         for x2 in productidresult:
             productid = x2[0]
             arrivedqty = x2[1]
+            note = x2[2]
 
         cursor2.execute("INSERT INTO porows (podocdetailsid, "
                         "podocid, "
                         "cordocid, "
                         "productid, "
                         "arrivedqty, "
-                        "dateofarrivaldate) VALUES ('" + str(podocdetailsid) + "', "
+                        "dateofarrivaldate, "
+                        "note) VALUES ('" + str(podocdetailsid) + "', "
                                                     "'" + str(podocid) + "', "
                                                     "'" + str(cordocid) + "', "
                                                     "'" + str(productid) + "', "
                                                     "'" + str(arrivedqty) + "', "
-                                                    "'" + str(dateofarrivaldate) + "');")
+                                                    "'" + str(dateofarrivaldate) + "', "
+                                                    "'" + str(note) + "');")
 
     cursor2.execute("SELECT   "
                         "auxid, "
@@ -415,11 +421,13 @@ def pohandlerreception(request): #from pohandlerform
                         "cordocid, "
                         "productid, "
                         "arrivedqty, "
-                        "dateofarrivaldate "
+                        "dateofarrivaldate, "
+                        "note "
 
                         "FROM porows ")
     tables = cursor2.fetchall()
 #dateofarrivallistsplitted to table end
+
 
 
 #deliverynote making start
@@ -431,13 +439,12 @@ def pohandlerreception(request): #from pohandlerform
                         "productid, "
                         "arrivedqty, "
                         "dateofarrivaldate,"
-                        "numberofitemstodeno "
+                        "numberofitemstodeno, "
+                        "note "
 
                     "FROM porows ")
     tables2 = cursor2.fetchall()
     docmakercounter = 0
-    #import pdb;
-    #pdb.set_trace()
 
 # neededqtytemptable declaration before/outside the following for loop start
     cursor2 = connection.cursor()
@@ -452,7 +459,8 @@ def pohandlerreception(request): #from pohandlerform
                     "     subjecttext VARCHAR(255) NULL, "
                     "     denorole VARCHAR(255) NULL, "
                     "     cordocidroot INT(11) NULL, "
-                    "     productid INT(11) NULL) "
+                    "     productid INT(11) NULL, "
+                    "     note VARCHAR(255) NULL) "
 
                     "      ENGINE=INNODB "
                     "    ; ")
@@ -466,6 +474,7 @@ def pohandlerreception(request): #from pohandlerform
         productid = x3[4]
         arrivedqty = x3[5]
         numberofitemstodeno = x3[7]
+        note = x3[8]
 
         cursor2.execute("SELECT "
                         "DD2cor.cordocid as cordocid, "
@@ -501,11 +510,12 @@ def pohandlerreception(request): #from pohandlerform
                                     "           LEFT JOIN   (SELECT "
                                     "                       Docid_tblDoc_details_id as docid, "
                                     "                       sum(Qty_tblDoc_details) as corqty, "
-                                    "                       Productid_tblDoc_details_id as productid "
+                                    "                       Productid_tblDoc_details_id as productid, "
+                                    "                       Note_tblDoc_details as note "
             
                                     "                       FROM quotation_tbldoc_details"
             
-                                    "                       GROUP BY docid, productid "
+                                    "                       GROUP BY docid, productid, note "
                                     "                       ) as DD22 "
                                     "           ON Dcor.Docid_tblDoc = DD22.docid "
 
@@ -572,15 +582,16 @@ def pohandlerreception(request): #from pohandlerform
 
         fromstockresult = cursor2.fetchall()
 
-# sumarrivedqty determination begin
+
+        # sumarrivedqty determination begin
         toinoperatordocdetails = ""
         cursor2.execute("SELECT   "
                         "podocdetailsid "
 
                         "FROM porows "
 
-                        "WHERE podocid=%s and cordocid=%s and productid=%s ",
-                        [podocid, cordocid, productid])
+                        "WHERE podocid=%s and cordocid=%s and productid=%s and note=%s",
+                        [podocid, cordocid, productid, note])
         resultsarrived = cursor2.fetchall()
 
         for x in resultsarrived:
@@ -644,11 +655,12 @@ def pohandlerreception(request): #from pohandlerform
                         "           LEFT JOIN   (SELECT "
                         "                       Docid_tblDoc_details_id as docid, "
                         "                       sum(Qty_tblDoc_details) as corqty, "
-                        "                       Productid_tblDoc_details_id as productid "
+                        "                       Productid_tblDoc_details_id as productid, "
+                        "                       Note_tblDoc_details as note"
 
                         "                       FROM quotation_tbldoc_details"
 
-                        "                       GROUP BY docid, productid "
+                        "                       GROUP BY docid, productid, note "
                         "                       ) as DD22 "
                         "           ON Dcor.Docid_tblDoc = DD22.docid "
 
@@ -758,17 +770,18 @@ def pohandlerreception(request): #from pohandlerform
                                 "sum(itemqty) "
     
                                 "FROM neededqtytemptable "
-                                "WHERE cororstockdocidto=%s and cordocidroot=%s and denorole=%s and productid=%s "
-                                "GROUP BY cororstockdocidto, cordocidroot, denorole, productid ",[corstockdocidparameter, cordocidrootparameter, denoroleparameter, productid])
+                                "WHERE cororstockdocidto=%s and cordocidroot=%s and denorole=%s and productid=%s and note=%s "
+                                "GROUP BY cororstockdocidto, cordocidroot, denorole, productid ",
+                                [corstockdocidparameter, cordocidrootparameter, denoroleparameter, productid, note])
                 results = cursor2.fetchall()
             if corstockdocidparameter == None:
                 cursor2.execute("SELECT   "
                                 "sum(itemqty) "
 
                                 "FROM neededqtytemptable "
-                                "WHERE cordocidroot=%s and denorole=%s and productid=%s "
+                                "WHERE cordocidroot=%s and denorole=%s and productid=%s and note=%s"
                                 "GROUP BY cordocidroot, denorole, productid ",
-                                [cordocidrootparameter, denoroleparameter, productid])
+                                [cordocidrootparameter, denoroleparameter, productid, note])
                 results = cursor2.fetchall()
 
             #import pdb;
@@ -1011,6 +1024,7 @@ def pohandlerreception(request): #from pohandlerform
                                 "denorole, "
                                 "cordocidroot, "
                                 "productid, "
+                                "note, "
                                 "itemqty) VALUES ('" + str(podocdetailsid) + "', "
                                                                   "'" + str(cororstockdocidto) + "', "
                                                                   "'" + str(podocidfrom) + "', "
@@ -1018,6 +1032,7 @@ def pohandlerreception(request): #from pohandlerform
                                                                   "'" + str(denorole) + "', "
                                                                   "'" + str(cordocidroot) + "', "
                                                                   "'" + str(productid) + "', "
+                                                                  "'" + str(note) + "', "
                                                                   "'" + str(itemqty) + "');")
 
             cursor2.execute("SELECT   "
@@ -1029,7 +1044,8 @@ def pohandlerreception(request): #from pohandlerform
                             "denorole, "
                             "cordocidroot, "
                             "itemqty, "
-                            "productid "
+                            "productid,"
+                            "note "
     
                             "FROM neededqtytemptable "
                             "ORDER BY cororstockdocidto ")
@@ -1053,6 +1069,7 @@ def pohandlerreception(request): #from pohandlerform
         denorole = xx[5]
         cordocidroot = xx[6]
         productid = xx[8]
+        note = xx[9]
 
 
         cursor2.execute("SELECT count(auxid) "
@@ -1081,7 +1098,8 @@ def pohandlerreception(request): #from pohandlerform
                     "subjecttext, "
                     "denorole, "
                     "cordocidroot, "
-                    "productid "
+                    "productid,"
+                    "note "
                     
                     "FROM neededqtytemptable "
                     "ORDER BY cororstockdocidto ")
@@ -1101,10 +1119,11 @@ def pohandlerreception(request): #from pohandlerform
         denorole = x31[7]
         cordocidroot = x31[8]
         productid = x31[9]
+        note = x31[10]
 
 # backtostockforcordocid_tbldoc value pre begin
         if denorole == 'toback':
-            backtostockforcordocidvalue = cordocidroot
+            backtostockforcordocid000value = cordocidroot
         else:
             backtostockforcordocidvalue = None
 
@@ -1306,7 +1325,7 @@ def pohandlerreception(request): #from pohandlerform
             fourthnum = x[5]
             secondnum = x[6]
             thirdnum = x[7]
-            note = x[8]
+            #note = x[8]
             productid = x[13]
             currencyrate = x[16]
             suppliercompanyid = x[24]

@@ -17,6 +17,19 @@ $(window).on("unload", function(){
 $(function () {
 //$("#tabs").tabs({ active: 0 });
 
+// Dialog "Connecting..." begin
+    $( "#dialog-message-connecting" ).dialog({
+      autoOpen: false,
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+
+// Dialog "Connecting..." end
+
 
     var index1 = 'qpsstats-active-tab1';
     //  Define friendly data store name
@@ -309,45 +322,18 @@ $('#title').click(function() {
    });
 
     $('#itsbutton').click(function() {
-/*
-        var quotationid=$('#quotationdocid').text();
-
-            $.ajax({
-                type: 'POST',
-                url: 'quotationnewrowadd',
-
-                data: {
-                'quotationid' : quotationid,
-                'docdetailsid' : 0, // New row in docdetails the 0 shows it (the quotationnewrowadd def in vw_quotation.py recognizes it)
-                'nextfirstnumonhtml' : $('#nextfirstnumonhtml').val(),
-                'nextsecondnumonhtml' : $('#nextsecondnumonhtml').val(),
-                'nextthirdnumonhtml' : $('#nextthirdnumonhtml').val(),
-                'nextfourthnumonhtml' : $('#nextfourthnumonhtml').val(),
-
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                },
-
-                success: function(data){
-
-                    $('#quotationtemplate').html(data);
-                    console.log(data);
-                },
-                error: function(){
-                    alert('failure');
-                },
-                datatype: 'html'
-
-            });
-*/
         var quotationid=$('#quotationdocid').text();
 
                   // send it out
                   let xhr = new XMLHttpRequest();
                   xhr.open("GET","https://cors-anywhere.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&project_id=4"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
                   xhr.send();
+                  $( "#dialog-message-connecting" ).dialog("option", "buttons", {}); //remove OK button
+                  $( "#dialog-message-connecting" ).dialog( "open" );
 
                   xhr.onload = function (){
                                     console.log(xhr.response);
+                  $( "#dialog-message-connecting" ).dialog( "close" );
 
                     $.ajax({
                         type: 'POST',
@@ -381,6 +367,7 @@ $('#title').click(function() {
                 var issuetrackingsystemnumberofitems= $('#issuetrackingsystemnumberofitems').text();
                 var itemdatalist=[];
                 var itemdataliststringified;
+                var quotationdocid = $('#quotationdocid').text();
 
         main();
 
@@ -415,6 +402,7 @@ $('#title').click(function() {
                     url: 'quotationissuetrackingsystemitemstoquotation',
 
                     data: {
+                    'quotationdocid' : quotationdocid,
                     'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
                     'itemdatalist': itemdataliststringified,
 
@@ -424,7 +412,7 @@ $('#title').click(function() {
                     success: function(url){
                     console.log('success');
 
-//                    window.location.href = url;
+                    window.location.href = url;
 
                     },
                     error: function(){

@@ -20,6 +20,7 @@ $(function () {
 
 //                    console.log(xmlexists, pdfexists);
 
+// Dialog "Dispatching..." begin
     $( "#dialog-message" ).dialog({
       autoOpen: false,
       modal: true,
@@ -34,6 +35,7 @@ $(function () {
                 $( "#dialog-message" ).dialog("option", "buttons", {}); //remove OK button
                 $( "#dialog-message" ).dialog( "open" );
             }
+// Dialog "Dispatching..." end
 
 
 

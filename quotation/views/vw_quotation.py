@@ -447,7 +447,7 @@ def quotationprint (request, docid):
         "`thirdnum_tblDoc_details`, "
         "`Note_tblDoc_details`, "
         "`creationtime_tblDoc_details`, "
-        "purchase_price_tblproduct_ctblDoc_details, "
+        "purchase_price_tblproduct_ctblDoc_details, " #10
         "listprice_tblDoc_details, "
         "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
         "Productid_tblDoc_details_id, "
@@ -804,9 +804,12 @@ def quotationsaveasmodern(request, pk):
             "`currencyisocode_tblcurrency_ctblproduct`, "
             "currencyrate_tblcurrency, "
             "unit_tblproduct "
+
             "FROM `quotation_tblproduct` "
+
             "LEFT JOIN quotation_tblcurrency "
             "ON quotation_tblproduct.currencyisocode_tblcurrency_ctblproduct=quotation_tblcurrency.currencyisocode_tblcurrency "
+
             "WHERE Productid_tblProduct= %s", [productid])
         results = cursor0.fetchall()
         for instancesingle in results:
@@ -983,7 +986,7 @@ def quotationsaveasorder(request, pk):
                         "`thirdnum_tblDoc_details`, "
                         "`Note_tblDoc_details`, "
                         "`creationtime_tblDoc_details`, "
-                        "purchase_price_tblproduct_ctblDoc_details, "
+                        "purchase_price_tblproduct_ctblDoc_details, " #10
                         "listprice_tblDoc_details, "
                         "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
                         "Productid_tblDoc_details_id, "
@@ -998,11 +1001,14 @@ def quotationsaveasorder(request, pk):
                         "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
                         "unit_tbldocdetails, "
                         "suppliercompanyid_tbldocdetails, "
-                        "supplierdescription_tblProduct_ctblDoc_details "
+                        "supplierdescription_tblProduct_ctblDoc_details " #25
+
                         "FROM quotation_tbldoc_details "
+
                         "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
                         "ON "
                         "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+
                         "WHERE docid_tbldoc_details_id=%s "
                         "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
                         [pk])
@@ -1153,11 +1159,17 @@ def quotationissuetrackingsystem(request):
                                                                           'xmlitems': xmlitems})
 @login_required
 def quotationissuetrackingsystemitemstoquotation(request):
+
+    creatorid = request.user.id
+    BASE_DIR = settings.BASE_DIR
+
+
+    quotationdocid = request.POST['quotationdocid']
     issuetrackingsystemnumberofitems = request.POST['issuetrackingsystemnumberofitems']
     itemdatalistraw = request.POST['itemdatalist']
     itemdatalist = json.loads(itemdatalistraw)
 
-    for x in range(int(issuetrackingsystemnumberofitems-1)):
+    for x in range(int(issuetrackingsystemnumberofitems)):
 
         timeentryandissueid = itemdatalist[(7*x+0)]
         projectname = itemdatalist[7*x+1]
@@ -1166,11 +1178,92 @@ def quotationissuetrackingsystemitemstoquotation(request):
         hours = itemdatalist[7*x+4]
         comments = itemdatalist[7*x+5]
         spenton = itemdatalist[7*x+6]
-        import pdb;
-        pdb.set_trace()
+        #import pdb;
+        #pdb.set_trace()
+
+        #customerdescriptionclone = 'Time of Gofri Man'
+        firstnum = x + 1
+        fourthnum = 0
+        secondnum = 0
+        thirdnum = 0
+        note = projectname + ' ' + comments + ' by ' + username + ' /Id:' + timeentryandissueid + '/'
+        #purchase_priceclone = 1
+        #listpricecomputed = 1
+        #currencyisocodeclone = 'USD'
+        productid = 54
+        currencyrate = 280
+        #unitsalespriceACU = 1
+        #unitclone = 'hrs'
+        #suppliercompanyid = 1
+
+        cursor0 = connection.cursor()
+        cursor0.execute(
+            "SELECT `Productid_tblProduct`, "
+            "`purchase_price_tblproduct`, `"
+            "customerdescription_tblProduct`, "
+            "`margin_tblproduct`, "
+            "`currencyisocode_tblcurrency_ctblproduct`, "
+            "currencyrate_tblcurrency, "
+            "unit_tblproduct,"
+            "suppliercompanyid_tblproduct "
+
+            "FROM `quotation_tblproduct` "
+
+            "LEFT JOIN quotation_tblcurrency "
+            "ON quotation_tblproduct.currencyisocode_tblcurrency_ctblproduct=quotation_tblcurrency.currencyisocode_tblcurrency "
+
+            "WHERE Productid_tblProduct= %s", [54])
+        results = cursor0.fetchall()
+        for instancesingle in results:
+            purchase_priceclone = instancesingle[1]
+            customerdescriptionclone = instancesingle[2]
+            currencyisocodeclone = instancesingle[4]
+
+            marginfromproducttable = instancesingle[3]
+            listpricecomputed = round((100 * purchase_priceclone) / (100 - marginfromproducttable), 2)
+            currencyrateclone = instancesingle[5]
+            unitclone = instancesingle[6]
+            suppliercompanyid = instancesingle[7]
 
 
-    creatorid = request.user.id
-    BASE_DIR = settings.BASE_DIR
+            unitsalespriceACU = listpricecomputed * currencyrateclone
 
-    return render(request, 'quotation/customerinvoicedispatchredirecturl.html', {'pk': 11})
+
+        cursor4 = connection.cursor()
+        cursor4.execute(
+            "INSERT INTO quotation_tbldoc_details "
+            "( Docid_tblDoc_details_id, "
+            "`Qty_tblDoc_details`, "
+            "`customerdescription_tblProduct_ctblDoc_details`, "
+            "firstnum_tblDoc_details, "
+            "`fourthnum_tblDoc_details`, "
+            "`secondnum_tblDoc_details`, "
+            "`thirdnum_tblDoc_details`, "
+            "`Note_tblDoc_details`, "
+            "purchase_price_tblproduct_ctblDoc_details, "
+            "listprice_tblDoc_details, "
+            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+            "Productid_tblDoc_details_id, "
+            "currencyrate_tblcurrency_ctblDoc_details, "
+            "unitsalespriceACU_tblDoc_details, "
+            "unit_tbldocdetails, "
+            "suppliercompanyid_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+
+            [quotationdocid,
+             hours,
+             customerdescriptionclone,
+             firstnum,
+             fourthnum,
+             secondnum,
+             thirdnum,
+             note,
+             purchase_priceclone,
+             listpricecomputed,
+             currencyisocodeclone,
+             productid,
+             currencyrate,
+             unitsalespriceACU,
+             unitclone,
+             suppliercompanyid])
+
+    return render(request, 'quotation/quotationissuetrackingsystemredirecturl.html', {'pk': quotationdocid})
