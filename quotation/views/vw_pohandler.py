@@ -476,6 +476,8 @@ def pohandlerreception(request): #from pohandlerform
         numberofitemstodeno = x3[7]
         note = x3[8]
 
+        #neededqtylist = []
+
         cursor2.execute("SELECT "
                         "DD2cor.cordocid as cordocid, "
                         "DD1po.Docid_tblDoc_details_id as podocid, "
@@ -510,12 +512,11 @@ def pohandlerreception(request): #from pohandlerform
                                     "           LEFT JOIN   (SELECT "
                                     "                       Docid_tblDoc_details_id as docid, "
                                     "                       sum(Qty_tblDoc_details) as corqty, "
-                                    "                       Productid_tblDoc_details_id as productid, "
-                                    "                       Note_tblDoc_details as note "
+                                    "                       Productid_tblDoc_details_id as productid "
             
                                     "                       FROM quotation_tbldoc_details"
             
-                                    "                       GROUP BY docid, productid, note "
+                                    "                       GROUP BY docid, productid "
                                     "                       ) as DD22 "
                                     "           ON Dcor.Docid_tblDoc = DD22.docid "
 
@@ -581,7 +582,6 @@ def pohandlerreception(request): #from pohandlerform
                         "WHERE DD1po.Doc_detailsid_tblDoc_details=%s ", [podocdetailsid])
 
         fromstockresult = cursor2.fetchall()
-
 
         # sumarrivedqty determination begin
         toinoperatordocdetails = ""
@@ -655,12 +655,11 @@ def pohandlerreception(request): #from pohandlerform
                         "           LEFT JOIN   (SELECT "
                         "                       Docid_tblDoc_details_id as docid, "
                         "                       sum(Qty_tblDoc_details) as corqty, "
-                        "                       Productid_tblDoc_details_id as productid, "
-                        "                       Note_tblDoc_details as note"
+                        "                       Productid_tblDoc_details_id as productid "
 
                         "                       FROM quotation_tbldoc_details"
 
-                        "                       GROUP BY docid, productid, note "
+                        "                       GROUP BY docid, productid "
                         "                       ) as DD22 "
                         "           ON Dcor.Docid_tblDoc = DD22.docid "
 
@@ -771,7 +770,7 @@ def pohandlerreception(request): #from pohandlerform
     
                                 "FROM neededqtytemptable "
                                 "WHERE cororstockdocidto=%s and cordocidroot=%s and denorole=%s and productid=%s and note=%s "
-                                "GROUP BY cororstockdocidto, cordocidroot, denorole, productid ",
+                                "GROUP BY cororstockdocidto, cordocidroot, denorole, productid, note ",
                                 [corstockdocidparameter, cordocidrootparameter, denoroleparameter, productid, note])
                 results = cursor2.fetchall()
             if corstockdocidparameter == None:
@@ -780,7 +779,7 @@ def pohandlerreception(request): #from pohandlerform
 
                                 "FROM neededqtytemptable "
                                 "WHERE cordocidroot=%s and denorole=%s and productid=%s and note=%s"
-                                "GROUP BY cordocidroot, denorole, productid ",
+                                "GROUP BY cordocidroot, denorole, productid, note ",
                                 [cordocidrootparameter, denoroleparameter, productid, note])
                 results = cursor2.fetchall()
 
@@ -828,6 +827,7 @@ def pohandlerreception(request): #from pohandlerform
             return productkind
 
         def sumtodirect (directqty, neededqtylist, cordocidfromstocklist):
+
             if directqty > 0:
                 if discreteorindiscretorservicetheproduct(podocdetailsid) == 'indiscrete':
                     appendvarneededqtylist = (podocdetailsid, cordocid, podocidfromstocklist, directqty, subjectfordeno('directdeno', cordocidfromstocklist), 'todirect', cordocidfromstocklist)
@@ -971,12 +971,7 @@ def pohandlerreception(request): #from pohandlerform
 
             maxneededitemtodirectqty = (coritemqtyinfromstocklist - fromstockitemqtyinfromstocklist -
                                         underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist))
-#            maxneededitemtodirectqty = (coritemqtyinfromstocklist - (neededitemqtyaggregated + underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)) -
-#                                       underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist))
             maxneededitemqty = fromstockitemqtyinfromstocklist - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
-#            maxneededitemqty = processable - fromstockitemqtyinbacktostocklist - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
-#            if fromstockitemqtyinfromstocklist == 1000:
-#                maxneededitemqty = 22
 
             maxneededitemtostockqty = processable - maxneededitemtodirectqty - maxneededitemqty - underprogressqtyinneededqtytemptable('tosurplus', 1382, cordocidfromstocklist)
 
@@ -997,13 +992,13 @@ def pohandlerreception(request): #from pohandlerform
             else:
                 neededtostockqty = maxneededitemtostockqty
 
-            neededqtylist = []
+            neededqtylist = []  #neededqtylist: items for one porow
+                                #neededqtytemptable: items for all porow
             sumtostock(neededtostockqty, neededqtylist, 1382, cordocidfromstocklist)  # surplusstockdocid)
             sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
             sumtodirect(neededitemtodirectqty, neededqtylist, cordocidfromstocklist)
 
-            #import pdb;
-            #pdb.set_trace()
+
 
             c = 11
 
