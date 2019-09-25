@@ -452,12 +452,6 @@ right: 21mm;
       margin: 15;
 
 }
-@media print
-{
-body * { visibility: hidden;}
-.page * { visibility: visible;}
-
-}
 .notediv {
       position: relative;
       top: 0mm;
@@ -470,3 +464,11 @@ body * { visibility: hidden;}
   color: red;
 
 }
+/*
+@media print
+{
+body * { visibility: hidden;}
+.page * { visibility: visible;}
+
+}
+*/
