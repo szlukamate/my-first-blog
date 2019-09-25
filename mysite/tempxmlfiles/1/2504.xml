@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<time_entries limit="25" offset="0" total_count="2" type="array">
+	<time_entry>
+		<id>19</id>
+		<project id="4" name="2019 Farewell Party"/>
+		<issue id="7"/>
+		<user id="7" name="Gofri Maker"/>
+		<activity id="9" name="Development"/>
+		<hours>1.25</hours>
+		<comments>Chemotox for repelling bugs</comments>
+		<spent_on>2019-09-25</spent_on>
+		<created_on>2019-09-25T19:26:33Z</created_on>
+		<updated_on>2019-09-25T19:30:52Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value>0</value>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>18</id>
+		<project id="4" name="2019 Farewell Party"/>
+		<issue id="7"/>
+		<user id="7" name="Gofri Maker"/>
+		<activity id="9" name="Development"/>
+		<hours>0.5</hours>
+		<comments>Washing gofri - debugging</comments>
+		<spent_on>2019-09-25</spent_on>
+		<created_on>2019-09-25T13:46:23Z</created_on>
+		<updated_on>2019-09-25T13:46:23Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value>0</value>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+</time_entries>

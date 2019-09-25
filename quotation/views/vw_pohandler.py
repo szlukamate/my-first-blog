@@ -202,8 +202,6 @@ def pohandlerreception(request): #from pohandlerform
     dateofarrivallist = json.loads(dateofarrivallistraw)
 
     creatorid = request.user.id
-    #import pdb;
-    #pdb.set_trace()
 
 #splitting start
     dateofarrivallistsplitted= []
@@ -368,7 +366,7 @@ def pohandlerreception(request): #from pohandlerform
                     "     podocid INT(11) NULL, " 
                     "     cordocid INT(11) NULL, "
                     "     productid INT(11) NULL, "
-                    "     arrivedqty DECIMAL(10,1) NULL,"
+                    "     arrivedqty DECIMAL(10,2) NULL,"
                     "     nop DECIMAL(10,1) NULL,"
                     "     dateofarrivaldate varchar(55) NULL, "
                     "     numberofitemstodeno INT(11) NULL, "
@@ -428,9 +426,10 @@ def pohandlerreception(request): #from pohandlerform
     tables = cursor2.fetchall()
 #dateofarrivallistsplitted to table end
 
+    #import pdb;
+    #pdb.set_trace()
 
-
-#deliverynote making start
+    #deliverynote making start
     cursor2.execute("SELECT "
                         "auxid, "
                         "podocdetailsid, "
@@ -454,7 +453,7 @@ def pohandlerreception(request): #from pohandlerform
                     "     podocdetailsid INT(11) NOT NULL, "
                     "     cororstockdocidto INT(11) NOT NULL, "
                     "     podocidfrom INT(11) NOT NULL, "
-                    "     itemqty DECIMAL(10,1) NULL, "
+                    "     itemqty DECIMAL(10,2) NULL, "
                     "     numberofitemstodeno INT(11) NULL, "
                     "     subjecttext VARCHAR(255) NULL, "
                     "     denorole VARCHAR(255) NULL, "
