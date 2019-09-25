@@ -459,11 +459,13 @@ right: 21mm;
    font-family: "Arial", Times, serif;
    font-size: 12px;
    overflow-wrap: break-word;
-    margin-left: -4px;
-    white-space: pre-line;
+
+//    margin-left: -4px;
+//    white-space: pre-line;
   color: red;
 
 }
+
 /*
 @media print
 {
