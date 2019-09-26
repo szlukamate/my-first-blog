@@ -55,6 +55,20 @@ body {
     white-space: pre-line;
 
 }
+.notediv {
+      position: relative;
+      top: 0mm;
+    width: 90mm;
+   font-family: "Arial", Times, serif;
+   font-size: 12px;
+   overflow-wrap: break-word;
+  color: red;
+
+//    margin-left: -4px;
+//    white-space: pre-line;
+
+}
+
 .qtydiv {
       position: absolute;
       top: 0mm;
@@ -450,19 +464,6 @@ right: 21mm;
 
 .backpagetextcontainer p {
       margin: 15;
-
-}
-.notediv {
-      position: relative;
-      top: 0mm;
-    width: 90mm;
-   font-family: "Arial", Times, serif;
-   font-size: 12px;
-   overflow-wrap: break-word;
-  color: red;
-
-//    margin-left: -4px;
-//    white-space: pre-line;
 
 }
 
