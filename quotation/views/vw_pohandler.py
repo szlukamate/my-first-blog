@@ -180,7 +180,7 @@ def pohandlerrowsourceforarrivaldates(request):
 
             "                       WHERE obsolete_tbldoc = 0"
             "                    ) as D"
-            "               ON D.docid=DD2.Docid_tblDoc_details_id "
+            "               ON DD2.Docid_tblDoc_details_id = D.docid "
             "            ) as DDdeno "
             "ON DD.Doc_detailsid_tblDoc_details=DDdeno.denotopodetailslink_tbldocdetails "
 
@@ -202,6 +202,40 @@ def pohandlerreception(request): #from pohandlerform
     dateofarrivallist = json.loads(dateofarrivallistraw)
 
     creatorid = request.user.id
+
+#set Central Stock variable begin
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT  Docid_tblDoc, "
+                    "        CONT.companyid "
+                    
+                    "FROM quotation_tbldoc "
+
+                    "LEFT JOIN (SELECT "
+                    "           Contactid_tblContacts as contactid, "
+                    "           COMP.companyid as companyid "
+                    
+                    "           FROM quotation_tblcontacts "
+                                
+                    "           JOIN (SELECT "
+                    "                  Companyid_tblCompanies as companyid"
+                    ""
+                    "                  FROM quotation_tblcompanies "
+                    "                  ) as COMP"      
+                    ""
+                    "           ON quotation_tblcontacts.Companyid_tblContacts_id = COMP.companyid"
+                    "           ) as CONT "
+                    
+                    "ON quotation_tbldoc.Contactid_tblDoc_id = CONT.contactid "
+
+                    "WHERE stocktakingdeno_tbldoc = 1 and companyid = 9 and obsolete_tbldoc = 0 " # companyid 9 is Central Stock to here go the surples items
+                    "ORDER BY Docid_tblDoc desc "
+                    "LIMIT 1 ")
+    stockdetails = cursor3.fetchall()
+
+    for x in stockdetails:
+        stockdocidforsurplus = x[0]
+
+#set Central Stock variable end
 
 #splitting start
     dateofarrivallistsplitted= []
@@ -965,14 +999,14 @@ def pohandlerreception(request): #from pohandlerform
 
             processedqty = (underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist) +
             underprogressqtyinneededqtytemptable('toback', None, cordocidfromstocklist) +
-            underprogressqtyinneededqtytemptable('tosurplus', 1382, cordocidfromstocklist))
+            underprogressqtyinneededqtytemptable('tosurplus', stockdocidforsurplus, cordocidfromstocklist))
             processable = sumarrivedqty - processedqty
 
             maxneededitemtodirectqty = (coritemqtyinfromstocklist - fromstockitemqtyinfromstocklist -
                                         underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist))
             maxneededitemqty = fromstockitemqtyinfromstocklist - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
 
-            maxneededitemtostockqty = processable - maxneededitemtodirectqty - maxneededitemqty - underprogressqtyinneededqtytemptable('tosurplus', 1382, cordocidfromstocklist)
+            maxneededitemtostockqty = processable - maxneededitemtodirectqty - maxneededitemqty - underprogressqtyinneededqtytemptable('tosurplus', stockdocidforsurplus, cordocidfromstocklist)
 
             if (sumarrivedqty - processedqty) > maxneededitemtodirectqty:
                 neededitemtodirectqty = maxneededitemtodirectqty
@@ -993,7 +1027,7 @@ def pohandlerreception(request): #from pohandlerform
 
             neededqtylist = []  #neededqtylist: items for one porow
                                 #neededqtytemptable: items for all porow
-            sumtostock(neededtostockqty, neededqtylist, 1382, cordocidfromstocklist)  # surplusstockdocid)
+            sumtostock(neededtostockqty, neededqtylist, stockdocidforsurplus, cordocidfromstocklist)  # surplusstockdocid)
             sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
             sumtodirect(neededitemtodirectqty, neededqtylist, cordocidfromstocklist)
 
