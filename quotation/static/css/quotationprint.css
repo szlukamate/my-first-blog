@@ -467,11 +467,10 @@ right: 21mm;
 
 }
 
-/*
+
 @media print
 {
 body * { visibility: hidden;}
 .page * { visibility: visible;}
 
 }
-*/
