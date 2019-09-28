@@ -1006,7 +1006,7 @@ def pohandlerreception(request): #from pohandlerform
                                         underprogressqtyinneededqtytemptable('todirect', cordocidfromstocklist, cordocidfromstocklist))
             maxneededitemqty = fromstockitemqtyinfromstocklist - underprogressqtyinneededqtytemptable('toback', fromstockstockdocidinfromstocklist, cordocidfromstocklist)
 
-            maxneededitemtostockqty = processable - maxneededitemtodirectqty - maxneededitemqty - underprogressqtyinneededqtytemptable('tosurplus', stockdocidforsurplus, cordocidfromstocklist)
+            maxneededitemtostockqty = processable - maxneededitemtodirectqty - maxneededitemqty
 
             if (sumarrivedqty - processedqty) > maxneededitemtodirectqty:
                 neededitemtodirectqty = maxneededitemtodirectqty
@@ -1027,11 +1027,12 @@ def pohandlerreception(request): #from pohandlerform
 
             neededqtylist = []  #neededqtylist: items for one porow
                                 #neededqtytemptable: items for all porow
-            sumtostock(neededtostockqty, neededqtylist, stockdocidforsurplus, cordocidfromstocklist)  # surplusstockdocid)
-            sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
             sumtodirect(neededitemtodirectqty, neededqtylist, cordocidfromstocklist)
+            sumtoback(neededitemqty, neededqtylist, fromstockstockdocidinfromstocklist,cordocidfromstocklist)
+            sumtostock(neededtostockqty, neededqtylist, stockdocidforsurplus, cordocidfromstocklist)  # surplusstockdocid)
 
-
+            #import pdb;
+            #pdb.set_trace()
 
             c = 11
 
@@ -1082,8 +1083,8 @@ def pohandlerreception(request): #from pohandlerform
             neededqtytemptable = cursor2.fetchall()
 # neededqtylist to temptable end
 
-    #import pdb;
-    #pdb.set_trace()
+            import pdb;
+            pdb.set_trace()
     d = 1
 
     time.sleep(0.200) # to avoid something mismatch in timing in mysql/django(???)

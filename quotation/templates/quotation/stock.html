@@ -19,15 +19,10 @@
 													<td>Supplier</td>
 													<td>Customerdescription</td>
 													<td>Supplierdescription</td>
-													<td>On StockIngoing</td>
-													<td>On StockOutgoing</td>
-													<td>Listprice</td>
-													<td>On Stock</td>
-													<td>Contactid</td>
-													<td>Contactid2</td>
-													<td>Contactid2</td>
-													<td>Contactid2</td>
-													<td>Contactid2</td>
+													<td>Label</td>
+													<td>In</td>
+													<td>Out</td>
+													<td>Stockid</td>
 
 												</tr>
 											</thead>
@@ -38,7 +33,7 @@
 
 														<tr>
 															<td>{{ docdetail.1}}</td>
-															<td>{{ docdetail.10}}</td>
+															<td>{{ docdetail.11}}</td>
 															<td>{{ docdetail.0}}</td>
 															<td>{{ docdetail.2}}</td>
 
@@ -46,13 +41,6 @@
 															<td>{{ docdetail.4}}</td>
 															<td>{{ docdetail.5}}</td>
 															<td>{{ docdetail.6}}</td>
-															<td>{{ docdetail.7}}</td>
-															<td>{{ docdetail.8}}</td>
-															<td>{{ docdetail.9}}</td>
-
-															<td>{{ docdetail.9}} {{ docdetail.11}}</td>
-
-															<td name="onstock" productid="{{ docdetail.1}}" loopid="{{ forloop.counter }}" >{{ docdetail.5}} {{ docdetail.6}}</td>
 
 															<td>
 																<button class="labelbutton" type="submit" productid="{{ docdetail.1}}">
