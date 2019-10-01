@@ -108,5 +108,7 @@ urlpatterns = [
     url('customerinvoiceshowpdfbutton', views.customerinvoiceshowpdfbutton, name='customerinvoiceshowpdfbutton'),
     url('quotationissuetrackingsystem$', views.quotationissuetrackingsystem, name='quotationissuetrackingsystem'),
     url('quotationissuetrackingsystemitemstoquotation$', views.quotationissuetrackingsystemitemstoquotation, name='quotationissuetrackingsystemitemstoquotation'),
+    url('quotationissuetrackingsystempostitems$', views.quotationissuetrackingsystempostitems, name='quotationissuetrackingsystempostitems'),
+    url('quotationissuetrackingsystemsearchcontent$', views.quotationissuetrackingsystemsearchcontent, name='quotationissuetrackingsystemsearchcontent'),
 
 ]

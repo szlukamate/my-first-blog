@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<time_entries limit="25" offset="0" total_count="3" type="array">
+	<time_entry>
+		<id>27</id>
+		<project id="4" name="2019 Farewell Party"/>
+		<issue id="11"/>
+		<user id="1" name="Redmine Admin"/>
+		<activity id="8" name="Design"/>
+		<hours>22.0</hours>
+		<comments>x</comments>
+		<spent_on>2019-10-01</spent_on>
+		<created_on>2019-10-01T12:11:41Z</created_on>
+		<updated_on>2019-10-01T12:23:23Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value>0</value>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>26</id>
+		<project id="4" name="2019 Farewell Party"/>
+		<issue id="11"/>
+		<user id="1" name="Redmine Admin"/>
+		<activity id="8" name="Design"/>
+		<hours>3.0</hours>
+		<comments>Washing gofri - debugging</comments>
+		<spent_on>2019-09-30</spent_on>
+		<created_on>2019-09-30T09:46:21Z</created_on>
+		<updated_on>2019-09-30T14:12:55Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value>0</value>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>25</id>
+		<project id="4" name="2019 Farewell Party"/>
+		<issue id="11"/>
+		<user id="7" name="ChiefGofri ChiefMaker"/>
+		<activity id="9" name="Development"/>
+		<hours>0.8</hours>
+		<comments>Spraying Chemotox</comments>
+		<spent_on>2019-09-29</spent_on>
+		<created_on>2019-09-29T14:34:48Z</created_on>
+		<updated_on>2019-09-29T14:34:48Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="1" name="test1">
+				<value>0</value>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+</time_entries>

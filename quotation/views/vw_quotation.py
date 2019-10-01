@@ -1154,7 +1154,7 @@ def quotationissuetrackingsystem(request):
     file.close()
     # making prettyxml begin
 
-    return render(request, 'quotation/quotationissuetrackingsystem.html',{'docid': quotationid,
+    return render(request, 'quotation/timeentries.html',{'docid': quotationid,
                                                                           'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
                                                                           'xmlitems': xmlitems})
 @login_required
@@ -1267,3 +1267,168 @@ def quotationissuetrackingsystemitemstoquotation(request):
              suppliercompanyid])
 
     return render(request, 'quotation/quotationissuetrackingsystemredirecturl.html', {'pk': quotationdocid})
+@login_required
+def quotationissuetrackingsystempostitems(request):
+
+#    creatorid = request.user.id
+#    BASE_DIR = settings.BASE_DIR
+
+
+#    quotationdocid = request.POST['quotationdocid']
+    subprocess.call('curl -v -H "Content-Type: application/json" -H "X-Redmine-API-Key: 6a722899382b3495828b3f2d6c41f93d19adb5f6" -X POST -d \'{"time_entry": {"project_id": "4", "activity_id": "8", "hours": "11"}}\' http://13.58.18.245:3000//time_entries.json', shell=True)
+    results23 = 1
+    json_data = json.dumps(results23)
+
+    return HttpResponse(json_data, content_type="application/json")
+
+
+@login_required
+def quotationissuetrackingsystemsearchcontent(request):
+    timeentryid = request.POST['timeentryid']
+    projectname = request.POST['projectname']
+    fromdate = request.POST['fromdate']
+    todate = request.POST['todate']
+
+    cursor2 = connection.cursor()
+    cursor2.execute("SELECT "
+                    "timeentryid, "
+                    "projectname, "
+                    "issueid, "
+                    "username, "
+                    "activityname, "
+                    "hours, "
+                    "comments, "
+                    "spenton "
+
+                    "FROM issuetrackingsystemtemptable ")
+    xmlitems = cursor2.fetchall()
+    import pdb;
+    pdb.set_trace()
+
+    if docnumber != '':
+        docnumberformainresults = "and D1.docnumber_tbldoc='" + docnumber + "' "
+    else:
+        docnumberformainresults = ""
+        docnumberforrowsources = ""
+
+    if dockindname != '':
+        dockindnameformainresults = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
+        dockindnameforrowsources = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
+    else:
+        dockindnameformainresults = ""
+        dockindnameforrowsources = ""
+
+    # datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
+    #    datephrase = "and DATE(quotation_tbldoc.creationtime_tbldoc) >= '" + fromdate + "' and DATE('D.creationtime_tbldoc') <= '" + todate + "' "
+    #    datephrase = "and D.creationtime_tbldoc >= '" + fromdate + "' and D.creationtime_tbldoc <= '" + todate + "' "
+    # datephrase = "and DATE(creationtime_tbldoc) = '2019-04-19'"
+    datephraseformainresults = ''
+    datephraseforrowsources = ''
+    if company != '':
+        companyformainresults = "and companyname_tblcompanies_ctbldoc='" + company + "'"
+        companyforrowsources = "and companyname_tblcompanies_ctbldoc='" + company + "'"
+    else:
+        companyformainresults = ""
+        companyforrowsources = ""
+
+    # import pdb;
+    # pdb.set_trace()
+    searchphraseformainresults = docnumberformainresults + dockindnameformainresults + datephraseformainresults + companyformainresults + " "
+    searchphraseforrowsources = dockindnameforrowsources + companyforrowsources + " "
+
+    cursor1 = connection.cursor()
+    # import pdb;
+    # pdb.set_trace()
+
+    cursor1.execute("SELECT D1.docid_tbldoc, "
+                    "D1.pcd_tblcompanies_ctbldoc, "
+                    "D1.town_tblcompanies_ctbldoc, "
+                    "D1.Doc_kindid_tblDoc_id, "
+                    "D1.companyname_tblcompanies_ctbldoc, "
+                    "D1.firstname_tblcontacts_ctbldoc, "
+                    "D1.lastname_tblcontacts_ctbldoc, "
+                    "D1.creationtime_tbldoc, "
+                    "Doc_kind_name_tblDoc_kind, "
+                    "pretag_tbldockind, "
+                    "D1.docnumber_tbldoc, "  # 10
+                    "Doc_kindid_tblDoc_kind, "
+                    "D1.subject_tbldoc, "
+                    "D1.wherefromdocid_tbldoc, "
+                    "D1.wheretodocid_tbldoc, "
+                    "Dfrom.fromcompanyname, "
+                    "Dto.tocompanyname, "
+                    "D1.obsolete_tbldoc, "
+                    "Dfrom.frompretag, "
+                    "Dfrom.fromdocnumber, "
+                    "Dto.topretag, "  # 20
+                    "Dto.todocnumber, "
+                    "D1.stocktakingdeno_tbldoc, "
+                    "D1.denoenabledflag_tbldoc, "
+                    "D1.machinemadedocflag_tbldoc "
+
+                    "FROM quotation_tbldoc as D1 "
+
+                    "JOIN quotation_tbldoc_kind "
+                    "ON D1.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "LEFT JOIN (SELECT companyname_tblcompanies_ctbldoc as fromcompanyname, "
+                    "                   docid_tbldoc as fromdocid, "
+                    "                   pretag_tbldockind as frompretag, "
+                    "                   docnumber_tbldoc as fromdocnumber "
+
+                    "                   FROM quotation_tbldoc "
+
+                    "                   JOIN quotation_tbldoc_kind "
+                    "                   ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "           ) as Dfrom "
+                    "ON D1.wherefromdocid_tbldoc = Dfrom.fromdocid "
+
+                    "LEFT JOIN (SELECT companyname_tblcompanies_ctbldoc as tocompanyname, "
+                    "                   docid_tbldoc as todocid, "
+                    "                   pretag_tbldockind as topretag, "
+                    "                   docnumber_tbldoc as todocnumber "
+
+                    "                   FROM quotation_tbldoc "
+
+                    "                   JOIN quotation_tbldoc_kind "
+                    "                   ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "           ) as Dto "
+                    "ON D1.wheretodocid_tbldoc = Dto.todocid "
+
+                    "HAVING D1.obsolete_tbldoc = 0 " + searchphraseformainresults + ""
+                                                                                    "order by D1.docid_tbldoc desc ")
+    docs = cursor1.fetchall()
+    # import pdb;
+    # pdb.set_trace()
+
+    cursor2 = connection.cursor()
+    cursor2.execute("SELECT "
+                    "companyname_tblcompanies_ctbldoc "
+
+                    "FROM quotation_tbldoc "
+
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "WHERE quotation_tbldoc.obsolete_tbldoc = 0 " + searchphraseforrowsources + ""
+                                                                                                "GROUP BY companyname_tblcompanies_ctbldoc ")
+
+    companiesrowsources = cursor2.fetchall()
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Doc_kind_name_tblDoc_kind "
+
+                    "FROM quotation_tbldoc "
+
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "WHERE quotation_tbldoc.obsolete_tbldoc = 0 " + searchphraseforrowsources + ""
+                                                                                                "GROUP BY Doc_kind_name_tblDoc_kind ")
+
+    dockindrowsources = cursor1.fetchall()
+    return render(request, 'quotation/timeentriescontent.html', {'docs': docs,
+                                                               'companiesrowsources': companiesrowsources,
+                                                               'dockindrowsources': dockindrowsources})

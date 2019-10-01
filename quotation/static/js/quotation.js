@@ -347,7 +347,35 @@ $('#title').click(function() {
 
                         success: function(data){
                     $('#quotationtemplate').html(data);
-//                    console.log(data);
+                        //template dates setting begin
+                        setTimeout(
+                          function()
+                          {
+                            var d = new Date();
+
+                            var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
+                            var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                            var fromday = d.getDate();
+
+                            var fromoutput = fromyear + '-' +
+                                (frommonth<10 ? '0' : '') + frommonth + '-' +
+                                (fromday<10 ? '0' : '') + fromday;
+                            $('#fromdate').val(fromoutput);
+
+                            var d = new Date();
+
+                            var toyear = d.getFullYear();
+                            var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                            var today = d.getDate();
+
+                            var tooutput = toyear + '-' +
+                                (tomonth<10 ? '0' : '') + tomonth + '-' +
+                                (today<10 ? '0' : '') + today;
+                            $('#todate').val(tooutput);
+                          }, 500);
+
+                        //template dates setting end
+
 
                         },
                         error: function(){
@@ -429,6 +457,92 @@ $('#title').click(function() {
 
 
     });
+    $('#updateitsbutton').click(function() {
+        var quotationid=$('#quotationdocid').text();
+
+                  // send it out
+                  let xhr = new XMLHttpRequest();
+//                  xhr.open("GET","https://cors-anywhere.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
+//                  xhr.open("POST","https://ancient-sierra-24943.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&project_id=4&activity_id=8"); // https://xxxxxxxx.herokuapp.com the header exchanger proxy server (own)
+                  xhr.open("POST","https://ancient-sierra-24943.herokuapp.com/http://13.58.18.245:3000//projects.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&name=%20na"); // https://xxxxxxxx.herokuapp.com the header exchanger proxy server (own)
+                  xhr.send();
+                  $( "#dialog-message-connecting" ).dialog("option", "buttons", {}); //remove OK button
+                  $( "#dialog-message-connecting" ).dialog( "open" );
+
+                  xhr.onload = function (){
+                                    console.log(xhr.response);
+                  $( "#dialog-message-connecting" ).dialog( "close" );
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'quotationissuetrackingsystempostitems',
+
+                        data: {
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                        },
+
+                        success: function(data){
+//                    $('#quotationtemplate').html(data);
+                                    console.log('success');
+
+                        },
+                        error: function(){
+
+                            alert('failure');
+                        },
+                        datatype: 'html'
+
+                    });
+
+                  };
+
+
+    });
+    $('body').on("click", "#searchbutton", function() {
+
+            $.ajax({
+                type: 'POST',
+                url: 'quotationissuetrackingsystemsearchcontent',
+
+                data: {
+                'timeentryid': $('#timeentryid').val(),
+                'fromdate': $('#fromdate').val(),
+                'todate': $('#todate').val(),
+                'projectname': $('#projectname').val(),
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(data){
+
+                    $('#timeentrysearchtemplate').html(data);
+                    //console.log(data);
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+                setTimeout(
+                  function()
+                  {
+/*
+                    var companyvalueaccumulator=$('select#company').val(); // swap options of select element after html template refresh
+                    var companyswap=$('select#companyswap').html();
+                    $('select#company').html(companyswap);
+                    $('select#company').val(companyvalueaccumulator);
+
+                    var dockindnamevalueaccumulator=$('select#dockindname').val();
+                    var dockindnameswap=$('select#dockindnameswap').html();
+                    $('select#dockindname').html(dockindnameswap);
+                    $('select#dockindname').val(dockindnamevalueaccumulator);
+*/
+                  }, 500);
+
+    });
+
+
 
 
 });
