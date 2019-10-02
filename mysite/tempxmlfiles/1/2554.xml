@@ -1,22 +1,5 @@
 <?xml version="1.0" ?>
-<time_entries limit="25" offset="0" total_count="3" type="array">
-	<time_entry>
-		<id>27</id>
-		<project id="4" name="2019 Farewell Party"/>
-		<issue id="11"/>
-		<user id="1" name="Redmine Admin"/>
-		<activity id="8" name="Design"/>
-		<hours>22.0</hours>
-		<comments>x</comments>
-		<spent_on>2019-10-01</spent_on>
-		<created_on>2019-10-01T12:11:41Z</created_on>
-		<updated_on>2019-10-01T12:23:23Z</updated_on>
-		<custom_fields type="array">
-			<custom_field id="1" name="test1">
-				<value>0</value>
-			</custom_field>
-		</custom_fields>
-	</time_entry>
+<time_entries limit="25" offset="0" total_count="2" type="array">
 	<time_entry>
 		<id>26</id>
 		<project id="4" name="2019 Farewell Party"/>

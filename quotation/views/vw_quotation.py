@@ -4,7 +4,7 @@ from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
 from django.contrib.auth.decorators import login_required
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
-from django.db import connection, transaction
+from django.db import connection, transaction, connections
 from array import *
 import simplejson as json
 from django.http import HttpResponse, HttpResponseNotFound
@@ -1077,9 +1077,16 @@ def quotationissuetrackingsystem(request):
     creatorid = request.user.id
     BASE_DIR = settings.BASE_DIR
 
+
+    #with connection('redmine').cursor() as cursor:
+    cursor21 = connections['redmine'].cursor()
+    cursor21.execute("SELECT table_name, table_schema FROM information_schema.tables WHERE TABLE_TYPE = 'BASE TABLE';")
+    x = cursor21.fetchall()
+    print(x)
+
     cursor2 = connection.cursor()
-    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS issuetrackingsystemtemptable;")
-    cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS issuetrackingsystemtemptable "
+    cursor2.execute("DROP TABLE IF EXISTS quotation_issuetrackingsystemtable" + str(creatorid) + ";")
+    cursor2.execute("CREATE TABLE IF NOT EXISTS quotation_issuetrackingsystemtable" + str(creatorid) + " "
                     "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
                     "     timeentryid INT(11) NOT NULL, "
                     "     projectname VARCHAR(255) NULL, "
@@ -1110,8 +1117,10 @@ def quotationissuetrackingsystem(request):
         comments = xmlitemsfromelementtree[x11][6].text
         spenton = xmlitemsfromelementtree[x11][7].text
 
+        #import pdb;
+        #pdb.set_trace()
 
-        cursor2.execute("INSERT INTO issuetrackingsystemtemptable "
+        cursor2.execute("INSERT INTO quotation_issuetrackingsystemtable" + str(creatorid) + " "
                         "(timeentryid, projectname, issueid, username, activityname, hours, comments, spenton) VALUES ('" + str(timeentryid) + "', "
                                                             "'" + str(projectname) + "', "
                                                             "'" + str(issueid) + "', "
@@ -1120,7 +1129,6 @@ def quotationissuetrackingsystem(request):
                                                             "'" + str(hours) + "', "
                                                             "'" + str(comments) + "', "
                                                             "'" + str(spenton) + "');")
-
 
     cursor2.execute("SELECT "
                     "timeentryid, "
@@ -1132,7 +1140,7 @@ def quotationissuetrackingsystem(request):
                     "comments, "
                     "spenton "
                     
-                    "FROM issuetrackingsystemtemptable ")
+                    "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " ")
     xmlitems = cursor2.fetchall()
 
     #import pdb;
@@ -1284,13 +1292,50 @@ def quotationissuetrackingsystempostitems(request):
 
 @login_required
 def quotationissuetrackingsystemsearchcontent(request):
+    creatorid = request.user.id
+    BASE_DIR = settings.BASE_DIR
+
     timeentryid = request.POST['timeentryid']
     projectname = request.POST['projectname']
     fromdate = request.POST['fromdate']
     todate = request.POST['todate']
 
+
+    if timeentryid != '':
+        timeentryidformainresults = "and TE.timeentryid='" + timeentryid + "' "
+    else:
+        timeentryidformainresults = ""
+#  ???        docnumberforrowsources = ""
+
+    if projectname != '':
+        projectnameformainresults = "and Doc_kind_name_tblDoc_kind='" + projectname + "' "
+#        projectnameforrowsources = "and Doc_kind_name_tblDoc_kind='" + projectname + "' "
+    else:
+        projectnameformainresults = ""
+#        projectnameforrowsources = ""
+
+    # datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
+    #    datephrase = "and DATE(quotation_tbldoc.creationtime_tbldoc) >= '" + fromdate + "' and DATE('D.creationtime_tbldoc') <= '" + todate + "' "
+    #    datephrase = "and D.creationtime_tbldoc >= '" + fromdate + "' and D.creationtime_tbldoc <= '" + todate + "' "
+    # datephrase = "and DATE(creationtime_tbldoc) = '2019-04-19'"
+    datephraseformainresults = ''
+    datephraseforrowsources = ''
+#    if company != '':
+#        companyformainresults = "and companyname_tblcompanies_ctbldoc='" + company + "'"
+#        companyforrowsources = "and companyname_tblcompanies_ctbldoc='" + company + "'"
+#    else:
+    companyformainresults = ""
+#        companyforrowsources = ""
+
+    searchphraseformainresults = timeentryidformainresults + projectnameformainresults + datephraseformainresults + companyformainresults + " "
+#    searchphraseforrowsources = dockindnameforrowsources + companyforrowsources + " "
+    #import pdb;
+    #pdb.set_trace()
+
     cursor2 = connection.cursor()
+
     cursor2.execute("SELECT "
+                    "auxid, "
                     "timeentryid, "
                     "projectname, "
                     "issueid, "
@@ -1299,110 +1344,15 @@ def quotationissuetrackingsystemsearchcontent(request):
                     "hours, "
                     "comments, "
                     "spenton "
-
-                    "FROM issuetrackingsystemtemptable ")
-    xmlitems = cursor2.fetchall()
-    import pdb;
-    pdb.set_trace()
-
-    if docnumber != '':
-        docnumberformainresults = "and D1.docnumber_tbldoc='" + docnumber + "' "
-    else:
-        docnumberformainresults = ""
-        docnumberforrowsources = ""
-
-    if dockindname != '':
-        dockindnameformainresults = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
-        dockindnameforrowsources = "and Doc_kind_name_tblDoc_kind='" + dockindname + "' "
-    else:
-        dockindnameformainresults = ""
-        dockindnameforrowsources = ""
-
-    # datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
-    #    datephrase = "and DATE(quotation_tbldoc.creationtime_tbldoc) >= '" + fromdate + "' and DATE('D.creationtime_tbldoc') <= '" + todate + "' "
-    #    datephrase = "and D.creationtime_tbldoc >= '" + fromdate + "' and D.creationtime_tbldoc <= '" + todate + "' "
-    # datephrase = "and DATE(creationtime_tbldoc) = '2019-04-19'"
-    datephraseformainresults = ''
-    datephraseforrowsources = ''
-    if company != '':
-        companyformainresults = "and companyname_tblcompanies_ctbldoc='" + company + "'"
-        companyforrowsources = "and companyname_tblcompanies_ctbldoc='" + company + "'"
-    else:
-        companyformainresults = ""
-        companyforrowsources = ""
-
-    # import pdb;
-    # pdb.set_trace()
-    searchphraseformainresults = docnumberformainresults + dockindnameformainresults + datephraseformainresults + companyformainresults + " "
-    searchphraseforrowsources = dockindnameforrowsources + companyforrowsources + " "
-
-    cursor1 = connection.cursor()
-    # import pdb;
-    # pdb.set_trace()
-
-    cursor1.execute("SELECT D1.docid_tbldoc, "
-                    "D1.pcd_tblcompanies_ctbldoc, "
-                    "D1.town_tblcompanies_ctbldoc, "
-                    "D1.Doc_kindid_tblDoc_id, "
-                    "D1.companyname_tblcompanies_ctbldoc, "
-                    "D1.firstname_tblcontacts_ctbldoc, "
-                    "D1.lastname_tblcontacts_ctbldoc, "
-                    "D1.creationtime_tbldoc, "
-                    "Doc_kind_name_tblDoc_kind, "
-                    "pretag_tbldockind, "
-                    "D1.docnumber_tbldoc, "  # 10
-                    "Doc_kindid_tblDoc_kind, "
-                    "D1.subject_tbldoc, "
-                    "D1.wherefromdocid_tbldoc, "
-                    "D1.wheretodocid_tbldoc, "
-                    "Dfrom.fromcompanyname, "
-                    "Dto.tocompanyname, "
-                    "D1.obsolete_tbldoc, "
-                    "Dfrom.frompretag, "
-                    "Dfrom.fromdocnumber, "
-                    "Dto.topretag, "  # 20
-                    "Dto.todocnumber, "
-                    "D1.stocktakingdeno_tbldoc, "
-                    "D1.denoenabledflag_tbldoc, "
-                    "D1.machinemadedocflag_tbldoc "
-
-                    "FROM quotation_tbldoc as D1 "
-
-                    "JOIN quotation_tbldoc_kind "
-                    "ON D1.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
-
-                    "LEFT JOIN (SELECT companyname_tblcompanies_ctbldoc as fromcompanyname, "
-                    "                   docid_tbldoc as fromdocid, "
-                    "                   pretag_tbldockind as frompretag, "
-                    "                   docnumber_tbldoc as fromdocnumber "
-
-                    "                   FROM quotation_tbldoc "
-
-                    "                   JOIN quotation_tbldoc_kind "
-                    "                   ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
-
-                    "           ) as Dfrom "
-                    "ON D1.wherefromdocid_tbldoc = Dfrom.fromdocid "
-
-                    "LEFT JOIN (SELECT companyname_tblcompanies_ctbldoc as tocompanyname, "
-                    "                   docid_tbldoc as todocid, "
-                    "                   pretag_tbldockind as topretag, "
-                    "                   docnumber_tbldoc as todocnumber "
-
-                    "                   FROM quotation_tbldoc "
-
-                    "                   JOIN quotation_tbldoc_kind "
-                    "                   ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
-
-                    "           ) as Dto "
-                    "ON D1.wheretodocid_tbldoc = Dto.todocid "
-
-                    "HAVING D1.obsolete_tbldoc = 0 " + searchphraseformainresults + ""
-                                                                                    "order by D1.docid_tbldoc desc ")
-    docs = cursor1.fetchall()
-    # import pdb;
-    # pdb.set_trace()
-
+    
+                    "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " as TE "
+    
+                    "WHERE auxid is not null " + searchphraseformainresults + "")
+#                    "order by D1.docid_tbldoc desc ")
+    docs = cursor2.fetchall()
+    #import pdb;
+    #pdb.set_trace()
+    '''
     cursor2 = connection.cursor()
     cursor2.execute("SELECT "
                     "companyname_tblcompanies_ctbldoc "
@@ -1429,6 +1379,7 @@ def quotationissuetrackingsystemsearchcontent(request):
                                                                                                 "GROUP BY Doc_kind_name_tblDoc_kind ")
 
     dockindrowsources = cursor1.fetchall()
-    return render(request, 'quotation/timeentriescontent.html', {'docs': docs,
-                                                               'companiesrowsources': companiesrowsources,
-                                                               'dockindrowsources': dockindrowsources})
+    '''
+    return render(request, 'quotation/timeentriescontent.html', {'docs': docs})
+#                                                               'companiesrowsources': companiesrowsources,
+#                                                               'dockindrowsources': dockindrowsources})

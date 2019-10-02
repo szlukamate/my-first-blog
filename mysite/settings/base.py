@@ -87,6 +87,14 @@ DATABASES = {
         'USER': 'szlukamatelocal',
         'PASSWORD': '220hftreD=',
         'HOST': 'localhost',
+    },
+    'redmine': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'redmine',
+        'USER': 'root',
+        'PASSWORD': 'hsihfadrA4+',
+        'HOST': 'http://13.58.18.245',
+        'PORT': '3306',
     }
 }
 
