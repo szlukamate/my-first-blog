@@ -1077,12 +1077,8 @@ def quotationissuetrackingsystem(request):
     creatorid = request.user.id
     BASE_DIR = settings.BASE_DIR
 
-
-    #with connection('redmine').cursor() as cursor:
-    cursor21 = connections['redmine'].cursor()
-    cursor21.execute("SELECT table_name, table_schema FROM information_schema.tables WHERE TABLE_TYPE = 'BASE TABLE';")
-    x = cursor21.fetchall()
-    print(x)
+    #import pdb;
+    #pdb.set_trace()
 
     cursor2 = connection.cursor()
     cursor2.execute("DROP TABLE IF EXISTS quotation_issuetrackingsystemtable" + str(creatorid) + ";")
@@ -1095,7 +1091,11 @@ def quotationissuetrackingsystem(request):
                     "     activityname VARCHAR(255) NULL, "
                     "     hours VARCHAR(10) NULL, "
                     "     comments VARCHAR(255) NULL, "
-                    "     spenton VARCHAR(20) NULL) "
+                    "     spenton VARCHAR(20) NULL, "
+                    "     projectid INT(11) NULL, "
+                    "     userid INT(11) NULL, "
+                    "     activityid INT(11) NULL, "
+                    "     docdetailsidinquotation INT(11) NULL) "
                     "      ENGINE=INNODB "
                     "    ; ")
 
@@ -1116,18 +1116,24 @@ def quotationissuetrackingsystem(request):
         hours = xmlitemsfromelementtree[x11][5].text
         comments = xmlitemsfromelementtree[x11][6].text
         spenton = xmlitemsfromelementtree[x11][7].text
+        projectid = xmlitemsfromelementtree[x11][2].attrib['id']
+        userid = xmlitemsfromelementtree[x11][3].attrib['id']
+        activityid = xmlitemsfromelementtree[x11][4].attrib['id']
 
         #import pdb;
         #pdb.set_trace()
 
         cursor2.execute("INSERT INTO quotation_issuetrackingsystemtable" + str(creatorid) + " "
-                        "(timeentryid, projectname, issueid, username, activityname, hours, comments, spenton) VALUES ('" + str(timeentryid) + "', "
+                        "(timeentryid, projectname, issueid, username, activityname, hours, comments, projectid, userid, activityid, spenton) VALUES ('" + str(timeentryid) + "', "
                                                             "'" + str(projectname) + "', "
                                                             "'" + str(issueid) + "', "
                                                             "'" + str(username) + "', "
                                                             "'" + str(activityname) + "', "
                                                             "'" + str(hours) + "', "
                                                             "'" + str(comments) + "', "
+                                                            "'" + str(projectid) + "', "
+                                                            "'" + str(userid) + "', "
+                                                            "'" + str(activityid) + "', "
                                                             "'" + str(spenton) + "');")
 
     cursor2.execute("SELECT "
@@ -1138,7 +1144,10 @@ def quotationissuetrackingsystem(request):
                     "activityname, "
                     "hours, "
                     "comments, "
-                    "spenton "
+                    "spenton, "
+                    "projectid, "
+                    "userid, "
+                    "activityid "
                     
                     "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " ")
     xmlitems = cursor2.fetchall()
@@ -1170,7 +1179,6 @@ def quotationissuetrackingsystemitemstoquotation(request):
 
     creatorid = request.user.id
     BASE_DIR = settings.BASE_DIR
-
 
     quotationdocid = request.POST['quotationdocid']
     issuetrackingsystemnumberofitems = request.POST['issuetrackingsystemnumberofitems']
@@ -1334,6 +1342,7 @@ def quotationissuetrackingsystemsearchcontent(request):
 
     cursor2 = connection.cursor()
 
+# redmine api and redmine database direct access data blending begin
     cursor2.execute("SELECT "
                     "auxid, "
                     "timeentryid, "
@@ -1343,13 +1352,55 @@ def quotationissuetrackingsystemsearchcontent(request):
                     "activityname, "
                     "hours, "
                     "comments, "
-                    "spenton "
+                    "spenton, "
+                    "projectid, "
+                    "userid, " #10
+                    "activityid, "
+                    "docdetailsidinquotation "
     
-                    "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " as TE "
+                    "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " "
     
                     "WHERE auxid is not null " + searchphraseformainresults + "")
-#                    "order by D1.docid_tbldoc desc ")
+    docspre = cursor2.fetchall()
+    for instancesingle in docspre:
+        timeentryid = instancesingle[1]
+
+        cursor21 = connections['redmine'].cursor()
+        cursor21.execute("SELECT "
+                         "docdetailsidinquotation "
+        
+                         "FROM time_entries "
+                         
+                         "WHERE id = %s",[timeentryid])
+        resultsfromredmine = cursor21.fetchall()
+        for instancesingle2 in resultsfromredmine:
+            docdetailsidinquotationfromredmine = instancesingle2[0]
+
+        cursor2.execute("UPDATE quotation_issuetrackingsystemtable" + str(creatorid) + " SET "
+                        "docdetailsidinquotation = %s "
+                        "WHERE timeentryid = %s ", [docdetailsidinquotationfromredmine, timeentryid])
+# redmine api and redmine database direct access data blending end
+
+    cursor2.execute("SELECT "
+                    "auxid, "
+                    "timeentryid, "
+                    "projectname, "
+                    "issueid, "
+                    "username, "
+                    "activityname, "
+                    "hours, "
+                    "comments, "
+                    "spenton, "
+                    "projectid, "
+                    "userid, "  # 10
+                    "activityid, "
+                    "docdetailsidinquotation "
+
+                    "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " "
+
+                    "WHERE auxid is not null " + searchphraseformainresults + "")
     docs = cursor2.fetchall()
+
     #import pdb;
     #pdb.set_trace()
     '''

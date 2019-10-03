@@ -91,9 +91,9 @@ DATABASES = {
     'redmine': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'redmine',
-        'USER': 'root',
-        'PASSWORD': 'hsihfadrA4+',
-        'HOST': 'http://13.58.18.245',
+        'USER': 'redmineremoteaccessor',
+        'PASSWORD': 'F4sHJQsb',
+        'HOST': '13.58.18.245',
         'PORT': '3306',
     }
 }
