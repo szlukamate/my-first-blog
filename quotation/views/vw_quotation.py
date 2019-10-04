@@ -1187,30 +1187,22 @@ def quotationissuetrackingsystemitemstoquotation(request):
 
     for x in range(int(issuetrackingsystemnumberofitems)):
 
-        timeentryandissueid = itemdatalist[(7*x+0)]
-        projectname = itemdatalist[7*x+1]
-        username = itemdatalist[7*x+2]
-        activityname = itemdatalist[7*x+3]
-        hours = itemdatalist[7*x+4]
-        comments = itemdatalist[7*x+5]
-        spenton = itemdatalist[7*x+6]
-        #import pdb;
-        #pdb.set_trace()
+        timeentryid = itemdatalist[(8*x+0)]
+        timeentryandissueid = itemdatalist[(8*x+1)]
+        projectname = itemdatalist[8*x+2]
+        username = itemdatalist[8*x+3]
+        activityname = itemdatalist[8*x+4]
+        hours = itemdatalist[8*x+5]
+        comments = itemdatalist[8*x+6]
+        spenton = itemdatalist[8*x+7]
 
-        #customerdescriptionclone = 'Time of Gofri Man'
         firstnum = x + 1
         fourthnum = 0
         secondnum = 0
         thirdnum = 0
         note = projectname + ' ' + comments + ' by ' + username + ' /Id:' + timeentryandissueid + '/'
-        #purchase_priceclone = 1
-        #listpricecomputed = 1
-        #currencyisocodeclone = 'USD'
         productid = 54
         currencyrate = 280
-        #unitsalespriceACU = 1
-        #unitclone = 'hrs'
-        #suppliercompanyid = 1
 
         cursor0 = connection.cursor()
         cursor0.execute(
@@ -1263,7 +1255,8 @@ def quotationissuetrackingsystemitemstoquotation(request):
             "currencyrate_tblcurrency_ctblDoc_details, "
             "unitsalespriceACU_tblDoc_details, "
             "unit_tbldocdetails, "
-            "suppliercompanyid_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            "suppliercompanyid_tbldocdetails, "
+            "creatorid_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
             [quotationdocid,
              hours,
@@ -1280,7 +1273,26 @@ def quotationissuetrackingsystemitemstoquotation(request):
              currencyrate,
              unitsalespriceACU,
              unitclone,
-             suppliercompanyid])
+             suppliercompanyid,
+             creatorid])
+
+        # update redmine table with docdetailsid begin
+        cursor3 = connection.cursor()
+        cursor3.execute(
+            "SELECT max(Doc_detailsid_tblDoc_details) FROM quotation_tbldoc_details WHERE creatorid_tbldocdetails=%s",
+            [creatorid])
+        results = cursor3.fetchall()
+        for x in results:
+            maxdocdetailsid = x[0]
+        #import pdb;
+        #pdb.set_trace()
+
+        cursor21 = connections['redmine'].cursor()
+        cursor21.execute("UPDATE custom_values SET "
+                        "value = %s "
+                        "WHERE custom_field_id = 4 and customized_id = %s ", [maxdocdetailsid, timeentryid]) # 4 means this field in Redmine in custom_fields table
+
+        # update redmine table with docdetailsid end
 
     return render(request, 'quotation/quotationissuetrackingsystemredirecturl.html', {'pk': quotationdocid})
 @login_required

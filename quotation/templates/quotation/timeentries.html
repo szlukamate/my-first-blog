@@ -3,6 +3,7 @@
 
 
 							{% csrf_token %}
+				<p id="issuetrackingsystemnumberofitems" hidden>{{ issuetrackingsystemnumberofitems}}</p>
 
 				<p align="center" id="title" style="font-size:160%;">Time Entry Items</p>{% csrf_token %}
 
@@ -40,6 +41,9 @@
 							   <span class="glyphicon glyphicon-trash"></span>
 							</button>
 
+							<button id="timeentriestoquotationbutton" type="button">
+							   <span class="glyphicon glyphicon-arrow-down"></span>
+							</button>
+
 							<span id="timeentrysearchtemplate" ></span>
-		<script type="text/javascript" src="{% static 'js/quotation.js' %}"></script>
 	{% endblock %}

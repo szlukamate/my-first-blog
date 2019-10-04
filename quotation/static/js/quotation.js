@@ -391,7 +391,7 @@ $('#title').click(function() {
 
     });
 
-    $('body').on("click", ".timeentriestoquotationbutton", function() {
+    $('body').on("click", "#timeentriestoquotationbutton", function() {
                 var issuetrackingsystemnumberofitems= $('#issuetrackingsystemnumberofitems').text();
                 var itemdatalist=[];
                 var itemdataliststringified;
@@ -407,11 +407,16 @@ $('#title').click(function() {
 
                 }
                 itemdataliststringified = JSON.stringify(itemdatalist);
+                    console.log(issuetrackingsystemnumberofitems);
+                    console.log(itemdataliststringified);
 
                 datatransmit();
 
             }
             function itemdatacollect(i){
+              timeentryid=$('p[class="timeentryid"][rowid="' + (i - 1) + '"]').text();
+                    console.log('timeentryid: ' + timeentryid);
+
               timeentryandissueid=$('td[class="timeentryandissueid"][rowid="' + (i - 1) + '"]').text();
               projectname=$('td[class="projectname"][rowid="' + (i - 1) + '"]').text();
               username=$('td[class="username"][rowid="' + (i - 1) + '"]').text();
@@ -419,7 +424,9 @@ $('#title').click(function() {
               hours=$('td[class="hours"][rowid="' + (i - 1) + '"]').text();
               comments=$('td[class="comments"][rowid="' + (i - 1) + '"]').text();
               spenton=$('td[class="spenton"][rowid="' + (i - 1) + '"]').text();
-              itemdatalist.push(timeentryandissueid, projectname, username, activityname, hours, comments, spenton);
+              itemdatalist.push(timeentryid, timeentryandissueid, projectname, username, activityname, hours, comments, spenton);
+
+                    console.log('itemdatalist: ' + itemdatalist);
 
             }
 

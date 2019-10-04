@@ -1,53 +1,42 @@
 <?xml version="1.0" ?>
-<time_entries limit="25" offset="0" total_count="3" type="array">
+<time_entries limit="25" offset="0" total_count="2" type="array">
 	<time_entry>
-		<id>35</id>
-		<project id="4" name="2019 Farewell Party"/>
-		<issue id="13"/>
-		<user id="1" name="Redmine Admin"/>
-		<activity id="9" name="Development"/>
-		<hours>0.5</hours>
-		<comments>Preparation</comments>
-		<spent_on>2019-10-03</spent_on>
-		<created_on>2019-10-03T15:04:29Z</created_on>
-		<updated_on>2019-10-03T15:04:29Z</updated_on>
-		<custom_fields type="array">
-			<custom_field id="1" name="test1">
-				<value>0</value>
-			</custom_field>
-		</custom_fields>
-	</time_entry>
-	<time_entry>
-		<id>34</id>
+		<id>37</id>
 		<project id="4" name="2019 Farewell Party"/>
 		<issue id="13"/>
 		<user id="1" name="Redmine Admin"/>
 		<activity id="8" name="Design"/>
-		<hours>2.0</hours>
+		<hours>1.0</hours>
 		<comments>Thinking</comments>
-		<spent_on>2019-10-03</spent_on>
-		<created_on>2019-10-03T15:03:33Z</created_on>
-		<updated_on>2019-10-03T15:03:33Z</updated_on>
+		<spent_on>2019-10-04</spent_on>
+		<created_on>2019-10-04T15:25:17Z</created_on>
+		<updated_on>2019-10-04T15:25:17Z</updated_on>
 		<custom_fields type="array">
-			<custom_field id="1" name="test1">
+			<custom_field id="4" name="quoteddocdetailsid">
+				<value>85682</value>
+			</custom_field>
+			<custom_field id="5" name="ordereddocdetailsid">
 				<value>0</value>
 			</custom_field>
 		</custom_fields>
 	</time_entry>
 	<time_entry>
-		<id>33</id>
+		<id>36</id>
 		<project id="4" name="2019 Farewell Party"/>
 		<issue id="13"/>
-		<user id="7" name="ChiefGofri ChiefMaker"/>
-		<activity id="9" name="Development"/>
-		<hours>1.0</hours>
-		<comments>Removed, spraying Chemotox to prevent</comments>
-		<spent_on>2019-10-02</spent_on>
-		<created_on>2019-10-02T15:55:21Z</created_on>
-		<updated_on>2019-10-02T15:55:21Z</updated_on>
+		<user id="1" name="Redmine Admin"/>
+		<activity id="8" name="Design"/>
+		<hours>0.5</hours>
+		<comments>More thinking</comments>
+		<spent_on>2019-10-04</spent_on>
+		<created_on>2019-10-04T14:45:46Z</created_on>
+		<updated_on>2019-10-04T14:45:46Z</updated_on>
 		<custom_fields type="array">
-			<custom_field id="1" name="test1">
-				<value>0</value>
+			<custom_field id="4" name="quoteddocdetailsid">
+				<value>85682</value>
+			</custom_field>
+			<custom_field id="5" name="ordereddocdetailsid">
+				<value/>
 			</custom_field>
 		</custom_fields>
 	</time_entry>
