@@ -1094,16 +1094,28 @@ def quotationissuetrackingsystem(request):
                     "     spenton VARCHAR(20) NULL, "
                     "     projectid INT(11) NULL, "
                     "     userid INT(11) NULL, "
-                    "     activityid INT(11) NULL, "
-                    "     docdetailsidinquotation INT(11) NULL) "
+                    "     activityid INT(11) NULL) "
                     "      ENGINE=INNODB "
                     "    ; ")
-
+    quotationid = request.POST['quotationid']
+    '''
     xmlresponsestring = request.POST['xmlresponsestring']
     quotationid = request.POST['quotationid']
 
     # delete/make folder with creatorid
     subprocess.call('if [ ! -d "' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '" ]; then mkdir ' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '  ;else rm -rf ' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + ' && mkdir ' + BASE_DIR + '/tempxmlfiles/' + str(creatorid) + ';  fi', shell=True)
+
+    # making prettyxml begin
+    xmlfilename = BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '/' + quotationid + '.xml'
+
+    parsed_xml = x12.parseString(xmlresponsestring)
+    pretty_xml_as_string = parsed_xml.toprettyxml()
+
+    file = open(xmlfilename, 'w')
+    file.write(pretty_xml_as_string)
+    file.close()
+    # making prettyxml begin
+
 
     xmlitemsfromelementtree = ET.fromstring(xmlresponsestring)
     issuetrackingsystemnumberofitems = len(xmlitemsfromelementtree)
@@ -1119,9 +1131,51 @@ def quotationissuetrackingsystem(request):
         projectid = xmlitemsfromelementtree[x11][2].attrib['id']
         userid = xmlitemsfromelementtree[x11][3].attrib['id']
         activityid = xmlitemsfromelementtree[x11][4].attrib['id']
+    '''
+    cursor21 = connections['redmine'].cursor()
+    cursor21.execute("SELECT "
+                     "T.id, "
+                     "T.project_id, "
+                     "T.user_id, "
+                     "T.issue_id, "
+                     "T.hours, "
+                     "T.comments, " #5
+                     "T.activity_id, "
+                     "T.spent_on, "
+                     "T.created_on, "
+                     "T.updated_on, "
+                     "projects.name, " #10
+                     "CONCAT(users.firstname, ' ', users.lastname) AS username, "
+                     "enumerations.name as activityname "
+                     
+                     "FROM time_entries as T "
+                     
+                     "JOIN projects "
+                     "ON T.project_id = projects.id "
 
-        #import pdb;
-        #pdb.set_trace()
+                     "JOIN enumerations "
+                     "ON T.activity_id = enumerations.id "
+
+                     "JOIN users "
+                     "ON T.user_id = users.id ")
+
+    redmineresults = cursor21.fetchall()
+    issuetrackingsystemnumberofitems = len(redmineresults)
+
+    for x11 in redmineresults:
+        timeentryid = x11[0]
+        projectname = x11[10]
+        issueid = x11[3]
+        if issueid == None:
+            issueid = 0
+        username = x11[11]
+        activityname = x11[12]
+        hours = x11[4]
+        comments = x11[5]
+        spenton = x11[7]
+        projectid = x11[1]
+        userid = x11[2]
+        activityid = x11[6]
 
         cursor2.execute("INSERT INTO quotation_issuetrackingsystemtable" + str(creatorid) + " "
                         "(timeentryid, projectname, issueid, username, activityname, hours, comments, projectid, userid, activityid, spenton) VALUES ('" + str(timeentryid) + "', "
@@ -1155,21 +1209,6 @@ def quotationissuetrackingsystem(request):
     #import pdb;
     #pdb.set_trace()
 
-    # making prettyxml begin
-    xmlfilename = BASE_DIR + '/tempxmlfiles/' + str(creatorid) + '/' + quotationid + '.xml'
-    #tree.write(xmlfilename, xml_declaration=True, encoding='utf-8')
-
-    #file = open(xmlfilename, 'r')
-    #xml_string = file.read()
-    #file.close()
-
-    parsed_xml = x12.parseString(xmlresponsestring)
-    pretty_xml_as_string = parsed_xml.toprettyxml()
-
-    file = open(xmlfilename, 'w')
-    file.write(pretty_xml_as_string)
-    file.close()
-    # making prettyxml begin
 
     return render(request, 'quotation/timeentries.html',{'docid': quotationid,
                                                                           'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
@@ -1353,7 +1392,7 @@ def quotationissuetrackingsystemsearchcontent(request):
     #pdb.set_trace()
 
     cursor2 = connection.cursor()
-
+    '''
 # redmine api and redmine database direct access data blending begin
     cursor2.execute("SELECT "
                     "auxid, "
@@ -1367,8 +1406,7 @@ def quotationissuetrackingsystemsearchcontent(request):
                     "spenton, "
                     "projectid, "
                     "userid, " #10
-                    "activityid, "
-                    "docdetailsidinquotation "
+                    "activityid "
     
                     "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " "
     
@@ -1392,7 +1430,7 @@ def quotationissuetrackingsystemsearchcontent(request):
                         "docdetailsidinquotation = %s "
                         "WHERE timeentryid = %s ", [docdetailsidinquotationfromredmine, timeentryid])
 # redmine api and redmine database direct access data blending end
-
+    '''
     cursor2.execute("SELECT "
                     "auxid, "
                     "timeentryid, "
@@ -1405,14 +1443,13 @@ def quotationissuetrackingsystemsearchcontent(request):
                     "spenton, "
                     "projectid, "
                     "userid, "  # 10
-                    "activityid, "
-                    "docdetailsidinquotation "
+                    "activityid "
 
                     "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " "
 
                     "WHERE auxid is not null " + searchphraseformainresults + "")
     docs = cursor2.fetchall()
-
+    numberoftimeentries = len(docs)
     #import pdb;
     #pdb.set_trace()
     '''
@@ -1443,6 +1480,7 @@ def quotationissuetrackingsystemsearchcontent(request):
 
     dockindrowsources = cursor1.fetchall()
     '''
-    return render(request, 'quotation/timeentriescontent.html', {'docs': docs})
+    return render(request, 'quotation/timeentriescontent.html', {'docs': docs,
+                                                               'numberoftimeentries': numberoftimeentries})
 #                                                               'companiesrowsources': companiesrowsources,
 #                                                               'dockindrowsources': dockindrowsources})

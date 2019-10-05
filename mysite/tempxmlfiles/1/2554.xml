@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<time_entries limit="25" offset="0" total_count="2" type="array">
+<time_entries limit="25" offset="0" total_count="8" type="array">
 	<time_entry>
 		<id>37</id>
 		<project id="4" name="2019 Farewell Party"/>
@@ -13,7 +13,7 @@
 		<updated_on>2019-10-04T15:25:17Z</updated_on>
 		<custom_fields type="array">
 			<custom_field id="4" name="quoteddocdetailsid">
-				<value>85682</value>
+				<value>85794</value>
 			</custom_field>
 			<custom_field id="5" name="ordereddocdetailsid">
 				<value>0</value>
@@ -33,7 +33,126 @@
 		<updated_on>2019-10-04T14:45:46Z</updated_on>
 		<custom_fields type="array">
 			<custom_field id="4" name="quoteddocdetailsid">
-				<value>85682</value>
+				<value>85795</value>
+			</custom_field>
+			<custom_field id="5" name="ordereddocdetailsid">
+				<value/>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>12</id>
+		<project id="3" name="Lefúrni a szőnyeget"/>
+		<user id="1" name="Redmine Admin"/>
+		<activity id="8" name="Design"/>
+		<hours>2.0</hours>
+		<comments>Drilling</comments>
+		<spent_on>2019-09-20</spent_on>
+		<created_on>2019-09-20T19:49:58Z</created_on>
+		<updated_on>2019-09-20T19:49:58Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="4" name="quoteddocdetailsid">
+				<value/>
+			</custom_field>
+			<custom_field id="5" name="ordereddocdetailsid">
+				<value/>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>5</id>
+		<project id="1" name="X Flowershop web"/>
+		<issue id="2"/>
+		<user id="4" name="Anonymous"/>
+		<activity id="9" name="Development"/>
+		<hours>1.0</hours>
+		<comments/>
+		<spent_on>2019-01-17</spent_on>
+		<created_on>2019-01-17T13:17:41Z</created_on>
+		<updated_on>2019-01-17T13:17:41Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="4" name="quoteddocdetailsid">
+				<value/>
+			</custom_field>
+			<custom_field id="5" name="ordereddocdetailsid">
+				<value/>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>4</id>
+		<project id="1" name="X Flowershop web"/>
+		<issue id="1"/>
+		<user id="4" name="Anonymous"/>
+		<activity id="8" name="Design"/>
+		<hours>1.0</hours>
+		<comments>y</comments>
+		<spent_on>2019-01-16</spent_on>
+		<created_on>2019-01-16T14:53:17Z</created_on>
+		<updated_on>2019-01-16T14:53:17Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="4" name="quoteddocdetailsid">
+				<value/>
+			</custom_field>
+			<custom_field id="5" name="ordereddocdetailsid">
+				<value/>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>3</id>
+		<project id="1" name="X Flowershop web"/>
+		<issue id="1"/>
+		<user id="4" name="Anonymous"/>
+		<activity id="8" name="Design"/>
+		<hours>1.0</hours>
+		<comments>xxxxxx</comments>
+		<spent_on>2019-01-16</spent_on>
+		<created_on>2019-01-16T14:38:55Z</created_on>
+		<updated_on>2019-01-16T14:38:55Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="4" name="quoteddocdetailsid">
+				<value/>
+			</custom_field>
+			<custom_field id="5" name="ordereddocdetailsid">
+				<value/>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>2</id>
+		<project id="1" name="X Flowershop web"/>
+		<issue id="1"/>
+		<user id="4" name="Anonymous"/>
+		<activity id="9" name="Development"/>
+		<hours>1.0</hours>
+		<comments>xxx</comments>
+		<spent_on>2019-01-16</spent_on>
+		<created_on>2019-01-16T14:36:46Z</created_on>
+		<updated_on>2019-01-16T14:36:46Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="4" name="quoteddocdetailsid">
+				<value/>
+			</custom_field>
+			<custom_field id="5" name="ordereddocdetailsid">
+				<value/>
+			</custom_field>
+		</custom_fields>
+	</time_entry>
+	<time_entry>
+		<id>1</id>
+		<project id="1" name="X Flowershop web"/>
+		<issue id="1"/>
+		<user id="4" name="Anonymous"/>
+		<activity id="8" name="Design"/>
+		<hours>1.0</hours>
+		<comments>xx</comments>
+		<spent_on>2019-01-16</spent_on>
+		<created_on>2019-01-16T14:26:09Z</created_on>
+		<updated_on>2019-01-16T14:26:09Z</updated_on>
+		<custom_fields type="array">
+			<custom_field id="4" name="quoteddocdetailsid">
+				<value/>
 			</custom_field>
 			<custom_field id="5" name="ordereddocdetailsid">
 				<value/>

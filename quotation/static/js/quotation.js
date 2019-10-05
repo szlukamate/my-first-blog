@@ -323,10 +323,11 @@ $('#title').click(function() {
 
     $('#itsbutton').click(function() {
         var quotationid=$('#quotationdocid').text();
-
+/*
                   // send it out
                   let xhr = new XMLHttpRequest();
-                  xhr.open("GET","https://cors-anywhere.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&project_id=4"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
+//                  xhr.open("GET","https://cors-anywhere.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&project_id=4"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
+                  xhr.open("GET","https://ancient-sierra-24943.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&status_id=1"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
                   xhr.send();
                   $( "#dialog-message-connecting" ).dialog("option", "buttons", {}); //remove OK button
                   $( "#dialog-message-connecting" ).dialog( "open" );
@@ -334,19 +335,21 @@ $('#title').click(function() {
                   xhr.onload = function (){
                                     console.log(xhr.response);
                   $( "#dialog-message-connecting" ).dialog( "close" );
+*/
+                  $( "#dialog-message-connecting" ).dialog( "open" );
 
                     $.ajax({
                         type: 'POST',
                         url: 'quotationissuetrackingsystem',
 
                         data: {
-                        'quotationid' : quotationid,
-                        'xmlresponsestring' : xhr.response,
+                        'quotationid': quotationid,
                         'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                         },
 
                         success: function(data){
-                    $('#quotationtemplate').html(data);
+                        $( "#dialog-message-connecting" ).dialog( "close" );
+                        $('#quotationtemplate').html(data);
                         //template dates setting begin
                         setTimeout(
                           function()
@@ -373,6 +376,7 @@ $('#title').click(function() {
                                 (today<10 ? '0' : '') + today;
                             $('#todate').val(tooutput);
                           }, 500);
+                          $('#searchbutton').trigger('click');
 
                         //template dates setting end
 
@@ -384,9 +388,9 @@ $('#title').click(function() {
                         },
                         datatype: 'html'
 
-                    });
+//                    });
 
-                  };
+                    });
 
 
     });

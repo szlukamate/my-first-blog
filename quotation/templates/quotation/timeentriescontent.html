@@ -1,4 +1,6 @@
 	{% block content %}
+
+							  View closed Time entries: <label class="switch"><input type="checkbox" id="receiveds"><span class="slider"></span></label><p id="numberoftimeentries" >Number of Time Entries:{{ numberoftimeentries}}</p>
 							  <select id="companyswap" hidden >
 									<option value="" ></option>
 									{% for companiesrowsource in companiesrowsources %}
@@ -13,7 +15,7 @@
 							  </select>
 
 
-							<div class="table-responsive text-nowrap" style="max-height: 600px; overflow:scroll;">
+							<div class="table-responsive text-nowrap" style="max-height: 200px; overflow:scroll;">
 										<table class="table table-striped"">
 											<thead>
 
@@ -25,7 +27,6 @@
 													<td>Hours</td>
 													<td>Comments</td>
 													<td>Spent On</td>
-													<td>Docdetailsid in Quotation</td>
 												</tr>
 											</thead>
 
@@ -42,7 +43,6 @@
 														<td  class="hours" rowid="{{ forloop.counter0 }}">{{ tblDoc.6 }}</td>
 														<td  class="comments" rowid="{{ forloop.counter0 }}">{{ tblDoc.7 }}</td>
 														<td  class="spenton" rowid="{{ forloop.counter0 }}">{{ tblDoc.8 }}</td>
-														<td  class="docdetailsidinquotation" rowid="{{ forloop.counter0 }}">{{ tblDoc.12 }}</td>
 													</tr>
 
 
