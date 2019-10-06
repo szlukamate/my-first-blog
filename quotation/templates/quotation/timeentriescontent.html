@@ -1,6 +1,6 @@
 	{% block content %}
 
-							  View closed Time entries: <label class="switch"><input type="checkbox" id="receiveds"><span class="slider"></span></label><p id="numberoftimeentries" >Number of Time Entries:{{ numberoftimeentries}}</p>
+							  <p id="numberoftimeentries" >Number of Time Entries:{{ numberoftimeentries}}</p>
 							  <select id="companyswap" hidden >
 									<option value="" ></option>
 									{% for companiesrowsource in companiesrowsources %}
@@ -27,6 +27,7 @@
 													<td>Hours</td>
 													<td>Comments</td>
 													<td>Spent On</td>
+													<td>Quoteddocnumber/docdetailsid</td>
 												</tr>
 											</thead>
 
@@ -43,6 +44,7 @@
 														<td  class="hours" rowid="{{ forloop.counter0 }}">{{ tblDoc.6 }}</td>
 														<td  class="comments" rowid="{{ forloop.counter0 }}">{{ tblDoc.7 }}</td>
 														<td  class="spenton" rowid="{{ forloop.counter0 }}">{{ tblDoc.8 }}</td>
+														<td  class="quotedids" rowid="{{ forloop.counter0 }}">{{ tblDoc.14 }}/{{ tblDoc.13 }}</td>
 													</tr>
 
 

@@ -1094,7 +1094,10 @@ def quotationissuetrackingsystem(request):
                     "     spenton VARCHAR(20) NULL, "
                     "     projectid INT(11) NULL, "
                     "     userid INT(11) NULL, "
-                    "     activityid INT(11) NULL) "
+                    "     activityid INT(11) NULL, "
+                    "     projectstatusid INT(11) NULL, "
+                    "     quoteddocdetailsid INT(11) NULL, "
+                    "     quoteddocnumber VARCHAR(255) NULL) "
                     "      ENGINE=INNODB "
                     "    ; ")
     quotationid = request.POST['quotationid']
@@ -1146,10 +1149,19 @@ def quotationissuetrackingsystem(request):
                      "T.updated_on, "
                      "projects.name, " #10
                      "CONCAT(users.firstname, ' ', users.lastname) AS username, "
-                     "enumerations.name as activityname "
+                     "enumerations.name as activityname, "
+                     "projects.status, "
+                     "quoteddocdetailsidtable.value, "
+                     "quoteddocnumbertable.value "
                      
                      "FROM time_entries as T "
                      
+                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
+                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
+
+                     "LEFT JOIN custom_values as quoteddocnumbertable "
+                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
+
                      "JOIN projects "
                      "ON T.project_id = projects.id "
 
@@ -1176,19 +1188,46 @@ def quotationissuetrackingsystem(request):
         projectid = x11[1]
         userid = x11[2]
         activityid = x11[6]
+        projectstatusid = x11[13]
+        quoteddocdetailsid = x11[14]
+        if quoteddocdetailsid == None:
+            quoteddocdetailsid = 0
+        quoteddocnumber = x11[15]
+        if quoteddocnumber == None:
+            quoteddocnumber = '-'
+
+        #import pdb;
+        #pdb.set_trace()
 
         cursor2.execute("INSERT INTO quotation_issuetrackingsystemtable" + str(creatorid) + " "
-                        "(timeentryid, projectname, issueid, username, activityname, hours, comments, projectid, userid, activityid, spenton) VALUES ('" + str(timeentryid) + "', "
-                                                            "'" + str(projectname) + "', "
-                                                            "'" + str(issueid) + "', "
-                                                            "'" + str(username) + "', "
-                                                            "'" + str(activityname) + "', "
-                                                            "'" + str(hours) + "', "
-                                                            "'" + str(comments) + "', "
-                                                            "'" + str(projectid) + "', "
-                                                            "'" + str(userid) + "', "
-                                                            "'" + str(activityid) + "', "
-                                                            "'" + str(spenton) + "');")
+                        
+                        "(timeentryid, "
+                        "projectname, "
+                        "issueid, "
+                        "username, "
+                        "activityname, "
+                        "hours, "
+                        "comments, "
+                        "projectid, "
+                        "userid, "
+                        "activityid, "
+                        "spenton, "
+                        "projectstatusid, "
+                        "quoteddocdetailsid, "
+                        "quoteddocnumber) VALUES ('" + str(timeentryid) + "', "
+                                                    "'" + str(projectname) + "', "
+                                                    "'" + str(issueid) + "', "
+                                                    "'" + str(username) + "', "
+                                                    "'" + str(activityname) + "', "
+                                                    "'" + str(hours) + "', "
+                                                    "'" + str(comments) + "', "
+                                                    "'" + str(projectid) + "', "
+                                                    "'" + str(userid) + "', "
+                                                    "'" + str(activityid) + "', "
+                                                    "'" + str(spenton) + "', "
+                                                    "'" + str(projectstatusid) + "', "
+                                                    "'" + str(quoteddocdetailsid) + "', "
+                                                    "'" + str(quoteddocnumber) + "');")
 
     cursor2.execute("SELECT "
                     "timeentryid, "
@@ -1201,7 +1240,10 @@ def quotationissuetrackingsystem(request):
                     "spenton, "
                     "projectid, "
                     "userid, "
-                    "activityid "
+                    "activityid, " #10
+                    "projectstatusid,"
+                    "quoteddocdetailsid, "
+                    "quoteddocnumber "
                     
                     "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " ")
     xmlitems = cursor2.fetchall()
@@ -1358,7 +1400,18 @@ def quotationissuetrackingsystemsearchcontent(request):
     projectname = request.POST['projectname']
     fromdate = request.POST['fromdate']
     todate = request.POST['todate']
+    onlyforopenprojects = request.POST['onlyforopenprojects']
+    unquotedcheckbox = request.POST['unquotedcheckbox']
 
+    if unquotedcheckbox == 'true':
+        unquotedcheckboxphrase = "and quoteddocdetailsid = 0 "
+    else:
+        unquotedcheckboxphrase = ""
+
+    if onlyforopenprojects == 'true':
+        onlyforopenprojectsphrase = "and projectstatusid = 1 "
+    else:
+        onlyforopenprojectsphrase = ""
 
     if timeentryid != '':
         timeentryidformainresults = "and TE.timeentryid='" + timeentryid + "' "
@@ -1386,7 +1439,7 @@ def quotationissuetrackingsystemsearchcontent(request):
     companyformainresults = ""
 #        companyforrowsources = ""
 
-    searchphraseformainresults = timeentryidformainresults + projectnameformainresults + datephraseformainresults + companyformainresults + " "
+    searchphraseformainresults = unquotedcheckboxphrase + onlyforopenprojectsphrase + timeentryidformainresults + projectnameformainresults + datephraseformainresults + companyformainresults + " "
 #    searchphraseforrowsources = dockindnameforrowsources + companyforrowsources + " "
     #import pdb;
     #pdb.set_trace()
@@ -1443,7 +1496,10 @@ def quotationissuetrackingsystemsearchcontent(request):
                     "spenton, "
                     "projectid, "
                     "userid, "  # 10
-                    "activityid "
+                    "activityid, "
+                    "projectstatusid, "
+                    "quoteddocdetailsid,"
+                    "quoteddocnumber "
 
                     "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " "
 

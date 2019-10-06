@@ -15,7 +15,6 @@ $(window).on("unload", function(){
 });
 */
 $(function () {
-//$("#tabs").tabs({ active: 0 });
 
 // Dialog "Connecting..." begin
     $( "#dialog-message-connecting" ).dialog({
@@ -375,8 +374,13 @@ $('#title').click(function() {
                                 (tomonth<10 ? '0' : '') + tomonth + '-' +
                                 (today<10 ? '0' : '') + today;
                             $('#todate').val(tooutput);
+
+                            $('#onlyforopenprojects').prop('checked', true);
+                            $('#unquotedcheckbox').prop('checked', true);
+
+                            $('#searchbutton').trigger('click');
+
                           }, 500);
-                          $('#searchbutton').trigger('click');
 
                         //template dates setting end
 
@@ -520,6 +524,8 @@ $('#title').click(function() {
                 'fromdate': $('#fromdate').val(),
                 'todate': $('#todate').val(),
                 'projectname': $('#projectname').val(),
+                'onlyforopenprojects': $('#onlyforopenprojects').prop('checked'),
+                'unquotedcheckbox': $('#unquotedcheckbox').prop('checked'),
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
@@ -550,6 +556,25 @@ $('#title').click(function() {
                     $('select#dockindname').val(dockindnamevalueaccumulator);
 */
                   }, 500);
+
+    });
+    $('body').on("click", "#searchoutbutton", function() {
+
+        $('#onlyforopenprojects').prop('checked', false);
+
+/*
+        $('#docnumber').val("");
+        sessionStorage.docnumber = ""
+
+        $('#dockindname').val("");
+        sessionStorage.dockindname = ""
+
+        $('#company').val("");
+        sessionStorage.company = ""
+*/
+        $('#searchbutton').trigger('click');
+
+        //console.log(rowid);
 
     });
 
