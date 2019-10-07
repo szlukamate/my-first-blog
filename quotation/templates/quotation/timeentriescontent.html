@@ -1,16 +1,24 @@
 	{% block content %}
 
-							  <p id="numberoftimeentries" >Number of Time Entries:{{ numberoftimeentries}}</p>
-							  <select id="companyswap" hidden >
+							  <p id="numberoftimeentries" >Number of Time Entries:{{ issuetrackingsystemnumberofitems}}</p>
+	      					  <p id="issuetrackingsystemnumberofitems" hidden>{{ issuetrackingsystemnumberofitems}}</p>
+
+							  <select id="projectnameswap" hidden >
 									<option value="" ></option>
-									{% for companiesrowsource in companiesrowsources %}
-										<option value="companiesrowsource.0">companiesrowsource.0</option>
+									{% for projectnamerowsource in projectnamerowsources %}
+										<option value="{{projectnamerowsource.0}}">{{projectnamerowsource.0}}</option>
 									{% endfor %}
 							  </select>
-							  <select id="dockindnameswap" hidden>
+							  <select id="usernameswap" hidden>
 									<option value="" ></option>
-									{% for dockindrowsource in dockindrowsources %}
-										<option value="dockindrowsource.0">dockindrowsource.0</option>
+									{% for usernamerowsource in usernamerowsources %}
+										<option value="{{usernamerowsource.1}}">{{usernamerowsource.0}}</option>
+									{% endfor %}
+							  </select>
+							  <select id="activitynameswap" hidden>
+									<option value="" ></option>
+									{% for activitynamerowsource in activitynamerowsources %}
+										<option value="{{activitynamerowsource.1}}">{{activitynamerowsource.0}}</option>
 									{% endfor %}
 							  </select>
 

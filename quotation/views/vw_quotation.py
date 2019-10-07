@@ -1074,6 +1074,8 @@ def quotationsaveasorder(request, pk):
     return redirect('docselector', pk=maxdocid)
 @login_required
 def quotationissuetrackingsystem(request):
+    quotationid = request.POST['quotationid']
+    '''
     creatorid = request.user.id
     BASE_DIR = settings.BASE_DIR
 
@@ -1100,7 +1102,7 @@ def quotationissuetrackingsystem(request):
                     "     quoteddocnumber VARCHAR(255) NULL) "
                     "      ENGINE=INNODB "
                     "    ; ")
-    quotationid = request.POST['quotationid']
+    '''
     '''
     xmlresponsestring = request.POST['xmlresponsestring']
     quotationid = request.POST['quotationid']
@@ -1134,6 +1136,7 @@ def quotationissuetrackingsystem(request):
         projectid = xmlitemsfromelementtree[x11][2].attrib['id']
         userid = xmlitemsfromelementtree[x11][3].attrib['id']
         activityid = xmlitemsfromelementtree[x11][4].attrib['id']
+    '''
     '''
     cursor21 = connections['redmine'].cursor()
     cursor21.execute("SELECT "
@@ -1247,14 +1250,12 @@ def quotationissuetrackingsystem(request):
                     
                     "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " ")
     xmlitems = cursor2.fetchall()
-
+    '''
     #import pdb;
     #pdb.set_trace()
 
 
-    return render(request, 'quotation/timeentries.html',{'docid': quotationid,
-                                                                          'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
-                                                                          'xmlitems': xmlitems})
+    return render(request, 'quotation/timeentries.html',{'docid': quotationid})
 @login_required
 def quotationissuetrackingsystemitemstoquotation(request):
 
@@ -1262,6 +1263,7 @@ def quotationissuetrackingsystemitemstoquotation(request):
     BASE_DIR = settings.BASE_DIR
 
     quotationdocid = request.POST['quotationdocid']
+    docnumber = request.POST['docnumber']
     issuetrackingsystemnumberofitems = request.POST['issuetrackingsystemnumberofitems']
     itemdatalistraw = request.POST['itemdatalist']
     itemdatalist = json.loads(itemdatalistraw)
@@ -1365,6 +1367,21 @@ def quotationissuetrackingsystemitemstoquotation(request):
         results = cursor3.fetchall()
         for x in results:
             maxdocdetailsid = x[0]
+
+        cursor3 = connection.cursor()
+        cursor3.execute(
+            "SELECT max(Docid_tblDoc_details_id) FROM quotation_tbldoc_details WHERE creatorid_tbldocdetails=%s",
+            [creatorid])
+        results = cursor3.fetchall()
+        for x in results:
+            maxdocid = x[0]
+
+        cursor3 = connection.cursor()
+        cursor3.execute(
+            "SELECT pretag_tbldockind FROM quotation_tbldoc_kind WHERE Doc_kindid_tblDoc_kind = 1")
+        results = cursor3.fetchall()
+        for x in results:
+            pretagforquotation = x[0]
         #import pdb;
         #pdb.set_trace()
 
@@ -1372,6 +1389,13 @@ def quotationissuetrackingsystemitemstoquotation(request):
         cursor21.execute("UPDATE custom_values SET "
                         "value = %s "
                         "WHERE custom_field_id = 4 and customized_id = %s ", [maxdocdetailsid, timeentryid]) # 4 means this field in Redmine in custom_fields table
+
+        assembleddocnumber = pretagforquotation + str(docnumber)
+
+        cursor21 = connections['redmine'].cursor()
+        cursor21.execute("UPDATE custom_values SET "
+                        "value = %s "
+                        "WHERE custom_field_id = 6 and customized_id = %s ", [assembleddocnumber, timeentryid]) # 6 means this field in Redmine in custom_fields table
 
         # update redmine table with docdetailsid end
 
@@ -1396,35 +1420,64 @@ def quotationissuetrackingsystemsearchcontent(request):
     creatorid = request.user.id
     BASE_DIR = settings.BASE_DIR
 
+    quoteddocnumber = request.POST['quoteddocnumber']
     timeentryid = request.POST['timeentryid']
     projectname = request.POST['projectname']
+    userid = request.POST['userid']
+    activityid = request.POST['activityid']
     fromdate = request.POST['fromdate']
     todate = request.POST['todate']
     onlyforopenprojects = request.POST['onlyforopenprojects']
     unquotedcheckbox = request.POST['unquotedcheckbox']
 
     if unquotedcheckbox == 'true':
-        unquotedcheckboxphrase = "and quoteddocdetailsid = 0 "
+        unquotedcheckboxphrase = "and quoteddocdetailsidtable.value = 0 "
+        unquotedcheckboxforrowsources = "and quoteddocdetailsidtable.value = 0 "
     else:
         unquotedcheckboxphrase = ""
+        unquotedcheckboxforrowsources = ""
 
     if onlyforopenprojects == 'true':
-        onlyforopenprojectsphrase = "and projectstatusid = 1 "
+        onlyforopenprojectsphrase = "and projects.status = 1 "
+        onlyforopenprojectsforrowsources = "and projects.status = 1 "
     else:
         onlyforopenprojectsphrase = ""
+        onlyforopenprojectsforrowsources = ""
+
+    if quoteddocnumber != '':
+        quoteddocnumberformainresults = "and T.id='" + quoteddocnumber + "' "
+        quoteddocnumberforrowsource = "and T.id='" + quoteddocnumber + "' "
+    else:
+        quoteddocnumberformainresults = ""
+        quoteddocnumberforrowsource = ""
 
     if timeentryid != '':
-        timeentryidformainresults = "and TE.timeentryid='" + timeentryid + "' "
+        timeentryidformainresults = "and T.id='" + timeentryid + "' "
+        timeentryidforrowsource = "and T.id='" + timeentryid + "' "
     else:
         timeentryidformainresults = ""
-#  ???        docnumberforrowsources = ""
+        timeentryidforrowsource = ""
 
     if projectname != '':
-        projectnameformainresults = "and Doc_kind_name_tblDoc_kind='" + projectname + "' "
-#        projectnameforrowsources = "and Doc_kind_name_tblDoc_kind='" + projectname + "' "
+        projectnameformainresults = "and projects.name='" + projectname + "' "
+        projectnameforrowsources = "and projects.name='" + projectname + "' "
     else:
         projectnameformainresults = ""
-#        projectnameforrowsources = ""
+        projectnameforrowsources = ""
+
+    if userid != '':
+        usernameformainresults = "and T.user_id='" + userid + "' "
+        usernameforrowsources = "and T.user_id='" + userid + "' "
+    else:
+        usernameformainresults = ""
+        usernameforrowsources = ""
+
+    if activityid != '':
+        activitynameformainresults = "and T.activity_id='" + activityid + "' "
+        activitynameforrowsources = "and T.activity_id='" + activityid + "' "
+    else:
+        activitynameformainresults = ""
+        activitynameforrowsources = ""
 
     # datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
     #    datephrase = "and DATE(quotation_tbldoc.creationtime_tbldoc) >= '" + fromdate + "' and DATE('D.creationtime_tbldoc') <= '" + todate + "' "
@@ -1439,104 +1492,138 @@ def quotationissuetrackingsystemsearchcontent(request):
     companyformainresults = ""
 #        companyforrowsources = ""
 
-    searchphraseformainresults = unquotedcheckboxphrase + onlyforopenprojectsphrase + timeentryidformainresults + projectnameformainresults + datephraseformainresults + companyformainresults + " "
-#    searchphraseforrowsources = dockindnameforrowsources + companyforrowsources + " "
+    searchphraseformainresults = unquotedcheckboxphrase + onlyforopenprojectsphrase + timeentryidformainresults + projectnameformainresults + datephraseformainresults + companyformainresults + usernameformainresults + activitynameformainresults + " "
+    searchphraseforrowsources = unquotedcheckboxforrowsources + onlyforopenprojectsforrowsources + timeentryidforrowsource + projectnameforrowsources + usernameforrowsources + activitynameforrowsources + " "
     #import pdb;
     #pdb.set_trace()
 
     cursor2 = connection.cursor()
-    '''
-# redmine api and redmine database direct access data blending begin
-    cursor2.execute("SELECT "
-                    "auxid, "
-                    "timeentryid, "
-                    "projectname, "
-                    "issueid, "
-                    "username, "
-                    "activityname, "
-                    "hours, "
-                    "comments, "
-                    "spenton, "
-                    "projectid, "
-                    "userid, " #10
-                    "activityid "
-    
-                    "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " "
-    
-                    "WHERE auxid is not null " + searchphraseformainresults + "")
-    docspre = cursor2.fetchall()
-    for instancesingle in docspre:
-        timeentryid = instancesingle[1]
+    cursor21 = connections['redmine'].cursor()
+    cursor21.execute("SELECT "
+                     "T.id, "
+                     "T.id, "
+                     "projects.name, "
+                     "T.issue_id, "
+                     "CONCAT(users.firstname, ' ', users.lastname) AS username, "
+                     "enumerations.name as activityname, " #5
+                     "T.hours, "
+                     "T.comments, "
+                     "T.spent_on, "
+                     "T.project_id, "
+                     "T.user_id, " #10
+                     "T.activity_id, "
+                     "projects.status, "
+                     "quoteddocdetailsidtable.value, "
+                     "quoteddocnumbertable.value, "
+                     "T.created_on, "   #15
+                     "T.updated_on "
 
-        cursor21 = connections['redmine'].cursor()
-        cursor21.execute("SELECT "
-                         "docdetailsidinquotation "
-        
-                         "FROM time_entries "
-                         
-                         "WHERE id = %s",[timeentryid])
-        resultsfromredmine = cursor21.fetchall()
-        for instancesingle2 in resultsfromredmine:
-            docdetailsidinquotationfromredmine = instancesingle2[0]
+                     "FROM time_entries as T "
 
-        cursor2.execute("UPDATE quotation_issuetrackingsystemtable" + str(creatorid) + " SET "
-                        "docdetailsidinquotation = %s "
-                        "WHERE timeentryid = %s ", [docdetailsidinquotationfromredmine, timeentryid])
-# redmine api and redmine database direct access data blending end
-    '''
-    cursor2.execute("SELECT "
-                    "auxid, "
-                    "timeentryid, "
-                    "projectname, "
-                    "issueid, "
-                    "username, "
-                    "activityname, "
-                    "hours, "
-                    "comments, "
-                    "spenton, "
-                    "projectid, "
-                    "userid, "  # 10
-                    "activityid, "
-                    "projectstatusid, "
-                    "quoteddocdetailsid,"
-                    "quoteddocnumber "
+                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
+                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
 
-                    "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " "
+                     "LEFT JOIN custom_values as quoteddocnumbertable "
+                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
 
-                    "WHERE auxid is not null " + searchphraseformainresults + "")
-    docs = cursor2.fetchall()
-    numberoftimeentries = len(docs)
+                     "JOIN projects "
+                     "ON T.project_id = projects.id "
+
+                     "JOIN enumerations "
+                     "ON T.activity_id = enumerations.id "
+
+                     "JOIN users "
+                     "ON T.user_id = users.id "
+
+                     "WHERE T.id is not null " + searchphraseformainresults + "")
+
+    docs = cursor21.fetchall()
+
+    issuetrackingsystemnumberofitems = len(docs)
     #import pdb;
     #pdb.set_trace()
-    '''
-    cursor2 = connection.cursor()
-    cursor2.execute("SELECT "
-                    "companyname_tblcompanies_ctbldoc "
+    cursor23 = connections['redmine'].cursor()
+    cursor23.execute("SELECT "
+                     "projects.name "
 
-                    "FROM quotation_tbldoc "
+                     "FROM time_entries as T "
 
-                    "JOIN quotation_tbldoc_kind "
-                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
+                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
 
-                    "WHERE quotation_tbldoc.obsolete_tbldoc = 0 " + searchphraseforrowsources + ""
-                                                                                                "GROUP BY companyname_tblcompanies_ctbldoc ")
+                     "LEFT JOIN custom_values as quoteddocnumbertable "
+                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
 
-    companiesrowsources = cursor2.fetchall()
-    cursor1 = connection.cursor()
-    cursor1.execute("SELECT "
-                    "Doc_kind_name_tblDoc_kind "
+                     "JOIN projects "
+                     "ON T.project_id = projects.id "
 
-                    "FROM quotation_tbldoc "
+                     "JOIN enumerations "
+                     "ON T.activity_id = enumerations.id "
 
-                    "JOIN quotation_tbldoc_kind "
-                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                     "JOIN users "
+                     "ON T.user_id = users.id "
 
-                    "WHERE quotation_tbldoc.obsolete_tbldoc = 0 " + searchphraseforrowsources + ""
-                                                                                                "GROUP BY Doc_kind_name_tblDoc_kind ")
+                     "WHERE T.id is not null " + searchphraseforrowsources + " "
+                                                                             
+                     "GROUP BY projects.name ")
+    projectnamerowsources = cursor23.fetchall()
 
-    dockindrowsources = cursor1.fetchall()
-    '''
+    cursor24 = connections['redmine'].cursor()
+    cursor24.execute("SELECT "
+                     "CONCAT(users.firstname, ' ', users.lastname) AS username, "
+                     "T.user_id "
+
+                     "FROM time_entries as T "
+
+                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
+                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
+
+                     "LEFT JOIN custom_values as quoteddocnumbertable "
+                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
+
+                     "JOIN projects "
+                     "ON T.project_id = projects.id "
+
+                     "JOIN enumerations "
+                     "ON T.activity_id = enumerations.id "
+
+                     "JOIN users "
+                     "ON T.user_id = users.id "
+
+                     "WHERE T.id is not null " + searchphraseforrowsources + " "
+                                                                             
+                     "GROUP BY username, T.user_id ")
+    usernamerowsources = cursor24.fetchall()
+
+    cursor25 = connections['redmine'].cursor()
+    cursor25.execute("SELECT "
+                     "enumerations.name as activityname, "
+                     "T.activity_id "
+
+                     "FROM time_entries as T "
+
+                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
+                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
+
+                     "LEFT JOIN custom_values as quoteddocnumbertable "
+                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
+
+                     "JOIN projects "
+                     "ON T.project_id = projects.id "
+
+                     "JOIN enumerations "
+                     "ON T.activity_id = enumerations.id "
+
+                     "JOIN users "
+                     "ON T.user_id = users.id "
+
+                     "WHERE T.id is not null " + searchphraseforrowsources + " "
+                                                                             
+                     "GROUP BY activityname, T.activity_id ")
+    activitynamerowsources = cursor25.fetchall()
+
     return render(request, 'quotation/timeentriescontent.html', {'docs': docs,
-                                                               'numberoftimeentries': numberoftimeentries})
-#                                                               'companiesrowsources': companiesrowsources,
-#                                                               'dockindrowsources': dockindrowsources})
+                                                               'issuetrackingsystemnumberofitems': issuetrackingsystemnumberofitems,
+                                                               'projectnamerowsources': projectnamerowsources,
+                                                               'usernamerowsources': usernamerowsources,
+                                                               'activitynamerowsources': activitynamerowsources})

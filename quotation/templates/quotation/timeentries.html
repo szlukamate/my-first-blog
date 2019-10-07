@@ -2,7 +2,6 @@
 	{% block content %}
 
 
-				<p id="issuetrackingsystemnumberofitems" hidden>{{ issuetrackingsystemnumberofitems}}</p>
 
 				<p align="center" id="title" style="font-size:160%;">Time Entry Items</p>{% csrf_token %}
 
@@ -10,13 +9,6 @@
 							<label for="timeentryid" >Time Entry Id</label>
 							<input id="timeentryid" type="text" value="" name="timeentryid" maxlength="50" size="10">
 
-							<label for="dockind" >Dockind</label>
-							  <select id="dockindname">
-									<option value="" ></option>
-									{% for dockindname in dockindnames %}
-										<option value="dockindname.0">dockindname.0</option>
-									{% endfor %}
-							  </select>
 
 							<label for="from" >From</label>
 							<input id="fromdate" type="text" value="" name="from" maxlength="50" size="10">
@@ -24,13 +16,6 @@
 							<label for="to" >To</label>
 							<input id="todate" type="text" value="" name="to" maxlength="50" size="10">
 
-							  <label for="projectname" >Projectname</label>
-							  <select id="projectname">
-									<option value="" ></option>
-									{% for company in companies %}
-										<option value="company.0">company.0</option>
-									{% endfor %}
-							  </select>
 							<span>Only For Open Projects: <label class="switch"><input type="checkbox" id="onlyforopenprojects"><span class="slider"></span></label></span>
 							<span>Only Unquoted: <label class="switch"><input type="checkbox" id="unquotedcheckbox"><span class="slider"></span></label></span>
 
@@ -45,6 +30,29 @@
 							<button id="timeentriestoquotationbutton" type="button">
 							   <span class="glyphicon glyphicon-arrow-down"></span>
 							</button>
+							<br>
 
+							<label for="quoteddocnumber" >Quoted Docnumber</label>
+							<input id="quoteddocnumber" type="text" value="" name="quoteddocnumber" maxlength="50" size="8">
+
+   						    <label for="projectname" >Projectname</label>
+							<select id="projectname">
+									<option value="" ></option>
+									{% for projectname in projectnamerowsources %}
+										<option value="company.0">projectname.0</option>
+									{% endfor %}
+							</select>
+							<label for="username" >User Name</label>
+							<select id="username"> <!-- Swapped from timeentriescontent.html-->
+									<option value="" ></option>
+										<option value="arbirary">arbirary</option>
+							</select>
+							<label for="activityname" >Activity Name</label>
+							<select id="activityname"> <!-- Swapped from timeentriescontent.html-->
+									<option value="" ></option>
+										<option value="arbirary">arbirary</option>
+							</select>
+
+							<hr>
 							<p id="timeentrysearchtemplate" ></p>
 	{% endblock %}

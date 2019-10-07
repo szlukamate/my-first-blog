@@ -404,6 +404,7 @@ $('#title').click(function() {
                 var itemdatalist=[];
                 var itemdataliststringified;
                 var quotationdocid = $('#quotationdocid').text();
+                var docnumber = $('#docnumber').text();
 
         main();
 
@@ -446,6 +447,7 @@ $('#title').click(function() {
 
                     data: {
                     'quotationdocid' : quotationdocid,
+                    'docnumber' : docnumber,
                     'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
                     'itemdatalist': itemdataliststringified,
 
@@ -520,10 +522,13 @@ $('#title').click(function() {
                 url: 'quotationissuetrackingsystemsearchcontent',
 
                 data: {
+                'quoteddocnumber': $('#quoteddocnumber').val(),
                 'timeentryid': $('#timeentryid').val(),
                 'fromdate': $('#fromdate').val(),
                 'todate': $('#todate').val(),
                 'projectname': $('#projectname').val(),
+                'userid': $('#username').val(),
+                'activityid': $('#activityname').val(),
                 'onlyforopenprojects': $('#onlyforopenprojects').prop('checked'),
                 'unquotedcheckbox': $('#unquotedcheckbox').prop('checked'),
 
@@ -534,6 +539,29 @@ $('#title').click(function() {
 
                     $('#timeentrysearchtemplate').html(data);
                     //console.log(data);
+
+                    setTimeout(
+                      function()
+                      {
+
+                        var projectnamevalueaccumulator=$('select#projectname').val(); // swap options of select element after html template refresh
+                        var projectnameswap=$('select#projectnameswap').html();
+                        $('select#projectname').html(projectnameswap);
+                        $('select#projectname').val(projectnamevalueaccumulator);
+
+                        var usernamevalueaccumulator=$('select#username').val();
+                        var usernameswap=$('select#usernameswap').html();
+                        $('select#username').html(usernameswap);
+                        $('select#username').val(usernamevalueaccumulator);
+
+                        var activitynamevalueaccumulator=$('select#activityname').val();
+                        var activitynameswap=$('select#activitynameswap').html();
+                        $('select#activityname').html(activitynameswap);
+                        $('select#activityname').val(activitynamevalueaccumulator);
+
+                      }, 500);
+
+
                 },
                 error: function(){
                     alert('failure');
@@ -541,41 +569,27 @@ $('#title').click(function() {
                 datatype: 'html'
 
             });
-                setTimeout(
-                  function()
-                  {
-/*
-                    var companyvalueaccumulator=$('select#company').val(); // swap options of select element after html template refresh
-                    var companyswap=$('select#companyswap').html();
-                    $('select#company').html(companyswap);
-                    $('select#company').val(companyvalueaccumulator);
-
-                    var dockindnamevalueaccumulator=$('select#dockindname').val();
-                    var dockindnameswap=$('select#dockindnameswap').html();
-                    $('select#dockindname').html(dockindnameswap);
-                    $('select#dockindname').val(dockindnamevalueaccumulator);
-*/
-                  }, 500);
 
     });
     $('body').on("click", "#searchoutbutton", function() {
 
         $('#onlyforopenprojects').prop('checked', false);
+        $('#unquotedcheckbox').prop('checked', false);
 
-/*
-        $('#docnumber').val("");
-        sessionStorage.docnumber = ""
+        $('#timeentryid').val("");
+        $('#projectname').val("");
+        $('#username').val("");
+        $('#activityname').val("");
 
-        $('#dockindname').val("");
-        sessionStorage.dockindname = ""
-
-        $('#company').val("");
-        sessionStorage.company = ""
-*/
         $('#searchbutton').trigger('click');
 
         //console.log(rowid);
 
+    });
+    $('body').on("keypress", "#timeentryid", function(event) {
+        if (event.keyCode == 13) {
+            $('#searchbutton').trigger('click');
+        }
     });
 
 
