@@ -404,7 +404,7 @@ $('#title').click(function() {
                 var itemdatalist=[];
                 var itemdataliststringified;
                 var quotationdocid = $('#quotationdocid').text();
-                var docnumber = $('#docnumber').text();
+                var quotationdocnumber = $('#quotationdocnumber').text();
 
         main();
 
@@ -447,7 +447,7 @@ $('#title').click(function() {
 
                     data: {
                     'quotationdocid' : quotationdocid,
-                    'docnumber' : docnumber,
+                    'quotationdocnumber' : quotationdocnumber,
                     'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
                     'itemdatalist': itemdataliststringified,
 
@@ -576,6 +576,7 @@ $('#title').click(function() {
         $('#onlyforopenprojects').prop('checked', false);
         $('#unquotedcheckbox').prop('checked', false);
 
+        $('#quoteddocnumber').val("");
         $('#timeentryid').val("");
         $('#projectname').val("");
         $('#username').val("");
@@ -583,10 +584,15 @@ $('#title').click(function() {
 
         $('#searchbutton').trigger('click');
 
-        //console.log(rowid);
 
     });
     $('body').on("keypress", "#timeentryid", function(event) {
+        if (event.keyCode == 13) {
+            $('#searchbutton').trigger('click');
+        }
+    });
+
+    $('body').on("keypress", "#quoteddocnumber", function(event) {
         if (event.keyCode == 13) {
             $('#searchbutton').trigger('click');
         }

@@ -976,44 +976,45 @@ def quotationsaveasorder(request, pk):
         for x in results:
             maxdocid = x[0]
 
-        cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
-                        "`Qty_tblDoc_details`, "
-                        "`Docid_tblDoc_details_id`, "
-                        "`customerdescription_tblProduct_ctblDoc_details`, "
-                        "`firstnum_tblDoc_details`, "
-                        "`fourthnum_tblDoc_details`, "
-                        "`secondnum_tblDoc_details`, "
-                        "`thirdnum_tblDoc_details`, "
-                        "`Note_tblDoc_details`, "
-                        "`creationtime_tblDoc_details`, "
-                        "purchase_price_tblproduct_ctblDoc_details, " #10
-                        "listprice_tblDoc_details, "
-                        "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-                        "Productid_tblDoc_details_id, "
-                        "Doc_detailsid_tblDoc_details, "
-                        "COALESCE(Productid_tblProduct, 0), "
-                        "currencyrate_tblcurrency_ctblDoc_details, "
-                        "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
-                        "unitsalespriceACU_tblDoc_details, "
-                        "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
-                        "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
-                        "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
-                        "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
-                        "unit_tbldocdetails, "
-                        "suppliercompanyid_tbldocdetails, "
-                        "supplierdescription_tblProduct_ctblDoc_details " #25
+    cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
+                    "`Qty_tblDoc_details`, "
+                    "`Docid_tblDoc_details_id`, "
+                    "`customerdescription_tblProduct_ctblDoc_details`, "
+                    "`firstnum_tblDoc_details`, "
+                    "`fourthnum_tblDoc_details`, "
+                    "`secondnum_tblDoc_details`, "
+                    "`thirdnum_tblDoc_details`, "
+                    "`Note_tblDoc_details`, "
+                    "`creationtime_tblDoc_details`, "
+                    "purchase_price_tblproduct_ctblDoc_details, " #10
+                    "listprice_tblDoc_details, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                    "Productid_tblDoc_details_id, "
+                    "Doc_detailsid_tblDoc_details, "
+                    "COALESCE(Productid_tblProduct, 0), "
+                    "currencyrate_tblcurrency_ctblDoc_details, "
+                    "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
+                    "unitsalespriceACU_tblDoc_details, "
+                    "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
+                    "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
+                    "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
+                    "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
+                    "unit_tbldocdetails, "
+                    "suppliercompanyid_tbldocdetails, "
+                    "supplierdescription_tblProduct_ctblDoc_details " #25
 
-                        "FROM quotation_tbldoc_details "
+                    "FROM quotation_tbldoc_details "
 
-                        "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
-                        "ON "
-                        "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+                    "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+                    "ON "
+                    "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
 
-                        "WHERE docid_tbldoc_details_id=%s "
-                        "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
-                        [pk])
-        docdetails = cursor3.fetchall()
+                    "WHERE docid_tbldoc_details_id=%s "
+                    "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
+                    [pk])
+    docdetails = cursor3.fetchall()
     for x in docdetails:
+        docdetailsid = x[0]
         qty = x[1]
         firstnum = x[4]
         fourthnum = x[5]
@@ -1052,7 +1053,8 @@ def quotationsaveasorder(request, pk):
             "unitsalespriceACU_tblDoc_details, "
             "unit_tbldocdetails, "
             "suppliercompanyid_tbldocdetails, "
-            "supplierdescription_tblProduct_ctblDoc_details) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            "supplierdescription_tblProduct_ctblDoc_details, "
+            "creatorid_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
             [maxdocid,
              qty,
@@ -1070,7 +1072,57 @@ def quotationsaveasorder(request, pk):
              unitsalespriceACU,
              unitclone,
              suppliercompanyid,
-             supplierdescriptionclone])
+             supplierdescriptionclone,
+             creatorid])
+
+        # update redmine with ordereddetails begin
+        cursor3 = connection.cursor()
+        cursor3.execute(
+            "SELECT max(Doc_detailsid_tblDoc_details) FROM quotation_tbldoc_details WHERE creatorid_tbldocdetails=%s",
+            [creatorid])
+        results = cursor3.fetchall()
+        for x in results:
+            maxdocdetailsid = x[0]
+
+        cursor3 = connection.cursor()
+        cursor3.execute(
+            "SELECT pretag_tbldockind FROM quotation_tbldoc_kind WHERE Doc_kindid_tblDoc_kind = 2")
+        results = cursor3.fetchall()
+        for x in results:
+            pretagfororder = x[0]
+
+        # selecting timeentryid for next query (#2 query) with the help of quoteddocdetailsid
+        cursor21 = connections['redmine'].cursor()
+        cursor21.execute(
+            "SELECT customized_id FROM custom_values WHERE custom_field_id = 4 and value = %s", [docdetailsid])
+        results = cursor21.fetchall()
+        for x in results:
+            timeentryid = x[0]
+
+        #2 query:
+        cursor21 = connections['redmine'].cursor()
+        cursor21.execute("UPDATE custom_values SET "
+                        "value = %s "
+                        "WHERE custom_field_id = 5 and customized_id = %s ", [maxdocdetailsid, timeentryid]) # 5 means this field in Redmine in custom_fields table
+
+        # select orderdocnumber
+        cursor3 = connection.cursor()
+        cursor3.execute(
+            "SELECT docnumber_tbldoc FROM quotation_tbldoc WHERE Docid_tblDoc=%s",
+            [maxdocid])
+        results = cursor3.fetchall()
+        for x in results:
+            orderdocnumber = x[0]
+
+        assembleddocnumber = pretagfororder + str(orderdocnumber)
+
+        cursor21 = connections['redmine'].cursor()
+        cursor21.execute("UPDATE custom_values SET "
+                        "value = %s "
+                        "WHERE custom_field_id = 7 and customized_id = %s ", [assembleddocnumber, timeentryid]) # 7 means this field in Redmine in custom_fields table
+
+        # update redmine with ordereddetails end
+
     return redirect('docselector', pk=maxdocid)
 @login_required
 def quotationissuetrackingsystem(request):
@@ -1263,7 +1315,7 @@ def quotationissuetrackingsystemitemstoquotation(request):
     BASE_DIR = settings.BASE_DIR
 
     quotationdocid = request.POST['quotationdocid']
-    docnumber = request.POST['docnumber']
+    quotationdocnumber = request.POST['quotationdocnumber']
     issuetrackingsystemnumberofitems = request.POST['issuetrackingsystemnumberofitems']
     itemdatalistraw = request.POST['itemdatalist']
     itemdatalist = json.loads(itemdatalistraw)
@@ -1390,7 +1442,7 @@ def quotationissuetrackingsystemitemstoquotation(request):
                         "value = %s "
                         "WHERE custom_field_id = 4 and customized_id = %s ", [maxdocdetailsid, timeentryid]) # 4 means this field in Redmine in custom_fields table
 
-        assembleddocnumber = pretagforquotation + str(docnumber)
+        assembleddocnumber = pretagforquotation + str(quotationdocnumber)
 
         cursor21 = connections['redmine'].cursor()
         cursor21.execute("UPDATE custom_values SET "
@@ -1445,8 +1497,8 @@ def quotationissuetrackingsystemsearchcontent(request):
         onlyforopenprojectsforrowsources = ""
 
     if quoteddocnumber != '':
-        quoteddocnumberformainresults = "and T.id='" + quoteddocnumber + "' "
-        quoteddocnumberforrowsource = "and T.id='" + quoteddocnumber + "' "
+        quoteddocnumberformainresults = "and quoteddocnumbertable.value='" + quoteddocnumber + "' "
+        quoteddocnumberforrowsource = "and quoteddocnumbertable.value='" + quoteddocnumber + "' "
     else:
         quoteddocnumberformainresults = ""
         quoteddocnumberforrowsource = ""
@@ -1492,8 +1544,12 @@ def quotationissuetrackingsystemsearchcontent(request):
     companyformainresults = ""
 #        companyforrowsources = ""
 
-    searchphraseformainresults = unquotedcheckboxphrase + onlyforopenprojectsphrase + timeentryidformainresults + projectnameformainresults + datephraseformainresults + companyformainresults + usernameformainresults + activitynameformainresults + " "
-    searchphraseforrowsources = unquotedcheckboxforrowsources + onlyforopenprojectsforrowsources + timeentryidforrowsource + projectnameforrowsources + usernameforrowsources + activitynameforrowsources + " "
+    searchphraseformainresults = (unquotedcheckboxphrase + onlyforopenprojectsphrase + timeentryidformainresults + projectnameformainresults +
+                                  datephraseformainresults + companyformainresults + usernameformainresults +
+                                  activitynameformainresults + quoteddocnumberformainresults + " ")
+    searchphraseforrowsources = (unquotedcheckboxforrowsources + onlyforopenprojectsforrowsources + timeentryidforrowsource +
+                                 projectnameforrowsources + usernameforrowsources + activitynameforrowsources +
+                                 quoteddocnumberforrowsource + " ")
     #import pdb;
     #pdb.set_trace()
 
