@@ -202,3 +202,70 @@ def productupdatesupplier(request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+
+
+@login_required
+def productsearchcontent(request):
+    cursor = connection.cursor()
+    cursor.execute("SELECT Productid_tblProduct, "
+                   "purchase_price_tblproduct, "
+                   "customerdescription_tblProduct, "
+                   "currencyisocode_tblcurrency_ctblproduct, "
+                   "margin_tblproduct, "
+                   "round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
+                   "unit_tblproduct, "
+                   "suppliercompanyid_tblproduct, "
+                   "companyname_tblcompanies, "
+                   "supplierdescription_tblProduct, "
+                   "discreteflag_tblproduct, "  # 10
+                   "serviceflag_tblproduct "
+
+                   "FROM quotation_tblproduct "
+
+                   "LEFT JOIN quotation_tblcompanies "
+                   "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
+
+                   "WHERE obsolete_tblproduct=0 "
+                   "order by productid_tblproduct"
+
+                   )
+    products = cursor.fetchall()
+    transaction.commit()
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT currencyid_tblcurrency, currencyisocode_tblcurrency FROM quotation_tblcurrency")
+    currencycodes = cursor3.fetchall()
+    transaction.commit()
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT companyid_tblcompanies, companyname_tblcompanies FROM quotation_tblcompanies")
+    supplierlist = cursor3.fetchall()
+    transaction.commit()
+
+
+    return render(request, 'quotation/productscontent.html', {'products': products,
+                                                       'currencycodes': currencycodes,
+                                                       'supplierlist': supplierlist})
+@login_required
+def productfieldupdate(request):
+    if request.method == "POST":
+        fieldvalue = request.POST['fieldvalue']
+        rowid = request.POST['rowid']
+        fieldname = request.POST['fieldname']
+        #import pdb;
+        #pdb.set_trace()
+        cursor2 = connection.cursor()
+        sqlquery = "UPDATE quotation_tblproduct SET " + fieldname + "= '"  + fieldvalue + "' WHERE productid_tblproduct =" + rowid
+        cursor2.execute(sqlquery)
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT " + fieldname + " "
+                       "FROM quotation_tblproduct "
+                        "WHERE productid_tblproduct= %s ", [rowid])
+        results = cursor3.fetchall()
+
+        json_data = json.dumps(results)
+
+        return HttpResponse(json_data, content_type="application/json")

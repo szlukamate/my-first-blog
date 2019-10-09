@@ -1,5 +1,5 @@
 /*
-quotation.js
+products.js
 */
 
             var msg="Hello Javascript2";
@@ -12,7 +12,17 @@ $(function () {
         $('#title').hide();
 
     });
-   $('.updateable').focusout(function() {
+
+    setTimeout(
+      function()
+      {
+
+            $('#searchbutton').trigger('click');
+
+      }, 500);
+
+   $('body').on("focusout", ".updateable", function() {
+
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var fieldvalue = $(this).val();
@@ -23,7 +33,7 @@ $(function () {
 
                    $.ajax({
                         type: 'POST',
-                        url: '',
+                        url: 'productfieldupdate',
 
                         data: {
                         'fieldvalue': fieldvalue,
@@ -97,13 +107,14 @@ $(function () {
 
 
    });
+    $('body').on("click", ".updateable", function() {
 
-   $('.updateable').click(function() {
         $(this).css("background-color", "yellow");
 
 
    });
-    $('.listpricechangerbutton').click(function() {
+    $('body').on("click", ".listpricechangerbutton", function() {
+
         var productid=$(this).attr( "productid" );
 
                     listpricefieldstate(this);
@@ -133,50 +144,50 @@ $(function () {
 
 
 
-    function listpricefieldstate(that){
+            function listpricefieldstate(that){
 
-        if ($('input[name="listprice"][productid="' + productid + '"').is(':disabled')){ // listprice is disabled
-                setlistpricebuttontext('toenabled', that);
+                if ($('input[name="listprice"][productid="' + productid + '"').is(':disabled')){ // listprice is disabled
+                        setlistpricebuttontext('toenabled', that);
 
-             } else { // listprice is enabled
-                setlistpricebuttontext('todisabled', that);
+                     } else { // listprice is enabled
+                        setlistpricebuttontext('todisabled', that);
 
 
-        }
-    }
-    function setlistpricebuttontext(listpricebuttonstate, that2){
-
-            switch(listpricebuttonstate) {
-              case 'toenabled':
-                $('input[name="listprice"][productid="' + productid + '"').prop('disabled', false)
-                $(that2).attr('value', 'Confirm');
-                break;
-              case 'todisabled':
-                $('input[name="listprice"][productid="' + productid + '"').prop('disabled', true)
-                $(that2).attr('value', 'Change list price');
-                break;
-              default:
-                // code block
+                }
             }
-    }
-    function ajaxsuccess (data, textStatus, jqXHR){
-    var marginnewfromsql=data[0][1];
-    $('input[name="margin_tblproduct"][productid="' + productid + '"').val(marginnewfromsql);
+            function setlistpricebuttontext(listpricebuttonstate, that2){
 
-    }
+                    switch(listpricebuttonstate) {
+                      case 'toenabled':
+                        $('input[name="listprice"][productid="' + productid + '"').prop('disabled', false)
+                        $(that2).attr('value', 'Confirm');
+                        break;
+                      case 'todisabled':
+                        $('input[name="listprice"][productid="' + productid + '"').prop('disabled', true)
+                        $(that2).attr('value', 'Change list price');
+                        break;
+                      default:
+                        // code block
+                    }
+            }
+            function ajaxsuccess (data, textStatus, jqXHR){
+            var marginnewfromsql=data[0][1];
+            $('input[name="margin_tblproduct"][productid="' + productid + '"').val(marginnewfromsql);
 
-    function ajaxerror (){
-       console.log('ajax failure');
-    }
-    function ajaxcomplete (){
+            }
 
-        console.log('ajax done');
-    }
+            function ajaxerror (){
+               console.log('ajax failure');
+            }
+            function ajaxcomplete (){
+
+                console.log('ajax done');
+            }
 
 
     });
+    $('body').on("change", ".currencyselection", function() {
 
-    $('.currencyselection').change(function() {
         var productid=$(this).attr( "productid" );
                     $.ajax({
                     type: 'POST',
@@ -212,7 +223,8 @@ $(function () {
                     }
 
     });
-    $('.supplierselection').change(function() {
+    $('body').on("change", ".supplierselection", function() {
+
         var productid=$(this).attr( "productid" );
                     $.ajax({
                     type: 'POST',
@@ -336,5 +348,54 @@ $(function () {
 
 
    });
+    $('#searchbutton').click(function() {
+
+            $.ajax({
+                type: 'POST',
+                url: 'productsearchcontent',
+
+                data: {
+                'docnumber': $('#docnumber').val(),
+                'dockindname': $('#dockindname').val(),
+                'fromdate': $('#fromdate').val(),
+                'todate': $('#todate').val(),
+                'company': $('#company').val(),
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(data){
+
+                    $('#productsearchtemplate').html(data);
+                    //console.log(data);
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+/*
+                setTimeout(
+                  function()
+                  {
+                    var companyvalueaccumulator=$('select#company').val(); // swap options of select element after html template refresh
+                    var companyswap=$('select#companyswap').html();
+                    $('select#company').html(companyswap);
+                    $('select#company').val(companyvalueaccumulator);
+
+                    var dockindnamevalueaccumulator=$('select#dockindname').val();
+                    var dockindnameswap=$('select#dockindnameswap').html();
+                    $('select#dockindname').html(dockindnameswap);
+                    $('select#dockindname').val(dockindnamevalueaccumulator);
+
+                  }, 500);
+        sessionStorage.docnumber = $('#docnumber').val();
+        sessionStorage.dockindname = $('#dockindname').val();
+        sessionStorage.fromdate = $('#fromdate').val();
+        sessionStorage.todate = $('#todate').val();
+        sessionStorage.company = $('#company').val();
+*/
+    });
 
 });

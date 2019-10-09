@@ -1075,7 +1075,7 @@ def quotationsaveasorder(request, pk):
              supplierdescriptionclone,
              creatorid])
 
-        # update redmine with ordereddetails begin
+        # update  redmine with ordereddetails begin
         cursor3 = connection.cursor()
         cursor3.execute(
             "SELECT max(Doc_detailsid_tblDoc_details) FROM quotation_tbldoc_details WHERE creatorid_tbldocdetails=%s",
@@ -1091,7 +1091,7 @@ def quotationsaveasorder(request, pk):
         for x in results:
             pretagfororder = x[0]
 
-        # selecting timeentryid for next query (#2 query) with the help of quoteddocdetailsid
+        # selecting timeentryid  for next query (#2 query) with the help of  quoteddocdetailsid
         cursor21 = connections['redmine'].cursor()
         cursor21.execute(
             "SELECT customized_id FROM custom_values WHERE custom_field_id = 4 and value = %s", [docdetailsid])

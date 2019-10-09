@@ -1,0 +1,83 @@
+	{% block content %}
+          
+
+
+
+		{% csrf_token %}
+		<p id="newproductsign" align="left"><a href="#"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+		<p id="sqlsavingfeedbackproduct"></p><br>
+
+			<div class="table-responsive text-nowrap" style="max-height: 600px; overflow:scroll;">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<td>Productid</td>
+									<td>Purchase Price</td>
+									<td>Currency</td>
+									<td>Margin</td>
+									<td>List Price</td>
+									<td>Change List Price</td>
+									<td>Customer Description</td>
+									<td>Supplier Description</td>
+									<td>Unit</td>
+									<td>Supplier</td>
+								</tr>
+							</thead>
+							<tbody>
+
+
+			{% for product in products %}
+								<tr>
+									<td><input type="text" id="x" class="updateable" value="{{product.0}}" name="Productid_tblProduct" maxlength="10" productid="{{product.0}}" size="3" disabled></td>
+									<td><input type="text" class="updateable" value="{{product.1}}" name="purchase_price_tblproduct" maxlength="10" productid="{{product.0}}" size="3"></td>
+									<td>
+										<select class="currencyselection" productid="{{product.0}}">
+												<option value="" disabled selected>{{product.3}}</option>
+											{% for currencycode in currencycodes %}
+												<option value="{{ currencycode.0 }}">{{ currencycode.1}}</option>
+											{% endfor %}
+										</select>
+									</td>
+									<td><input type="text" class="updateable" value="{{product.4}}" name="margin_tblproduct" maxlength="3" productid="{{product.0}}" size="3"/></td>
+									<td><input type="text" value="{{product.5}}" name="listprice" maxlength="10" size="8" productid="{{product.0}}" disabled/></td>
+									<td><input type="button" name="listpricechangerbutton" value="Change list Price" class="listpricechangerbutton" productid="{{product.0}}" style="width:200px"></td>
+									<td><textarea rows="2" cols="35" class="updateable" name="customerdescription_tblProduct" productid="{{product.0}}">{{ product.2}}</textarea></td>
+									<td><textarea rows="2" cols="35" class="updateable" name="supplierdescription_tblProduct" productid="{{product.0}}">{{ product.9}}</textarea></td>
+									<td><input type="text" class="updateable" value="{{product.6}}" name="unit_tblproduct" maxlength="10" size="8" productid="{{product.0}}"/></td>
+									<td>
+										<select class="supplierselection" productid="{{product.0}}">
+												<option value="" disabled selected>{{product.8}}</option>
+											{% for supplier in supplierlist %}
+												<option value="{{ supplier.0 }}">{{ supplier.1}}</option>
+											{% endfor %}
+										</select>
+									</td>
+									{% if product.11 == 1 %}
+
+										<td><span style="color:orange;">Service</span></td>
+
+									{% else %}
+
+
+										{% if product.10 == 1 %}
+											<td><span style="color:black; white-space: nowrap;">Discrete Product</span></td>
+										{% else %}
+											<td><span style="color:green; white-space: nowrap;">Indiscrete Product</span></td>
+										{% endif %}
+
+									{% endif %}
+
+									<td><a href="{% url 'productremove' pkproductid=product.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+
+								</tr>
+
+			{% endfor %}
+
+							</tbody>
+						</table>
+			</div>
+
+
+
+	{% endblock %}

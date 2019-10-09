@@ -110,5 +110,7 @@ urlpatterns = [
     url('quotationissuetrackingsystemitemstoquotation$', views.quotationissuetrackingsystemitemstoquotation, name='quotationissuetrackingsystemitemstoquotation'),
     url('quotationissuetrackingsystempostitems$', views.quotationissuetrackingsystempostitems, name='quotationissuetrackingsystempostitems'),
     url('quotationissuetrackingsystemsearchcontent$', views.quotationissuetrackingsystemsearchcontent, name='quotationissuetrackingsystemsearchcontent'),
+    url('productsearchcontent$', views.productsearchcontent, name='productsearchcontent'),
+    url('productfieldupdate$', views.productfieldupdate, name='productfieldupdate'),
 
 ]
