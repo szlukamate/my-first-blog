@@ -11,6 +11,7 @@ from django.http import HttpResponse
 # pdb.set_trace()
 @login_required
 def products(request, pkproductid):
+    '''
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
         rowid = request.POST['rowid']
@@ -30,6 +31,7 @@ def products(request, pkproductid):
         json_data = json.dumps(results)
 
         return HttpResponse(json_data, content_type="application/json")
+    '''
     # pkproductid == 0 if the request not asks a particular product
     if int(pkproductid) == 0:
         cursor = connection.cursor()
@@ -79,7 +81,7 @@ def products(request, pkproductid):
 
         products = cursor.fetchall()
         transaction.commit()
-
+    '''
     cursor3 = connection.cursor()
     cursor3.execute(
         "SELECT currencyid_tblcurrency, currencyisocode_tblcurrency FROM quotation_tblcurrency")
@@ -91,11 +93,25 @@ def products(request, pkproductid):
         "SELECT companyid_tblcompanies, companyname_tblcompanies FROM quotation_tblcompanies")
     supplierlist = cursor3.fetchall()
     transaction.commit()
+    '''
+    # Creates a list containing #h lists, each of #w items, all set to 0
+    w, h = 3, 3;
+    addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
 
+    addfilterselectvaluesandoptions[0][0] = 'Customer Description'
+    addfilterselectvaluesandoptions[0][1] = 'customerdescription'
+
+    addfilterselectvaluesandoptions[1][0] = 'Listprice'
+    addfilterselectvaluesandoptions[1][1] = 'listprice'
+
+    addfilterselectvaluesandoptions[2][0] = 'Currency'
+    addfilterselectvaluesandoptions[2][1] = 'currency'
+
+    #import pdb;
+    #pdb.set_trace()
 
     return render(request, 'quotation/products.html', {'products': products,
-                                                       'currencycodes': currencycodes,
-                                                       'supplierlist': supplierlist})
+                                                       'addfilterselectvaluesandoptions': addfilterselectvaluesandoptions})
 @login_required
 def productupdatecurrencyisocode(request):
     if request.method == 'POST':

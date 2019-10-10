@@ -397,5 +397,116 @@ $(function () {
         sessionStorage.company = $('#company').val();
 */
     });
+    $('#addfilterselect').change(function() {
+
+        var optionValues = [];
+
+        $('#addfilterselect option').each(function() {
+            optionValues.push($(this).attr( "value" ));
+        });
+        var selectedvalue = $('#addfilterselect').val()
+        $('#addfilterselect').val("");
+
+//        $('#result').html(optionValues);
+                    console.log(optionValues);
+
+                    $.ajax({
+                    type: 'POST',
+                    url: 'filtermain',
+
+                    data: {
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                        console.log('ajax done');
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess(data, textStatus, jqXHR)
+                    {
+                    console.log(data);
+//                    var supplieridsql= data[0]
+//                    $('select[class="supplierselection"][productid="' + productid + '"] option:selected').html(supplieridsql);
+                    $('#filtertemplate').html(data);
+                    }
+
+
+
+                    $.ajax({
+                    type: 'POST',
+                    url: 'filteraddfilteroptinsonproductform',
+
+                    data: {
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess2,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                        console.log('ajax done');
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess2(data, textStatus, jqXHR)
+                    {
+                    console.log(data);
+//                    var supplieridsql= data[0]
+//                    $('select[class="supplierselection"][productid="' + productid + '"] option:selected').html(supplieridsql);
+                    $('#filtertemplate').html(data);
+                    }
+
+
+
+                    $.ajax({
+                    type: 'POST',
+                    url: 'filtertemplatehtmlonproductform',
+
+                    data: {
+
+                    'selectedvalue': selectedvalue,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess3,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                        console.log('ajax done');
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess3(data, textStatus, jqXHR)
+                    {
+                    console.log(data);
+//                    var supplieridsql= data[0]
+//                    $('select[class="supplierselection"][productid="' + productid + '"] option:selected').html(supplieridsql);
+                    $('#filtertemplate').html(data);
+                    }
+
+
+
+    });
 
 });

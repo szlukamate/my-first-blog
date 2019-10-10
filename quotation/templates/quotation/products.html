@@ -48,13 +48,18 @@
 									<option value="" ></option>
 										<option value="arbitrary">arbitrary</option>
 							</select>
-							<label for="activityname" >Activity Name</label>
-							<select id="activityname"> <!-- Swapped from timeentriescontent.html-->
+							<label for="addfilterselect" >Add Filter</label>
+							<select id="addfilterselect">
 									<option value="" ></option>
-										<option value="arbitrary">arbitrary</option>
+									{% for addfilterselectvaluesandoption in addfilterselectvaluesandoptions %}
+										<option value="{{addfilterselectvaluesandoption.1}}">{{addfilterselectvaluesandoption.0}}</option>
+									{% endfor %}
 							</select>
+							<p id="newproductsign" align="left"><a href="#"><span class="glyphicon glyphicon-plus"></span></a></p>
 
+							<p id="filtertemplate" ></p>
 							<hr>
+							<p id="productsearchtemplate" ></p>
 
 							<div id="dialog-form" title="New Product Type">
 							<p>Please choose the type of product from below:</p>
@@ -65,8 +70,6 @@
 								</fieldset>
 							  </form>
 							</div>
-
-							<p id="productsearchtemplate" ></p>
 
 			<script type="text/javascript" src="{% static 'js/products.js' %}"></script>
         <link rel="stylesheet" href="{% static 'css/products.css' %}">
