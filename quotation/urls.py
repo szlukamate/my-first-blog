@@ -113,7 +113,6 @@ urlpatterns = [
     url('productsearchcontent$', views.productsearchcontent, name='productsearchcontent'),
     url('productfieldupdate$', views.productfieldupdate, name='productfieldupdate'),
     url('filtermain$', views.filtermain, name='filtermain'),
-    url('filteraddfilteroptinsonproductform$', views.filteraddfilteroptinsonproductform, name='filteraddfilteroptinsonproductform'),
     url('filtertemplatehtmlonproductform$', views.filtertemplatehtmlonproductform, name='filtertemplatehtmlonproductform'),
 
 ]

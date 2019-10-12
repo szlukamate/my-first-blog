@@ -2,8 +2,15 @@
 	{% block content %}
           
 
-					{% csrf_token %}
-					<p  >{{selectedvalue}}</p>
-
+	{% csrf_token %}
+	<input type="checkbox" class="enabledfiltercheckbox" filteritemrowid="{{filteritemrowid}}" filteritemname="{{filteritemname}}" checked>
+	<span >{{selectedoption}}</span>
+	<select class="filteritemselect" filteritemrowid="{{filteritemrowid}}" filteritemname="{{filteritemname}}">
+		{% for filteritemselectoption in filteritemselectoptions %}
+			<option value="{{ filteritemselectoption.0}}">{{ filteritemselectoption.1}}</option>
+		{% endfor %}
+	</select>
+	<span class="filteritemtemplate" filteritemrowid="{{filteritemrowid}}" filteritemname="{{filteritemname}}"></span>
+	<br>
 
 	{% endblock %}

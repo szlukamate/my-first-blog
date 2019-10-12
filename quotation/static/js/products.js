@@ -5,12 +5,12 @@ products.js
             var msg="Hello Javascript2";
                     console.log(msg);
 $(function () {
+    var filteritemmaxrowid=0;
 
     $('a[href="/quotation/products/0/"]').parent().addClass('active'); //activate products tab on navbar
 
     $('#title').click(function() {
         $('#title').hide();
-
     });
 
     setTimeout(
@@ -398,17 +398,16 @@ $(function () {
 */
     });
     $('#addfilterselect').change(function() {
-
+        filteritemmaxrowid++;
         var optionValues = [];
 
         $('#addfilterselect option').each(function() {
             optionValues.push($(this).attr( "value" ));
         });
         var selectedvalue = $('#addfilterselect').val()
+        var selectedoption = $('#addfilterselect option:selected').text()
+        $("#addfilterselect option:selected").attr('disabled','disabled')
         $('#addfilterselect').val("");
-
-//        $('#result').html(optionValues);
-                    console.log(optionValues);
 
                     $.ajax({
                     type: 'POST',
@@ -425,7 +424,6 @@ $(function () {
                     },
                     complete: function(){
 
-                        console.log('ajax done');
                     },
 
                     datatype: 'json'
@@ -434,43 +432,10 @@ $(function () {
 
                     function UpdateSuccess(data, textStatus, jqXHR)
                     {
-                    console.log(data);
-//                    var supplieridsql= data[0]
-//                    $('select[class="supplierselection"][productid="' + productid + '"] option:selected').html(supplieridsql);
-                    $('#filtertemplate').html(data);
                     }
 
 
 
-                    $.ajax({
-                    type: 'POST',
-                    url: 'filteraddfilteroptinsonproductform',
-
-                    data: {
-
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                    },
-
-                    success: UpdateSuccess2,
-                    error: function(){
-                       console.log('ajax failure');
-                    },
-                    complete: function(){
-
-                        console.log('ajax done');
-                    },
-
-                    datatype: 'json'
-
-                    });
-
-                    function UpdateSuccess2(data, textStatus, jqXHR)
-                    {
-                    console.log(data);
-//                    var supplieridsql= data[0]
-//                    $('select[class="supplierselection"][productid="' + productid + '"] option:selected').html(supplieridsql);
-                    $('#filtertemplate').html(data);
-                    }
 
 
 
@@ -480,7 +445,10 @@ $(function () {
 
                     data: {
 
+                    'invokedfrom': 'addfilterselectchanged',
+                    'filteritemmaxrowid': filteritemmaxrowid,
                     'selectedvalue': selectedvalue,
+                    'selectedoption': selectedoption,
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
                     },
 
@@ -490,7 +458,6 @@ $(function () {
                     },
                     complete: function(){
 
-                        console.log('ajax done');
                     },
 
                     datatype: 'json'
@@ -499,11 +466,60 @@ $(function () {
 
                     function UpdateSuccess3(data, textStatus, jqXHR)
                     {
-                    console.log(data);
-//                    var supplieridsql= data[0]
-//                    $('select[class="supplierselection"][productid="' + productid + '"] option:selected').html(supplieridsql);
-                    $('#filtertemplate').html(data);
+                    $("#filtertemplate").append(data);
+                    $('.filteritemselect').trigger('change');
+
                     }
+
+
+
+
+    });
+    $('body').on("change", ".filteritemselect", function() {
+
+        var filteritemrowid = $(this).attr( "filteritemrowid" );
+        var filteritemname = $(this).attr( "filteritemname" );
+
+                    $.ajax({
+                    type: 'POST',
+                    url: 'filtertemplatehtmlonproductform',
+
+                    data: {
+
+                    'invokedfrom': 'filteritemselectchanged',
+                    'filteritemrowid': filteritemrowid,
+                    'filteritemname': filteritemname,
+                    'filteritemselectedvalue': $('.filteritemselect[filteritemrowid="' + filteritemrowid + '"]').val(),
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess3,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess3(data, textStatus, jqXHR)
+                    {
+                    $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').html(data);
+
+                    }
+
+
+
+    });
+    $('body').on("click", ".enabledfiltercheckbox", function() {
+
+        var filteritemrowid = $(this).attr( "filteritemrowid" );
+        $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').toggle();
+        $('.filteritemselect[filteritemrowid="' + filteritemrowid + '"]').toggle();
 
 
 

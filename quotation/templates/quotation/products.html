@@ -8,15 +8,6 @@
 				<p align="center" id="title" style="font-size:160%;">Products Form</p>{% csrf_token %}
 
 							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
-							<label for="timeentryid" >Time Entry Id</label>
-							<input id="timeentryid" type="text" value="" name="timeentryid" maxlength="50" size="10">
-
-
-
-							<span>Only For Open Projects: <label class="switch"><input type="checkbox" id="onlyforopenprojects"><span class="slider"></span></label></span>
-							<span>Only Unquoted: <label class="switch"><input type="checkbox" id="unquotedcheckbox"></label></span>
-							<span>Only Unordered: <label class="switch"><input type="checkbox" id="unorderedcheckbox"></label></span>
-
 							<button id="searchbutton" type="submit">
 							   <span class="glyphicon glyphicon-filter"></span>
 							</button>
@@ -24,30 +15,6 @@
 							<button id="searchoutbutton" type="button">
 							   <span class="glyphicon glyphicon-trash"></span>
 							</button>
-
-							<button id="timeentriestoquotationbutton" type="button">
-							   <span class="glyphicon glyphicon-arrow-down"></span>
-							</button>
-							<br>
-
-							<label for="quoteddocnumber" >Quoted Docnumber (With Pretag)</label>
-							<input id="quoteddocnumber" type="text" value="" name="quoteddocnumber" maxlength="50" size="8">
-
-							<label for="ordereddocnumber" >Ordered Docnumber (With Pretag)</label>
-							<input id="ordereddocnumber" type="text" value="" name="ordereddocnumber" maxlength="50" size="8">
-
-   						    <label for="projectname" >Projectname</label>
-							<select id="projectname">
-									<option value="" ></option>
-									{% for projectname in projectnamerowsources %}
-										<option value="company.0">projectname.0</option>
-									{% endfor %}
-							</select>
-							<label for="username" >User Name</label>
-							<select id="username"> <!-- Swapped from timeentriescontent.html-->
-									<option value="" ></option>
-										<option value="arbitrary">arbitrary</option>
-							</select>
 							<label for="addfilterselect" >Add Filter</label>
 							<select id="addfilterselect">
 									<option value="" ></option>
