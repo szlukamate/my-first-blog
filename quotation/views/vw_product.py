@@ -73,9 +73,12 @@ def products(request, pkproductid):
                        "suppliercompanyid_tblproduct, "
                        "companyname_tblcompanies, "
                        "supplierdescription_tblProduct "
+
                        "FROM quotation_tblproduct "
+
                        "JOIN quotation_tblcompanies "
                        "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
+
                        "WHERE productid_tblproduct= %s and obsolete_tblproduct=0 "
                        "order by productid_tblproduct", [pkproductid])
 
@@ -94,6 +97,7 @@ def products(request, pkproductid):
     supplierlist = cursor3.fetchall()
     transaction.commit()
     '''
+# filtering options to Addfilter selectbox begin
     # Creates a list containing #h lists, each of #w items, all set to 0
     w, h = 3, 3;
     addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
@@ -106,6 +110,7 @@ def products(request, pkproductid):
 
     addfilterselectvaluesandoptions[2][0] = 'Currency'
     addfilterselectvaluesandoptions[2][1] = 'currency'
+# filtering options to Addfilter selectbox end
 
     #import pdb;
     #pdb.set_trace()
@@ -222,6 +227,32 @@ def productupdatesupplier(request):
 
 @login_required
 def productsearchcontent(request):
+    filteritemlistraw = request.POST['filteritemlist']
+    filteritemlist = json.loads(filteritemlistraw)
+
+    for x in range(0,len(filteritemlist),4):
+
+        filteritemname = filteritemlist[(x+0)]
+        filteritemoperator = filteritemlist[x+1]
+        filteritemfirstinput = filteritemlist[x+2]
+        filteritemsecondinput = filteritemlist[x+3]
+
+        import pdb;
+        pdb.set_trace()
+
+    if filteritemname == 'customerdescription':
+        if filteritemoperator == 'contains':
+            customerdescriptionphrase = "and customerdescription_tblProduct = 1 "
+
+
+
+
+
+
+
+
+
+
     cursor = connection.cursor()
     cursor.execute("SELECT Productid_tblProduct, "
                    "purchase_price_tblproduct, "

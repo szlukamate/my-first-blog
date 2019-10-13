@@ -17,7 +17,7 @@ $(function () {
       function()
       {
 
-            $('#searchbutton').trigger('click');
+            $('#filterbutton').trigger('click');
 
       }, 500);
 
@@ -348,18 +348,44 @@ $(function () {
 
 
    });
-    $('#searchbutton').click(function() {
+    $('#filterbutton').click(function() {
+    var filteritemlist = []
+    main();
+
+        function main(){
+            for (i = 1; i <= filteritemmaxrowid; ++i) {
+            getfilteritemparamaters(i);
+            }
+
+            filteritemliststringified = JSON.stringify(filteritemlist);
+            console.log(filteritemliststringified);
+
+            filteritemlisttransmit();
+        }
+
+        function getfilteritemparamaters(i){
+            if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked")) {
+
+                filteritemnamevar = $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').attr( "filteritemname" );
+                filteritemselectedvaluevar = $('.filteritemselect[filteritemrowid="' + i + '"]').val();
+                firstinputbox = $('.firstinputbox[filteritemrowid="' + i + '"]').val();
+                secondinputbox = $('.secondinputbox[filteritemrowid="' + i + '"]').val();
+                if (typeof secondinputbox === "undefined") {
+                    secondinputbox = ''
+                }
+                filteritemlist.push(filteritemnamevar, filteritemselectedvaluevar, firstinputbox, secondinputbox);
+                console.log(filteritemlist);
+            }
+        }
+        function filteritemlisttransmit(){
 
             $.ajax({
                 type: 'POST',
                 url: 'productsearchcontent',
 
                 data: {
-                'docnumber': $('#docnumber').val(),
-                'dockindname': $('#dockindname').val(),
-                'fromdate': $('#fromdate').val(),
-                'todate': $('#todate').val(),
-                'company': $('#company').val(),
+
+                'filteritemlist': filteritemliststringified,
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
@@ -375,27 +401,7 @@ $(function () {
                 datatype: 'html'
 
             });
-/*
-                setTimeout(
-                  function()
-                  {
-                    var companyvalueaccumulator=$('select#company').val(); // swap options of select element after html template refresh
-                    var companyswap=$('select#companyswap').html();
-                    $('select#company').html(companyswap);
-                    $('select#company').val(companyvalueaccumulator);
-
-                    var dockindnamevalueaccumulator=$('select#dockindname').val();
-                    var dockindnameswap=$('select#dockindnameswap').html();
-                    $('select#dockindname').html(dockindnameswap);
-                    $('select#dockindname').val(dockindnamevalueaccumulator);
-
-                  }, 500);
-        sessionStorage.docnumber = $('#docnumber').val();
-        sessionStorage.dockindname = $('#dockindname').val();
-        sessionStorage.fromdate = $('#fromdate').val();
-        sessionStorage.todate = $('#todate').val();
-        sessionStorage.company = $('#company').val();
-*/
+        }
     });
     $('#addfilterselect').change(function() {
         filteritemmaxrowid++;
@@ -409,30 +415,6 @@ $(function () {
         $("#addfilterselect option:selected").attr('disabled','disabled')
         $('#addfilterselect').val("");
 
-                    $.ajax({
-                    type: 'POST',
-                    url: 'filtermain',
-
-                    data: {
-
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                    },
-
-                    success: UpdateSuccess,
-                    error: function(){
-                       console.log('ajax failure');
-                    },
-                    complete: function(){
-
-                    },
-
-                    datatype: 'json'
-
-                    });
-
-                    function UpdateSuccess(data, textStatus, jqXHR)
-                    {
-                    }
 
 
 
