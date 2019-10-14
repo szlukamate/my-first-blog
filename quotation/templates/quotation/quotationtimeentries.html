@@ -20,11 +20,11 @@
 							<span>Only Unquoted: <label class="switch"><input type="checkbox" id="unquotedcheckbox"></label></span>
 							<span>Only Unordered: <label class="switch"><input type="checkbox" id="unorderedcheckbox"></label></span>
 
-							<button id="searchbutton" type="submit">
+							<button id="filterbutton" type="submit">
 							   <span class="glyphicon glyphicon-filter"></span>
 							</button>
 
-							<button id="searchoutbutton" type="button">
+							<button id="filteroutbutton" type="button">
 							   <span class="glyphicon glyphicon-trash"></span>
 							</button>
 
@@ -56,6 +56,15 @@
 									<option value="" ></option>
 										<option value="arbitrary">arbitrary</option>
 							</select>
+							<br>
+							<label for="addfilterselect" >Add Filter</label>
+							<select id="addfilterselect">
+									<option value="" ></option>
+									{% for addfilterselectvaluesandoption in addfilterselectvaluesandoptions %}
+										<option value="{{addfilterselectvaluesandoption.1}}">{{addfilterselectvaluesandoption.0}}</option>
+									{% endfor %}
+							</select>
+							<p id="filtertemplate" ></p>
 
 							<hr>
 							<p id="timeentrysearchtemplate" ></p>

@@ -16,6 +16,8 @@ $(window).on("unload", function(){
 */
 $(function () {
 
+    var filteritemmaxrowid=0;
+
 // Dialog "Connecting..." begin
     $( "#dialog-message-connecting" ).dialog({
       autoOpen: false,
@@ -378,7 +380,7 @@ $('#title').click(function() {
                             $('#onlyforopenprojects').prop('checked', true);
                             $('#unquotedcheckbox').prop('checked', true);
 
-                            $('#searchbutton').trigger('click');
+                            $('#filterbutton').trigger('click');
 
                           }, 500);
 
@@ -515,8 +517,81 @@ $('#title').click(function() {
 
 
     });
-    $('body').on("click", "#searchbutton", function() {
+    $('body').on("click", "#filterbutton", function() {
 
+    var filteritemlist = []
+    main();
+
+        function main(){
+            addfilterselectalloptionsenable();
+            for (i = 1; i <= filteritemmaxrowid; ++i) {
+            getfilteritemparamaters(i);
+            }
+
+            filteritemliststringified = JSON.stringify(filteritemlist);
+
+            filteritemlisttransmit();
+        }
+        function addfilterselectthisoptiondisable(filteritemnamevar){
+            $('#addfilterselect option').each(function() {
+                if ($(this).val() == filteritemnamevar) {
+                   $(this).prop('disabled', true);
+                }
+            });
+
+        }
+        function addfilterselectalloptionsenable(){
+            $('#addfilterselect option').each(function() {
+                $(this).prop('disabled', false);
+            });
+
+        }
+        function getfilteritemparamaters(i){
+            if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked")) {
+
+                filteritemnamevar = $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').attr( "filteritemname" );
+                filteritemselectedvaluevar = $('.filteritemselect[filteritemrowid="' + i + '"]').val();
+                firstinputbox = $('.firstinputbox[filteritemrowid="' + i + '"]').val();
+                secondinputbox = $('.secondinputbox[filteritemrowid="' + i + '"]').val();
+                if (typeof secondinputbox === "undefined") {
+                    secondinputbox = ''
+                }
+                filteritemlist.push(filteritemnamevar, filteritemselectedvaluevar, firstinputbox, secondinputbox);
+
+                addfilterselectthisoptiondisable(filteritemnamevar);
+
+            }
+            if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked") == false) { //checked out filteritems remove
+                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').remove();
+            }
+        }
+        function filteritemlisttransmit(){
+
+            $.ajax({
+                type: 'POST',
+                url: 'quotationissuetrackingsystemsearchcontent',
+
+                data: {
+
+                'filteritemlist': filteritemliststringified,
+
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                },
+
+                success: function(data){
+
+                    $('#timeentrysearchtemplate').html(data);
+                },
+                error: function(){
+                    alert('failure');
+                },
+                datatype: 'html'
+
+            });
+        }
+
+
+/*
             $.ajax({
                 type: 'POST',
                 url: 'quotationissuetrackingsystemsearchcontent',
@@ -569,7 +644,7 @@ $('#title').click(function() {
                 datatype: 'html'
 
             });
-
+*/
     });
     $('body').on("click", "#searchoutbutton", function() {
 
@@ -596,6 +671,61 @@ $('#title').click(function() {
         if (event.keyCode == 13) {
             $('#searchbutton').trigger('click');
         }
+    });
+    $('body').on("change", "#addfilterselect", function(event) {
+        filteritemmaxrowid++;
+        var optionValues = [];
+
+        $('#addfilterselect option').each(function() {
+            optionValues.push($(this).attr( "value" ));
+        });
+        var selectedvalue = $('#addfilterselect').val()
+        var selectedoption = $('#addfilterselect option:selected').text()
+        $("#addfilterselect option:selected").attr('disabled','disabled')
+        $('#addfilterselect').val("");
+
+
+
+
+
+
+
+                    $.ajax({
+                    type: 'POST',
+                    url: 'filtertemplatehtmlonquotationtimeentryform',
+
+                    data: {
+
+                    'invokedfrom': 'addfilterselectchanged',
+                    'filteritemmaxrowid': filteritemmaxrowid,
+                    'selectedvalue': selectedvalue,
+                    'selectedoption': selectedoption,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess3,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess3(data, textStatus, jqXHR)
+                    {
+                    $("#filtertemplate").append(data);
+//                    $('.filteritemselect').trigger('change');
+                      console.log('mn');
+
+                    }
+
+
+
+
     });
 
 

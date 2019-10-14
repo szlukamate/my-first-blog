@@ -108,8 +108,8 @@ def products(request, pkproductid):
     addfilterselectvaluesandoptions[1][0] = 'Listprice'
     addfilterselectvaluesandoptions[1][1] = 'listprice'
 
-    addfilterselectvaluesandoptions[2][0] = 'Currency'
-    addfilterselectvaluesandoptions[2][1] = 'currency'
+    addfilterselectvaluesandoptions[2][0] = 'Supplier'
+    addfilterselectvaluesandoptions[2][1] = 'supplier'
 # filtering options to Addfilter selectbox end
 
     #import pdb;
@@ -230,6 +230,15 @@ def productsearchcontent(request):
     filteritemlistraw = request.POST['filteritemlist']
     filteritemlist = json.loads(filteritemlistraw)
 
+    filteritemname = ''
+    filteritemoperator = ''
+    filteritemfirstinput = ''
+    filteritemsecondinput = ''
+
+    customerdescriptionphrase = ""
+    listpricephrase = ""
+    supplierphrase = ""
+
     for x in range(0,len(filteritemlist),4):
 
         filteritemname = filteritemlist[(x+0)]
@@ -237,21 +246,23 @@ def productsearchcontent(request):
         filteritemfirstinput = filteritemlist[x+2]
         filteritemsecondinput = filteritemlist[x+3]
 
-        import pdb;
-        pdb.set_trace()
+        if filteritemname == 'customerdescription':
+            if filteritemoperator == 'contains':
+                customerdescriptionphrase = "and customerdescription_tblProduct  LIKE '%" + filteritemfirstinput + "%' "
+            if filteritemoperator == 'doesntcontain':
+                customerdescriptionphrase = "and customerdescription_tblProduct NOT LIKE '%" + filteritemfirstinput + "%' "
 
-    if filteritemname == 'customerdescription':
-        if filteritemoperator == 'contains':
-            customerdescriptionphrase = "and customerdescription_tblProduct = 1 "
+        if filteritemname == 'listprice':
+            if filteritemoperator == 'gteq':
+                listpricephrase = "and purchase_price_tblproduct >= " + filteritemfirstinput + " "
 
+        if filteritemname == 'supplier':
+            if filteritemoperator == 'is':
+                supplierphrase = "and suppliercompanyid_tblproduct = " + filteritemfirstinput + " "
 
-
-
-
-
-
-
-
+    searchphraseformainresults = (customerdescriptionphrase + listpricephrase + supplierphrase + " ")
+#                                  datephraseformainresults + companyformainresults + usernameformainresults +
+#                                  activitynameformainresults + quoteddocnumberformainresults + " ")
 
     cursor = connection.cursor()
     cursor.execute("SELECT Productid_tblProduct, "
@@ -262,7 +273,7 @@ def productsearchcontent(request):
                    "round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
                    "unit_tblproduct, "
                    "suppliercompanyid_tblproduct, "
-                   "companyname_tblcompanies, "
+                   "companyname_tblcompanies as suppliercompanyname, "
                    "supplierdescription_tblProduct, "
                    "discreteflag_tblproduct, "  # 10
                    "serviceflag_tblproduct "
@@ -272,12 +283,12 @@ def productsearchcontent(request):
                    "LEFT JOIN quotation_tblcompanies "
                    "ON companyid_tblcompanies = suppliercompanyid_tblproduct "
 
-                   "WHERE obsolete_tblproduct=0 "
+                   "WHERE obsolete_tblproduct=0 " + searchphraseformainresults + ""
                    "order by productid_tblproduct"
-
-                   )
+                    )
     products = cursor.fetchall()
     transaction.commit()
+    numberofitems = len(products)
 
     cursor3 = connection.cursor()
     cursor3.execute(
@@ -291,10 +302,14 @@ def productsearchcontent(request):
     supplierlist = cursor3.fetchall()
     transaction.commit()
 
-
+    #import pdb;
+    #pdb.set_trace()
+#
     return render(request, 'quotation/productscontent.html', {'products': products,
                                                        'currencycodes': currencycodes,
+                                                       'numberofitems': numberofitems,
                                                        'supplierlist': supplierlist})
+
 @login_required
 def productfieldupdate(request):
     if request.method == "POST":

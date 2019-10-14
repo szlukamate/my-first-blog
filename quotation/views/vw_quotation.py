@@ -1303,11 +1303,24 @@ def quotationissuetrackingsystem(request):
                     "FROM quotation_issuetrackingsystemtable" + str(creatorid) + " ")
     xmlitems = cursor2.fetchall()
     '''
+    # filtering options to Addfilter selectbox begin
+    # Creates a list containing #h lists, each of #w items, all set to 0
+    w, h = 2, 2;
+    addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
+
+    addfilterselectvaluesandoptions[0][0] = 'Project Status'
+    addfilterselectvaluesandoptions[0][1] = 'projectstatus'
+
+    addfilterselectvaluesandoptions[1][0] = 'Activity Name'
+    addfilterselectvaluesandoptions[1][1] = 'activityname'
+    # filtering options to Addfilter selectbox end
+
     #import pdb;
     #pdb.set_trace()
 
 
-    return render(request, 'quotation/timeentries.html',{'docid': quotationid})
+    return render(request, 'quotation/quotationtimeentries.html',{'docid': quotationid,
+                                                                  'addfilterselectvaluesandoptions': addfilterselectvaluesandoptions})
 @login_required
 def quotationissuetrackingsystemitemstoquotation(request):
 
@@ -1471,7 +1484,36 @@ def quotationissuetrackingsystempostitems(request):
 def quotationissuetrackingsystemsearchcontent(request):
     creatorid = request.user.id
     BASE_DIR = settings.BASE_DIR
+    #import pdb;
+    #pdb.set_trace()
 
+    filteritemlistraw = request.POST['filteritemlist']
+    filteritemlist = json.loads(filteritemlistraw)
+
+    filteritemname = ''
+    filteritemoperator = ''
+    filteritemfirstinput = ''
+    filteritemsecondinput = ''
+
+    customerdescriptionphrase = ""
+    listpricephrase = ""
+    supplierphrase = ""
+
+    for x in range(0,len(filteritemlist),4):
+
+        filteritemname = filteritemlist[(x+0)]
+        filteritemoperator = filteritemlist[x+1]
+        filteritemfirstinput = filteritemlist[x+2]
+        filteritemsecondinput = filteritemlist[x+3]
+
+        if filteritemname == 'customerdescription':
+            if filteritemoperator == 'contains':
+                customerdescriptionphrase = "and customerdescription_tblProduct  LIKE '%" + filteritemfirstinput + "%' "
+            if filteritemoperator == 'doesntcontain':
+                customerdescriptionphrase = "and customerdescription_tblProduct NOT LIKE '%" + filteritemfirstinput + "%' "
+
+
+    '''
     quoteddocnumber = request.POST['quoteddocnumber']
     timeentryid = request.POST['timeentryid']
     projectname = request.POST['projectname']
@@ -1488,7 +1530,7 @@ def quotationissuetrackingsystemsearchcontent(request):
     else:
         unquotedcheckboxphrase = ""
         unquotedcheckboxforrowsources = ""
-
+    
     if onlyforopenprojects == 'true':
         onlyforopenprojectsphrase = "and projects.status = 1 "
         onlyforopenprojectsforrowsources = "and projects.status = 1 "
@@ -1530,7 +1572,7 @@ def quotationissuetrackingsystemsearchcontent(request):
     else:
         activitynameformainresults = ""
         activitynameforrowsources = ""
-
+    '''
     # datephrase = "and creationtime_tbldoc BETWEEN '" + fromdate + "' and '" + todate + "' "
     #    datephrase = "and DATE(quotation_tbldoc.creationtime_tbldoc) >= '" + fromdate + "' and DATE('D.creationtime_tbldoc') <= '" + todate + "' "
     #    datephrase = "and D.creationtime_tbldoc >= '" + fromdate + "' and D.creationtime_tbldoc <= '" + todate + "' "
@@ -1544,12 +1586,12 @@ def quotationissuetrackingsystemsearchcontent(request):
     companyformainresults = ""
 #        companyforrowsources = ""
 
-    searchphraseformainresults = (unquotedcheckboxphrase + onlyforopenprojectsphrase + timeentryidformainresults + projectnameformainresults +
-                                  datephraseformainresults + companyformainresults + usernameformainresults +
-                                  activitynameformainresults + quoteddocnumberformainresults + " ")
-    searchphraseforrowsources = (unquotedcheckboxforrowsources + onlyforopenprojectsforrowsources + timeentryidforrowsource +
-                                 projectnameforrowsources + usernameforrowsources + activitynameforrowsources +
-                                 quoteddocnumberforrowsource + " ")
+    searchphraseformainresults = ""#(unquotedcheckboxphrase + onlyforopenprojectsphrase + timeentryidformainresults + projectnameformainresults +
+                                  #datephraseformainresults + companyformainresults + usernameformainresults +
+                                  #activitynameformainresults + quoteddocnumberformainresults + " ")
+    searchphraseforrowsources = ""# (unquotedcheckboxforrowsources + onlyforopenprojectsforrowsources + timeentryidforrowsource +
+#                                 projectnameforrowsources + usernameforrowsources + activitynameforrowsources +
+#                                 quoteddocnumberforrowsource + " ")
     #import pdb;
     #pdb.set_trace()
 
@@ -1675,8 +1717,10 @@ def quotationissuetrackingsystemsearchcontent(request):
                                                                              
                      "GROUP BY activityname, T.activity_id ")
     activitynamerowsources = cursor25.fetchall()
+    #import pdb;
+    #pdb.set_trace()
 
-    return render(request, 'quotation/timeentriescontent.html', {'docs': docs,
+    return render(request, 'quotation/quotationtimeentriescontent.html', {'docs': docs,
                                                                'issuetrackingsystemnumberofitems': issuetrackingsystemnumberofitems,
                                                                'projectnamerowsources': projectnamerowsources,
                                                                'usernamerowsources': usernamerowsources,

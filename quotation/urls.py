@@ -113,5 +113,6 @@ urlpatterns = [
     url('productsearchcontent$', views.productsearchcontent, name='productsearchcontent'),
     url('productfieldupdate$', views.productfieldupdate, name='productfieldupdate'),
     url('filtertemplatehtmlonproductform$', views.filtertemplatehtmlonproductform, name='filtertemplatehtmlonproductform'),
+    url('filtertemplatehtmlonquotationtimeentryform$', views.filtertemplatehtmlonquotationtimeentryform, name='filtertemplatehtmlonquotationtimeentryform'),
 
 ]

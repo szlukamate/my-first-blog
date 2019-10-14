@@ -19,6 +19,9 @@ $(function () {
 
             $('#filterbutton').trigger('click');
 
+            $("#addfilterselect option[value=customerdescription]").attr('selected', 'selected'); // open and autofocus for this filter field
+            $('#addfilterselect').trigger('change');
+
       }, 500);
 
    $('body').on("focusout", ".updateable", function() {
@@ -353,16 +356,29 @@ $(function () {
     main();
 
         function main(){
+            addfilterselectalloptionsenable();
             for (i = 1; i <= filteritemmaxrowid; ++i) {
             getfilteritemparamaters(i);
             }
 
             filteritemliststringified = JSON.stringify(filteritemlist);
-            console.log(filteritemliststringified);
 
             filteritemlisttransmit();
         }
+        function addfilterselectthisoptiondisable(filteritemnamevar){
+            $('#addfilterselect option').each(function() {
+                if ($(this).val() == filteritemnamevar) {
+                   $(this).prop('disabled', true);
+                }
+            });
 
+        }
+        function addfilterselectalloptionsenable(){
+            $('#addfilterselect option').each(function() {
+                $(this).prop('disabled', false);
+            });
+
+        }
         function getfilteritemparamaters(i){
             if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked")) {
 
@@ -374,7 +390,12 @@ $(function () {
                     secondinputbox = ''
                 }
                 filteritemlist.push(filteritemnamevar, filteritemselectedvaluevar, firstinputbox, secondinputbox);
-                console.log(filteritemlist);
+
+                addfilterselectthisoptiondisable(filteritemnamevar);
+
+            }
+            if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked") == false) { //checked out filteritems remove
+                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').remove();
             }
         }
         function filteritemlisttransmit(){
@@ -393,7 +414,6 @@ $(function () {
                 success: function(data){
 
                     $('#productsearchtemplate').html(data);
-                    //console.log(data);
                 },
                 error: function(){
                     alert('failure');
@@ -491,6 +511,7 @@ $(function () {
                     function UpdateSuccess3(data, textStatus, jqXHR)
                     {
                     $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').html(data);
+                    $('.firstinputbox').focus();
 
                     }
 
@@ -505,6 +526,19 @@ $(function () {
 
 
 
+    });
+    $('#filteroutbutton').click(function() {
+
+        $('#filtertemplate').html('<!-- Empty -->');
+
+        $('#filterbutton').trigger('click');
+
+
+    });
+    $('body').on("keypress", ".firstinputbox", function(event) {
+        if (event.keyCode == 13) {
+            $('#filterbutton').trigger('click');
+        }
     });
 
 });
