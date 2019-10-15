@@ -186,6 +186,19 @@ def filtertemplatehtmlonquotationtimeentryform(request):
 
                                 return render(request, 'quotation/filteritemtemplateempty.html', {})
 
+                if filteritemname == 'quoteddocdetailsid':
+                        if filteritemselectedvalue == 'hasnotvalue':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
+                        if filteritemselectedvalue == 'hasvalue':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
+                if filteritemname == 'quoteddocnumber':
+                        if filteritemselectedvalue == 'is':
+
+                                return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
 
                 if filteritemname == 'activityname':
                     cursor4 = connections['redmine'].cursor()
@@ -212,6 +225,29 @@ def filtertemplatehtmlonquotationtimeentryform(request):
 
                             return render(request, 'quotation/filteritemtemplateempty.html', {})
 
+                if filteritemname == 'datespenton':
+                        if filteritemselectedvalue == 'between':
+
+                                return render(request, 'quotation/filteritemtemplatebetweeninputbox.html', {'filteritemrowid': filteritemrowid, 'filteritemname': filteritemname})
+
+                if filteritemname == 'timeentryid':
+                        if filteritemselectedvalue == 'is':
+
+                                return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
+
+                if filteritemname == 'projectname':
+
+                    cursor3 = connection.cursor()
+                    cursor3.execute(
+                        "SELECT companyid_tblcompanies, companyname_tblcompanies FROM quotation_tblcompanies")
+                    supplierlist = cursor3.fetchall()
+
+                    if filteritemselectedvalue == 'is':
+
+                        return render(request, 'quotation/filteritemtemplateselect.html',
+                                      {'filteritemfirstinputboxselectoptions': supplierlist,
+                                       'filteritemrowid': filteritemrowid})
+
         if invokedfrom == 'addfilterselectchanged': # when we want to search first click the #Add Filter selectbox and add some filteritems to html
                 filteritemrowid = request.POST['filteritemmaxrowid']
                 selectedvalue = request.POST['selectedvalue']
@@ -221,7 +257,7 @@ def filtertemplatehtmlonquotationtimeentryform(request):
                 if selectedvalue == 'projectstatus': # here the value is text without space and small letter i.e. customerdescription
 
                     # Creates a list containing #h lists, each of #w items, all set to 0
-                    w, h = 2, 4;
+                    w, h = 2, 2;
                     filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
 
                     filteritemname = 'projectstatus' #attribute for elements
@@ -231,6 +267,31 @@ def filtertemplatehtmlonquotationtimeentryform(request):
 
                     filteritemselectoptions[1][0] = 'closed'
                     filteritemselectoptions[1][1] = "closed"
+
+                if selectedvalue == 'quoteddocdetailsid': # here the value is text without space and small letter i.e. customerdescription
+
+                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    w, h = 2, 2;
+                    filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
+
+                    filteritemname = 'quoteddocdetailsid' #attribute for elements
+
+                    filteritemselectoptions[0][0] = 'hasnotvalue' #for inner use
+                    filteritemselectoptions[0][1] = 'has not value' #for the user to show
+
+                    filteritemselectoptions[1][0] = 'hasvalue'
+                    filteritemselectoptions[1][1] = "has value"
+
+                if selectedvalue == 'quoteddocnumber': # here the value is text without space and small letter i.e. customerdescription
+
+                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    w, h = 2, 1;
+                    filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
+
+                    filteritemname = 'quoteddocnumber' #attribute for elements
+
+                    filteritemselectoptions[0][0] = 'is'
+                    filteritemselectoptions[0][1] = 'is'
 
                 if selectedvalue == 'activityname': # here the value is text without space and small letter i.e. customerdescription
 
@@ -251,6 +312,43 @@ def filtertemplatehtmlonquotationtimeentryform(request):
 
                     filteritemselectoptions[3][0] = 'any'
                     filteritemselectoptions[3][1] = 'any'
+
+
+                    filteritemselectoptions[0][0] = 'is' #for inner use
+                    filteritemselectoptions[0][1] = 'is' #for the user to show
+
+                if selectedvalue == 'datespenton': # here the value is text without space and small letter i.e. customerdescription
+
+                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    w, h = 2, 1;
+                    filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
+
+                    filteritemname = 'datespenton' #attribute for elements
+
+                    filteritemselectoptions[0][0] = 'between'
+                    filteritemselectoptions[0][1] = 'between'
+
+                if selectedvalue == 'timeentryid': # here the value is text without space and small letter i.e. customerdescription
+
+                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    w, h = 2, 1;
+                    filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
+
+                    filteritemname = 'timeentryid' #attribute for elements
+
+                    filteritemselectoptions[0][0] = 'is'
+                    filteritemselectoptions[0][1] = 'is'
+
+                if selectedvalue == 'projectname': # here the value is text without space and small letter i.e. customerdescription
+
+                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    w, h = 2, 1;
+                    filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
+
+                    filteritemname = 'projectname' #attribute for elements
+
+                    filteritemselectoptions[0][0] = 'is'
+                    filteritemselectoptions[0][1] = 'is'
 
         return render(request, 'quotation/filtertemplatehtml.html',{'selectedoption': selectedoption,
                                                                     'filteritemrowid': filteritemrowid,

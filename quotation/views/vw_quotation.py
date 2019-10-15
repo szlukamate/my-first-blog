@@ -1305,14 +1305,30 @@ def quotationissuetrackingsystem(request):
     '''
     # filtering options to Addfilter selectbox begin
     # Creates a list containing #h lists, each of #w items, all set to 0
-    w, h = 2, 2;
+    w, h = 2, 7;
     addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
 
     addfilterselectvaluesandoptions[0][0] = 'Project Status'
     addfilterselectvaluesandoptions[0][1] = 'projectstatus'
 
-    addfilterselectvaluesandoptions[1][0] = 'Activity Name'
-    addfilterselectvaluesandoptions[1][1] = 'activityname'
+    addfilterselectvaluesandoptions[1][0] = 'Quoted Docdetailsid'
+    addfilterselectvaluesandoptions[1][1] = 'quoteddocdetailsid'
+
+    addfilterselectvaluesandoptions[2][0] = 'Quoted Docnumber (with pretag)'
+    addfilterselectvaluesandoptions[2][1] = 'quoteddocnumber'
+
+    addfilterselectvaluesandoptions[3][0] = 'Activity Name'
+    addfilterselectvaluesandoptions[3][1] = 'activityname'
+
+    addfilterselectvaluesandoptions[4][0] = 'Date - Spent On'
+    addfilterselectvaluesandoptions[4][1] = 'datespenton'
+
+    addfilterselectvaluesandoptions[5][0] = 'Time Entry Id'
+    addfilterselectvaluesandoptions[5][1] = 'timeentryid'
+
+    addfilterselectvaluesandoptions[6][0] = 'Project Name'
+    addfilterselectvaluesandoptions[6][1] = 'projectname'
+
     # filtering options to Addfilter selectbox end
 
     #import pdb;
@@ -1495,9 +1511,12 @@ def quotationissuetrackingsystemsearchcontent(request):
     filteritemfirstinput = ''
     filteritemsecondinput = ''
 
-    customerdescriptionphrase = ""
-    listpricephrase = ""
-    supplierphrase = ""
+    projectstatusphrase = ""
+    quoteddocdetailsidphrase = ""
+    quoteddocnumberphrase = ""
+    datespentonphrase = ""
+    timeentryidphrase = ""
+    projectnamephrase = ""
 
     for x in range(0,len(filteritemlist),4):
 
@@ -1506,11 +1525,33 @@ def quotationissuetrackingsystemsearchcontent(request):
         filteritemfirstinput = filteritemlist[x+2]
         filteritemsecondinput = filteritemlist[x+3]
 
-        if filteritemname == 'customerdescription':
-            if filteritemoperator == 'contains':
-                customerdescriptionphrase = "and customerdescription_tblProduct  LIKE '%" + filteritemfirstinput + "%' "
-            if filteritemoperator == 'doesntcontain':
-                customerdescriptionphrase = "and customerdescription_tblProduct NOT LIKE '%" + filteritemfirstinput + "%' "
+        if filteritemname == 'projectstatus':
+            if filteritemoperator == 'open':
+                projectstatusphrase = "and projects.status = 1  "
+            if filteritemoperator == 'closed':
+                projectstatusphrase = "and projects.status = 5  "
+
+        if filteritemname == 'quoteddocdetailsid':
+            if filteritemoperator == 'hasnotvalue':
+                quoteddocdetailsidphrase = "and quoteddocdetailsidtable.value = '' "
+            if filteritemoperator == 'hasvalue':
+                quoteddocdetailsidphrase = "and quoteddocdetailsidtable.value <> '' "
+
+        if filteritemname == 'quoteddocnumber':
+            if filteritemoperator == 'is':
+                quoteddocnumberphrase = "and quoteddocnumbertable.value = '" + filteritemfirstinput + "' "
+
+        if filteritemname == 'datespenton':
+            if filteritemoperator == 'between':
+                datespentonphrase = "and T.spent_on BETWEEN '" + filteritemfirstinput + "' AND '" + filteritemsecondinput + "' "
+
+        if filteritemname == 'timeentryid':
+            if filteritemoperator == 'is':
+                timeentryidphrase = "and T.id = '" + filteritemfirstinput + "' "
+
+        if filteritemname == 'projectname':
+            if filteritemoperator == 'is':
+                projectnamephrase = "and projects.name = '" + filteritemfirstinput + "' "
 
 
     '''
@@ -1586,7 +1627,8 @@ def quotationissuetrackingsystemsearchcontent(request):
     companyformainresults = ""
 #        companyforrowsources = ""
 
-    searchphraseformainresults = ""#(unquotedcheckboxphrase + onlyforopenprojectsphrase + timeentryidformainresults + projectnameformainresults +
+    searchphraseformainresults = (projectstatusphrase + quoteddocdetailsidphrase + quoteddocnumberphrase + #(unquotedcheckboxphrase + onlyforopenprojectsphrase + timeentryidformainresults + projectnameformainresults +
+                                  datespentonphrase + timeentryidphrase + projectnamephrase)
                                   #datephraseformainresults + companyformainresults + usernameformainresults +
                                   #activitynameformainresults + quoteddocnumberformainresults + " ")
     searchphraseforrowsources = ""# (unquotedcheckboxforrowsources + onlyforopenprojectsforrowsources + timeentryidforrowsource +
@@ -1636,6 +1678,9 @@ def quotationissuetrackingsystemsearchcontent(request):
                      "WHERE T.id is not null " + searchphraseformainresults + "")
 
     docs = cursor21.fetchall()
+
+    #import pdb;
+    #pdb.set_trace()
 
     issuetrackingsystemnumberofitems = len(docs)
     cursor23 = connections['redmine'].cursor()

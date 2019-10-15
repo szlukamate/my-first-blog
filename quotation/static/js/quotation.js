@@ -355,34 +355,53 @@ $('#title').click(function() {
                         setTimeout(
                           function()
                           {
-                            var d = new Date();
-
-                            var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
-                            var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                            var fromday = d.getDate();
-
-                            var fromoutput = fromyear + '-' +
-                                (frommonth<10 ? '0' : '') + frommonth + '-' +
-                                (fromday<10 ? '0' : '') + fromday;
-                            $('#fromdate').val(fromoutput);
-
-                            var d = new Date();
-
-                            var toyear = d.getFullYear();
-                            var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                            var today = d.getDate();
-
-                            var tooutput = toyear + '-' +
-                                (tomonth<10 ? '0' : '') + tomonth + '-' +
-                                (today<10 ? '0' : '') + today;
-                            $('#todate').val(tooutput);
 
                             $('#onlyforopenprojects').prop('checked', true);
                             $('#unquotedcheckbox').prop('checked', true);
 
-                            $('#filterbutton').trigger('click');
+                            $("#addfilterselect option[value=projectstatus]").attr('selected', 'selected'); // open this filter field
+                            $('#addfilterselect').trigger('change');
 
-                          }, 500);
+                            $("#addfilterselect option[value=quoteddocdetailsid]").attr('selected', 'selected'); // open this filter field
+                            $('#addfilterselect').trigger('change');
+
+                            $("#addfilterselect option[value=datespenton]").attr('selected', 'selected'); // open this filter field
+                            $('#addfilterselect').trigger('change');
+
+                            setTimeout(
+                              function()
+                              {
+
+                                    var d = new Date();
+
+                                    var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
+                                    var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                                    var fromday = d.getDate();
+
+                                    var fromoutput = fromyear + '-' +
+                                        (frommonth<10 ? '0' : '') + frommonth + '-' +
+                                        (fromday<10 ? '0' : '') + fromday;
+//                                    $('#fromdate').val(fromoutput);
+                                    $('.firstinputbox[filteritemname="datespenton"]').val(fromoutput);
+
+                                    var d = new Date();
+
+                                    var toyear = d.getFullYear();
+                                    var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                                    var today = d.getDate();
+
+                                    var tooutput = toyear + '-' +
+                                        (tomonth<10 ? '0' : '') + tomonth + '-' +
+                                        (today<10 ? '0' : '') + today;
+//                                    $('#todate').val(tooutput);
+                                    $('.secondinputbox[filteritemname="datespenton"]').val(tooutput);
+
+
+                                    $('#filterbutton').trigger('click');
+                              }, 1000);
+
+
+                          }, 250);
 
                         //template dates setting end
 
@@ -470,11 +489,6 @@ $('#title').click(function() {
                 });
             }
 
-
-
-
-
-
     });
     $('#updateitsbutton').click(function() {
         var quotationid=$('#quotationdocid').text();
@@ -552,6 +566,9 @@ $('#title').click(function() {
                 filteritemnamevar = $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').attr( "filteritemname" );
                 filteritemselectedvaluevar = $('.filteritemselect[filteritemrowid="' + i + '"]').val();
                 firstinputbox = $('.firstinputbox[filteritemrowid="' + i + '"]').val();
+                if (typeof firstinputbox === "undefined") {
+                    firstinputbox = ''
+                }
                 secondinputbox = $('.secondinputbox[filteritemrowid="' + i + '"]').val();
                 if (typeof secondinputbox === "undefined") {
                     secondinputbox = ''
@@ -562,10 +579,14 @@ $('#title').click(function() {
 
             }
             if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked") == false) { //checked out filteritems remove
-                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').remove();
+                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').detach();
+                $('.selectedoption[filteritemrowid="' + i + '"]').detach();
+                $('.filteritemtemplate[filteritemrowid="' + i + '"]').detach();
+
             }
         }
         function filteritemlisttransmit(){
+                      console.log(filteritemliststringified);
 
             $.ajax({
                 type: 'POST',
@@ -646,18 +667,12 @@ $('#title').click(function() {
             });
 */
     });
-    $('body').on("click", "#searchoutbutton", function() {
+    $('body').on("click", "#filteroutbutton", function() {
 
-        $('#onlyforopenprojects').prop('checked', false);
-        $('#unquotedcheckbox').prop('checked', false);
 
-        $('#quoteddocnumber').val("");
-        $('#timeentryid').val("");
-        $('#projectname').val("");
-        $('#username').val("");
-        $('#activityname').val("");
+        $('#filtertemplate').html('<!-- Empty -->');
 
-        $('#searchbutton').trigger('click');
+        $('#filterbutton').trigger('click');
 
 
     });
@@ -718,17 +733,63 @@ $('#title').click(function() {
                     function UpdateSuccess3(data, textStatus, jqXHR)
                     {
                     $("#filtertemplate").append(data);
-//                    $('.filteritemselect').trigger('change');
-                      console.log('mn');
-
+                    $('.filteritemselect').trigger('change');
                     }
 
 
 
 
     });
+    $('body').on("click", ".enabledfiltercheckbox", function() {
+
+        var filteritemrowid = $(this).attr( "filteritemrowid" );
+        $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').toggle();
+        $('.filteritemselect[filteritemrowid="' + filteritemrowid + '"]').toggle();
 
 
 
+    });
+    $('body').on("change", ".filteritemselect", function() {
+//                       console.log('ajajj');
+
+        var filteritemrowid = $(this).attr( "filteritemrowid" );
+        var filteritemname = $(this).attr( "filteritemname" );
+
+                    $.ajax({
+                    type: 'POST',
+                    url: 'filtertemplatehtmlonquotationtimeentryform',
+
+                    data: {
+
+                    'invokedfrom': 'filteritemselectchanged',
+                    'filteritemrowid': filteritemrowid,
+                    'filteritemname': filteritemname,
+                    'filteritemselectedvalue': $('.filteritemselect[filteritemrowid="' + filteritemrowid + '"]').val(),
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess3,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess3(data, textStatus, jqXHR)
+                    {
+                    $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').html(data);
+                    $('.firstinputbox').focus();
+
+                    }
+
+
+
+    });
 
 });

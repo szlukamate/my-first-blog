@@ -6,19 +6,6 @@
 				<p align="center" id="title" style="font-size:160%;">Time Entry Items</p>{% csrf_token %}
 
 							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
-							<label for="timeentryid" >Time Entry Id</label>
-							<input id="timeentryid" type="text" value="" name="timeentryid" maxlength="50" size="10">
-
-
-							<label for="from" >From</label>
-							<input id="fromdate" type="text" value="" name="from" maxlength="50" size="10">
-
-							<label for="to" >To</label>
-							<input id="todate" type="text" value="" name="to" maxlength="50" size="10">
-
-							<span>Only For Open Projects: <label class="switch"><input type="checkbox" id="onlyforopenprojects"><span class="slider"></span></label></span>
-							<span>Only Unquoted: <label class="switch"><input type="checkbox" id="unquotedcheckbox"></label></span>
-							<span>Only Unordered: <label class="switch"><input type="checkbox" id="unorderedcheckbox"></label></span>
 
 							<button id="filterbutton" type="submit">
 							   <span class="glyphicon glyphicon-filter"></span>
@@ -32,12 +19,6 @@
 							   <span class="glyphicon glyphicon-arrow-down"></span>
 							</button>
 							<br>
-
-							<label for="quoteddocnumber" >Quoted Docnumber (With Pretag)</label>
-							<input id="quoteddocnumber" type="text" value="" name="quoteddocnumber" maxlength="50" size="8">
-
-							<label for="ordereddocnumber" >Ordered Docnumber (With Pretag)</label>
-							<input id="ordereddocnumber" type="text" value="" name="ordereddocnumber" maxlength="50" size="8">
 
    						    <label for="projectname" >Projectname</label>
 							<select id="projectname">

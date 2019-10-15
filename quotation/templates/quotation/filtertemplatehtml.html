@@ -4,7 +4,7 @@
 
 	{% csrf_token %}
 	<input type="checkbox" class="enabledfiltercheckbox" filteritemrowid="{{filteritemrowid}}" filteritemname="{{filteritemname}}" checked>
-	<span >{{selectedoption}}</span>
+	<span class="selectedoption" filteritemrowid="{{filteritemrowid}}" filteritemname="{{filteritemname}}">{{selectedoption}}</span>
 	<select class="filteritemselect" filteritemrowid="{{filteritemrowid}}" filteritemname="{{filteritemname}}">
 		{% for filteritemselectoption in filteritemselectoptions %}
 			<option value="{{ filteritemselectoption.0}}">{{ filteritemselectoption.1}}</option>

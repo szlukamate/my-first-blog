@@ -396,9 +396,11 @@ $(function () {
             }
             if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked") == false) { //checked out filteritems remove
                 $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').remove();
+                $('.selectedoption[filteritemrowid="' + i + '"]').remove();
             }
         }
         function filteritemlisttransmit(){
+                    console.log(filteritemliststringified);
 
             $.ajax({
                 type: 'POST',

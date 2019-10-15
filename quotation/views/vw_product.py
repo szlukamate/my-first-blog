@@ -255,6 +255,8 @@ def productsearchcontent(request):
         if filteritemname == 'listprice':
             if filteritemoperator == 'gteq':
                 listpricephrase = "and purchase_price_tblproduct >= " + filteritemfirstinput + " "
+            if filteritemoperator == 'lteq':
+                listpricephrase = "and purchase_price_tblproduct <= " + filteritemfirstinput + " "
 
         if filteritemname == 'supplier':
             if filteritemoperator == 'is':
