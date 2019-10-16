@@ -1768,5 +1768,6 @@ def quotationissuetrackingsystemsearchcontent(request):
     return render(request, 'quotation/quotationtimeentriescontent.html', {'docs': docs,
                                                                'issuetrackingsystemnumberofitems': issuetrackingsystemnumberofitems,
                                                                'projectnamerowsources': projectnamerowsources,
+                                                               'searchphraseformainresults': searchphraseformainresults,
                                                                'usernamerowsources': usernamerowsources,
                                                                'activitynamerowsources': activitynamerowsources})

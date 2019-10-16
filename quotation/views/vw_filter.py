@@ -171,6 +171,7 @@ def filtertemplatehtmlonproductform(request):
                                                                     'filteritemselectoptions': filteritemselectoptions})
 def filtertemplatehtmlonquotationtimeentryform(request):
         invokedfrom = request.POST['invokedfrom']
+#        searchphraseformainresults = request.POST['searchphraseformainresults']
 
         if invokedfrom == 'filteritemselectchanged': # when we want change a filteritems on html (clicking the selectbox on filteritem)
                 filteritemselectedvalue = request.POST['filteritemselectedvalue']
@@ -237,15 +238,36 @@ def filtertemplatehtmlonquotationtimeentryform(request):
 
                 if filteritemname == 'projectname':
 
-                    cursor3 = connection.cursor()
-                    cursor3.execute(
-                        "SELECT companyid_tblcompanies, companyname_tblcompanies FROM quotation_tblcompanies")
-                    supplierlist = cursor3.fetchall()
+                    cursor23 = connections['redmine'].cursor()
+                    cursor23.execute("SELECT "
+                                     "projects.name "
+
+                                     "FROM time_entries as T "
+
+                                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
+                                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
+
+                                     "LEFT JOIN custom_values as quoteddocnumbertable "
+                                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
+
+                                     "JOIN projects "
+                                     "ON T.project_id = projects.id "
+
+                                     "JOIN enumerations "
+                                     "ON T.activity_id = enumerations.id "
+
+                                     "JOIN users "
+                                     "ON T.user_id = users.id "
+
+                                     "WHERE T.id is not null " + searchphraseformainresults + " "
+
+                                     "GROUP BY projects.name ")
+                    projectnamerowsources = cursor23.fetchall()
 
                     if filteritemselectedvalue == 'is':
 
                         return render(request, 'quotation/filteritemtemplateselect.html',
-                                      {'filteritemfirstinputboxselectoptions': supplierlist,
+                                      {'filteritemfirstinputboxselectoptions': projectnamerowsources,
                                        'filteritemrowid': filteritemrowid})
 
         if invokedfrom == 'addfilterselectchanged': # when we want to search first click the #Add Filter selectbox and add some filteritems to html

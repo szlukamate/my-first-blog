@@ -538,6 +538,7 @@ $('#title').click(function() {
 
         function main(){
             addfilterselectalloptionsenable();
+            $("#filteritemlistelementvaluesaccumulatortemplate").html('<!--Empty-->') // emptying filteritems accumulator
             for (i = 1; i <= filteritemmaxrowid; ++i) {
             getfilteritemparamaters(i);
             }
@@ -573,16 +574,27 @@ $('#title').click(function() {
                 if (typeof secondinputbox === "undefined") {
                     secondinputbox = ''
                 }
+
+                 //filteritems to temporary store /to accumulator/ (because the filteritem values are vanished after adding a new filteritems ...cont...
+                 // therefore put out to site and copy this values to the already existing filter items)
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<input type="text" class="filteritemlistelementvaluesaccumulator_name" value="' + filteritemnamevar + '" filteritemrowid="' + i + '">');
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<input type="text" class="filteritemlistelementvaluesaccumulator_selectedvalue" value="' + filteritemselectedvaluevar + '" filteritemrowid="' + i + '">');
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<input type="text" class="filteritemlistelementvaluesaccumulator_firstinputbox" value="' + firstinputbox + '" filteritemrowid="' + i + '">');
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<input type="text" class="filteritemlistelementvaluesaccumulator_secondinputbox" value="' + secondinputbox + '" filteritemrowid="' + i + '">');
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<br>');
+
                 filteritemlist.push(filteritemnamevar, filteritemselectedvaluevar, firstinputbox, secondinputbox);
 
                 addfilterselectthisoptiondisable(filteritemnamevar);
 
             }
             if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked") == false) { //checked out filteritems remove
-                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').detach();
-                $('.selectedoption[filteritemrowid="' + i + '"]').detach();
-                $('.filteritemtemplate[filteritemrowid="' + i + '"]').detach();
-
+                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').prev().prev().remove(); //line before previos (<br>) remove
+                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').prev().remove(); //line previous (csrfmiddlewaretoken) remove
+                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').remove();
+                $('.selectedoption[filteritemrowid="' + i + '"]').remove();
+                $('.filteritemselect[filteritemrowid="' + i + '"]').remove();
+                $('span[class="filteritemtemplate"][filteritemrowid="' + i + '"]').remove();
             }
         }
         function filteritemlisttransmit(){
@@ -602,6 +614,8 @@ $('#title').click(function() {
                 success: function(data){
 
                     $('#timeentrysearchtemplate').html(data);
+console.log('searchphraseformainresults: '+ $('#searchphraseformainresults').text());
+
                 },
                 error: function(){
                     alert('failure');
@@ -699,7 +713,10 @@ $('#title').click(function() {
         $("#addfilterselect option:selected").attr('disabled','disabled')
         $('#addfilterselect').val("");
 
-
+        searchphraseformainresults_var = $('#searchphraseformainresults').text()
+                if ( searchphraseformainresults_var == "") {
+                    searchphraseformainresults_var = 'a'
+                }
 
 
 
@@ -711,6 +728,7 @@ $('#title').click(function() {
 
                     data: {
 
+                    'searchphraseformainresults': $('#searchphraseformainresults').text(),
                     'invokedfrom': 'addfilterselectchanged',
                     'filteritemmaxrowid': filteritemmaxrowid,
                     'selectedvalue': selectedvalue,
@@ -732,8 +750,31 @@ $('#title').click(function() {
 
                     function UpdateSuccess3(data, textStatus, jqXHR)
                     {
+
                     $("#filtertemplate").append(data);
+                            setTimeout(
+                              function()
+                              {
+
+                                  filteritemvaluesfromaccumulator(); // filteritem values from accumulator to eliminate vanish effect after new addfilter (see above - keyword: accumulator)
+                              }, 250);
+
                     $('.filteritemselect').trigger('change');
+                    }
+                    function filteritemvaluesfromaccumulator(){
+                        for (i = 1; i <= (filteritemmaxrowid-1); ++i) { // filteritemmaxrowid already contains new filteritem which has not accumulated value
+                        copyfilteritemvaluesfromaccumulator(i);
+                        }
+
+                    }
+                    function copyfilteritemvaluesfromaccumulator(){
+                    temp_firstinputbox = $('input[class="filteritemlistelementvaluesaccumulator_firstinputbox"][filteritemrowid="' + i + '"]').val()
+                    $('input[class="firstinputbox"][filteritemrowid="' + i + '"]').val(temp_firstinputbox)
+
+                    temp_secondinputbox = $('input[class="filteritemlistelementvaluesaccumulator_secondinputbox"][filteritemrowid="' + i + '"]').val()
+                    $('input[class="secondinputbox"][filteritemrowid="' + i + '"]').val(temp_secondinputbox)
+
+
                     }
 
 
@@ -750,7 +791,6 @@ $('#title').click(function() {
 
     });
     $('body').on("change", ".filteritemselect", function() {
-//                       console.log('ajajj');
 
         var filteritemrowid = $(this).attr( "filteritemrowid" );
         var filteritemname = $(this).attr( "filteritemname" );
