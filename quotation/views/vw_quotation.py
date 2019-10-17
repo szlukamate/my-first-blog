@@ -1327,7 +1327,7 @@ def quotationissuetrackingsystem(request):
     addfilterselectvaluesandoptions[5][1] = 'timeentryid'
 
     addfilterselectvaluesandoptions[6][0] = 'Project Name'
-    addfilterselectvaluesandoptions[6][1] = 'projectname'
+    addfilterselectvaluesandoptions[6][1] = 'projectid'
 
     # filtering options to Addfilter selectbox end
 
@@ -1549,9 +1549,9 @@ def quotationissuetrackingsystemsearchcontent(request):
             if filteritemoperator == 'is':
                 timeentryidphrase = "and T.id = '" + filteritemfirstinput + "' "
 
-        if filteritemname == 'projectname':
+        if filteritemname == 'projectid':
             if filteritemoperator == 'is':
-                projectnamephrase = "and projects.name = '" + filteritemfirstinput + "' "
+                projectnamephrase = "and projects.id = '" + filteritemfirstinput + "' "
 
 
     '''

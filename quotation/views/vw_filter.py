@@ -171,7 +171,9 @@ def filtertemplatehtmlonproductform(request):
                                                                     'filteritemselectoptions': filteritemselectoptions})
 def filtertemplatehtmlonquotationtimeentryform(request):
         invokedfrom = request.POST['invokedfrom']
-#        searchphraseformainresults = request.POST['searchphraseformainresults']
+        searchphraseformainresults = request.POST['searchphraseformainresults']
+        #import pdb;
+        #pdb.set_trace()
 
         if invokedfrom == 'filteritemselectchanged': # when we want change a filteritems on html (clicking the selectbox on filteritem)
                 filteritemselectedvalue = request.POST['filteritemselectedvalue']
@@ -236,10 +238,12 @@ def filtertemplatehtmlonquotationtimeentryform(request):
 
                                 return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
 
-                if filteritemname == 'projectname':
-
+                if filteritemname == 'projectid':
+                    if searchphraseformainresults == 'a': # timeentrysearchtemplate does not contain searchphraseformainresults
+                        searchphraseformainresults = 'and projects.name is not null'
                     cursor23 = connections['redmine'].cursor()
                     cursor23.execute("SELECT "
+                                     "projects.id, "
                                      "projects.name "
 
                                      "FROM time_entries as T "
@@ -261,7 +265,8 @@ def filtertemplatehtmlonquotationtimeentryform(request):
 
                                      "WHERE T.id is not null " + searchphraseformainresults + " "
 
-                                     "GROUP BY projects.name ")
+                                     "GROUP BY projects.id, "
+                                     "         projects.name ")
                     projectnamerowsources = cursor23.fetchall()
 
                     if filteritemselectedvalue == 'is':
@@ -361,13 +366,13 @@ def filtertemplatehtmlonquotationtimeentryform(request):
                     filteritemselectoptions[0][0] = 'is'
                     filteritemselectoptions[0][1] = 'is'
 
-                if selectedvalue == 'projectname': # here the value is text without space and small letter i.e. customerdescription
+                if selectedvalue == 'projectid': # here the value is text without space and small letter i.e. customerdescription
 
                     # Creates a list containing #h lists, each of #w items, all set to 0
                     w, h = 2, 1;
                     filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
 
-                    filteritemname = 'projectname' #attribute for elements
+                    filteritemname = 'projectid' #attribute for elements
 
                     filteritemselectoptions[0][0] = 'is'
                     filteritemselectoptions[0][1] = 'is'

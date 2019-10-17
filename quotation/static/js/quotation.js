@@ -612,9 +612,8 @@ $('#title').click(function() {
                 },
 
                 success: function(data){
-
+//
                     $('#timeentrysearchtemplate').html(data);
-console.log('searchphraseformainresults: '+ $('#searchphraseformainresults').text());
 
                 },
                 error: function(){
@@ -728,7 +727,7 @@ console.log('searchphraseformainresults: '+ $('#searchphraseformainresults').tex
 
                     data: {
 
-                    'searchphraseformainresults': $('#searchphraseformainresults').text(),
+                    'searchphraseformainresults': searchphraseformainresults_var,
                     'invokedfrom': 'addfilterselectchanged',
                     'filteritemmaxrowid': filteritemmaxrowid,
                     'selectedvalue': selectedvalue,
@@ -758,6 +757,8 @@ console.log('searchphraseformainresults: '+ $('#searchphraseformainresults').tex
 
                                   filteritemvaluesfromaccumulator(); // filteritem values from accumulator to eliminate vanish effect after new addfilter (see above - keyword: accumulator)
                               }, 250);
+
+console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
 
                     $('.filteritemselect').trigger('change');
                     }
@@ -795,12 +796,18 @@ console.log('searchphraseformainresults: '+ $('#searchphraseformainresults').tex
         var filteritemrowid = $(this).attr( "filteritemrowid" );
         var filteritemname = $(this).attr( "filteritemname" );
 
+        searchphraseformainresults_var = $('#searchphraseformainresults').text()
+                if ( searchphraseformainresults_var == "") {
+                    searchphraseformainresults_var = 'a'
+                }
+
+
                     $.ajax({
                     type: 'POST',
                     url: 'filtertemplatehtmlonquotationtimeentryform',
 
                     data: {
-
+                    'searchphraseformainresults': searchphraseformainresults_var,
                     'invokedfrom': 'filteritemselectchanged',
                     'filteritemrowid': filteritemrowid,
                     'filteritemname': filteritemname,
