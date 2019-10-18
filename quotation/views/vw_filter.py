@@ -239,7 +239,7 @@ def filtertemplatehtmlonquotationtimeentryform(request):
                                 return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
 
                 if filteritemname == 'projectid':
-                    if searchphraseformainresults == 'a': # timeentrysearchtemplate does not contain searchphraseformainresults
+                    if searchphraseformainresults == 'a': # timeentrysearchtemplate does not contain  searchphraseformainresults
                         searchphraseformainresults = 'and projects.name is not null'
                     cursor23 = connections['redmine'].cursor()
                     cursor23.execute("SELECT "
@@ -273,6 +273,43 @@ def filtertemplatehtmlonquotationtimeentryform(request):
 
                         return render(request, 'quotation/filteritemtemplateselect.html',
                                       {'filteritemfirstinputboxselectoptions': projectnamerowsources,
+                                       'filteritemrowid': filteritemrowid})
+
+                if filteritemname == 'userid':
+                    if searchphraseformainresults == 'a': # timeentrysearchtemplate does not contain  searchphraseformainresults
+                        searchphraseformainresults = 'and users.firstname is not null'
+                    cursor23 = connections['redmine'].cursor()
+                    cursor23.execute("SELECT "
+                                     "users.id, "
+                                     "CONCAT(users.firstname, ' ', users.lastname) AS username "
+
+                                     "FROM time_entries as T "
+
+                                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
+                                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
+
+                                     "LEFT JOIN custom_values as quoteddocnumbertable "
+                                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
+
+                                     "JOIN projects "
+                                     "ON T.project_id = projects.id "
+
+                                     "JOIN enumerations "
+                                     "ON T.activity_id = enumerations.id "
+
+                                     "JOIN users "
+                                     "ON T.user_id = users.id "
+
+                                     "WHERE T.id is not null " + searchphraseformainresults + " "
+
+                                     "GROUP BY users.id, "
+                                     "         username ")
+                    usernamerowsources = cursor23.fetchall()
+
+                    if filteritemselectedvalue == 'is':
+
+                        return render(request, 'quotation/filteritemtemplateselect.html',
+                                      {'filteritemfirstinputboxselectoptions': usernamerowsources,
                                        'filteritemrowid': filteritemrowid})
 
         if invokedfrom == 'addfilterselectchanged': # when we want to search first click the #Add Filter selectbox and add some filteritems to html
@@ -373,6 +410,17 @@ def filtertemplatehtmlonquotationtimeentryform(request):
                     filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
 
                     filteritemname = 'projectid' #attribute for elements
+
+                    filteritemselectoptions[0][0] = 'is'
+                    filteritemselectoptions[0][1] = 'is'
+
+                if selectedvalue == 'userid': # here the value is text without space and small letter i.e. customerdescription
+
+                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    w, h = 2, 1;
+                    filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
+
+                    filteritemname = 'userid' #attribute for elements
 
                     filteritemselectoptions[0][0] = 'is'
                     filteritemselectoptions[0][1] = 'is'

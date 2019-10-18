@@ -1305,7 +1305,7 @@ def quotationissuetrackingsystem(request):
     '''
     # filtering options to Addfilter selectbox begin
     # Creates a list containing #h lists, each of #w items, all set to 0
-    w, h = 2, 7;
+    w, h = 2, 8;
     addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
 
     addfilterselectvaluesandoptions[0][0] = 'Project Status'
@@ -1328,6 +1328,9 @@ def quotationissuetrackingsystem(request):
 
     addfilterselectvaluesandoptions[6][0] = 'Project Name'
     addfilterselectvaluesandoptions[6][1] = 'projectid'
+
+    addfilterselectvaluesandoptions[7][0] = 'User Name'
+    addfilterselectvaluesandoptions[7][1] = 'userid'
 
     # filtering options to Addfilter selectbox end
 
@@ -1552,6 +1555,10 @@ def quotationissuetrackingsystemsearchcontent(request):
         if filteritemname == 'projectid':
             if filteritemoperator == 'is':
                 projectnamephrase = "and projects.id = '" + filteritemfirstinput + "' "
+
+        if filteritemname == 'userid':
+            if filteritemoperator == 'is':
+                projectnamephrase = "and T.user_id = '" + filteritemfirstinput + "' "
 
 
     '''

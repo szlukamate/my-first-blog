@@ -20,18 +20,6 @@
 							</button>
 							<br>
 
-   						    <label for="projectname" >Projectname</label>
-							<select id="projectname">
-									<option value="" ></option>
-									{% for projectname in projectnamerowsources %}
-										<option value="company.0">projectname.0</option>
-									{% endfor %}
-							</select>
-							<label for="username" >User Name</label>
-							<select id="username"> <!-- Swapped from timeentriescontent.html-->
-									<option value="" ></option>
-										<option value="arbitrary">arbitrary</option>
-							</select>
 							<label for="activityname" >Activity Name</label>
 							<select id="activityname"> <!-- Swapped from timeentriescontent.html-->
 									<option value="" ></option>
@@ -49,5 +37,5 @@
 
 							<hr>
 							<p id="timeentrysearchtemplate" ></p>
-							<p id="filteritemlistelementvaluesaccumulatortemplate" ></p>
+							<p id="filteritemlistelementvaluesaccumulatortemplate" hidden></p>
 	{% endblock %}
