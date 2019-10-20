@@ -6,7 +6,9 @@
 		{% csrf_token %}
 
 		<p >Number of Items:{{numberofitems}}</p>
-		<p id="sqlsavingfeedbackproduct"></p><br>
+		<p id="sqlsavingfeedbackproduct"></p>
+        <p id="searchphraseformainresults" hidden>{{ searchphraseformainresults}}</p>
+		<br>
 
 			<div class="table-responsive text-nowrap" style="max-height: 600px; overflow:scroll;">
 						<table class="table table-striped">

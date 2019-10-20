@@ -114,5 +114,8 @@ urlpatterns = [
     url('productfieldupdate$', views.productfieldupdate, name='productfieldupdate'),
     url('filtertemplatehtmlonproductform$', views.filtertemplatehtmlonproductform, name='filtertemplatehtmlonproductform'),
     url('filtertemplatehtmlonquotationtimeentryform$', views.filtertemplatehtmlonquotationtimeentryform, name='filtertemplatehtmlonquotationtimeentryform'),
+    url(r'timemanager/$', views.timemanager, name='timemanager'),
+    url('filtertemplatehtmlontimemanagerform$', views.filtertemplatehtmlontimemanagerform,name='filtertemplatehtmlontimemanagerform'),
+    url('timemanagersearchcontent$', views.timemanagersearchcontent, name='timemanagersearchcontent'),
 
 ]

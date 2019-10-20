@@ -14,3 +14,4 @@ from .vw_deliverynote import *
 from .vw_stock import *
 from .vw_customerinvoice import *
 from .vw_filter import *
+from .vw_timemanager import *

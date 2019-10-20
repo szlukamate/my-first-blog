@@ -1,0 +1,48 @@
+	{% block content %}
+          
+
+
+
+		{% csrf_token %}
+
+		<p >Number of Items:{{numberofitems}}</p>
+		<p id="sqlsavingfeedbackproduct"></p><br>
+
+			<div class="table-responsive text-nowrap" style="max-height: 600px; overflow:scroll;">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<td>Time Done id</td>
+									<td>Project Name</td>
+
+									<td>Hours</td>
+								</tr>
+							</thead>
+							<tbody>
+
+
+			{% for timedone in timedones %}
+								<tr>
+									<td><input type="text" id="x" class="updateable" value="{{timedone.0}}" name="Productid_tblProduct" maxlength="10" productid="{{timedone.0}}" size="3" disabled></td>
+									<td>
+										<select class="projectselection" timedoneid="{{timedone.0}}">
+												<option value="" disabled selected>{{timedone.3}}</option>
+											{% for projectnamerowsource in projectnamerowsources %}
+												<option value="{{ projectnamerowsource.0 }}">{{ projectnamerowsource.0}}</option>
+											{% endfor %}
+										</select>
+									</td>
+
+									<td><input type="text" class="updateable" value="{{timedone.1}}" name="hours" maxlength="10" productid="{{timedone.0}}" size="3"></td>
+
+								</tr>
+
+			{% endfor %}
+
+							</tbody>
+						</table>
+			</div>
+
+
+
+	{% endblock %}

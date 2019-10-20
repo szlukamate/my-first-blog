@@ -5,7 +5,7 @@
 
 
 
-				<p align="center" id="title" style="font-size:160%;">Products Form</p>{% csrf_token %}
+				<p align="center" id="title" style="font-size:160%;">Time Manager Form</p>{% csrf_token %}
 
 							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 							<button id="filterbutton" type="submit">
@@ -37,9 +37,5 @@
 								</fieldset>
 							  </form>
 							</div>
-
-			<script type="text/javascript" src="{% static 'js/products.js' %}"></script>
-<!--
-        <link rel="stylesheet" href="{% static 'css/products.css' %}">
--->
+			<script type="text/javascript" src="{% static 'js/timemanager.js' %}"></script>
 	{% endblock %}
