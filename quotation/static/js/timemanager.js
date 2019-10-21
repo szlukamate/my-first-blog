@@ -28,18 +28,18 @@ $(function () {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var fieldvalue = $(this).val();
-        var productid = $(this).attr( "productid" );
+        var rowid = $(this).attr( "timedoneid" );
         var fieldname = $(this).attr( "name" );
 
 
 
                    $.ajax({
                         type: 'POST',
-                        url: 'productfieldupdate',
+                        url: 'timemanagerfieldupdate',
 
                         data: {
                         'fieldvalue': fieldvalue,
-                        'rowid' : productid,
+                        'rowid' : rowid,
                         'fieldname': fieldname,
                         'csrfmiddlewaretoken': CSRFtoken
                         },
@@ -55,7 +55,7 @@ $(function () {
                    });
                             function updatesuccess (data, textStatus, jqXHR){
                                 console.log('datafromsql:' + data);
-                                $('input[name="' + fieldname + '"][productid="' + productid + '"').css("background-color", "white").val(data);
+                                $('input[name="' + fieldname + '"][timedoneid="' + rowid + '"').css("background-color", "white").val(data);
                                 $('#sqlsavingfeedbackproduct').html('<span  class="glyphicon glyphicon-hdd"></span>');
 
                                 setTimeout(
@@ -69,44 +69,6 @@ $(function () {
                             function updateerror (){
                                 alert('Failure in saving');
                             };
-
-
-                 if ((fieldname=='purchase_price_tblproduct') || (fieldname=='margin_tblproduct')){ // if price related field changed then an additional listpriceupdate
-
-                    setTimeout(function(){
-                    $.ajax({
-                    type: 'POST',
-                    url: 'productlistpricefieldupdate/',
-
-                    data: {
-                        'postselector' : 'listpriceupdaterequestonly',
-                        'productidinproductjs' : productid,
-                        'csrfmiddlewaretoken': CSRFtoken
-                        },
-
-                    success:requerysuccess,
-                    error: requeryerror,
-                    complete: completerequery,
-                    })
-                    }, 500); // delay to ensure to get valid data
-
-                    function requerysuccess (data, textStatus, jqXHR){
-                    console.log('Success requery!!!');
-                    var listpricefromsql=data[0][2];
-                    $('input[name="listprice"][productid="' + productid + '"').val(listpricefromsql);
-
-                    };
-                    function requeryerror (){
-                        alert('Failure in requery');
-                    };
-                    function completerequery (){
-                        console.log('ajax done');
-                    };
-                 };
-
-
-
-
 
    });
     $('body').on("click", ".updateable", function() {
@@ -546,5 +508,153 @@ $(function () {
             $('#filterbutton').trigger('click');
         }
     });
+    $('body').on("change", ".projectselection", function() {
+            timedoneid = $(this).attr( "timedoneid" )
+                    $.ajax({
+                    type: 'POST',
+                    url: 'timemanagerupdateprojectselect',
+
+                    data: {
+
+                    'projectidinjs' : $(this).val(),
+                    'projectnameinjs' : $( ".projectselection[timedoneid='" + timedoneid + "'] option:selected" ).text(),
+                    'timedoneidinjs' : timedoneid,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                        console.log('ajax done');
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess(data, textStatus, jqXHR)
+                    {
+                    console.log(data);
+                    var projectidsql= data[0][0];
+                    var projectnamesql= data[0][1];
+
+                    $('select[class="projectselection"][timedoneid="' + timedoneid + '"] option:selected').html(projectnamesql);
+                    $('input[class="projectid"][timedoneid="' + timedoneid + '"]').val(projectidsql)
+
+                    }
+
+    });
+    $('body').on("change", ".userselection", function() {
+            timedoneid = $(this).attr( "timedoneid" )
+                    $.ajax({
+                    type: 'POST',
+                    url: 'timemanagerupdateuserselect',
+
+                    data: {
+
+                    'useridinjs' : $(this).val(),
+                    'usernameinjs' : $( ".userselection[timedoneid='" + timedoneid + "'] option:selected" ).text(),
+                    'timedoneidinjs' : timedoneid,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                        console.log('ajax done');
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess(data, textStatus, jqXHR)
+                    {
+                    console.log(data);
+                    var useridsql= data[0][0];
+                    var usernamesql= data[0][1];
+
+                    $('select[class="userselection"][timedoneid="' + timedoneid + '"] option:selected').html(usernamesql);
+                    $('input[class="userid"][timedoneid="' + timedoneid + '"]').val(useridsql)
+
+                    }
+
+    });
+    $('body').on("change", ".issueselection", function() {
+            timedoneid = $(this).attr( "timedoneid" )
+                    $.ajax({
+                    type: 'POST',
+                    url: 'timemanagerupdateissueselect',
+
+                    data: {
+
+                    'issueidinjs' : $(this).val(),
+                    'issuesubjectinjs' : $( ".issueselection[timedoneid='" + timedoneid + "'] option:selected" ).text(),
+                    'timedoneidinjs' : timedoneid,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                        console.log('ajax done');
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess(data, textStatus, jqXHR)
+                    {
+                    console.log(data);
+                    var issueidsql= data[0][0];
+                    var issuesubjectsql= data[0][1];
+
+                    $('select[class="issueselection"][timedoneid="' + timedoneid + '"] option:selected').html(issuesubjectsql);
+                    $('input[class="issueid"][timedoneid="' + timedoneid + '"]').val(issueidsql)
+
+                    }
+
+    });
+   $('#timedonesuploadtoits').click(function() {
+                        console.log('x');
+                $.ajax({
+                    type: 'POST',
+                    url: 'timemanageruploadtoits',
+
+                    data: {
+//                    'quotationdocid' : quotationdocid,
+//                    'quotationdocnumber' : quotationdocnumber,
+//                    'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
+//                    'itemdatalist': itemdataliststringified,
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(url){
+                    console.log(url);
+
+//                    window.location.href = url;
+
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+
+
+
+   });
 
 });

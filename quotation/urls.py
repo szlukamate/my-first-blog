@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^quotationnewrow/(?P<pkdocid>[0-9]+)/(?P<pkproductid>[0-9]+)/(?P<pkdocdetailsid>[0-9]+)/(?P<nextfirstnumonhtml>[0-9]+)/(?P<nextsecondnumonhtml>[0-9]+)/(?P<nextthirdnumonhtml>[0-9]+)/(?P<nextfourthnumonhtml>[0-9]+)/$', views.quotationnewrow, name='quotationnewrow'),
     url('quotationnewrowadd', views.quotationnewrowadd, name='quotationnewrowadd'),
     url(r'^quotationupdatecontact/(?P<pkdocid>[0-9]+)/(?P<pkcontactid>[0-9]+)/$', views.quotationupdatecontact, name='quotationupdatecontact'),
-    url('productupdatecurrencyisocode', views.productupdatecurrencyisocode, name='productupdatecurrencyisocode'),
+    url('productupdatecurrencyisocode$', views.productupdatecurrencyisocode, name='productupdatecurrencyisocode'),
     url(r'productnew', views.productnew, name='productnew'),
     url(r'^productremove/(?P<pkproductid>[0-9]+)/$', views.productremove, name='productremove'),
     url(r'^quotationrowremove/(?P<pk>[0-9]+)/$', views.quotationrowremove, name='quotationrowremove'),
@@ -117,5 +117,10 @@ urlpatterns = [
     url(r'timemanager/$', views.timemanager, name='timemanager'),
     url('filtertemplatehtmlontimemanagerform$', views.filtertemplatehtmlontimemanagerform,name='filtertemplatehtmlontimemanagerform'),
     url('timemanagersearchcontent$', views.timemanagersearchcontent, name='timemanagersearchcontent'),
+    url('timemanagerupdateprojectselect$', views.timemanagerupdateprojectselect, name='timemanagerupdateprojectselect'),
+    url('timemanagerupdateuserselect$', views.timemanagerupdateuserselect, name='timemanagerupdateuserselect'),
+    url('timemanagerupdateissueselect$', views.timemanagerupdateissueselect, name='timemanagerupdateissueselect'),
+    url('timemanagerfieldupdate$', views.timemanagerfieldupdate, name='timemanagerfieldupdate'),
+    url('timemanageruploadtoits$', views.timemanageruploadtoits, name='timemanageruploadtoits'),
 
 ]

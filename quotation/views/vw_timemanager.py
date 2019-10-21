@@ -81,10 +81,17 @@ def timemanagersearchcontent(request):
 #                                  activitynameformainresults + quoteddocnumberformainresults + " ")
     searchphraseforrowsources = searchphraseformainresults
     cursor = connection.cursor()
-    cursor.execute("SELECT timedoneid_tbltimedone, "
+    cursor.execute("SELECT "
+                   "timedoneid_tbltimedone, "
                    "hours_tbltimedone, "
                    "projectid_tbltimedone, "
-                   "name_tblprojects_redmine_ctbltimedone "
+                   "name_tblprojects_redmine_ctbltimedone, "
+        "           userid_tbltimedone, "
+        "           username_redmine_ctbltimedone, " #5
+                   "issueid_tbltimedone, "
+                   "issuesubject_redmine_ctbltimedone, "
+                   "comments_tbltimedone, "
+                   "spenton_tbltimedone "
 
                    "FROM quotation_tbltimedone "
 
@@ -95,6 +102,7 @@ def timemanagersearchcontent(request):
 
     cursor23 = connections['redmine'].cursor()
     cursor23.execute("SELECT "
+                     "projects.id, "
                      "projects.name "
 
                      "FROM time_entries as T "
@@ -114,21 +122,170 @@ def timemanagersearchcontent(request):
                      "JOIN users "
                      "ON T.user_id = users.id "
 
-                     "WHERE T.id is not null " + searchphraseforrowsources + " "
+                     "WHERE T.id is not null and projects.status = 1 " + searchphraseforrowsources + " "
 
-                     "GROUP BY projects.name ")
+                     "GROUP BY projects.id, "
+                    "           projects.name ")
     projectnamerowsources = cursor23.fetchall()
 
-    cursor3 = connection.cursor()
-    cursor3.execute(
-        "SELECT companyid_tblcompanies, companyname_tblcompanies FROM quotation_tblcompanies")
-    supplierlist = cursor3.fetchall()
-    transaction.commit()
+    cursor24 = connections['redmine'].cursor()
+    cursor24.execute("SELECT "
+                     "users.id, "
+                     "CONCAT(users.firstname, ' ', users.lastname) AS username "
+
+                     "FROM time_entries as T "
+
+                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
+                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
+
+                     "LEFT JOIN custom_values as quoteddocnumbertable "
+                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
+
+                     "JOIN projects "
+                     "ON T.project_id = projects.id "
+
+                     "JOIN enumerations "
+                     "ON T.activity_id = enumerations.id "
+
+                     "JOIN users "
+                     "ON T.user_id = users.id "
+
+                     "WHERE T.id is not null and projects.status = 1 " + searchphraseforrowsources + " "
+
+                     "GROUP BY users.id, "
+                    "           username ")
+    usernamerowsources = cursor24.fetchall()
+
+    cursor25 = connections['redmine'].cursor()
+    cursor25.execute("SELECT "
+                     "id, "
+                     "subject, "
+                     "project_id "
+
+                     "FROM issues ")
+
+#                     "WHERE T.id is not null and projects.status = 1 " + searchphraseforrowsources + " "
+
+#                     "GROUP BY users.id, "
+#                    "           username ")
+    issuerowsources = cursor25.fetchall()
 
     #import pdb;
     #pdb.set_trace()
 #
     return render(request, 'quotation/timemanagercontent.html', {'timedones': timedones,
                                                        'projectnamerowsources': projectnamerowsources,
-                                                       'numberofitems': numberofitems,
-                                                       'supplierlist': supplierlist})
+                                                       'usernamerowsources': usernamerowsources,
+                                                       'issuerowsources': issuerowsources,
+                                                       'numberofitems': numberofitems})
+@login_required
+def timemanagerupdateprojectselect(request):
+    if request.method == 'POST':
+        timedoneidinjs = request.POST['timedoneidinjs']
+        projectidinjs = request.POST['projectidinjs']
+        projectnameinjs = request.POST['projectnameinjs']
+
+    cursor2 = connection.cursor()
+    cursor2.execute("UPDATE quotation_tbltimedone SET "
+                    "projectid_tbltimedone= %s, name_tblprojects_redmine_ctbltimedone = %s "
+                    "WHERE timedoneid_tbltimedone =%s ", [projectidinjs, projectnameinjs, timedoneidinjs])
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT "
+        "           projectid_tbltimedone, "
+    "               name_tblprojects_redmine_ctbltimedone "
+        
+        "FROM quotation_tbltimedone "
+        
+        "WHERE timedoneid_tbltimedone= %s ", [timedoneidinjs])
+    results = cursor3.fetchall()
+
+    json_data = json.dumps(results)
+
+    return HttpResponse(json_data, content_type="application/json")
+@login_required
+def timemanagerupdateuserselect(request):
+    if request.method == 'POST':
+        timedoneidinjs = request.POST['timedoneidinjs']
+        useridinjs = request.POST['useridinjs']
+        usernameinjs = request.POST['usernameinjs']
+
+    cursor2 = connection.cursor()
+    cursor2.execute("UPDATE quotation_tbltimedone SET "
+                    "userid_tbltimedone= %s, username_redmine_ctbltimedone = %s "
+                    "WHERE timedoneid_tbltimedone =%s ", [useridinjs, usernameinjs, timedoneidinjs])
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT "
+        "           userid_tbltimedone, "
+        "           username_redmine_ctbltimedone "
+        
+        "FROM quotation_tbltimedone "
+        
+        "WHERE timedoneid_tbltimedone= %s ", [timedoneidinjs])
+    results = cursor3.fetchall()
+
+    json_data = json.dumps(results)
+
+    return HttpResponse(json_data, content_type="application/json")
+@login_required
+def timemanagerupdateissueselect(request):
+    if request.method == 'POST':
+        timedoneidinjs = request.POST['timedoneidinjs']
+        issueidinjs = request.POST['issueidinjs']
+        issuesubjectinjs = request.POST['issuesubjectinjs']
+
+    cursor2 = connection.cursor()
+    cursor2.execute("UPDATE quotation_tbltimedone SET "
+                    "issueid_tbltimedone= %s, issuesubject_redmine_ctbltimedone = %s "
+                    "WHERE timedoneid_tbltimedone =%s ", [issueidinjs, issuesubjectinjs, timedoneidinjs])
+
+    cursor3 = connection.cursor()
+    cursor3.execute(
+        "SELECT "
+        "           issueid_tbltimedone, "
+        "           issuesubject_redmine_ctbltimedone "
+        
+        "FROM quotation_tbltimedone "
+        
+        "WHERE timedoneid_tbltimedone= %s ", [timedoneidinjs])
+    results = cursor3.fetchall()
+
+    json_data = json.dumps(results)
+
+    return HttpResponse(json_data, content_type="application/json")
+@login_required
+def timemanagerfieldupdate(request):
+    if request.method == "POST":
+        fieldvalue = request.POST['fieldvalue']
+        rowid = request.POST['rowid']
+        fieldname = request.POST['fieldname']
+        #import pdb;
+        #pdb.set_trace()
+
+        cursor22 = connection.cursor()
+        cursor22.callproc("sptimemanagerfieldsupdate", [fieldname, fieldvalue, rowid])
+        results23 = cursor22.fetchall()
+        print(results23)
+        '''
+        cursor2 = connection.cursor()
+        sqlquery = "UPDATE quotation_tbltimedone SET " + fieldname + "= '"  + fieldvalue + "' WHERE timedoneid_tbltimedone =" + rowid
+        cursor2.execute(sqlquery)
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT " + fieldname + " "
+                       "FROM quotation_tbltimedone "
+                        "WHERE timedoneid_tbltimedone= %s ", [rowid])
+        results = cursor3.fetchall()
+        '''
+        json_data = json.dumps(results23)
+
+        return HttpResponse(json_data, content_type="application/json")
+@login_required
+def timemanageruploadtoits(request):
+        results23 = 0
+        json_data = json.dumps(results23)
+
+        return HttpResponse(json_data, content_type="application/json")
