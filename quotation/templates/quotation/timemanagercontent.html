@@ -5,7 +5,7 @@
 
 		{% csrf_token %}
 
-		<p >Number of Items:{{numberofitems}}</p>
+		<p id="timedonesnumberofitems">{{timedonesnumberofitems}}</p>
 		<p id="sqlsavingfeedbackproduct"></p><br>
 
 			<div class="table-responsive text-nowrap" style="max-height: 600px; overflow:scroll;">
@@ -19,9 +19,10 @@
 									<td>User Name</td>
 									<td>Issue Id</td>
 									<td>Issue Subject</td>
+									<td>Hours</td>
+
 									<td>Comments</td>
 
-									<td>Hours</td>
 									<td>Spenton</td>
 								</tr>
 							</thead>
@@ -30,8 +31,8 @@
 
 			{% for timedone in timedones %}
 								<tr>
-									<td><input type="text" value="{{timedone.0}}" maxlength="10" timedoneid="{{timedone.0}}" size="3" disabled></td>
-									<td><input type="text" class="projectid" value="{{timedone.2}}" maxlength="10" timedoneid="{{timedone.0}}" size="3" disabled></td>
+									<td><input type="text" class="timedoneid" value="{{timedone.0}}" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="3" disabled></td>
+									<td><input type="text" class="projectid" value="{{timedone.2}}" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="3" disabled></td>
 									<td>
 										<select class="projectselection" timedoneid="{{timedone.0}}">
 												<option value="" disabled selected>{{timedone.3}}</option>
@@ -40,7 +41,7 @@
 											{% endfor %}
 										</select>
 									</td>
-									<td><input type="text" class="userid" value="{{timedone.4}}" maxlength="10" timedoneid="{{timedone.0}}" size="3" disabled></td>
+									<td><input type="text" class="userid" value="{{timedone.4}}" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="3" disabled></td>
 									<td>
 										<select class="userselection" timedoneid="{{timedone.0}}">
 												<option value="" disabled selected>{{timedone.5}}</option>
@@ -49,7 +50,7 @@
 											{% endfor %}
 										</select>
 									</td>
-									<td><input type="text" class="issueid" value="{{timedone.6}}" maxlength="10" timedoneid="{{timedone.0}}" size="3" disabled></td>
+									<td><input type="text" class="issueid" value="{{timedone.6}}" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="3" disabled></td>
 									<td>
 										<select class="issueselection" timedoneid="{{timedone.0}}">
 												<option value="" disabled selected>{{timedone.7}}</option>
@@ -58,10 +59,11 @@
 											{% endfor %}
 										</select>
 									</td>
-									<td><input type="text" class="updateable" value="{{timedone.8}}" name="comments_tbltimedone" maxlength="10" timedoneid="{{timedone.0}}" size="13"></td>
+									<td><input type="text" class="updateable" value="{{timedone.1}}" name="hours_tbltimedone" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="3"></td>
 
-									<td><input type="text" class="updateable" value="{{timedone.1}}" name="hours_tbltimedone" maxlength="10" timedoneid="{{timedone.0}}" size="3"></td>
-									<td><input type="text" class="updateable" value="{{timedone.9}}" name="spenton_tbltimedone" maxlength="10" timedoneid="{{timedone.0}}" size="8"></td>
+									<td><input type="text" class="updateable" value="{{timedone.8}}" name="comments_tbltimedone" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="13"></td>
+
+									<td><input type="text" class="updateable" value="{{timedone.9}}" name="spenton_tbltimedone" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="8"></td>
 
 								</tr>
 

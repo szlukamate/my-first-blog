@@ -625,25 +625,72 @@ $(function () {
                     }
 
     });
-   $('#timedonesuploadtoits').click(function() {
-                        console.log('x');
+    $('body').on("click", "#timedonesuploadtoitsbutton", function() {
+                var timedonesnumberofitems= $('#timedonesnumberofitems').text();
+                var itemdatalist=[];
+                var itemdataliststringified;
+                //var quotationdocid = $('#quotationdocid').text();
+                //var quotationdocnumber = $('#quotationdocnumber').text();
+
+        main();
+
+            function main(){
+
+
+                for (i = 1; i <= timedonesnumberofitems; i++) {
+                    itemdatacollect(i);
+
+                }
+                itemdataliststringified = JSON.stringify(itemdatalist);
+                    console.log(timedonesnumberofitems);
+                    console.log(itemdataliststringified);
+
+                datatransmit();
+
+            }
+            function itemdatacollect(i){
+              //timedoneid=$('input[class="timedoneid"][rowid="' + (i - 1) + '"]').val();
+              //      console.log(i);
+              //      console.log('timedoneid: ' + timedoneid);
+
+              projectid=$('input[class="projectid"][rowid="' + (i - 1) + '"]').val();
+              userid=$('input[class="userid"][rowid="' + (i - 1) + '"]').val();
+              issueid=$('input[class="issueid"][rowid="' + (i - 1) + '"]').val();
+              hours=$('input[name="hours_tbltimedone"][rowid="' + (i - 1) + '"]').val();
+              comments=$('input[name="comments_tbltimedone"][rowid="' + (i - 1) + '"]').val();
+              spenton=$('input[name="spenton_tbltimedone"][rowid="' + (i - 1) + '"]').val();
+
+              projectname=$('td[class="projectname"][rowid="' + (i - 1) + '"]').text();
+              username=$('td[class="username"][rowid="' + (i - 1) + '"]').text();
+              activityname=$('td[class="activityname"][rowid="' + (i - 1) + '"]').text();
+              //hours=$('td[class="hours"][rowid="' + (i - 1) + '"]').text();
+              //comments=$('td[class="comments"][rowid="' + (i - 1) + '"]').text();
+              //spenton=$('td[class="spenton"][rowid="' + (i - 1) + '"]').text();
+              itemdatalist.push(projectid, userid, issueid, hours, comments, spenton );
+
+                    console.log('itemdatalist: ' + itemdatalist);
+
+            }
+
+            function datatransmit(){
+
                 $.ajax({
                     type: 'POST',
                     url: 'timemanageruploadtoits',
 
                     data: {
-//                    'quotationdocid' : quotationdocid,
-//                    'quotationdocnumber' : quotationdocnumber,
-//                    'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
-//                    'itemdatalist': itemdataliststringified,
+                    //'quotationdocid' : quotationdocid,
+                    //'quotationdocnumber' : quotationdocnumber,
+                    'timedonesnumberofitems' : timedonesnumberofitems,
+                    'itemdatalist': itemdataliststringified,
 
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
 
                     success: function(url){
-                    console.log(url);
+                    console.log('success');
 
-//                    window.location.href = url;
+                    //window.location.href = url;
 
                     },
                     error: function(){
@@ -652,9 +699,9 @@ $(function () {
                     datatype: 'html'
 
                 });
+            }
 
+    });
 
-
-   });
 
 });

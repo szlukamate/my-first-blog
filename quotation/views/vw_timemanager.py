@@ -98,7 +98,7 @@ def timemanagersearchcontent(request):
                    "WHERE timedoneid_tbltimedone is not null " + searchphraseformainresults + ""
                     )
     timedones = cursor.fetchall()
-    numberofitems = len(timedones)
+    timedonesnumberofitems = len(timedones)
 
     cursor23 = connections['redmine'].cursor()
     cursor23.execute("SELECT "
@@ -177,7 +177,7 @@ def timemanagersearchcontent(request):
                                                        'projectnamerowsources': projectnamerowsources,
                                                        'usernamerowsources': usernamerowsources,
                                                        'issuerowsources': issuerowsources,
-                                                       'numberofitems': numberofitems})
+                                                       'timedonesnumberofitems': timedonesnumberofitems})
 @login_required
 def timemanagerupdateprojectselect(request):
     if request.method == 'POST':
@@ -285,7 +285,63 @@ def timemanagerfieldupdate(request):
         return HttpResponse(json_data, content_type="application/json")
 @login_required
 def timemanageruploadtoits(request):
-        results23 = 0
-        json_data = json.dumps(results23)
+    creatorid = request.user.id
+    BASE_DIR = settings.BASE_DIR
 
-        return HttpResponse(json_data, content_type="application/json")
+    timedonesnumberofitems = request.POST['timedonesnumberofitems']
+    itemdatalistraw = request.POST['itemdatalist']
+    itemdatalist = json.loads(itemdatalistraw)
+
+    for x in range(int(timedonesnumberofitems)):
+
+        projectid = itemdatalist[(8*x+0)]
+        userid = itemdatalist[(8*x+1)]
+        issueid = itemdatalist[8*x+2]
+        hours = itemdatalist[8*x+3]
+        comments = itemdatalist[8*x+4]
+        spenton = itemdatalist[8*x+5]
+
+        firstnum = x + 1
+        fourthnum = 0
+        secondnum = 0
+
+
+    cursor21 = connections['redmine'].cursor()
+    cursor21.execute(
+        "INSERT INTO time_entries "
+        "( project_id, "
+        "user_id, "
+        "issue_id, "
+        "hours, "
+        "comments, "
+        "activity_id, " #5
+        "spent_on, "
+        "tyear, "
+        "tmonth, "
+        "tweek, "
+        "created_on, " #10
+        "updated_on) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+
+        [projectid,
+         userid,
+         issueid,
+         hours,
+         comments,
+#         activityid,
+         8,
+         spenton,
+#         tyear,
+         2010,
+#         tmonth,
+         10,
+#         tweek,
+         10,
+#         createdon,
+         '2020-12-12-',
+#         updatedon])
+         '2020-12-12-'])
+
+    results23 = 0
+    json_data = json.dumps(results23)
+
+    return HttpResponse(json_data, content_type="application/json")

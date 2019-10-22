@@ -1617,6 +1617,7 @@ def quotationissuetrackingsystemsearchcontent(request):
     #pdb.set_trace()
 
     issuetrackingsystemnumberofitems = len(docs)
+
     cursor23 = connections['redmine'].cursor()
     cursor23.execute("SELECT "
                      "projects.name "
