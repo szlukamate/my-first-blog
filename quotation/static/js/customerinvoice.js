@@ -76,7 +76,8 @@ $(function () {
 ///*
                   // send it out
                   let xhr = new XMLHttpRequest();
-                  xhr.open("POST","https://cors-anywhere.herokuapp.com/https://www.szamlazz.hu/szamla/"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
+//                  xhr.open("POST","https://cors-anywhere.herokuapp.com/https://www.szamlazz.hu/szamla/"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
+                  xhr.open("POST","https://ancient-sierra-24943.herokuapp.com/https://www.szamlazz.hu/szamla/"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
                   xhr.send(formData);
 
                   xhr.onload = function (){ // if the response received the pdf is read and sent to stack

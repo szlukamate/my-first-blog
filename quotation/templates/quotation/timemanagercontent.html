@@ -24,6 +24,7 @@
 									<td>Comments</td>
 
 									<td>Spenton</td>
+									<td>Time Entry Id in ITS</td>
 								</tr>
 							</thead>
 							<tbody>
@@ -64,6 +65,10 @@
 									<td><input type="text" class="updateable" value="{{timedone.8}}" name="comments_tbltimedone" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="13"></td>
 
 									<td><input type="text" class="updateable" value="{{timedone.9}}" name="spenton_tbltimedone" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="8"></td>
+
+									<td><input type="text" value="{{timedone.10}}" name="timeentryidinits_tbltimedone" maxlength="10" timedoneid="{{timedone.0}}" rowid="{{ forloop.counter0 }}" size="3" disabled></td>
+
+									<td><a href="{% url 'timedoneitemremove' pktimedoneid=timedone.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
 
 								</tr>
 

@@ -1472,7 +1472,7 @@ def quotationissuetrackingsystemitemstoquotation(request):
         cursor21 = connections['redmine'].cursor()
         cursor21.execute("UPDATE custom_values SET "
                         "value = %s "
-                        "WHERE custom_field_id = 4 and customized_id = %s ", [maxdocdetailsid, timeentryid]) # 4 means this field in Redmine in custom_fields table
+                        "WHERE custom_field_id = 4 and customized_id = %s ", [maxdocdetailsid, timeentryid]) # 4 means this  field in Redmine in custom_fields table
 
         assembleddocnumber = pretagforquotation + str(quotationdocnumber)
 

@@ -91,7 +91,8 @@ def timemanagersearchcontent(request):
                    "issueid_tbltimedone, "
                    "issuesubject_redmine_ctbltimedone, "
                    "comments_tbltimedone, "
-                   "spenton_tbltimedone "
+                   "spenton_tbltimedone, "
+                   "timeentryidinits_tbltimedone " #10
 
                    "FROM quotation_tbltimedone "
 
@@ -294,17 +295,19 @@ def timemanageruploadtoits(request):
 
     for x in range(int(timedonesnumberofitems)):
 
-        projectid = itemdatalist[(8*x+0)]
-        userid = itemdatalist[(8*x+1)]
-        issueid = itemdatalist[8*x+2]
-        hours = itemdatalist[8*x+3]
-        comments = itemdatalist[8*x+4]
-        spenton = itemdatalist[8*x+5]
+        timedoneid = itemdatalist[(7*x+0)]
+        projectid = itemdatalist[(7*x+1)]
+        userid = itemdatalist[(7*x+2)]
+        issueid = itemdatalist[7*x+3]
+        hours = itemdatalist[7*x+4]
+        comments = itemdatalist[7*x+5]
+        spenton = itemdatalist[7*x+6]
 
         firstnum = x + 1
         fourthnum = 0
         secondnum = 0
-
+        #import pdb;
+        #pdb.set_trace()
 
     cursor21 = connections['redmine'].cursor()
     cursor21.execute(
@@ -320,7 +323,8 @@ def timemanageruploadtoits(request):
         "tmonth, "
         "tweek, "
         "created_on, " #10
-        "updated_on) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+        "updated_on, "
+        "creatoridfromquotationmaker) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
         [projectid,
          userid,
@@ -339,9 +343,78 @@ def timemanageruploadtoits(request):
 #         createdon,
          '2020-12-12-',
 #         updatedon])
-         '2020-12-12-'])
+         '2020-12-12-',
+         creatorid])
+    cursor3 = connections['redmine'].cursor()
+    cursor3.execute(
+        "SELECT "
+        "max(id) "
+
+        "FROM time_entries "
+
+        "WHERE creatoridfromquotationmaker = %s",
+        [creatorid])
+    results = cursor3.fetchall()
+    for x in results:
+        timeentryid = x[0]
+    # import pdb;
+    # pdb.set_trace()
+    cursor21.execute("INSERT INTO custom_values " #insert the timeentryid custom field
+                     "(value, "
+                     "custom_field_id, "
+                     "customized_type, "
+                     "customized_id) VALUES (%s,%s,%s,%s)",
+
+                     [timeentryid,
+                      8,
+                      'TimeEntry',
+                      timeentryid])
+
+    cursor21.execute("INSERT INTO custom_values " #insert the quoteddocdetailsid custom field
+                     "(value, "
+                     "custom_field_id, "
+                     "customized_type, "
+                     "customized_id) VALUES (%s,%s,%s,%s)",
+
+                     [None,
+                      4,
+                      'TimeEntry',
+                      timeentryid])
+
+    cursor21.execute("INSERT INTO custom_values " #insert the quoteddocnumber custom field
+                     "(value, "
+                     "custom_field_id, "
+                     "customized_type, "
+                     "customized_id) VALUES (%s,%s,%s,%s)",
+
+                     [None,
+                      6,
+                      'TimeEntry',
+                      timeentryid])
+
+    cursor2 = connection.cursor()
+    cursor2.execute("UPDATE quotation_tbltimedone SET " #update timeentryid which get from Issue Tracking System - not null means: the timedone item is uploaded to ITS
+                     "timeentryidinits_tbltimedone = %s "
+                     "WHERE timedoneid_tbltimedone = %s ",
+                     [timeentryid, timedoneid ])
 
     results23 = 0
     json_data = json.dumps(results23)
 
     return HttpResponse(json_data, content_type="application/json")
+@login_required
+def timedoneitemnew(request):
+
+    cursor1 = connection.cursor()
+    cursor1.execute("INSERT INTO quotation_tbltimedone "
+                    "(spenton_tbltimedone) VALUES ('2020-01-01')")
+
+    return redirect('timemanager')
+@login_required
+def timedoneitemremove(request,pktimedoneid):
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "DELETE FROM quotation_tbltimedone WHERE timedoneid_tbltimedone=%s ", [pktimedoneid])
+
+    return redirect('timemanager')

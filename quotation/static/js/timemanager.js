@@ -653,6 +653,7 @@ $(function () {
               //      console.log(i);
               //      console.log('timedoneid: ' + timedoneid);
 
+              timedoneid=$('input[class="timedoneid"][rowid="' + (i - 1) + '"]').val();
               projectid=$('input[class="projectid"][rowid="' + (i - 1) + '"]').val();
               userid=$('input[class="userid"][rowid="' + (i - 1) + '"]').val();
               issueid=$('input[class="issueid"][rowid="' + (i - 1) + '"]').val();
@@ -666,7 +667,7 @@ $(function () {
               //hours=$('td[class="hours"][rowid="' + (i - 1) + '"]').text();
               //comments=$('td[class="comments"][rowid="' + (i - 1) + '"]').text();
               //spenton=$('td[class="spenton"][rowid="' + (i - 1) + '"]').text();
-              itemdatalist.push(projectid, userid, issueid, hours, comments, spenton );
+              itemdatalist.push(timedoneid, projectid, userid, issueid, hours, comments, spenton );
 
                     console.log('itemdatalist: ' + itemdatalist);
 

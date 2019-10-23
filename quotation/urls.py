@@ -122,5 +122,7 @@ urlpatterns = [
     url('timemanagerupdateissueselect$', views.timemanagerupdateissueselect, name='timemanagerupdateissueselect'),
     url('timemanagerfieldupdate$', views.timemanagerfieldupdate, name='timemanagerfieldupdate'),
     url('timemanageruploadtoits$', views.timemanageruploadtoits, name='timemanageruploadtoits'),
+    url(r'timedoneitemnew$', views.timedoneitemnew, name='timedoneitemnew'),
+    url(r'^timedoneitemremove/(?P<pktimedoneid>[0-9]+)/$', views.timedoneitemremove, name='timedoneitemremove'),
 
 ]

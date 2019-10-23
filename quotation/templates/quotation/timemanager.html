@@ -7,7 +7,6 @@
 
 				<p align="center" id="title" style="font-size:160%;">Time Manager Form</p>{% csrf_token %}
 
-							<p align="right"><a href="{% url 'docadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 							<button id="filterbutton" type="submit">
 							   <span class="glyphicon glyphicon-filter"></span>
 							</button>
@@ -26,7 +25,7 @@
 										<option value="{{addfilterselectvaluesandoption.1}}">{{addfilterselectvaluesandoption.0}}</option>
 									{% endfor %}
 							</select>
-							<p id="newproductsign" align="left"><a href="#"><span class="glyphicon glyphicon-plus"></span></a></p>
+							<p align="left"><a href="{% url 'timedoneitemnew' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 
 							<p id="filtertemplate" ></p>
 							<hr>
