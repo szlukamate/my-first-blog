@@ -77,241 +77,6 @@ $(function () {
 
 
    });
-    $('body').on("click", ".listpricechangerbutton", function() {
-
-        var productid=$(this).attr( "productid" );
-
-                    listpricefieldstate(this);
-                    var listprice=$('input[name="listprice"][productid="' + productid + '"').val();
-                    var purchaseprice=$('input[name="purchase_price_tblproduct"][productid="' + productid + '"').val();
-                    var marginrequired=((listprice-purchaseprice)/listprice)*100
-
-
-                        $.ajax({
-                        type: 'POST',
-                        url: 'productlistpricefieldupdate/',
-
-                        data: {
-                        'postselector' : 'listpriceupdaterequestwithpassingmarginrequired',
-                        'marginrequired' : marginrequired,
-                        'productidinproductjs' : productid,
-                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                        },
-
-                        success: ajaxsuccess,
-                        error: ajaxerror,
-                        complete: ajaxcomplete,
-
-                        datatype: 'json'
-
-                        });
-
-
-
-            function listpricefieldstate(that){
-
-                if ($('input[name="listprice"][productid="' + productid + '"').is(':disabled')){ // listprice is disabled
-                        setlistpricebuttontext('toenabled', that);
-
-                     } else { // listprice is enabled
-                        setlistpricebuttontext('todisabled', that);
-
-
-                }
-            }
-            function setlistpricebuttontext(listpricebuttonstate, that2){
-
-                    switch(listpricebuttonstate) {
-                      case 'toenabled':
-                        $('input[name="listprice"][productid="' + productid + '"').prop('disabled', false)
-                        $(that2).attr('value', 'Confirm');
-                        break;
-                      case 'todisabled':
-                        $('input[name="listprice"][productid="' + productid + '"').prop('disabled', true)
-                        $(that2).attr('value', 'Change list price');
-                        break;
-                      default:
-                        // code block
-                    }
-            }
-            function ajaxsuccess (data, textStatus, jqXHR){
-            var marginnewfromsql=data[0][1];
-            $('input[name="margin_tblproduct"][productid="' + productid + '"').val(marginnewfromsql);
-
-            }
-
-            function ajaxerror (){
-               console.log('ajax failure');
-            }
-            function ajaxcomplete (){
-
-                console.log('ajax done');
-            }
-
-
-    });
-    $('body').on("change", ".currencyselection", function() {
-
-        var productid=$(this).attr( "productid" );
-                    $.ajax({
-                    type: 'POST',
-                    url: 'productupdatecurrencyisocode/',
-
-                    data: {
-
-                    'currencyidinjs' : $(this).val(),
-                    'productidinjs' : $(this).attr( "productid" ),
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                    },
-
-                    success: UpdateSuccess,
-                    error: function(){
-                       console.log('ajax failure');
-                    },
-                    complete: function(){
-
-                        console.log('ajax done');
-                    },
-
-                    datatype: 'json'
-
-                    });
-
-                    function UpdateSuccess(data, textStatus, jqXHR)
-                    {
-                    console.log(data);
-                    var currencyidsql= data[0]
-                    $('select[class="currencyselection"][productid="' + productid + '"] option:selected').html(currencyidsql);
-
-
-                    }
-
-    });
-    $('body').on("change", ".supplierselection", function() {
-
-        var productid=$(this).attr( "productid" );
-                    $.ajax({
-                    type: 'POST',
-                    url: 'productupdatesupplier/',
-
-                    data: {
-
-                    'supplieridinjs' : $(this).val(),
-                    'productidinjs' : $(this).attr( "productid" ),
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                    },
-
-                    success: UpdateSuccess,
-                    error: function(){
-                       console.log('ajax failure');
-                    },
-                    complete: function(){
-
-                        console.log('ajax done');
-                    },
-
-                    datatype: 'json'
-
-                    });
-
-                    function UpdateSuccess(data, textStatus, jqXHR)
-                    {
-                    console.log(data);
-                    var supplieridsql= data[0]
-                    $('select[class="supplierselection"][productid="' + productid + '"] option:selected').html(supplieridsql);
-
-
-                    }
-
-    });
-    $( "#dialog-form" ).dialog({
-          autoOpen: false,
-          height: 260,
-          width: 350,
-          modal: true,
-          buttons: {
-            "Service": function() {
-                $.ajax({
-                    type: 'POST',
-                    url: 'productnew/',
-
-                    data: {
-                    'serviceflag' : 1,
-                    'discreteflag' : 0,
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                    },
-
-                    success: function(url){
-                    window.location.href = url;
-
-                    },
-                    error: function(){
-
-                        alert('failure');
-                    },
-                    datatype: 'html'
-
-                });
-            },
-            "Product/InDiscrete": function() {
-                $.ajax({
-                    type: 'POST',
-                    url: 'productnew/',
-
-                    data: {
-                    'serviceflag' : 0,
-                    'discreteflag' : 0,
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                    },
-
-                    success: function(url){
-                    window.location.href = url;
-
-                    },
-                    error: function(){
-
-                        alert('failure');
-                    },
-                    datatype: 'html'
-
-                });
-            },
-            "Product/Discrete": function() {
-                $.ajax({
-                    type: 'POST',
-                    url: 'productnew/',
-
-                    data: {
-                    'serviceflag' : 0,
-                    'discreteflag' : 1,
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                    },
-
-                    success: function(url){
-                    window.location.href = url;
-
-                    },
-                    error: function(){
-
-                        alert('failure');
-                    },
-                    datatype: 'html'
-
-                });
-            },
-            Cancel: function() {
-                    $( this ).dialog( "close" );
-            }
-          },
-          close: function() {
-                    $( this ).dialog( "close" );
-          }
-    });
-   $('#newproductsign').click(function() {
-            $( "#dialog-form" ).dialog( "open" );
-
-
-   });
     $('#filterbutton').click(function() {
     var filteritemlist = []
     main();
@@ -544,6 +309,8 @@ $(function () {
                     $('select[class="projectselection"][timedoneid="' + timedoneid + '"] option:selected').html(projectnamesql);
                     $('input[class="projectid"][timedoneid="' + timedoneid + '"]').val(projectidsql)
 
+                    $('#auxfunctionforissueselectoptions').trigger('click', projectidsql); // relevant issue select options for project
+
                     }
 
     });
@@ -703,6 +470,47 @@ $(function () {
             }
 
     });
+    $('#auxfunctionforissueselectoptions').click(function(event, projectid) {
+                    //console.log('auxfunctionforissueselectoptions ' + timedoneid);
 
+
+                    $.ajax({
+                    type: 'POST',
+                    url: 'timemanagerupdateissueselectafterchangeprojectselect',
+
+                    data: {
+
+                    'projectidinjs' : projectid,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                    success: UpdateSuccess,
+                    error: function(){
+                       console.log('ajax failure');
+                    },
+                    complete: function(){
+
+                        console.log('ajax done');
+                    },
+
+                    datatype: 'json'
+
+                    });
+
+                    function UpdateSuccess(data, textStatus, jqXHR)
+                    {
+                    console.log(data);
+/*
+                    var projectidsql= data[0][0];
+                    var projectnamesql= data[0][1];
+
+                    $('select[class="projectselection"][timedoneid="' + timedoneid + '"] option:selected').html(projectnamesql);
+                    $('input[class="projectid"][timedoneid="' + timedoneid + '"]').val(projectidsql)
+
+                    $('#auxfunctionforissueselectoptions').trigger('click'); // relevant issue select options for project
+*/
+                    }
+
+    });
 
 });

@@ -103,58 +103,24 @@ def timemanagersearchcontent(request):
 
     cursor23 = connections['redmine'].cursor()
     cursor23.execute("SELECT "
-                     "projects.id, "
-                     "projects.name "
+                     "id, "
+                     "name "
 
-                     "FROM time_entries as T "
+                     "FROM projects "
 
-                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
-                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
+                     "WHERE id is not null and status = 1 " + searchphraseforrowsources + " ")
 
-                     "LEFT JOIN custom_values as quoteddocnumbertable "
-                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
-
-                     "JOIN projects "
-                     "ON T.project_id = projects.id "
-
-                     "JOIN enumerations "
-                     "ON T.activity_id = enumerations.id "
-
-                     "JOIN users "
-                     "ON T.user_id = users.id "
-
-                     "WHERE T.id is not null and projects.status = 1 " + searchphraseforrowsources + " "
-
-                     "GROUP BY projects.id, "
-                    "           projects.name ")
     projectnamerowsources = cursor23.fetchall()
 
     cursor24 = connections['redmine'].cursor()
     cursor24.execute("SELECT "
-                     "users.id, "
-                     "CONCAT(users.firstname, ' ', users.lastname) AS username "
+                     "id, "
+                     "CONCAT(firstname, ' ', lastname) AS username "
 
-                     "FROM time_entries as T "
+                     "FROM users "
 
-                     "LEFT JOIN custom_values as quoteddocdetailsidtable "
-                     "ON T.id = quoteddocdetailsidtable.customized_id and quoteddocdetailsidtable.custom_field_id = 4 "
+                     "WHERE id is not null " + searchphraseforrowsources + " ")
 
-                     "LEFT JOIN custom_values as quoteddocnumbertable "
-                     "ON T.id = quoteddocnumbertable.customized_id and quoteddocnumbertable.custom_field_id = 6 "
-
-                     "JOIN projects "
-                     "ON T.project_id = projects.id "
-
-                     "JOIN enumerations "
-                     "ON T.activity_id = enumerations.id "
-
-                     "JOIN users "
-                     "ON T.user_id = users.id "
-
-                     "WHERE T.id is not null and projects.status = 1 " + searchphraseforrowsources + " "
-
-                     "GROUP BY users.id, "
-                    "           username ")
     usernamerowsources = cursor24.fetchall()
 
     cursor25 = connections['redmine'].cursor()
@@ -201,7 +167,6 @@ def timemanagerupdateprojectselect(request):
         
         "WHERE timedoneid_tbltimedone= %s ", [timedoneidinjs])
     results = cursor3.fetchall()
-
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
@@ -418,3 +383,24 @@ def timedoneitemremove(request,pktimedoneid):
         "DELETE FROM quotation_tbltimedone WHERE timedoneid_tbltimedone=%s ", [pktimedoneid])
 
     return redirect('timemanager')
+
+
+@login_required
+def timemanagerupdateissueselectafterchangeprojectselect(request): # see name
+    if request.method == 'POST':
+        projectidinjs = request.POST['projectidinjs']
+
+    cursor3 = connections['redmine'].cursor()
+    cursor3.execute("SELECT "
+                     "id, "
+                     "subject, "
+                     "project_id "
+
+                     "FROM issues "
+
+                     "WHERE project_id = %s ", [projectidinjs])
+
+    results = cursor3.fetchall()
+    json_data = json.dumps(results)
+
+    return HttpResponse(json_data, content_type="application/json")
