@@ -309,7 +309,8 @@ $(function () {
                     $('select[class="projectselection"][timedoneid="' + timedoneid + '"] option:selected').html(projectnamesql);
                     $('input[class="projectid"][timedoneid="' + timedoneid + '"]').val(projectidsql)
 
-                    $('#auxfunctionforissueselectoptions').trigger('click', projectidsql); // relevant issue select options for project
+                    $('#auxfunctionforissueselectoptions').trigger('click', ["" + timedoneid + "" , "" + projectidsql + ""]); // relevant issue select options for project
+                    //$('#auxfunctionforissueselectoptions').trigger('click', timedoneid); // relevant issue select options for project
 
                     }
 
@@ -470,8 +471,9 @@ $(function () {
             }
 
     });
-    $('#auxfunctionforissueselectoptions').click(function(event, projectid) {
-                    //console.log('auxfunctionforissueselectoptions ' + timedoneid);
+    $('#auxfunctionforissueselectoptions').click(function(event, timedoneid, projectid) {
+                    console.log('projectid in aux: ' + projectid);
+                    console.log('timedoneid in aux: ' + timedoneid);
 
 
                     $.ajax({
@@ -480,6 +482,7 @@ $(function () {
 
                     data: {
 
+                    'timedoneidinjs' : timedoneid,
                     'projectidinjs' : projectid,
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
                     },
@@ -500,6 +503,8 @@ $(function () {
                     function UpdateSuccess(data, textStatus, jqXHR)
                     {
                     console.log(data);
+                    $('select[class="issueselection"][timedoneid="' + timedoneid + '"').html(data);
+
 /*
                     var projectidsql= data[0][0];
                     var projectnamesql= data[0][1];

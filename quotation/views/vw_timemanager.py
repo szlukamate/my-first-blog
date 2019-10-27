@@ -122,7 +122,7 @@ def timemanagersearchcontent(request):
                      "WHERE id is not null " + searchphraseforrowsources + " ")
 
     usernamerowsources = cursor24.fetchall()
-
+    '''
     cursor25 = connections['redmine'].cursor()
     cursor25.execute("SELECT "
                      "id, "
@@ -131,10 +131,22 @@ def timemanagersearchcontent(request):
 
                      "FROM issues ")
 
-#                     "WHERE T.id is not null and projects.status = 1 " + searchphraseforrowsources + " "
+    issuerowsources = cursor25.fetchall()
+    '''
+    cursor25 = connections['redmine'].cursor()
+    cursor25.execute("SELECT "
+                     "I.id, "
+                     "subject, "
+                     "project_id, "
+                     "projects.name "
 
-#                     "GROUP BY users.id, "
-#                    "           username ")
+                     "FROM issues as I "
+
+                     "JOIN projects "
+                     "ON I.project_id = projects.id "
+                     
+                     "WHERE I.id is not null and status = 1 ")
+
     issuerowsources = cursor25.fetchall()
 
     #import pdb;
@@ -386,9 +398,9 @@ def timedoneitemremove(request,pktimedoneid):
 
 
 @login_required
-def timemanagerupdateissueselectafterchangeprojectselect(request): # see name
-    if request.method == 'POST':
-        projectidinjs = request.POST['projectidinjs']
+def timemanagerupdateissueselectafterchangeprojectselect(request): # <-- see name
+    timedoneidinjs = request.POST['timedoneidinjs']
+    projectidinjs = request.POST['projectidinjs']
 
     cursor3 = connections['redmine'].cursor()
     cursor3.execute("SELECT "
@@ -400,7 +412,8 @@ def timemanagerupdateissueselectafterchangeprojectselect(request): # see name
 
                      "WHERE project_id = %s ", [projectidinjs])
 
-    results = cursor3.fetchall()
-    json_data = json.dumps(results)
+    selectoptions = cursor3.fetchall()
 
-    return HttpResponse(json_data, content_type="application/json")
+    return render(request, 'quotation/timemanagerissueselecthtmlafterupdateprojectselect.html',
+                  {'timedoneid': timedoneidinjs,
+                  'selectoptions': selectoptions})

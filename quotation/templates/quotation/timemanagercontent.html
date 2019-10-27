@@ -56,7 +56,11 @@
 										<select class="issueselection" timedoneid="{{timedone.0}}">
 												<option value="" disabled selected>{{timedone.7}}</option>
 											{% for issuerowsource in issuerowsources %}
-												<option value="{{ issuerowsource.0 }}">Iss/PrId:{{ issuerowsource.0}}/{{ issuerowsource.2}} {{ issuerowsource.1}}</option>
+												{% if timedone.2 == issuerowsource.2 %} <!-- matches projectid -->
+
+													<option value="{{ issuerowsource.0 }}">{{ issuerowsource.1}}</option>
+
+												{% endif %}
 											{% endfor %}
 										</select>
 									</td>

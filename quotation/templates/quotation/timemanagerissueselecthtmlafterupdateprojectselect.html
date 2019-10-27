@@ -1,5 +1,5 @@
-	<select class="firstinputbox" filteritemrowid="{{filteritemrowid}}">
-		{% for filteritemfirstinputboxselectoption in filteritemfirstinputboxselectoptions %}
-			<option value="{{ filteritemfirstinputboxselectoption.0}}">{{ filteritemfirstinputboxselectoption.1}}</option>
+	<select class="issueselection" timedoneid="{{timedoneid}}">
+		{% for selectoption in selectoptions %}
+			<option value="{{ selectoption.0}}">{{ selectoption.1}}</option>
 		{% endfor %}
 	</select>
