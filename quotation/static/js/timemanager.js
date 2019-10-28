@@ -390,6 +390,8 @@ $(function () {
                     $('select[class="issueselection"][timedoneid="' + timedoneid + '"] option:selected').html(issuesubjectsql);
                     $('input[class="issueid"][timedoneid="' + timedoneid + '"]').val(issueidsql)
 
+                    $('input[class="issueid"][timedoneid="' + timedoneid + '"]').css("background-color", ""); //remove red background
+
                     }
 
     });
@@ -503,7 +505,8 @@ $(function () {
                     function UpdateSuccess(data, textStatus, jqXHR)
                     {
                     console.log(data);
-                    $('select[class="issueselection"][timedoneid="' + timedoneid + '"').html(data);
+                    $('select[class="issueselection"][timedoneid="' + timedoneid + '"]').html(data);
+                    $('input[class="issueid"][timedoneid="' + timedoneid + '"]').css("background-color", "red");
 
 /*
                     var projectidsql= data[0][0];

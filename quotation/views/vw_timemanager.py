@@ -98,8 +98,90 @@ def timemanagersearchcontent(request):
 
                    "WHERE timedoneid_tbltimedone is not null " + searchphraseformainresults + ""
                     )
-    timedones = cursor.fetchall()
-    timedonesnumberofitems = len(timedones)
+    timedonespre = cursor.fetchall()
+    timedonesnumberofitems = len(timedonespre)
+
+# timedones to temptable begin
+    cursor2 = connection.cursor()
+    cursor2.execute("DROP TEMPORARY TABLE IF EXISTS timedonetemptable;")
+    cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS timedonetemptable "
+                    "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
+                    "     hours_tbltimedonetemptable FLOAT NOT NULL, "
+                    "     projectid_tbltimedonetemptable INT(11) NULL, "
+                    "     userid_tbltimedonetemptable INT(11) NULL, "
+                    "     issueid_tbltimedonetemptable INT(11) NULL, "
+                    "     comments_tbltimedonetemptable varchar(1024) NULL,"
+                    "     spenton_tbltimedonetemptable DATE NULL,"
+                    "     timeentryidinits_tbltimedonetemptable INT(11) NULL, "
+                    "     issueidredbackgroundflag_tbltimedonetemptable INT(11) NULL) " #if projectid alien for issueid the issueid background needs to be set to red
+
+                    "      ENGINE=INNODB "
+                    "    ; ")
+    for x11 in timedonespre:
+        hours = x11[1]
+        if hours == None:
+            hours = 0
+        #hours = round(hours,2)
+        projectid = x11[2]
+        userid = x11[4]
+        issueid = x11[6]
+        comments = x11[8]
+        spenton = x11[9]
+        timeentryidinits = x11[10]
+        if timeentryidinits == None:
+            timeentryidinits = 0
+
+        cursor2.execute("INSERT INTO timedonetemptable (hours_tbltimedonetemptable, "
+                        "projectid_tbltimedonetemptable, "
+                        "userid_tbltimedonetemptable, "
+                        "issueid_tbltimedonetemptable, "
+                        "comments_tbltimedonetemptable, "
+                        "spenton_tbltimedonetemptable, "
+                        "timeentryidinits_tbltimedonetemptable) VALUES ('" + str(hours) + "', "
+                                                    "'" + str(projectid) + "', "
+                                                    "'" + str(userid) + "', "
+                                                    "'" + str(issueid) + "', "
+                                                    "'" + str(comments) + "', "
+                                                    "'" + str(spenton) + "', "
+                                                    "'" + str(timeentryidinits) + "');")
+
+    cursor2.execute("SELECT   "
+                        "auxid, "
+                        "hours_tbltimedonetemptable, "
+                        "projectid_tbltimedonetemptable, "
+                        "userid_tbltimedonetemptable, "
+                    "   issueid_tbltimedonetemptable, "
+                    "   comments_tbltimedonetemptable, " #5
+                    "   spenton_tbltimedonetemptable, "
+                    "   timeentryidinits_tbltimedonetemptable "
+
+                        "FROM timedonetemptable ")
+    timedonesunsetflag = cursor2.fetchall()
+
+# timedones to temptable end
+
+# setting issueidredbackgroundflag begin
+    for x in timedonesunsetflag:
+        issueid
+    cursor25 = connections['redmine'].cursor()
+    cursor25.execute("SELECT "
+                     "I.id, "
+                     "subject, "
+                     "project_id, "
+                     "projects.name "
+
+                     "FROM issues as I "
+
+                     "JOIN projects "
+                     "ON I.project_id = projects.id "
+
+                     "WHERE I.id is not null and status = 1 ")
+
+    issuerowsourcessss = cursor25.fetchall()
+
+    # setting issueidredbackgroundflag end
+    #import pdb;
+    #pdb.set_trace()
 
     cursor23 = connections['redmine'].cursor()
     cursor23.execute("SELECT "
@@ -152,7 +234,7 @@ def timemanagersearchcontent(request):
     #import pdb;
     #pdb.set_trace()
 #
-    return render(request, 'quotation/timemanagercontent.html', {'timedones': timedones,
+    return render(request, 'quotation/timemanagercontent.html', {'timedones': timedonespre,
                                                        'projectnamerowsources': projectnamerowsources,
                                                        'usernamerowsources': usernamerowsources,
                                                        'issuerowsources': issuerowsources,
