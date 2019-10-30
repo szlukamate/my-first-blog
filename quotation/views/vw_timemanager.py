@@ -28,11 +28,11 @@ def timemanager(request):
         addfilterselectvaluesandoptions[0][0] = 'Project Name'
         addfilterselectvaluesandoptions[0][1] = 'projectid'
 
-        addfilterselectvaluesandoptions[1][0] = 'Listprice'
-        addfilterselectvaluesandoptions[1][1] = 'listprice'
+        addfilterselectvaluesandoptions[1][0] = 'Timedone Id'
+        addfilterselectvaluesandoptions[1][1] = 'timedoneid'
 
-        addfilterselectvaluesandoptions[2][0] = 'Supplier'
-        addfilterselectvaluesandoptions[2][1] = 'supplier'
+        addfilterselectvaluesandoptions[2][0] = 'Date - Spent On'
+        addfilterselectvaluesandoptions[2][1] = 'datespenton'
         # filtering options to Addfilter selectbox end
 
         # import pdb;
@@ -49,9 +49,9 @@ def timemanagersearchcontent(request):
     filteritemfirstinput = ''
     filteritemsecondinput = ''
 
-    customerdescriptionphrase = ""
-    listpricephrase = ""
-    supplierphrase = ""
+    projectphrase = ""
+    timedonephrase = ""
+    datespentonphrase = ""
 
     for x in range(0,len(filteritemlist),4):
 
@@ -60,25 +60,17 @@ def timemanagersearchcontent(request):
         filteritemfirstinput = filteritemlist[x+2]
         filteritemsecondinput = filteritemlist[x+3]
 
-        if filteritemname == 'customerdescription':
-            if filteritemoperator == 'contains':
-                customerdescriptionphrase = "and customerdescription_tblProduct  LIKE '%" + filteritemfirstinput + "%' "
-            if filteritemoperator == 'doesntcontain':
-                customerdescriptionphrase = "and customerdescription_tblProduct NOT LIKE '%" + filteritemfirstinput + "%' "
-
-        if filteritemname == 'listprice':
-            if filteritemoperator == 'gteq':
-                listpricephrase = "and purchase_price_tblproduct >= " + filteritemfirstinput + " "
-            if filteritemoperator == 'lteq':
-                listpricephrase = "and purchase_price_tblproduct <= " + filteritemfirstinput + " "
-
-        if filteritemname == 'supplier':
+        if filteritemname == 'projectid':
             if filteritemoperator == 'is':
-                supplierphrase = "and suppliercompanyid_tblproduct = " + filteritemfirstinput + " "
+                projectphrase = "and projectid_tbltimedone = '" + filteritemfirstinput + "' "
+        if filteritemname == 'timedoneid':
+            if filteritemoperator == 'is':
+                timedonephrase = "and timedoneid_tbltimedone = '" + filteritemfirstinput + "' "
+        if filteritemname == 'datespenton':
+            if filteritemoperator == 'between':
+                datespentonphrase = "and spenton_tbltimedone BETWEEN '" + filteritemfirstinput + "' AND '" + filteritemsecondinput + "' "
 
-    searchphraseformainresults = (customerdescriptionphrase + listpricephrase + supplierphrase + " ")
-#                                  datephraseformainresults + companyformainresults + usernameformainresults +
-#                                  activitynameformainresults + quoteddocnumberformainresults + " ")
+    searchphraseformainresults = (projectphrase + timedonephrase + datespentonphrase + " ")
     searchphraseforrowsources = searchphraseformainresults
     cursor = connection.cursor()
     cursor.execute("SELECT "
@@ -99,7 +91,6 @@ def timemanagersearchcontent(request):
                    "WHERE timedoneid_tbltimedone is not null " + searchphraseformainresults + ""
                     )
     timedonespre = cursor.fetchall()
-    timedonesnumberofitems = len(timedonespre)
 
 # timedones to temptable begin
     cursor2 = connection.cursor()
@@ -113,7 +104,11 @@ def timemanagersearchcontent(request):
                     "     comments_tbltimedonetemptable varchar(1024) NULL,"
                     "     spenton_tbltimedonetemptable DATE NULL,"
                     "     timeentryidinits_tbltimedonetemptable INT(11) NULL, "
-                    "     issueidredbackgroundflag_tbltimedonetemptable INT(11) NULL) " #if projectid alien for issueid the issueid background needs to be set to red
+                    "     issueidredbackgroundflag_tbltimedonetemptable INT(11) NULL, " #if projectid alien for issueid the issueid background needs to be set to red
+                    "     timedoneid_tbltimedonetemptable INT(11) NULL, " 
+                    "     name_tblprojects_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " #10 
+                    "     username_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
+                    "     issuesubject_redmine_ctbltimedonetemptable VARCHAR(255) NULL) " 
 
                     "      ENGINE=INNODB "
                     "    ; ")
@@ -121,7 +116,6 @@ def timemanagersearchcontent(request):
         hours = x11[1]
         if hours == None:
             hours = 0
-        #hours = round(hours,2)
         projectid = x11[2]
         userid = x11[4]
         issueid = x11[6]
@@ -130,6 +124,10 @@ def timemanagersearchcontent(request):
         timeentryidinits = x11[10]
         if timeentryidinits == None:
             timeentryidinits = 0
+        timedoneid = x11[0]
+        projectname = x11[3]
+        username = x11[5]
+        issuesubject = x11[7]
 
         cursor2.execute("INSERT INTO timedonetemptable (hours_tbltimedonetemptable, "
                         "projectid_tbltimedonetemptable, "
@@ -137,13 +135,21 @@ def timemanagersearchcontent(request):
                         "issueid_tbltimedonetemptable, "
                         "comments_tbltimedonetemptable, "
                         "spenton_tbltimedonetemptable, "
-                        "timeentryidinits_tbltimedonetemptable) VALUES ('" + str(hours) + "', "
+                        "timeentryidinits_tbltimedonetemptable, "
+                        "timedoneid_tbltimedonetemptable, "
+                        "name_tblprojects_redmine_ctbltimedonetemptable, "
+                        "username_redmine_ctbltimedonetemptable, "
+                        "issuesubject_redmine_ctbltimedonetemptable) VALUES ('" + str(hours) + "', "
                                                     "'" + str(projectid) + "', "
                                                     "'" + str(userid) + "', "
                                                     "'" + str(issueid) + "', "
                                                     "'" + str(comments) + "', "
                                                     "'" + str(spenton) + "', "
-                                                    "'" + str(timeentryidinits) + "');")
+                                                    "'" + str(timeentryidinits) + "', "
+                                                    "'" + str(timedoneid) + "', "
+                                                    "'" + str(projectname) + "', "
+                                                    "'" + str(username) + "', "
+                                                    "'" + str(issuesubject) + "');")
 
     cursor2.execute("SELECT   "
                         "auxid, "
@@ -153,35 +159,75 @@ def timemanagersearchcontent(request):
                     "   issueid_tbltimedonetemptable, "
                     "   comments_tbltimedonetemptable, " #5
                     "   spenton_tbltimedonetemptable, "
-                    "   timeentryidinits_tbltimedonetemptable "
+                    "   timeentryidinits_tbltimedonetemptable, "
+                    "   issueidredbackgroundflag_tbltimedonetemptable, "
+                    "   timedoneid_tbltimedonetemptable,"
+                    "   name_tblprojects_redmine_ctbltimedonetemptable, " #10
+                    "   username_redmine_ctbltimedonetemptable, "
+                    "   issuesubject_redmine_ctbltimedonetemptable "
 
                         "FROM timedonetemptable ")
     timedonesunsetflag = cursor2.fetchall()
-
 # timedones to temptable end
 
 # setting issueidredbackgroundflag begin
     for x in timedonesunsetflag:
-        issueid
-    cursor25 = connections['redmine'].cursor()
-    cursor25.execute("SELECT "
-                     "I.id, "
-                     "subject, "
-                     "project_id, "
-                     "projects.name "
+        issueidintemptable = x[4]
+        projectidintemptable = x[2]
+        if projectidintemptable == None:
+            projectidintemptable = 0
 
-                     "FROM issues as I "
+        timedoneidintemptable = x[9]
 
-                     "JOIN projects "
-                     "ON I.project_id = projects.id "
+        cursor25 = connections['redmine'].cursor()
+        cursor25.execute("SELECT "
+                         "I.id, "
+                         "subject, "
+                         "project_id "
+    
+                         "FROM issues as I "
+   
+                         "WHERE I.id = %s ", [issueidintemptable])
+        issuesforbackgroundset = cursor25.fetchall()
+        for x in issuesforbackgroundset:
+            projectidinissuestable = x[2]
+        if len(issuesforbackgroundset) == 0:
+                projectidinissuestable = 0
 
-                     "WHERE I.id is not null and status = 1 ")
+        if projectidintemptable != projectidinissuestable: # issueid background needs to be set red
+            cursor2.execute("UPDATE timedonetemptable SET "
+                             "issueidredbackgroundflag_tbltimedonetemptable=1 "
+                             "WHERE timedoneid_tbltimedonetemptable =%s ", [timedoneidintemptable])
+        #import pdb;
+        #pdb.set_trace()
 
-    issuerowsourcessss = cursor25.fetchall()
+        xx = 1
 
-    # setting issueidredbackgroundflag end
+    cursor2.execute("SELECT   "
+                        "auxid, "
+                        "hours_tbltimedonetemptable, "
+                        "projectid_tbltimedonetemptable, "
+                        "userid_tbltimedonetemptable, "
+                    "   issueid_tbltimedonetemptable, "
+                    "   comments_tbltimedonetemptable, " #5
+                    "   spenton_tbltimedonetemptable, "
+                    "   timeentryidinits_tbltimedonetemptable, "
+                    "   issueidredbackgroundflag_tbltimedonetemptable, "
+                    "   timedoneid_tbltimedonetemptable, "
+                    "   name_tblprojects_redmine_ctbltimedonetemptable, " #10
+                    "   username_redmine_ctbltimedonetemptable, "
+                    "   issuesubject_redmine_ctbltimedonetemptable "
+
+                        "FROM timedonetemptable ")
+    timedonessetflag = cursor2.fetchall()
+    timedonesnumberofitems = len(timedonessetflag)
+
     #import pdb;
     #pdb.set_trace()
+
+
+# setting issueidredbackgroundflag end
+
 
     cursor23 = connections['redmine'].cursor()
     cursor23.execute("SELECT "
@@ -190,7 +236,7 @@ def timemanagersearchcontent(request):
 
                      "FROM projects "
 
-                     "WHERE id is not null and status = 1 " + searchphraseforrowsources + " ")
+                     "WHERE id is not null and status = 1 ")
 
     projectnamerowsources = cursor23.fetchall()
 
@@ -201,20 +247,9 @@ def timemanagersearchcontent(request):
 
                      "FROM users "
 
-                     "WHERE id is not null " + searchphraseforrowsources + " ")
+                     "WHERE id is not null  ")
 
     usernamerowsources = cursor24.fetchall()
-    '''
-    cursor25 = connections['redmine'].cursor()
-    cursor25.execute("SELECT "
-                     "id, "
-                     "subject, "
-                     "project_id "
-
-                     "FROM issues ")
-
-    issuerowsources = cursor25.fetchall()
-    '''
     cursor25 = connections['redmine'].cursor()
     cursor25.execute("SELECT "
                      "I.id, "
@@ -234,7 +269,7 @@ def timemanagersearchcontent(request):
     #import pdb;
     #pdb.set_trace()
 #
-    return render(request, 'quotation/timemanagercontent.html', {'timedones': timedonespre,
+    return render(request, 'quotation/timemanagercontent.html', {'timedones': timedonessetflag,
                                                        'projectnamerowsources': projectnamerowsources,
                                                        'usernamerowsources': usernamerowsources,
                                                        'issuerowsources': issuerowsources,
@@ -262,6 +297,9 @@ def timemanagerupdateprojectselect(request):
         "WHERE timedoneid_tbltimedone= %s ", [timedoneidinjs])
     results = cursor3.fetchall()
     json_data = json.dumps(results)
+#
+    #import pdb;
+    #pdb.set_trace()
 
     return HttpResponse(json_data, content_type="application/json")
 @login_required
@@ -329,17 +367,6 @@ def timemanagerfieldupdate(request):
         cursor22.callproc("sptimemanagerfieldsupdate", [fieldname, fieldvalue, rowid])
         results23 = cursor22.fetchall()
         print(results23)
-        '''
-        cursor2 = connection.cursor()
-        sqlquery = "UPDATE quotation_tbltimedone SET " + fieldname + "= '"  + fieldvalue + "' WHERE timedoneid_tbltimedone =" + rowid
-        cursor2.execute(sqlquery)
-
-        cursor3 = connection.cursor()
-        cursor3.execute("SELECT " + fieldname + " "
-                       "FROM quotation_tbltimedone "
-                        "WHERE timedoneid_tbltimedone= %s ", [rowid])
-        results = cursor3.fetchall()
-        '''
         json_data = json.dumps(results23)
 
         return HttpResponse(json_data, content_type="application/json")
@@ -351,16 +378,39 @@ def timemanageruploadtoits(request):
     timedonesnumberofitems = request.POST['timedonesnumberofitems']
     itemdatalistraw = request.POST['itemdatalist']
     itemdatalist = json.loads(itemdatalistraw)
-
     for x in range(int(timedonesnumberofitems)):
 
-        timedoneid = itemdatalist[(7*x+0)]
-        projectid = itemdatalist[(7*x+1)]
-        userid = itemdatalist[(7*x+2)]
-        issueid = itemdatalist[7*x+3]
-        hours = itemdatalist[7*x+4]
-        comments = itemdatalist[7*x+5]
-        spenton = itemdatalist[7*x+6]
+        timedoneid = itemdatalist[(8*x+0)]
+        projectid = itemdatalist[(8*x+1)]
+        userid = itemdatalist[(8*x+2)]
+        issueid = itemdatalist[8*x+3]
+        hours = itemdatalist[8*x+4]
+        comments = itemdatalist[8*x+5]
+        spenton = itemdatalist[8*x+6]
+        timeentryidinits = itemdatalist[8*x+7]
+
+        # timeentry row delete if already exists in redmine begin
+        cursor21 = connections['redmine'].cursor()
+        cursor21.execute(
+            "SELECT "
+            "id "
+
+            "FROM time_entries "
+
+            "WHERE id = %s",
+            [timeentryidinits])
+        results = cursor21.fetchall()
+        if len(results) != 0: # there is already row in TimeEntry table in Redmine
+            cursor21.execute(
+                "DELETE FROM time_entries WHERE id=%s ", [timeentryidinits]) # remove Time Entry
+            cursor21.execute(
+                "DELETE FROM custom_values WHERE customized_id=%s and custom_field_id = 8 ", [timeentryidinits]) # remove custom_field name timeentryid
+            cursor21.execute(
+                "DELETE FROM custom_values WHERE customized_id=%s and custom_field_id = 6 ", [timeentryidinits]) # remove custom_field name quoteddocnumber
+            cursor21.execute(
+                "DELETE FROM custom_values WHERE customized_id=%s and custom_field_id = 4 ", [timeentryidinits]) # remove custom_field name quoteddocdetailsid
+
+        # timeentry row delete if already exists in redmine end
 
         firstnum = x + 1
         fourthnum = 0
@@ -368,105 +418,104 @@ def timemanageruploadtoits(request):
         #import pdb;
         #pdb.set_trace()
 
-    cursor21 = connections['redmine'].cursor()
-    cursor21.execute(
-        "INSERT INTO time_entries "
-        "( project_id, "
-        "user_id, "
-        "issue_id, "
-        "hours, "
-        "comments, "
-        "activity_id, " #5
-        "spent_on, "
-        "tyear, "
-        "tmonth, "
-        "tweek, "
-        "created_on, " #10
-        "updated_on, "
-        "creatoridfromquotationmaker) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+        cursor21.execute(
+            "INSERT INTO time_entries "
+            "( project_id, "
+            "user_id, "
+            "issue_id, "
+            "hours, "
+            "comments, "
+            "activity_id, " #5
+            "spent_on, "
+            "tyear, "
+            "tmonth, "
+            "tweek, "
+            "created_on, " #10
+            "updated_on, "
+            "creatoridfromquotationmaker) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
-        [projectid,
-         userid,
-         issueid,
-         hours,
-         comments,
-#         activityid,
-         8,
-         spenton,
-#         tyear,
-         2010,
-#         tmonth,
-         10,
-#         tweek,
-         10,
-#         createdon,
-         '2020-12-12-',
-#         updatedon])
-         '2020-12-12-',
-         creatorid])
-    cursor3 = connections['redmine'].cursor()
-    cursor3.execute(
-        "SELECT "
-        "max(id) "
+            [projectid,
+             userid,
+             issueid,
+             hours,
+             comments,
+    #         activityid,
+             8,
+             spenton,
+    #         tyear,
+             2010,
+    #         tmonth,
+             10,
+    #         tweek,
+             10,
+    #         createdon,
+             '2020-12-12-',
+    #         updatedon])
+             '2020-12-12-',
+             creatorid])
+        cursor3 = connections['redmine'].cursor()
+        cursor3.execute(
+            "SELECT "
+            "max(id) "
+    
+            "FROM time_entries "
+    
+            "WHERE creatoridfromquotationmaker = %s",
+            [creatorid])
+        results = cursor3.fetchall()
+        for x in results:
+            timeentryid = x[0]
+        # import pdb;
+        # pdb.set_trace()
+        cursor21.execute("INSERT INTO custom_values " #insert the timeentryid custom field
+                         "(value, "
+                         "custom_field_id, "
+                         "customized_type, "
+                         "customized_id) VALUES (%s,%s,%s,%s)",
 
-        "FROM time_entries "
+                         [timeentryid,
+                          8,
+                          'TimeEntry',
+                          timeentryid])
 
-        "WHERE creatoridfromquotationmaker = %s",
-        [creatorid])
-    results = cursor3.fetchall()
-    for x in results:
-        timeentryid = x[0]
-    # import pdb;
-    # pdb.set_trace()
-    cursor21.execute("INSERT INTO custom_values " #insert the timeentryid custom field
-                     "(value, "
-                     "custom_field_id, "
-                     "customized_type, "
-                     "customized_id) VALUES (%s,%s,%s,%s)",
+        cursor21.execute("INSERT INTO custom_values " #insert the quoteddocdetailsid custom field - with None value
+                         "(value, "
+                         "custom_field_id, "
+                         "customized_type, "
+                         "customized_id) VALUES (%s,%s,%s,%s)",
 
-                     [timeentryid,
-                      8,
-                      'TimeEntry',
-                      timeentryid])
+                         [None,
+                          4,
+                          'TimeEntry',
+                          timeentryid])
 
-    cursor21.execute("INSERT INTO custom_values " #insert the quoteddocdetailsid custom field
-                     "(value, "
-                     "custom_field_id, "
-                     "customized_type, "
-                     "customized_id) VALUES (%s,%s,%s,%s)",
+        cursor21.execute("INSERT INTO custom_values " #insert the quoteddocnumber custom field - with None value
+                         "(value, "
+                         "custom_field_id, "
+                         "customized_type, "
+                         "customized_id) VALUES (%s,%s,%s,%s)",
 
-                     [None,
-                      4,
-                      'TimeEntry',
-                      timeentryid])
+                         [None,
+                          6,
+                          'TimeEntry',
+                          timeentryid])
 
-    cursor21.execute("INSERT INTO custom_values " #insert the quoteddocnumber custom field
-                     "(value, "
-                     "custom_field_id, "
-                     "customized_type, "
-                     "customized_id) VALUES (%s,%s,%s,%s)",
+        cursor2 = connection.cursor()
+        cursor2.execute("UPDATE quotation_tbltimedone SET " #update timeentryid which get from Issue Tracking System - not null means: the timedone item is uploaded to ITS
+                         "timeentryidinits_tbltimedone = %s "
+                         "WHERE timedoneid_tbltimedone = %s ",
+                         [timeentryid, timedoneid ])
 
-                     [None,
-                      6,
-                      'TimeEntry',
-                      timeentryid])
+    return render(request, 'quotation/timemanagerafteruploadtoitsredirecturl.html',{})
 
-    cursor2 = connection.cursor()
-    cursor2.execute("UPDATE quotation_tbltimedone SET " #update timeentryid which get from Issue Tracking System - not null means: the timedone item is uploaded to ITS
-                     "timeentryidinits_tbltimedone = %s "
-                     "WHERE timedoneid_tbltimedone = %s ",
-                     [timeentryid, timedoneid ])
 
-    results23 = 0
-    json_data = json.dumps(results23)
 
-    return HttpResponse(json_data, content_type="application/json")
 @login_required
 def timedoneitemnew(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("INSERT INTO quotation_tbltimedone "
-                    "(spenton_tbltimedone) VALUES ('2020-01-01')")
+                    "(spenton_tbltimedone) VALUES ('2019-10-10')")
 
     return redirect('timemanager')
 @login_required

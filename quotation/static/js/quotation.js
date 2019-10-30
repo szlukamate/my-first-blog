@@ -324,19 +324,6 @@ $('#title').click(function() {
 
     $('#itsbutton').click(function() {
         var quotationid=$('#quotationdocid').text();
-/*
-                  // send it out
-                  let xhr = new XMLHttpRequest();
-//                  xhr.open("GET","https://cors-anywhere.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&project_id=4"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
-                  xhr.open("GET","https://ancient-sierra-24943.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&status_id=1"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
-                  xhr.send();
-                  $( "#dialog-message-connecting" ).dialog("option", "buttons", {}); //remove OK button
-                  $( "#dialog-message-connecting" ).dialog( "open" );
-
-                  xhr.onload = function (){
-                                    console.log(xhr.response);
-                  $( "#dialog-message-connecting" ).dialog( "close" );
-*/
                   $( "#dialog-message-connecting" ).dialog( "open" );
 
                     $.ajax({
@@ -356,8 +343,8 @@ $('#title').click(function() {
                           function()
                           {
 
-                            $('#onlyforopenprojects').prop('checked', true);
-                            $('#unquotedcheckbox').prop('checked', true);
+//                            $('#onlyforopenprojects').prop('checked', true);
+//                            $('#unquotedcheckbox').prop('checked', true);
 
                             $("#addfilterselect option[value=projectstatus]").attr('selected', 'selected'); // open this filter field
                             $('#addfilterselect').trigger('change');
@@ -381,7 +368,6 @@ $('#title').click(function() {
                                     var fromoutput = fromyear + '-' +
                                         (frommonth<10 ? '0' : '') + frommonth + '-' +
                                         (fromday<10 ? '0' : '') + fromday;
-//                                    $('#fromdate').val(fromoutput);
                                     $('.firstinputbox[filteritemname="datespenton"]').val(fromoutput);
 
                                     var d = new Date();
@@ -393,7 +379,6 @@ $('#title').click(function() {
                                     var tooutput = toyear + '-' +
                                         (tomonth<10 ? '0' : '') + tomonth + '-' +
                                         (today<10 ? '0' : '') + today;
-//                                    $('#todate').val(tooutput);
                                     $('.secondinputbox[filteritemname="datespenton"]').val(tooutput);
 
 
@@ -623,62 +608,6 @@ $('#title').click(function() {
 
             });
         }
-
-
-/*
-            $.ajax({
-                type: 'POST',
-                url: 'quotationissuetrackingsystemsearchcontent',
-
-                data: {
-                'quoteddocnumber': $('#quoteddocnumber').val(),
-                'timeentryid': $('#timeentryid').val(),
-                'fromdate': $('#fromdate').val(),
-                'todate': $('#todate').val(),
-                'projectname': $('#projectname').val(),
-                'userid': $('#username').val(),
-                'activityid': $('#activityname').val(),
-                'onlyforopenprojects': $('#onlyforopenprojects').prop('checked'),
-                'unquotedcheckbox': $('#unquotedcheckbox').prop('checked'),
-
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                },
-
-                success: function(data){
-
-                    $('#timeentrysearchtemplate').html(data);
-                    //console.log(data);
-
-                    setTimeout(
-                      function()
-                      {
-
-                        var projectnamevalueaccumulator=$('select#projectname').val(); // swap options of select element after html template refresh
-                        var projectnameswap=$('select#projectnameswap').html();
-                        $('select#projectname').html(projectnameswap);
-                        $('select#projectname').val(projectnamevalueaccumulator);
-
-                        var usernamevalueaccumulator=$('select#username').val();
-                        var usernameswap=$('select#usernameswap').html();
-                        $('select#username').html(usernameswap);
-                        $('select#username').val(usernamevalueaccumulator);
-
-                        var activitynamevalueaccumulator=$('select#activityname').val();
-                        var activitynameswap=$('select#activitynameswap').html();
-                        $('select#activityname').html(activitynameswap);
-                        $('select#activityname').val(activitynamevalueaccumulator);
-
-                      }, 500);
-
-
-                },
-                error: function(){
-                    alert('failure');
-                },
-                datatype: 'html'
-
-            });
-*/
     });
     $('body').on("click", "#filteroutbutton", function() {
 
@@ -716,10 +645,6 @@ $('#title').click(function() {
                 if ( searchphraseformainresults_var == "") {
                     searchphraseformainresults_var = 'a'
                 }
-
-
-
-
 
                     $.ajax({
                     type: 'POST',

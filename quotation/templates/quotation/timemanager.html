@@ -32,5 +32,15 @@
 							<hr>
 							<p id="productsearchtemplate" ></p>
 
+							<div id="dialog" title="Userid is unset">
+							<p>Please set the Userid in row with timedoneid <span id="useridemptyintimedoneid"></span></p>
+							</div>
+							<div id="dialog-message" title="Uploading...">
+							</div>
+							<p id="filteritemlistelementvaluesaccumulatortemplate" hidden></p>
+
+
 			<script type="text/javascript" src="{% static 'js/timemanager.js' %}"></script>
+            <link rel="stylesheet" href="{% static 'css/timemanager.css' %}">
+
 	{% endblock %}

@@ -16,10 +16,42 @@ $(function () {
       function()
       {
 
-            $('#filterbutton').trigger('click');
+            //$('#filterbutton').trigger('click');
 
-            $("#addfilterselect option[value=projectid]").attr('selected', 'selected'); // open and autofocus for this filter field
+            //$("#addfilterselect option[value=projectid]").attr('selected', 'selected'); // open and autofocus for this filter field
+            //$('#addfilterselect').trigger('change');
+
+            $("#addfilterselect option[value=datespenton]").attr('selected', 'selected'); // open and autofocus for this filter field
             $('#addfilterselect').trigger('change');
+            setTimeout(
+              function()
+              {
+
+                    var d = new Date();
+
+                    var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
+                    var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                    var fromday = d.getDate();
+
+                    var fromoutput = fromyear + '-' +
+                        (frommonth<10 ? '0' : '') + frommonth + '-' +
+                        (fromday<10 ? '0' : '') + fromday;
+                    $('.firstinputbox[filteritemname="datespenton"]').val(fromoutput);
+
+                    var d = new Date();
+
+                    var toyear = d.getFullYear();
+                    var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                    var today = d.getDate();
+
+                    var tooutput = toyear + '-' +
+                        (tomonth<10 ? '0' : '') + tomonth + '-' +
+                        (today<10 ? '0' : '') + today;
+                    $('.secondinputbox[filteritemname="datespenton"]').val(tooutput);
+
+
+                    $('#filterbutton').trigger('click');
+              }, 1000);
 
       }, 500);
 
@@ -83,6 +115,8 @@ $(function () {
 
         function main(){
             addfilterselectalloptionsenable();
+            $("#filteritemlistelementvaluesaccumulatortemplate").html('<!--Empty-->') // emptying filteritems accumulator
+
             for (i = 1; i <= filteritemmaxrowid; ++i) {
             getfilteritemparamaters(i);
             }
@@ -111,19 +145,41 @@ $(function () {
                 filteritemnamevar = $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').attr( "filteritemname" );
                 filteritemselectedvaluevar = $('.filteritemselect[filteritemrowid="' + i + '"]').val();
                 firstinputbox = $('.firstinputbox[filteritemrowid="' + i + '"]').val();
+                if (typeof firstinputbox === "undefined") {
+                    firstinputbox = ''
+                }
                 secondinputbox = $('.secondinputbox[filteritemrowid="' + i + '"]').val();
                 if (typeof secondinputbox === "undefined") {
                     secondinputbox = ''
                 }
+
+                 //filteritems to temporary store /to accumulator/ (because the filteritem values are vanished after adding a new filteritems ...cont...
+                 // therefore put out to site and copy this values to the already existing filter items)
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<input type="text" class="filteritemlistelementvaluesaccumulator_name" value="' + filteritemnamevar + '" filteritemrowid="' + i + '">');
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<input type="text" class="filteritemlistelementvaluesaccumulator_selectedvalue" value="' + filteritemselectedvaluevar + '" filteritemrowid="' + i + '">');
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<input type="text" class="filteritemlistelementvaluesaccumulator_firstinputbox" value="' + firstinputbox + '" filteritemrowid="' + i + '">');
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<input type="text" class="filteritemlistelementvaluesaccumulator_secondinputbox" value="' + secondinputbox + '" filteritemrowid="' + i + '">');
+                $("#filteritemlistelementvaluesaccumulatortemplate").append('<br>');
+
                 filteritemlist.push(filteritemnamevar, filteritemselectedvaluevar, firstinputbox, secondinputbox);
 
                 addfilterselectthisoptiondisable(filteritemnamevar);
 
             }
             if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked") == false) { //checked out filteritems remove
+                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').prev().prev().remove(); //line before previos (<br>) remove
+                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').prev().remove(); //line previous (csrfmiddlewaretoken) remove
                 $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').remove();
                 $('.selectedoption[filteritemrowid="' + i + '"]').remove();
+                $('.filteritemselect[filteritemrowid="' + i + '"]').remove();
+                $('span[class="filteritemtemplate"][filteritemrowid="' + i + '"]').remove();
             }
+
+//            if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked") == false) { //checked out filteritems remove
+//                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').remove();
+//                $('.selectedoption[filteritemrowid="' + i + '"]').remove();
+//            }
+
         }
         function filteritemlisttransmit(){
                     console.log(filteritemliststringified);
@@ -195,8 +251,32 @@ $(function () {
 
                     function UpdateSuccess3(data, textStatus, jqXHR)
                     {
+
                     $("#filtertemplate").append(data);
+                            setTimeout(
+                              function()
+                              {
+
+                                  filteritemvaluesfromaccumulator(); // filteritem values from accumulator to eliminate vanish effect after new addfilter (see above - keyword: accumulator)
+                              }, 250);
+
+console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
+
                     $('.filteritemselect').trigger('change');
+                    }
+                    function filteritemvaluesfromaccumulator(){
+                        for (i = 1; i <= (filteritemmaxrowid-1); ++i) { // filteritemmaxrowid already contains new filteritem which has not accumulated value
+                        copyfilteritemvaluesfromaccumulator(i);
+                        }
+
+                    }
+                    function copyfilteritemvaluesfromaccumulator(){
+                    temp_firstinputbox = $('input[class="filteritemlistelementvaluesaccumulator_firstinputbox"][filteritemrowid="' + i + '"]').val()
+                    $('input[class="firstinputbox"][filteritemrowid="' + i + '"]').val(temp_firstinputbox)
+
+                    temp_secondinputbox = $('input[class="filteritemlistelementvaluesaccumulator_secondinputbox"][filteritemrowid="' + i + '"]').val()
+                    $('input[class="secondinputbox"][filteritemrowid="' + i + '"]').val(temp_secondinputbox)
+
 
                     }
 
@@ -310,7 +390,6 @@ $(function () {
                     $('input[class="projectid"][timedoneid="' + timedoneid + '"]').val(projectidsql)
 
                     $('#auxfunctionforissueselectoptions').trigger('click', ["" + timedoneid + "" , "" + projectidsql + ""]); // relevant issue select options for project
-                    //$('#auxfunctionforissueselectoptions').trigger('click', timedoneid); // relevant issue select options for project
 
                     }
 
@@ -399,8 +478,7 @@ $(function () {
                 var timedonesnumberofitems= $('#timedonesnumberofitems').text();
                 var itemdatalist=[];
                 var itemdataliststringified;
-                //var quotationdocid = $('#quotationdocid').text();
-                //var quotationdocnumber = $('#quotationdocnumber').text();
+                var useridisemptyflag = 0;
 
         main();
 
@@ -411,6 +489,11 @@ $(function () {
                     itemdatacollect(i);
 
                 }
+                if (useridisemptyflag == 1) {
+                  return false;
+                }
+                $( "#dialog-message" ).dialog( "open" ); // Uploading...
+
                 itemdataliststringified = JSON.stringify(itemdatalist);
                     console.log(timedonesnumberofitems);
                     console.log(itemdataliststringified);
@@ -419,9 +502,6 @@ $(function () {
 
             }
             function itemdatacollect(i){
-              //timedoneid=$('input[class="timedoneid"][rowid="' + (i - 1) + '"]').val();
-              //      console.log(i);
-              //      console.log('timedoneid: ' + timedoneid);
 
               timedoneid=$('input[class="timedoneid"][rowid="' + (i - 1) + '"]').val();
               projectid=$('input[class="projectid"][rowid="' + (i - 1) + '"]').val();
@@ -430,19 +510,27 @@ $(function () {
               hours=$('input[name="hours_tbltimedone"][rowid="' + (i - 1) + '"]').val();
               comments=$('input[name="comments_tbltimedone"][rowid="' + (i - 1) + '"]').val();
               spenton=$('input[name="spenton_tbltimedone"][rowid="' + (i - 1) + '"]').val();
+              timeentryid=$('input[name="timeentryidinits_tbltimedone"][rowid="' + (i - 1) + '"]').val();
 
               projectname=$('td[class="projectname"][rowid="' + (i - 1) + '"]').text();
               username=$('td[class="username"][rowid="' + (i - 1) + '"]').text();
               activityname=$('td[class="activityname"][rowid="' + (i - 1) + '"]').text();
-              //hours=$('td[class="hours"][rowid="' + (i - 1) + '"]').text();
-              //comments=$('td[class="comments"][rowid="' + (i - 1) + '"]').text();
-              //spenton=$('td[class="spenton"][rowid="' + (i - 1) + '"]').text();
-              itemdatalist.push(timedoneid, projectid, userid, issueid, hours, comments, spenton );
+
+              if (userid == 0) {
+                  useridisnotsetdialog(timedoneid);
+
+              }
+
+
+              itemdatalist.push(timedoneid, projectid, userid, issueid, hours, comments, spenton, timeentryid );
 
                     console.log('itemdatalist: ' + itemdatalist);
 
             }
-
+            function useridisnotsetdialog(useridemptyintimedoneid){
+            $('#dialog').data('useridemptyintimedoneid', useridemptyintimedoneid).dialog('open');
+            useridisemptyflag = 1;
+            }
             function datatransmit(){
 
                 $.ajax({
@@ -461,7 +549,7 @@ $(function () {
                     success: function(url){
                     console.log('success');
 
-                    //window.location.href = url;
+                    window.location.href = url;
 
                     },
                     error: function(){
@@ -507,18 +595,38 @@ $(function () {
                     console.log(data);
                     $('select[class="issueselection"][timedoneid="' + timedoneid + '"]').html(data);
                     $('input[class="issueid"][timedoneid="' + timedoneid + '"]').css("background-color", "red");
+                    $('select[class="issueselection"][timedoneid="' + timedoneid + '"]').val('');
 
-/*
-                    var projectidsql= data[0][0];
-                    var projectnamesql= data[0][1];
-
-                    $('select[class="projectselection"][timedoneid="' + timedoneid + '"] option:selected').html(projectnamesql);
-                    $('input[class="projectid"][timedoneid="' + timedoneid + '"]').val(projectidsql)
-
-                    $('#auxfunctionforissueselectoptions').trigger('click'); // relevant issue select options for project
-*/
                     }
 
     });
+    $( "#dialog" ).dialog({
+      autoOpen:false,
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+
+        }
+      },
+      open: function() {
+          var useridemptyintimedoneid = $(this).data('useridemptyintimedoneid');
+          $('#useridemptyintimedoneid').text(useridemptyintimedoneid);
+
+      }
+
+    });
+// Dialog "Uploading..." begin
+    $( "#dialog-message" ).dialog({
+      autoOpen: false,
+      modal: true
+  //    buttons: {
+  //      Ok: function() {
+  //        $( this ).dialog( "close" );
+  //      }
+  //    }
+    });
+
+// Dialog "Uploading..." end
 
 });
