@@ -1,0 +1,45 @@
+{% extends 'quotation/base.html' %}
+{% load staticfiles%}
+	{% block content %}
+          
+
+
+
+				<p id="auxfunctionforissueselectoptions" hidden></p>
+							<p align="center" style="font-size:160%;">Purchase Order Preparation Form</p>{% csrf_token %}
+
+							<button id="filterbutton" type="submit">
+							   <span class="glyphicon glyphicon-filter"></span>
+							</button>
+
+							<button id="filteroutbutton" type="button">
+							   <span class="glyphicon glyphicon-trash"></span>
+							</button>
+
+							<label for="addfilterselect" >Add Filter</label>
+							<select id="addfilterselect">
+									<option value="" ></option>
+									{% for addfilterselectvaluesandoption in addfilterselectvaluesandoptions %}
+										<option value="{{addfilterselectvaluesandoption.1}}">{{addfilterselectvaluesandoption.0}}</option>
+									{% endfor %}
+							</select>
+							<button id="checkallbutton" type="button">
+							   <span>Check All</span>
+							</button>
+							<button id="uncheckallbutton" type="button">
+							   <span>Uncheck All</span>
+							</button>
+
+							<p align="left"><a href="{% url 'timedoneitemnew' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+							<p id="filtertemplate" ></p>
+							<hr>
+							<p id="productsearchtemplate" ></p>
+
+							<p id="filteritemlistelementvaluesaccumulatortemplate" hidden></p>
+
+
+			<script type="text/javascript" src="{% static 'js/purchaseorderpre.js' %}"></script>
+            <link rel="stylesheet" href="{% static 'css/purchaseorderpre.css' %}">
+
+	{% endblock %}

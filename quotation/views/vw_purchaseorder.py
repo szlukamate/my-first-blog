@@ -18,6 +18,33 @@ import os
 # pdb.set_trace()
 @login_required
 def purchaseorderpre(request):
+    filteritemlistraw = request.POST['filteritemlist']
+    filteritemlist = json.loads(filteritemlistraw)
+
+    filteritemname = ''
+    filteritemoperator = ''
+    filteritemfirstinput = ''
+    filteritemsecondinput = ''
+
+    dateofcorcreationphrase = ""
+    docnumberphrase = ""
+
+    for x in range(0,len(filteritemlist),4):
+
+        filteritemname = filteritemlist[(x+0)]
+        filteritemoperator = filteritemlist[x+1]
+        filteritemfirstinput = filteritemlist[x+2]
+        filteritemsecondinput = filteritemlist[x+3]
+
+        if filteritemname == 'dateofcorcreation':
+            if filteritemoperator == 'between':
+                dateofcorcreationphrase = "and creationtime_tbldoc BETWEEN '" + filteritemfirstinput + "' AND '" + filteritemsecondinput + "' "
+        if filteritemname == 'docnumber':
+            if filteritemoperator == 'is':
+                docnumberphrase = "and docnumber_tbldoc = '" + filteritemfirstinput + "' "
+
+    searchphraseformainresults = (dateofcorcreationphrase + docnumberphrase + " ")
+
     cursor3 = connection.cursor()
     cursor3.execute("SELECT  "
                     "Docid_tblDoc, "
@@ -81,13 +108,33 @@ def purchaseorderpre(request):
                     "   WHERE obsolete_tbldoc=0 " 
                     "   GROUP BY podetailslink_tbldocdetails) as purchaseorderset "
                     "ON DD.Doc_detailsid_tblDoc_details=purchaseorderset.podetailslink_tbldocdetails "
-                    "HAVING Doc_kindid_tblDoc_id=2 and obsolete_tbldoc=0 and customerqty > COALESCE(purchaseqty2, 0) "
+                    "HAVING Doc_kindid_tblDoc_id=2 and obsolete_tbldoc=0 and customerqty > COALESCE(purchaseqty2, 0) " + searchphraseformainresults + ""
                     "order by docnumber_tbldoc,firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details")
     customerorders = cursor3.fetchall()
     customerordersnumber = len(customerorders)
 
     return render(request, 'quotation/purchaseorderpre.html', {'customerorders': customerorders,
                                                                'customerordersnumber': customerordersnumber})
+@login_required
+def purchaseorderpreframe(request):
+        # filtering options to Addfilter selectbox begin
+        # Creates a list containing #h lists, each of #w items, all set to 0
+        w, h = 3, 2;
+        addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
+
+        addfilterselectvaluesandoptions[0][0] = 'Date - of COR creation'
+        addfilterselectvaluesandoptions[0][1] = 'dateofcorcreation'
+
+        addfilterselectvaluesandoptions[1][0] = 'Docnumber'
+        addfilterselectvaluesandoptions[1][1] = 'docnumber'
+
+        # filtering options to Addfilter selectbox end
+
+        # import pdb;
+        # pdb.set_trace()
+
+        return render(request, 'quotation/purchaseorderpreframe.html', {'addfilterselectvaluesandoptions': addfilterselectvaluesandoptions})
+
 @login_required
 def purchaseordermake(request):
     if request.method == 'POST':

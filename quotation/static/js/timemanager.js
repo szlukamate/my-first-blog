@@ -16,10 +16,6 @@ $(function () {
       function()
       {
 
-            //$('#filterbutton').trigger('click');
-
-            //$("#addfilterselect option[value=projectid]").attr('selected', 'selected'); // open and autofocus for this filter field
-            //$('#addfilterselect').trigger('change');
 
             $("#addfilterselect option[value=datespenton]").attr('selected', 'selected'); // open and autofocus for this filter field
             $('#addfilterselect').trigger('change');
@@ -174,11 +170,6 @@ $(function () {
                 $('.filteritemselect[filteritemrowid="' + i + '"]').remove();
                 $('span[class="filteritemtemplate"][filteritemrowid="' + i + '"]').remove();
             }
-
-//            if ($('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').is(":checked") == false) { //checked out filteritems remove
-//                $('.enabledfiltercheckbox[filteritemrowid="' + i + '"]').remove();
-//                $('.selectedoption[filteritemrowid="' + i + '"]').remove();
-//            }
 
         }
         function filteritemlisttransmit(){

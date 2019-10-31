@@ -125,5 +125,7 @@ urlpatterns = [
     url(r'timedoneitemnew$', views.timedoneitemnew, name='timedoneitemnew'),
     url(r'^timedoneitemremove/(?P<pktimedoneid>[0-9]+)/$', views.timedoneitemremove, name='timedoneitemremove'),
     url('timemanagerupdateissueselectafterchangeprojectselect$', views.timemanagerupdateissueselectafterchangeprojectselect, name='timemanagerupdateissueselectafterchangeprojectselect'),
+    url(r'purchaseorderpreframe/$', views.purchaseorderpreframe, name='purchaseorderpreframe'),
+    url('filtertemplatehtmlonpurchaseorderpreform$', views.filtertemplatehtmlonpurchaseorderpreform, name='filtertemplatehtmlonpurchaseorderpreform'),
 
 ]
