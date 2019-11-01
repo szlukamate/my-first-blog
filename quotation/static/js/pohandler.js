@@ -151,14 +151,11 @@ $(document).ready(function () {
 
         var fillingdateval = $('#fillingdate').val();
         var pohandlerarrivalbuttonrowid = $(this).attr( "rowid" );
+                    console.log('rowid: ' + pohandlerarrivalbuttonrowid);
 
         $('input[name2="dateofarrivalinput"][rowid="' + pohandlerarrivalbuttonrowid + '"]').val(fillingdateval);
         $('input[class="updateable"][rowid="' + pohandlerarrivalbuttonrowid + '"]').trigger('change');
                     console.log('na3');
-
-
-
-
 
     });
 
@@ -278,4 +275,70 @@ $(document).ready(function () {
             console.log('stringified' + JSON.stringify(dateofarrivallist));
 
     });
+    $('#arriveallbutton').click(function() {
+
+        var fillingdateval = $('#fillingdate').val(); // center date before manual selection
+        var porowsnumber=0;
+        var i;
+        var dateofarrivallist=[];
+        var podocdetailsid;
+        var podocid;
+        var cordocid;
+
+        var dateofarrival = $('#select-resultarrivaldates').text() //center date after manual selection
+                           console.log('na9: ' + dateofarrival);
+                           console.log(dateofarrival.length);
+
+        if (dateofarrival == 'none') {
+            dateofarrival = ''
+        }
+                           console.log('na10: ' + dateofarrival);
+
+        porowsnumberfunc();
+
+        main();
+
+            function main(){
+                porowsnumberfunc();
+
+                for (i = 1; i <= porowsnumber; i++) {
+                    getrows(i);
+                    setrowsarrivaldate(i);
+                }
+
+
+            }
+
+            function porowsnumberfunc(){
+            porowsnumber=$('#porowsnumber').attr( "porowsnumber" ); //Number of PO rows arrived
+            }
+            function getrows(i){
+
+                           podocdetailsid=$('input[type="text"][loopid="' + i + '"').attr( "podocdetailsid" );
+                           podocid=$('input[type="text"][loopid="' + i + '"').attr( "podocid" );
+                           cordocid=$('input[type="text"][loopid="' + i + '"').attr( "cordocid" );
+
+                           dateofarrivallist.push(podocdetailsid, podocid, cordocid, dateofarrival);
+                           console.log('arriveallraw' + dateofarrivallist);
+
+            }
+            function setrowsarrivaldate(i){
+                    setTimeout(
+                      function()
+                      {
+
+                           var podocdetailsidinlist = dateofarrivallist[4*(i-1)];
+                            $('input[name2="dateofarrivalinput"][rowid="' + podocdetailsidinlist + '"]').val(fillingdateval);
+                            $('input[class="updateable"][rowid="' + podocdetailsidinlist + '"]').trigger('change');
+
+                      },200*i);
+
+            }
+
+
+
+
+
+    });
+
 });
