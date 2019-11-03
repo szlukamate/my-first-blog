@@ -22,46 +22,24 @@ $(function () {
       {
 
 
-            //$("#addfilterselect option[value=dateofcorcreation]").attr('selected', 'selected'); // open and autofocus for this filter field
-            //$('#addfilterselect').trigger('change');
-            $("#addfilterselect option[value=docnumber]").attr('selected', 'selected'); // open and autofocus for this filter field
+            $("#addfilterselect option[value=dateofcorcreation]").attr('selected', 'selected'); // open and autofocus for this filter field
             $('#addfilterselect').trigger('change');
-                setTimeout(
-              function()
-              {
-                    $('.firstinputbox[filteritemname="docnumber"]').val(176);
+            //$("#addfilterselect option[value=docnumber]").attr('selected', 'selected'); // open and autofocus for this filter field
+            //$('#addfilterselect').trigger('change');
+            //    setTimeout(
+            //  function()
+            //  {
+            //        $('.firstinputbox[filteritemname="docnumber"]').val(176);
 
-              },200);
+            //  },200);
 
             setTimeout(
               function()
               {
 
-                    var d = new Date();
-                    d.setDate(d.getDate()-14); // -14 days for fromdate
+                   $('#auxfunctionfordatespentondefaultfill').trigger('click');
+                   $('#filterbutton').trigger('click');
 
-                    var fromyear = d.getFullYear();
-                    var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                    var fromday = d.getDate();
-
-                    var fromoutput = fromyear + '-' +
-                        (frommonth<10 ? '0' : '') + frommonth + '-' +
-                        (fromday<10 ? '0' : '') + fromday;
-                    $('.firstinputbox[filteritemname="dateofcorcreation"]').val(fromoutput);
-
-                    var d = new Date();
-
-                    var toyear = d.getFullYear();
-                    var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                    var today = d.getDate();
-
-                    var tooutput = toyear + '-' +
-                        (tomonth<10 ? '0' : '') + tomonth + '-' +
-                        (today<10 ? '0' : '') + today;
-                    $('.secondinputbox[filteritemname="dateofcorcreation"]').val(tooutput);
-
-
-                    $('#filterbutton').trigger('click');
               }, 1000);
 
       }, 500);
@@ -340,6 +318,10 @@ console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
                     function UpdateSuccess3(data, textStatus, jqXHR)
                     {
                     $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').html(data);
+                    if ($('.filteritemtemplate[filteritemname="' + filteritemname + '"]').attr('filteritemname') == 'dateofcorcreation') {
+                                    $('#auxfunctionfordatespentondefaultfill').trigger('click');
+                    }
+
                     $('.firstinputbox').focus();
 
                     }
@@ -441,6 +423,34 @@ console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
                       },200*i);
 
             }
+
+    });
+    $('body').on("click", "#auxfunctionfordatespentondefaultfill", function() {
+
+                    var d = new Date();
+                    d.setDate(d.getDate()-14); // -14 days for fromdate
+
+                    var fromyear = d.getFullYear();
+                    var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                    var fromday = d.getDate();
+
+                    var fromoutput = fromyear + '-' +
+                        (frommonth<10 ? '0' : '') + frommonth + '-' +
+                        (fromday<10 ? '0' : '') + fromday;
+                    $('.firstinputbox[filteritemname="dateofcorcreation"]').val(fromoutput);
+
+                    var d = new Date();
+
+                    var toyear = d.getFullYear();
+                    var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                    var today = d.getDate();
+
+                    var tooutput = toyear + '-' +
+                        (tomonth<10 ? '0' : '') + tomonth + '-' +
+                        (today<10 ? '0' : '') + today;
+                    $('.secondinputbox[filteritemname="dateofcorcreation"]').val(tooutput);
+
+
 
     });
 

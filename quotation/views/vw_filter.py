@@ -236,7 +236,7 @@ def filtertemplatehtmlonquotationtimeentryform(request):
                 if filteritemname == 'timeentryid':
                         if filteritemselectedvalue == 'is':
 
-                                return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
+                                return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid, 'filteritemname': filteritemname})
 
                 if filteritemname == 'projectid':
                     if searchphraseformainresults == 'a': # timeentrysearchtemplate does not contain  searchphraseformainresults
@@ -472,6 +472,15 @@ def filtertemplatehtmlontimemanagerform(request):
 
                                 return render(request, 'quotation/filteritemtemplatebetweeninputbox.html', {'filteritemrowid': filteritemrowid, 'filteritemname': filteritemname})
 
+                if filteritemname == 'timeentryid':
+                        if filteritemselectedvalue == 'hasnotvalue':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
+                        if filteritemselectedvalue == 'hasvalue':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
         if invokedfrom == 'addfilterselectchanged': # when we want to search first click the #Add Filter selectbox and add some filteritems to html
                 filteritemrowid = request.POST['filteritemmaxrowid']
                 selectedvalue = request.POST['selectedvalue']
@@ -511,6 +520,21 @@ def filtertemplatehtmlontimemanagerform(request):
                     filteritemselectoptions[0][0] = 'between'
                     filteritemselectoptions[0][1] = 'between'
 
+                if selectedvalue == 'timeentryid':
+
+                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    w, h = 2, 2;
+                    filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
+
+                    filteritemname = 'timeentryid' #attribute for elements
+
+                    filteritemselectoptions[0][0] = 'hasnotvalue' #for inner use
+                    filteritemselectoptions[0][1] = 'has not value' #for the user to show
+
+                    filteritemselectoptions[1][0] = 'hasvalue'
+                    filteritemselectoptions[1][1] = "has value"
+
+
         return render(request, 'quotation/filtertemplatehtml.html',{'selectedoption': selectedoption,
                                                                     'filteritemrowid': filteritemrowid,
                                                                     'filteritemname': filteritemname,
@@ -534,7 +558,6 @@ def filtertemplatehtmlonpurchaseorderpreform(request):
                         if filteritemselectedvalue == 'is':
 
                                 return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid, 'filteritemname': filteritemname})
-
 
         if invokedfrom == 'addfilterselectchanged': # when we want to search first click the #Add Filter selectbox and add some filteritems to html
                 filteritemrowid = request.POST['filteritemmaxrowid']

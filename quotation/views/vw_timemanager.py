@@ -22,7 +22,7 @@ import xml.dom.minidom as x12
 def timemanager(request):
         # filtering options to Addfilter selectbox begin
         # Creates a list containing #h lists, each of #w items, all set to 0
-        w, h = 3, 3;
+        w, h = 3, 4;
         addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
 
         addfilterselectvaluesandoptions[0][0] = 'Project Name'
@@ -33,6 +33,10 @@ def timemanager(request):
 
         addfilterselectvaluesandoptions[2][0] = 'Date - Spent On'
         addfilterselectvaluesandoptions[2][1] = 'datespenton'
+
+        addfilterselectvaluesandoptions[3][0] = 'Timeentry Id'
+        addfilterselectvaluesandoptions[3][1] = 'timeentryid'
+
         # filtering options to Addfilter selectbox end
 
         # import pdb;
@@ -52,6 +56,7 @@ def timemanagersearchcontent(request):
     projectphrase = ""
     timedonephrase = ""
     datespentonphrase = ""
+    timeentryidphrase = ""
 
     for x in range(0,len(filteritemlist),4):
 
@@ -69,8 +74,11 @@ def timemanagersearchcontent(request):
         if filteritemname == 'datespenton':
             if filteritemoperator == 'between':
                 datespentonphrase = "and spenton_tbltimedone BETWEEN '" + filteritemfirstinput + "' AND '" + filteritemsecondinput + "' "
+        if filteritemname == 'timeentryid':
+            if filteritemoperator == 'hasnotvalue':
+                timeentryidphrase = "and timeentryidinits_tbltimedone is null "
 
-    searchphraseformainresults = (projectphrase + timedonephrase + datespentonphrase + " ")
+    searchphraseformainresults = (projectphrase + timedonephrase + datespentonphrase + timeentryidphrase + " ")
     searchphraseforrowsources = searchphraseformainresults
     cursor = connection.cursor()
     cursor.execute("SELECT "
@@ -91,8 +99,10 @@ def timemanagersearchcontent(request):
                    "WHERE timedoneid_tbltimedone is not null " + searchphraseformainresults + ""
                     )
     timedonespre = cursor.fetchall()
+    #import pdb;
+    #pdb.set_trace()
 
-# timedones to temptable begin
+    # timedones to temptable begin
     cursor2 = connection.cursor()
     cursor2.execute("DROP TEMPORARY TABLE IF EXISTS timedonetemptable;")
     cursor2.execute("CREATE TEMPORARY TABLE IF NOT EXISTS timedonetemptable "
@@ -123,7 +133,7 @@ def timemanagersearchcontent(request):
         spenton = x11[9]
         timeentryidinits = x11[10]
         if timeentryidinits == None:
-            timeentryidinits = 0
+            timeentryidinits = 0 #tricky - this made me revolved - the input box showed 0 meanwhile the non temporary table contained null...
         timedoneid = x11[0]
         projectname = x11[3]
         username = x11[5]

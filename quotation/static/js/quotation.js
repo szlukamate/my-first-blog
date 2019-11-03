@@ -359,30 +359,9 @@ $('#title').click(function() {
                               function()
                               {
 
-                                    var d = new Date();
-
-                                    var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
-                                    var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                                    var fromday = d.getDate();
-
-                                    var fromoutput = fromyear + '-' +
-                                        (frommonth<10 ? '0' : '') + frommonth + '-' +
-                                        (fromday<10 ? '0' : '') + fromday;
-                                    $('.firstinputbox[filteritemname="datespenton"]').val(fromoutput);
-
-                                    var d = new Date();
-
-                                    var toyear = d.getFullYear();
-                                    var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                                    var today = d.getDate();
-
-                                    var tooutput = toyear + '-' +
-                                        (tomonth<10 ? '0' : '') + tomonth + '-' +
-                                        (today<10 ? '0' : '') + today;
-                                    $('.secondinputbox[filteritemname="datespenton"]').val(tooutput);
-
-
+                                    $('#auxfunctionfordatespentondefaultfill').trigger('click');
                                     $('#filterbutton').trigger('click');
+
                               }, 1000);
 
 
@@ -681,6 +660,8 @@ $('#title').click(function() {
                               {
 
                                   filteritemvaluesfromaccumulator(); // filteritem values from accumulator to eliminate vanish effect after new addfilter (see above - keyword: accumulator)
+                                  $('.firstinputbox[filteritemname="timeentryid"]').val(17666);
+
                               }, 250);
 
 console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
@@ -712,8 +693,6 @@ console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
         var filteritemrowid = $(this).attr( "filteritemrowid" );
         $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').toggle();
         $('.filteritemselect[filteritemrowid="' + filteritemrowid + '"]').toggle();
-
-
 
     });
     $('body').on("change", ".filteritemselect", function() {
@@ -756,9 +735,42 @@ console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
                     function UpdateSuccess3(data, textStatus, jqXHR)
                     {
                     $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').html(data);
+                       //console.log('nafilteritemname: ' + $('.filteritemtemplate[filteritemname="' + filteritemname + '"]').attr('filteritemname'));
+
+                    if ($('.filteritemtemplate[filteritemname="' + filteritemname + '"]').attr('filteritemname') == 'datespenton') {
+                                    $('#auxfunctionfordatespentondefaultfill').trigger('click');
+                    }
+
                     $('.firstinputbox').focus();
 
                     }
+
+
+
+    });
+    $('body').on("click", "#auxfunctionfordatespentondefaultfill", function() {
+
+                                    var d = new Date();
+
+                                    var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
+                                    var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                                    var fromday = d.getDate();
+
+                                    var fromoutput = fromyear + '-' +
+                                        (frommonth<10 ? '0' : '') + frommonth + '-' +
+                                        (fromday<10 ? '0' : '') + fromday;
+                                    $('.firstinputbox[filteritemname="datespenton"]').val(fromoutput);
+
+                                    var d = new Date();
+
+                                    var toyear = d.getFullYear();
+                                    var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                                    var today = d.getDate();
+
+                                    var tooutput = toyear + '-' +
+                                        (tomonth<10 ? '0' : '') + tomonth + '-' +
+                                        (today<10 ? '0' : '') + today;
+                                    $('.secondinputbox[filteritemname="datespenton"]').val(tooutput);
 
 
 

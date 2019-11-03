@@ -17,36 +17,18 @@ $(function () {
       {
 
 
-            $("#addfilterselect option[value=datespenton]").attr('selected', 'selected'); // open and autofocus for this filter field
+//            $("#addfilterselect option[value=datespenton]").attr('selected', 'selected'); // open and autofocus for this filter field
+//            $('#addfilterselect').trigger('change');
+
+            $("#addfilterselect option[value=timeentryid]").attr('selected', 'selected'); // open and autofocus for this filter field
             $('#addfilterselect').trigger('change');
             setTimeout(
               function()
               {
 
-                    var d = new Date();
+                                    $('#auxfunctionfordatespentondefaultfill').trigger('click');
+                                    $('#filterbutton').trigger('click');
 
-                    var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
-                    var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                    var fromday = d.getDate();
-
-                    var fromoutput = fromyear + '-' +
-                        (frommonth<10 ? '0' : '') + frommonth + '-' +
-                        (fromday<10 ? '0' : '') + fromday;
-                    $('.firstinputbox[filteritemname="datespenton"]').val(fromoutput);
-
-                    var d = new Date();
-
-                    var toyear = d.getFullYear();
-                    var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                    var today = d.getDate();
-
-                    var tooutput = toyear + '-' +
-                        (tomonth<10 ? '0' : '') + tomonth + '-' +
-                        (today<10 ? '0' : '') + today;
-                    $('.secondinputbox[filteritemname="datespenton"]').val(tooutput);
-
-
-                    $('#filterbutton').trigger('click');
               }, 1000);
 
       }, 500);
@@ -199,6 +181,9 @@ $(function () {
         }
     });
     $('#addfilterselect').change(function() {
+
+        console.log('addfilterselect invoke event');
+
         filteritemmaxrowid++;
         var optionValues = [];
 
@@ -251,7 +236,7 @@ $(function () {
                                   filteritemvaluesfromaccumulator(); // filteritem values from accumulator to eliminate vanish effect after new addfilter (see above - keyword: accumulator)
                               }, 250);
 
-console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
+//console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
 
                     $('.filteritemselect').trigger('change');
                     }
@@ -276,6 +261,7 @@ console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
 
     });
     $('body').on("change", ".filteritemselect", function() {
+                       console.log('filteritemselect event invoked');
 
         var filteritemrowid = $(this).attr( "filteritemrowid" );
         var filteritemname = $(this).attr( "filteritemname" );
@@ -315,6 +301,10 @@ console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
                     function UpdateSuccess3(data, textStatus, jqXHR)
                     {
                     $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').html(data);
+//                       console.log('filteritemname: ' + $('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').attr('filteritemname'));
+                    if ($('.filteritemtemplate[filteritemrowid="' + filteritemrowid + '"]').attr('filteritemname') == 'datespenton') {
+                                    $('#auxfunctionfordatespentondefaultfill').trigger('click');
+                    }
                     $('.firstinputbox').focus();
 
                     }
@@ -607,17 +597,40 @@ console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
       }
 
     });
+
 // Dialog "Uploading..." begin
     $( "#dialog-message" ).dialog({
       autoOpen: false,
       modal: true
-  //    buttons: {
-  //      Ok: function() {
-  //        $( this ).dialog( "close" );
-  //      }
-  //    }
     });
-
 // Dialog "Uploading..." end
+
+    $('body').on("click", "#auxfunctionfordatespentondefaultfill", function() {
+
+                                    var d = new Date();
+
+                                    var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
+                                    var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                                    var fromday = d.getDate();
+
+                                    var fromoutput = fromyear + '-' +
+                                        (frommonth<10 ? '0' : '') + frommonth + '-' +
+                                        (fromday<10 ? '0' : '') + fromday;
+                                    $('.firstinputbox[filteritemname="datespenton"]').val(fromoutput);
+
+                                    var d = new Date();
+
+                                    var toyear = d.getFullYear();
+                                    var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
+                                    var today = d.getDate();
+
+                                    var tooutput = toyear + '-' +
+                                        (tomonth<10 ? '0' : '') + tomonth + '-' +
+                                        (today<10 ? '0' : '') + today;
+                                    $('.secondinputbox[filteritemname="datespenton"]').val(tooutput);
+
+
+
+    });
 
 });
