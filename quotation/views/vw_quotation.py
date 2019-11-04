@@ -1193,7 +1193,7 @@ def quotationissuetrackingsystemitemstoquotation(request):
         thirdnum = 0
         note = projectname + ' ' + comments + ' by ' + username + ' /Id:' + timeentryandissueid + '/'
         productid = 54
-        currencyrate = 280
+#        currencyrate = 280
 
         cursor0 = connection.cursor()
         cursor0.execute(
@@ -1202,7 +1202,7 @@ def quotationissuetrackingsystemitemstoquotation(request):
             "customerdescription_tblProduct`, "
             "`margin_tblproduct`, "
             "`currencyisocode_tblcurrency_ctblproduct`, "
-            "currencyrate_tblcurrency, "
+            "currencyrate_tblcurrency, " #5
             "unit_tblproduct,"
             "suppliercompanyid_tblproduct "
 
@@ -1261,7 +1261,7 @@ def quotationissuetrackingsystemitemstoquotation(request):
              listpricecomputed,
              currencyisocodeclone,
              productid,
-             currencyrate,
+             currencyrateclone,
              unitsalespriceACU,
              unitclone,
              suppliercompanyid,
@@ -1360,9 +1360,9 @@ def quotationissuetrackingsystemsearchcontent(request):
 
         if filteritemname == 'quoteddocdetailsid':
             if filteritemoperator == 'hasnotvalue':
-                quoteddocdetailsidphrase = "and quoteddocdetailsidtable.value = '' "
+                quoteddocdetailsidphrase = "and quoteddocdetailsidtable.value is null "
             if filteritemoperator == 'hasvalue':
-                quoteddocdetailsidphrase = "and quoteddocdetailsidtable.value <> '' "
+                quoteddocdetailsidphrase = "and quoteddocdetailsidtable.value is not null "
 
         if filteritemname == 'quoteddocnumber':
             if filteritemoperator == 'is':

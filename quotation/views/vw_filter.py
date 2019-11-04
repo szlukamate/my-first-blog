@@ -481,6 +481,10 @@ def filtertemplatehtmlontimemanagerform(request):
 
                                 return render(request, 'quotation/filteritemtemplateempty.html', {})
 
+                        if filteritemselectedvalue == 'is':
+
+                                return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
+
         if invokedfrom == 'addfilterselectchanged': # when we want to search first click the #Add Filter selectbox and add some filteritems to html
                 filteritemrowid = request.POST['filteritemmaxrowid']
                 selectedvalue = request.POST['selectedvalue']
@@ -523,7 +527,7 @@ def filtertemplatehtmlontimemanagerform(request):
                 if selectedvalue == 'timeentryid':
 
                     # Creates a list containing #h lists, each of #w items, all set to 0
-                    w, h = 2, 2;
+                    w, h = 2, 3;
                     filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
 
                     filteritemname = 'timeentryid' #attribute for elements
@@ -534,6 +538,8 @@ def filtertemplatehtmlontimemanagerform(request):
                     filteritemselectoptions[1][0] = 'hasvalue'
                     filteritemselectoptions[1][1] = "has value"
 
+                    filteritemselectoptions[2][0] = 'is'
+                    filteritemselectoptions[2][1] = 'is'
 
         return render(request, 'quotation/filtertemplatehtml.html',{'selectedoption': selectedoption,
                                                                     'filteritemrowid': filteritemrowid,

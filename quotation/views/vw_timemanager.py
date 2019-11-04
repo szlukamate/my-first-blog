@@ -77,6 +77,8 @@ def timemanagersearchcontent(request):
         if filteritemname == 'timeentryid':
             if filteritemoperator == 'hasnotvalue':
                 timeentryidphrase = "and timeentryidinits_tbltimedone is null "
+            if filteritemoperator == 'is':
+                timeentryidphrase = "and timeentryidinits_tbltimedone = '" + filteritemfirstinput + "' "
 
     searchphraseformainresults = (projectphrase + timedonephrase + datespentonphrase + timeentryidphrase + " ")
     searchphraseforrowsources = searchphraseformainresults
@@ -92,7 +94,8 @@ def timemanagersearchcontent(request):
                    "issuesubject_redmine_ctbltimedone, "
                    "comments_tbltimedone, "
                    "spenton_tbltimedone, "
-                   "timeentryidinits_tbltimedone " #10
+                   "timeentryidinits_tbltimedone, " #10
+                   "uploadingtimestamp_tbltimedone "
 
                    "FROM quotation_tbltimedone "
 
@@ -118,7 +121,8 @@ def timemanagersearchcontent(request):
                     "     timedoneid_tbltimedonetemptable INT(11) NULL, " 
                     "     name_tblprojects_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " #10 
                     "     username_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
-                    "     issuesubject_redmine_ctbltimedonetemptable VARCHAR(255) NULL) " 
+                    "     issuesubject_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
+                    "     uploadingtimestamp_tbltimedonetemptable TIMESTAMP NULL) " 
 
                     "      ENGINE=INNODB "
                     "    ; ")
@@ -138,6 +142,7 @@ def timemanagersearchcontent(request):
         projectname = x11[3]
         username = x11[5]
         issuesubject = x11[7]
+        uploadingtimestamp = x11[11]
 
         cursor2.execute("INSERT INTO timedonetemptable (hours_tbltimedonetemptable, "
                         "projectid_tbltimedonetemptable, "
@@ -149,7 +154,8 @@ def timemanagersearchcontent(request):
                         "timedoneid_tbltimedonetemptable, "
                         "name_tblprojects_redmine_ctbltimedonetemptable, "
                         "username_redmine_ctbltimedonetemptable, "
-                        "issuesubject_redmine_ctbltimedonetemptable) VALUES ('" + str(hours) + "', "
+                        "issuesubject_redmine_ctbltimedonetemptable, "
+                        "uploadingtimestamp_tbltimedonetemptable) VALUES ('" + str(hours) + "', "
                                                     "'" + str(projectid) + "', "
                                                     "'" + str(userid) + "', "
                                                     "'" + str(issueid) + "', "
@@ -159,7 +165,8 @@ def timemanagersearchcontent(request):
                                                     "'" + str(timedoneid) + "', "
                                                     "'" + str(projectname) + "', "
                                                     "'" + str(username) + "', "
-                                                    "'" + str(issuesubject) + "');")
+                                                    "'" + str(issuesubject) + "', "
+                                                    "'" + str(uploadingtimestamp) + "');")
 
     cursor2.execute("SELECT   "
                         "auxid, "
@@ -174,7 +181,8 @@ def timemanagersearchcontent(request):
                     "   timedoneid_tbltimedonetemptable,"
                     "   name_tblprojects_redmine_ctbltimedonetemptable, " #10
                     "   username_redmine_ctbltimedonetemptable, "
-                    "   issuesubject_redmine_ctbltimedonetemptable "
+                    "   issuesubject_redmine_ctbltimedonetemptable, "
+                    "   uploadingtimestamp_tbltimedonetemptable "
 
                         "FROM timedonetemptable ")
     timedonesunsetflag = cursor2.fetchall()
@@ -226,7 +234,8 @@ def timemanagersearchcontent(request):
                     "   timedoneid_tbltimedonetemptable, "
                     "   name_tblprojects_redmine_ctbltimedonetemptable, " #10
                     "   username_redmine_ctbltimedonetemptable, "
-                    "   issuesubject_redmine_ctbltimedonetemptable "
+                    "   issuesubject_redmine_ctbltimedonetemptable, "
+                    "   uploadingtimestamp_tbltimedonetemptable "
 
                         "FROM timedonetemptable ")
     timedonessetflag = cursor2.fetchall()

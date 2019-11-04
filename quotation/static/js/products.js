@@ -194,7 +194,7 @@ $(function () {
         var productid=$(this).attr( "productid" );
                     $.ajax({
                     type: 'POST',
-                    url: 'productupdatecurrencyisocode/',
+                    url: 'productupdatecurrencyisocode',
 
                     data: {
 
