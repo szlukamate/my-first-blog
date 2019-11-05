@@ -472,6 +472,18 @@ def filtertemplatehtmlontimemanagerform(request):
 
                                 return render(request, 'quotation/filteritemtemplatebetweeninputbox.html', {'filteritemrowid': filteritemrowid, 'filteritemname': filteritemname})
 
+                        if filteritemselectedvalue == 'today':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
+                        if filteritemselectedvalue == 'yesterday':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
+                        if filteritemselectedvalue == 'lessthandaysago':
+
+                                return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
+
                 if filteritemname == 'timeentryid':
                         if filteritemselectedvalue == 'hasnotvalue':
 
@@ -482,6 +494,23 @@ def filtertemplatehtmlontimemanagerform(request):
                                 return render(request, 'quotation/filteritemtemplateempty.html', {})
 
                         if filteritemselectedvalue == 'is':
+
+                                return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
+
+                if filteritemname == 'uploadingtimestamp':
+                        if filteritemselectedvalue == 'between':
+
+                                return render(request, 'quotation/filteritemtemplatebetweeninputbox.html', {'filteritemrowid': filteritemrowid, 'filteritemname': filteritemname})
+
+                        if filteritemselectedvalue == 'today':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
+                        if filteritemselectedvalue == 'yesterday':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
+                        if filteritemselectedvalue == 'lessthandaysago':
 
                                 return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
 
@@ -516,13 +545,22 @@ def filtertemplatehtmlontimemanagerform(request):
                 if selectedvalue == 'datespenton': # here the value is text without space and small letter i.e. customerdescription
 
                     # Creates a list containing #h lists, each of #w items, all set to 0
-                    w, h = 2, 1;
+                    w, h = 2, 4;
                     filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
 
                     filteritemname = 'datespenton' #attribute for elements
 
-                    filteritemselectoptions[0][0] = 'between'
-                    filteritemselectoptions[0][1] = 'between'
+                    filteritemselectoptions[0][0] = 'today'
+                    filteritemselectoptions[0][1] = 'today'
+
+                    filteritemselectoptions[1][0] = 'yesterday'
+                    filteritemselectoptions[1][1] = 'yesterday'
+
+                    filteritemselectoptions[2][0] = 'between'
+                    filteritemselectoptions[2][1] = 'between'
+
+                    filteritemselectoptions[3][0] = 'lessthandaysago'
+                    filteritemselectoptions[3][1] = 'less than days ago'
 
                 if selectedvalue == 'timeentryid':
 
@@ -540,6 +578,26 @@ def filtertemplatehtmlontimemanagerform(request):
 
                     filteritemselectoptions[2][0] = 'is'
                     filteritemselectoptions[2][1] = 'is'
+
+                if selectedvalue == 'uploadingtimestamp': # here the value is text without space and small letter i.e. customerdescription
+
+                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    w, h = 2, 4;
+                    filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
+
+                    filteritemname = 'uploadingtimestamp' #attribute for elements
+
+                    filteritemselectoptions[0][0] = 'today'
+                    filteritemselectoptions[0][1] = 'today'
+
+                    filteritemselectoptions[1][0] = 'yesterday'
+                    filteritemselectoptions[1][1] = 'yesterday'
+
+                    filteritemselectoptions[2][0] = 'between'
+                    filteritemselectoptions[2][1] = 'between'
+
+                    filteritemselectoptions[3][0] = 'lessthandaysago'
+                    filteritemselectoptions[3][1] = 'less than days ago'
 
         return render(request, 'quotation/filtertemplatehtml.html',{'selectedoption': selectedoption,
                                                                     'filteritemrowid': filteritemrowid,

@@ -16,13 +16,14 @@ import subprocess
 import os
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
+from datetime import datetime, timedelta
 # import pdb;
 # pdb.set_trace()
 @login_required
 def timemanager(request):
         # filtering options to Addfilter selectbox begin
         # Creates a list containing #h lists, each of #w items, all set to 0
-        w, h = 3, 4;
+        w, h = 3, 5;
         addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
 
         addfilterselectvaluesandoptions[0][0] = 'Project Name'
@@ -36,6 +37,9 @@ def timemanager(request):
 
         addfilterselectvaluesandoptions[3][0] = 'Timeentry Id'
         addfilterselectvaluesandoptions[3][1] = 'timeentryid'
+
+        addfilterselectvaluesandoptions[4][0] = 'Uploading Timestamp'
+        addfilterselectvaluesandoptions[4][1] = 'uploadingtimestamp'
 
         # filtering options to Addfilter selectbox end
 
@@ -57,6 +61,7 @@ def timemanagersearchcontent(request):
     timedonephrase = ""
     datespentonphrase = ""
     timeentryidphrase = ""
+    uploadingtimestampphrase = ""
 
     for x in range(0,len(filteritemlist),4):
 
@@ -74,14 +79,32 @@ def timemanagersearchcontent(request):
         if filteritemname == 'datespenton':
             if filteritemoperator == 'between':
                 datespentonphrase = "and spenton_tbltimedone BETWEEN '" + filteritemfirstinput + "' AND '" + filteritemsecondinput + "' "
+            if filteritemoperator == 'today':
+                datespentonphrase = "and spenton_tbltimedone = '" + str((datetime.now()).date() - timedelta(days=0)) + "' "
+            if filteritemoperator == 'yesterday':
+                datespentonphrase = "and spenton_tbltimedone = '" + str((datetime.now()).date() - timedelta(days=1)) + "' "
+            if filteritemoperator == 'lessthandaysago':
+                datespentonphrase = "and spenton_tbltimedone BETWEEN '" + str((datetime.now()).date() - timedelta(days=int(filteritemfirstinput))) + "' AND '" + str((datetime.now()).date() - timedelta(days=0)) + "' "
         if filteritemname == 'timeentryid':
             if filteritemoperator == 'hasnotvalue':
                 timeentryidphrase = "and timeentryidinits_tbltimedone is null "
             if filteritemoperator == 'is':
                 timeentryidphrase = "and timeentryidinits_tbltimedone = '" + filteritemfirstinput + "' "
+        if filteritemname == 'uploadingtimestamp':
+            if filteritemoperator == 'between':
+                uploadingtimestampphrase = "and date(uploadingtimestamp_tbltimedone) BETWEEN '" + filteritemfirstinput + "' AND '" + filteritemsecondinput + "' "
+            if filteritemoperator == 'today':
+                uploadingtimestampphrase = "and date(uploadingtimestamp_tbltimedone) = '" + str((datetime.now()).date() - timedelta(days=0)) + "' "
+            if filteritemoperator == 'yesterday':
+                uploadingtimestampphrase = "and date(uploadingtimestamp_tbltimedone) = '" + str((datetime.now()).date() - timedelta(days=1)) + "' "
+            if filteritemoperator == 'lessthandaysago':
+                uploadingtimestampphrase = "and date(uploadingtimestamp_tbltimedone) BETWEEN '" + str((datetime.now()).date() - timedelta(days=int(filteritemfirstinput))) + "' AND '" + str((datetime.now()).date() - timedelta(days=0)) + "' "
 
-    searchphraseformainresults = (projectphrase + timedonephrase + datespentonphrase + timeentryidphrase + " ")
+    searchphraseformainresults = (projectphrase + timedonephrase + datespentonphrase + timeentryidphrase + uploadingtimestampphrase + " ")
     searchphraseforrowsources = searchphraseformainresults
+    #import pdb;
+    #pdb.set_trace()
+
     cursor = connection.cursor()
     cursor.execute("SELECT "
                    "timedoneid_tbltimedone, "
