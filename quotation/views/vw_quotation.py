@@ -1178,22 +1178,23 @@ def quotationissuetrackingsystemitemstoquotation(request):
 
     for x in range(int(issuetrackingsystemnumberofitems)):
 
-        timeentryid = itemdatalist[(8*x+0)]
-        timeentryandissueid = itemdatalist[(8*x+1)]
-        projectname = itemdatalist[8*x+2]
-        username = itemdatalist[8*x+3]
-        activityname = itemdatalist[8*x+4]
-        hours = itemdatalist[8*x+5]
-        comments = itemdatalist[8*x+6]
-        spenton = itemdatalist[8*x+7]
+        timeentryid = itemdatalist[(9*x+0)]
+        timeentryandissueid = itemdatalist[(9*x+1)]
+        projectname = itemdatalist[9*x+2]
+        username = itemdatalist[9*x+3]
+        activityname = itemdatalist[9*x+4]
+        hours = itemdatalist[9*x+5]
+        comments = itemdatalist[9*x+6]
+        spenton = itemdatalist[9*x+7]
+        issuesubject = itemdatalist[9*x+8]
 
         firstnum = x + 1
         fourthnum = 0
         secondnum = 0
         thirdnum = 0
-        note = projectname + ' ' + comments + ' by ' + username + ' /Id:' + timeentryandissueid + '/'
+        note = 'Projectname: ' + projectname + '\nIssue Subject: ' + issuesubject + '\nComment on Spent Time: ' + comments + '\nby ' + username + '\nTimeentry and Issue Id: ' + timeentryandissueid + ' '
         productid = 54
-#        currencyrate = 280
+#         currencyrate = 280
 
         cursor0 = connection.cursor()
         cursor0.execute(
@@ -1414,7 +1415,8 @@ def quotationissuetrackingsystemsearchcontent(request):
                      "quoteddocdetailsidtable.value, "
                      "quoteddocnumbertable.value, "
                      "T.created_on, "   #15
-                     "T.updated_on "
+                     "T.updated_on, "
+                     "issues.subject "
 
                      "FROM time_entries as T "
 
@@ -1432,6 +1434,9 @@ def quotationissuetrackingsystemsearchcontent(request):
 
                      "JOIN users "
                      "ON T.user_id = users.id "
+
+                     "JOIN issues "
+                     "ON T.issue_id = issues.id "
 
                      "WHERE T.id is not null " + searchphraseformainresults + "")
 
@@ -1530,3 +1535,41 @@ def quotationissuetrackingsystemsearchcontent(request):
                                                                'searchphraseformainresults': searchphraseformainresults,
                                                                'usernamerowsources': usernamerowsources,
                                                                'activitynamerowsources': activitynamerowsources})
+@login_required
+def quotationerasequoteddocdatainits(request):
+
+    creatorid = request.user.id
+    BASE_DIR = settings.BASE_DIR
+
+    quotationdocid = request.POST['quotationdocid']
+    quotationdocnumber = request.POST['quotationdocnumber']
+    issuetrackingsystemnumberofitems = request.POST['issuetrackingsystemnumberofitems']
+    itemdatalistraw = request.POST['itemdatalist']
+    itemdatalist = json.loads(itemdatalistraw)
+
+    for x in range(int(issuetrackingsystemnumberofitems)):
+
+        timeentryid = itemdatalist[(8*x+0)]
+        timeentryandissueid = itemdatalist[(8*x+1)]
+        projectname = itemdatalist[8*x+2]
+        username = itemdatalist[8*x+3]
+        activityname = itemdatalist[8*x+4]
+        hours = itemdatalist[8*x+5]
+        comments = itemdatalist[8*x+6]
+        spenton = itemdatalist[8*x+7]
+
+        # update redmine  table begin
+
+        cursor21 = connections['redmine'].cursor()
+        cursor21.execute("UPDATE custom_values SET "
+                        "value = %s "
+                        "WHERE custom_field_id = 4 and customized_id = %s ", [None, timeentryid]) # 4 means this  field in Redmine in custom_fields table
+
+        cursor21 = connections['redmine'].cursor()
+        cursor21.execute("UPDATE custom_values SET "
+                        "value = %s "
+                        "WHERE custom_field_id = 6 and customized_id = %s ", [None, timeentryid]) # 6 means this field in Redmine in custom_fields table
+
+        # update redmine table end
+
+    return render(request, 'quotation/quotationissuetrackingsystemredirecturl.html', {'pk': quotationdocid})

@@ -166,6 +166,8 @@ def timemanagersearchcontent(request):
         username = x11[5]
         issuesubject = x11[7]
         uploadingtimestamp = x11[11]
+        if uploadingtimestamp == None:
+            uploadingtimestamp = '2220-12-12 17:47:30'
 
         cursor2.execute("INSERT INTO timedonetemptable (hours_tbltimedonetemptable, "
                         "projectid_tbltimedonetemptable, "
@@ -557,7 +559,7 @@ def timedoneitemnew(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("INSERT INTO quotation_tbltimedone "
-                    "(spenton_tbltimedone) VALUES ('2019-10-10')")
+                    "(spenton_tbltimedone) VALUES ('" + str((datetime.now()).date()) + "')")
 
     return redirect('timemanager')
 @login_required

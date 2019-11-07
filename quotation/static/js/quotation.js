@@ -418,7 +418,8 @@ $('#title').click(function() {
               hours=$('td[class="hours"][rowid="' + (i - 1) + '"]').text();
               comments=$('td[class="comments"][rowid="' + (i - 1) + '"]').text();
               spenton=$('td[class="spenton"][rowid="' + (i - 1) + '"]').text();
-              itemdatalist.push(timeentryid, timeentryandissueid, projectname, username, activityname, hours, comments, spenton);
+              issuesubject=$('td[class="issuesubject"][rowid="' + (i - 1) + '"]').text();
+              itemdatalist.push(timeentryid, timeentryandissueid, projectname, username, activityname, hours, comments, spenton, issuesubject);
 
                     console.log('itemdatalist: ' + itemdatalist);
 
@@ -773,6 +774,76 @@ console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
                                     $('.secondinputbox[filteritemname="datespenton"]').val(tooutput);
 
 
+
+    });
+    $('body').on("click", "#erasequoteddocdatainitsbutton", function() {
+                var issuetrackingsystemnumberofitems= $('#issuetrackingsystemnumberofitems').text();
+                var itemdatalist=[];
+                var itemdataliststringified;
+                var quotationdocid = $('#quotationdocid').text();
+                var quotationdocnumber = $('#quotationdocnumber').text();
+
+        main();
+
+            function main(){
+
+
+                for (i = 1; i <= issuetrackingsystemnumberofitems; i++) {
+                    itemdatacollect(i);
+
+                }
+                itemdataliststringified = JSON.stringify(itemdatalist);
+                    console.log(issuetrackingsystemnumberofitems);
+                    console.log(itemdataliststringified);
+
+                datatransmit();
+
+            }
+            function itemdatacollect(i){
+              timeentryid=$('p[class="timeentryid"][rowid="' + (i - 1) + '"]').text();
+                    console.log('timeentryid: ' + timeentryid);
+
+              timeentryandissueid=$('td[class="timeentryandissueid"][rowid="' + (i - 1) + '"]').text();
+              projectname=$('td[class="projectname"][rowid="' + (i - 1) + '"]').text();
+              username=$('td[class="username"][rowid="' + (i - 1) + '"]').text();
+              activityname=$('td[class="activityname"][rowid="' + (i - 1) + '"]').text();
+              hours=$('td[class="hours"][rowid="' + (i - 1) + '"]').text();
+              comments=$('td[class="comments"][rowid="' + (i - 1) + '"]').text();
+              spenton=$('td[class="spenton"][rowid="' + (i - 1) + '"]').text();
+              itemdatalist.push(timeentryid, timeentryandissueid, projectname, username, activityname, hours, comments, spenton);
+
+                    console.log('itemdatalist: ' + itemdatalist);
+
+            }
+
+            function datatransmit(){
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'quotationerasequoteddocdatainits',
+
+                    data: {
+                    'quotationdocid' : quotationdocid,
+                    'quotationdocnumber' : quotationdocnumber,
+                    'issuetrackingsystemnumberofitems' : issuetrackingsystemnumberofitems,
+                    'itemdatalist': itemdataliststringified,
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(url){
+                    console.log('success');
+
+                    window.location.href = url;
+
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+            }
 
     });
 

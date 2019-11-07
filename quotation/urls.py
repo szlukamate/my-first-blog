@@ -127,5 +127,6 @@ urlpatterns = [
     url('timemanagerupdateissueselectafterchangeprojectselect$', views.timemanagerupdateissueselectafterchangeprojectselect, name='timemanagerupdateissueselectafterchangeprojectselect'),
     url(r'purchaseorderpreframe/$', views.purchaseorderpreframe, name='purchaseorderpreframe'),
     url('filtertemplatehtmlonpurchaseorderpreform$', views.filtertemplatehtmlonpurchaseorderpreform, name='filtertemplatehtmlonpurchaseorderpreform'),
+    url('quotationerasequoteddocdatainits$', views.quotationerasequoteddocdatainits, name='quotationerasequoteddocdatainits'),
 
 ]

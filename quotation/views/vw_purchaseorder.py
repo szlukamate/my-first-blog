@@ -38,7 +38,7 @@ def purchaseorderpre(request):
 
         if filteritemname == 'dateofcorcreation':
             if filteritemoperator == 'between':
-                dateofcorcreationphrase = "and creationtime_tbldoc BETWEEN '" + filteritemfirstinput + "' AND '" + filteritemsecondinput + "' "
+                dateofcorcreationphrase = "and date(creationtime_tbldoc) BETWEEN '" + filteritemfirstinput + "' AND '" + filteritemsecondinput + "' "
         if filteritemname == 'docnumber':
             if filteritemoperator == 'is':
                 docnumberphrase = "and docnumber_tbldoc = '" + filteritemfirstinput + "' "
