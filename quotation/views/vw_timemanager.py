@@ -145,7 +145,7 @@ def timemanagersearchcontent(request):
                     "     name_tblprojects_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " #10 
                     "     username_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
                     "     issuesubject_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
-                    "     uploadingtimestamp_tbltimedonetemptable TIMESTAMP NULL) " 
+                    "     uploadingtimestamp_tbltimedonetemptable DATETIME NULL) " 
 
                     "      ENGINE=INNODB "
                     "    ; ")
@@ -160,14 +160,14 @@ def timemanagersearchcontent(request):
         spenton = x11[9]
         timeentryidinits = x11[10]
         if timeentryidinits == None:
-            timeentryidinits = 0 #tricky - this made me revolved - the input box showed 0 meanwhile the non temporary table contained null...
+            timeentryidinits = 0 #tricky - this  made me revolved - the input box showed 0 meanwhile the non temporary table contained null...
         timedoneid = x11[0]
         projectname = x11[3]
         username = x11[5]
         issuesubject = x11[7]
         uploadingtimestamp = x11[11]
         if uploadingtimestamp == None:
-            uploadingtimestamp = '2220-12-12 17:47:30'
+            uploadingtimestamp = '3000-12-31 23:59:59'
 
         cursor2.execute("INSERT INTO timedonetemptable (hours_tbltimedonetemptable, "
                         "projectid_tbltimedonetemptable, "
@@ -533,7 +533,7 @@ def timemanageruploadtoits(request):
                           'TimeEntry',
                           timeentryid])
 
-        cursor21.execute("INSERT INTO custom_values " #insert the quoteddocnumber custom field - with None value
+        cursor21.execute("INSERT INTO custom_values " #insert  the quoteddocnumber custom field - with None value
                          "(value, "
                          "custom_field_id, "
                          "customized_type, "
@@ -544,11 +544,13 @@ def timemanageruploadtoits(request):
                           'TimeEntry',
                           timeentryid])
 
+        uploadingdatetime = datetime.now()
+
         cursor2 = connection.cursor()
         cursor2.execute("UPDATE quotation_tbltimedone SET " #update timeentryid which get from Issue Tracking System - not null means: the timedone item is uploaded to ITS
-                         "timeentryidinits_tbltimedone = %s "
+                         "timeentryidinits_tbltimedone = %s, uploadingtimestamp_tbltimedone = %s "
                          "WHERE timedoneid_tbltimedone = %s ",
-                         [timeentryid, timedoneid ])
+                         [timeentryid, uploadingdatetime, timedoneid ])
 
     return render(request, 'quotation/timemanagerafteruploadtoitsredirecturl.html',{})
 

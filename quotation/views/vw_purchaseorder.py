@@ -549,9 +549,10 @@ def purchaseorderform(request, pk):
                      "DD2.denodocnumber, "
                      "DD2.denopretag, "
                      "DD2.denodocid, "
-
                      "DD3.sumdenodocdetailsqty "
+
                      "FROM quotation_tbldoc_details as DD "
+
                      "LEFT JOIN    (SELECT (Doc_detailsid_tblDoc_details) as denodocdetails, "
                      "               denotopodetailslink_tbldocdetails, "
                      "               (Qty_tblDoc_details) as denodocdetailsqty, "

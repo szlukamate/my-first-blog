@@ -1193,8 +1193,12 @@ def quotationissuetrackingsystemitemstoquotation(request):
         secondnum = 0
         thirdnum = 0
         note = 'Projectname: ' + projectname + '\nIssue Subject: ' + issuesubject + '\nComment on Spent Time: ' + comments + '\nby ' + username + '\nTimeentry and Issue Id: ' + timeentryandissueid + ' '
-        productid = 54
-#         currencyrate = 280
+# supplier select begin
+        if username == 'Redmine Admin':
+            productid = 54
+        elif username == 'ChiefGofri ChiefMaker':
+            productid = 56
+# supplier select end
 
         cursor0 = connection.cursor()
         cursor0.execute(
@@ -1212,7 +1216,7 @@ def quotationissuetrackingsystemitemstoquotation(request):
             "LEFT JOIN quotation_tblcurrency "
             "ON quotation_tblproduct.currencyisocode_tblcurrency_ctblproduct=quotation_tblcurrency.currencyisocode_tblcurrency "
 
-            "WHERE Productid_tblProduct= %s", [54])
+            "WHERE Productid_tblProduct= %s", [productid])
         results = cursor0.fetchall()
         for instancesingle in results:
             purchase_priceclone = instancesingle[1]

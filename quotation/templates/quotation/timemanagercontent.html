@@ -25,7 +25,7 @@
 
 									<td>Spenton</td>
 									<td>Time Entry Id in ITS</td>
-									<td>Uploading Timestamp</td>
+									<td>Uploading Datetime</td>
 								</tr>
 							</thead>
 							<tbody>
@@ -76,8 +76,15 @@
 									<td><input type="text" class="updateable" value="{{timedone.6|date:'Y-m-d'}}" name="spenton_tbltimedone" maxlength="10" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" size="8"></td>
 
 									<td><input type="text" value="{{timedone.7}}" name="timeentryidinits_tbltimedone" maxlength="10" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" size="13" disabled></td>
+									{% if timedone.13|date:'Y-m-d H:i' != '3000-12-31 23:59' %} <!-- uploading dateime set -->
 
-									<td><input type="text" value="{{timedone.13|date:'Y-m-d'}}" name="uploadingtimestamp_tbltimedone" maxlength="10" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" size="13" disabled></td>
+										<td><input type="text" value="{{timedone.13|date:'Y-m-d H:i'}}" name="uploadingtimestamp_tbltimedone" maxlength="10" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" size="13" disabled></td>
+
+									{% else %}
+
+										<td><input type="text" value="" style="background-color: red; "name="uploadingtimestamp_tbltimedone" maxlength="10" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" size="13" disabled></td>
+
+									{% endif %}
 
 									<td><a href="{% url 'timedoneitemremove' pktimedoneid=timedone.9 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
 
