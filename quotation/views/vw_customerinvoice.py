@@ -940,6 +940,7 @@ def customerinvoicemake(request, docid):
         docdetails = cursor3.fetchall()
 
         for x in docdetails:
+            cordocdetailsid = x[0]
             qty = x[1]
 
             firstnum = x[4]
@@ -982,7 +983,8 @@ def customerinvoicemake(request, docid):
                 "unit_tbldocdetails, "
                 "suppliercompanyid_tbldocdetails, "
                 "podocdetailsidforlabel_tbldocdetails, "
-                "supplierdescription_tblProduct_ctblDoc_details) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                "supplierdescription_tblProduct_ctblDoc_details, "
+                "cidetailslinkfromcor_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", #cordocdetailsid which is invoiced in this row
 
                 [maxdocid,
                  qty,
@@ -1001,7 +1003,8 @@ def customerinvoicemake(request, docid):
                  unitclone,
                  suppliercompanyid,
                  podocdetailsidforlabel,
-                 supplierdescriptionclone])
+                 supplierdescriptionclone,
+                 cordocdetailsid])
 
     #import pdb;
     #pdb.set_trace()

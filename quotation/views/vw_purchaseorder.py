@@ -548,7 +548,7 @@ def purchaseorderform(request, pk):
                      "DD2.denodocdetailsqty, "
                      "DD2.denodocnumber, "
                      "DD2.denopretag, "
-                     "DD2.denodocid, "
+                     "DD2.denodocid, " #5
                      "DD3.sumdenodocdetailsqty "
 
                      "FROM quotation_tbldoc_details as DD "

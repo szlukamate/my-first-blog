@@ -186,8 +186,8 @@
 
 								{% if tblDoc_details.0 == polink.0 %} <!-- match docdetailsids -->
 
-									{% if tblDoc_details.1 == polink.6 %} <!-- if matches sumqty-->
-										{% if polink.2 != tblDoc_details.1 %} <!-- if many POs-->
+									{% if tblDoc_details.1 == polink.6 %} <!-- if matches sumqty(corqty==sumpoqty)-->
+										{% if polink.2 != tblDoc_details.1 %} <!-- if many POs (poqty!=corqty-->
 											<a href="{% url 'purchaseorderform' pk=polink.5 %}"><span style="color:black; background-color: #33cccc;" >{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})/{{ polink.2}}</a><br>
 										{% else %}
 										<!-- if only one PO-->

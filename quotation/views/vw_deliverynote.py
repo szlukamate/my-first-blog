@@ -959,7 +959,6 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
                                                       "'" + str(inqty) + "', "
                                                       "'" + str(outqty) + "');")
 
-
                 # stockresults to temptable end
 
                 cursor333.execute("SELECT "

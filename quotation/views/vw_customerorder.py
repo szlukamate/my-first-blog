@@ -108,7 +108,7 @@ def customerorderform(request, pk):
                     "DD.thirdnum_tblDoc_details, "
                     "DD.Note_tblDoc_details, "
                     "DD.creationtime_tblDoc_details, "
-                    "DD.purchase_price_tblproduct_ctblDoc_details, " #10
+                    "DD.purchase_price_tblproduct_ctblDoc_details, " # 10
                     "DD.listprice_tblDoc_details, "
                     "DD.currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
                     "DD.Productid_tblDoc_details_id, "
@@ -123,7 +123,7 @@ def customerorderform(request, pk):
                     "(100-round(((DD.unitsalespriceACU_tblDoc_details/(DD.listprice_tblDoc_details * DD.currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
                     "DD.unit_tbldocdetails, "
                     "companyname_tblcompanies, "
-                    "DD.supplierdescription_tblProduct_ctblDoc_details " #25
+                    "DD.supplierdescription_tblProduct_ctblDoc_details " # 25
 
                     
                     
@@ -145,10 +145,11 @@ def customerorderform(request, pk):
                     "DD2.podocdetailsqty, "
                     "DD2.podocnumber, "
                     "DD2.popretag, "
-                    "DD2.podocid, "
+                    "DD2.podocid, " #5
+                    "DD3.sumpodocdetailsqty "
                      
-                     "DD3.sumpodocdetailsqty "
                     "FROM quotation_tbldoc_details as DD "
+
                    "LEFT JOIN    (SELECT (Doc_detailsid_tblDoc_details) as podocdetails, "
                     "               podetailslink_tbldocdetails, "
                     "               (Qty_tblDoc_details) as podocdetailsqty, "

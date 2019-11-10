@@ -178,8 +178,8 @@
 
 														{% if tblDoc_details.0 == denotopolink.0 %} <!-- match docdetailsids -->
 
-															{% if tblDoc_details.1 == denotopolink.6 %} <!-- if matches sumqty-->
-																{% if denotopolink.2 != tblDoc_details.1 %} <!-- if many POs-->
+															{% if tblDoc_details.1 == denotopolink.6 %} <!-- if matches sumqty (poqty==sumdenoqty)-->
+																{% if denotopolink.2 != tblDoc_details.1 %} <!-- if many POs (denoqty==poqty)-->
 																	<a href="{% url 'deliverynoteform' pk=denotopolink.5 %}"><span style="color:black; background-color: yellow;" >{{ denotopolink.4}}{{ denotopolink.3}}(PODDId:{{ denotopolink.1}})/{{ denotopolink.2}}</a><br>
 																{% else %}
 																<!-- if only one PO-->
