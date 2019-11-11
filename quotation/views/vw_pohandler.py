@@ -1326,9 +1326,9 @@ def pohandlerreception(request): #from pohandlerform
                         "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
                         "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
                         "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
-                        "unit_tbldocdetails, "  # 23
+                        "unit_tbldocdetails, "  
                         "suppliercompanyid_tbldocdetails, "
-                        "supplierdescription_tblProduct_ctblDoc_details "
+                        "supplierdescription_tblProduct_ctblDoc_details " # 25
 
                         "FROM quotation_tbldoc_details "
 

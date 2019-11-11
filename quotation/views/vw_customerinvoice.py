@@ -701,8 +701,9 @@ def customerinvoicemake(request, docid):
     cursor222.execute("DROP TEMPORARY TABLE IF EXISTS denoddocdetailstemptable;")
     cursor222.execute("CREATE TEMPORARY TABLE IF NOT EXISTS denoddocdetailstemptable "
                     "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
-                    "     denoddocdetailsid INT(11) NOT NULL) "
-                    "      ENGINE=INNODB "
+                    "     denoddocdetailsid INT(11) NOT NULL, "
+                    "     alreadyinvoicedflag INT(11) NULL) " # in cidetailslinkfromdeno_tbldocdetails got the alreadyinvoiced denodocdetailsid for this doc
+                    "      ENGINE=INNODB "                          # thus this flag needs to be set to 1 if cidetailslinkfromdeno_tbldocdetails contains the denoddocdetailsid (i.e. already invoiced)
                     "    ; ")
 
     # which deno belongs to this order begin
@@ -723,13 +724,40 @@ def customerinvoicemake(request, docid):
     denoddocdetails = cursor1.fetchall()
     # which deno belongs to this order end
 
-    #import pdb;
-    #pdb.set_trace()
+    # import pdb;
+    # pdb.set_trace()
 
     for x in denoddocdetails:
         denoddocdetailsid = x[1]
         cursor222.execute("INSERT INTO denoddocdetailstemptable "
                         "(denoddocdetailsid) VALUES ('" + str(denoddocdetailsid) + "');")
+
+        cursor222.execute("SELECT max(auxid)  "
+                          
+                          "FROM denoddocdetailstemptable ")
+        maxauxidresult = cursor222.fetchall()
+        for x in maxauxidresult:
+            maxauxid = x[0]
+
+
+        # update alreadyinvoicedflag begin # see above 'already invoiced'
+        cursor1.execute("SELECT "
+                        "Doc_detailsid_tblDoc_details " # just for sake God (this field only to avoid syntax error)
+
+                        "FROM quotation_tbldoc_details "
+                        
+                        "JOIN quotation_tbldoc "
+                        "ON quotation_tbldoc_details.Docid_tblDoc_details_id = quotation_tbldoc.Docid_tblDoc "
+
+                        "WHERE cidetailslinkfromdeno_tbldocdetails=%s and obsolete_tbldoc = 0 ",
+                        [denoddocdetailsid])
+        denoddocdetails = cursor1.fetchall()
+        denoddocdetailslength = len(denoddocdetails)
+        if denoddocdetailslength != 0: # if already invoiced needs to set flag
+            cursor222.execute("UPDATE denoddocdetailstemptable SET "
+                            "alreadyinvoicedflag = 1 "
+                            "WHERE auxid =%s ", [maxauxid])
+        # update alreadyinvoicedflag end
 
     cursor222.execute("SELECT *  "
                     "FROM denoddocdetailstemptable ")
@@ -895,6 +923,7 @@ def customerinvoicemake(request, docid):
 
     for x3 in denoddocdetailstemptableresult:
         denoddocdetailsid = x3[1]
+        alreadyinvoicedflag = x3[2]
 
         cursor3 = connection.cursor()
         cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
@@ -940,7 +969,7 @@ def customerinvoicemake(request, docid):
         docdetails = cursor3.fetchall()
 
         for x in docdetails:
-            cordocdetailsid = x[0]
+            denodocdetailsid = x[0]
             qty = x[1]
 
             firstnum = x[4]
@@ -963,48 +992,49 @@ def customerinvoicemake(request, docid):
             unitsalespriceACU = x[18]
             podocdetailsidforlabel = x[26]
 
-            cursor4 = connection.cursor()
-            cursor4.execute(
-                "INSERT INTO quotation_tbldoc_details "
-                "( Docid_tblDoc_details_id, "
-                "`Qty_tblDoc_details`, "
-                "`customerdescription_tblProduct_ctblDoc_details`, "
-                "firstnum_tblDoc_details, "
-                "`fourthnum_tblDoc_details`, "
-                "`secondnum_tblDoc_details`, "
-                "`thirdnum_tblDoc_details`, "
-                "`Note_tblDoc_details`, "
-                "purchase_price_tblproduct_ctblDoc_details, "
-                "listprice_tblDoc_details, "
-                "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-                "Productid_tblDoc_details_id, "
-                "currencyrate_tblcurrency_ctblDoc_details, "
-                "unitsalespriceACU_tblDoc_details, "
-                "unit_tbldocdetails, "
-                "suppliercompanyid_tbldocdetails, "
-                "podocdetailsidforlabel_tbldocdetails, "
-                "supplierdescription_tblProduct_ctblDoc_details, "
-                "cidetailslinkfromcor_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", #cordocdetailsid which is invoiced in this row
+            if alreadyinvoicedflag != 1: # only put item to invoice if not invoiced already
+                cursor4 = connection.cursor()
+                cursor4.execute(
+                    "INSERT INTO quotation_tbldoc_details "
+                    "( Docid_tblDoc_details_id, "
+                    "`Qty_tblDoc_details`, "
+                    "`customerdescription_tblProduct_ctblDoc_details`, "
+                    "firstnum_tblDoc_details, "
+                    "`fourthnum_tblDoc_details`, "
+                    "`secondnum_tblDoc_details`, "
+                    "`thirdnum_tblDoc_details`, "
+                    "`Note_tblDoc_details`, "
+                    "purchase_price_tblproduct_ctblDoc_details, "
+                    "listprice_tblDoc_details, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                    "Productid_tblDoc_details_id, "
+                    "currencyrate_tblcurrency_ctblDoc_details, "
+                    "unitsalespriceACU_tblDoc_details, "
+                    "unit_tbldocdetails, "
+                    "suppliercompanyid_tbldocdetails, "
+                    "podocdetailsidforlabel_tbldocdetails, "
+                    "supplierdescription_tblProduct_ctblDoc_details, "
+                    "cidetailslinkfromdeno_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", #denodocdetailsid which is invoiced in this row
 
-                [maxdocid,
-                 qty,
-                 customerdescriptionclone,
-                 firstnum,
-                 fourthnum,
-                 secondnum,
-                 thirdnum,
-                 note,
-                 purchase_priceclone,
-                 listpricecomputed,
-                 currencyisocodeclone,
-                 productid,
-                 currencyrate,
-                 unitsalespriceACU,
-                 unitclone,
-                 suppliercompanyid,
-                 podocdetailsidforlabel,
-                 supplierdescriptionclone,
-                 cordocdetailsid])
+                    [maxdocid,
+                     qty,
+                     customerdescriptionclone,
+                     firstnum,
+                     fourthnum,
+                     secondnum,
+                     thirdnum,
+                     note,
+                     purchase_priceclone,
+                     listpricecomputed,
+                     currencyisocodeclone,
+                     productid,
+                     currencyrate,
+                     unitsalespriceACU,
+                     unitclone,
+                     suppliercompanyid,
+                     podocdetailsidforlabel,
+                     supplierdescriptionclone,
+                     denodocdetailsid])
 
     #import pdb;
     #pdb.set_trace()

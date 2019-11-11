@@ -672,7 +672,7 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
 
     for instancesingle in results:
         laststocktakingdocid = instancesingle[0]
-# lateststoctaking date for selected stock start
+# lateststoctaking date for selected stock end
 
 
     creatorid = request.user.id
@@ -693,7 +693,6 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
         cursor2.execute("INSERT INTO denofromstock "
                         "(productid, productqty) VALUES ('" + str(productid) + "', "
                                             "'" + str(productqty) + "');")
-
 
     cursor2.execute("SELECT *  "
                     "FROM denofromstock ")
@@ -864,9 +863,9 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
                         "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
                         "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
                         "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
-                        "unit_tbldocdetails, "  # 23
+                        "unit_tbldocdetails, "  
                         "suppliercompanyid_tbldocdetails, "
-                        "supplierdescription_tblProduct_ctblDoc_details "
+                        "supplierdescription_tblProduct_ctblDoc_details " # 25
 
                         "FROM quotation_tbldoc_details "
 
@@ -883,7 +882,8 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
         docdetails = cursor3.fetchall()
 
         for x in docdetails:
-            denotopodetailslink = x[0]
+            denotopodetailslink = x[0] #  this because script was copied from pohandler.py - here is not any po yet...
+                                        # this should be named: denodetailsfromcor - [where]details[wherefrom]
 #            qty = x[1]
 
             firstnum = x[4]
@@ -921,7 +921,7 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
             # oldestlabelid determination start
             def oldestlabel():
 
-                # stockresults to temptable start
+                #  stockresults to temptable start
                 cursor333 = connection.cursor()
                 cursor333.execute("DROP TEMPORARY TABLE IF EXISTS stockresultstempforoldestlabel;")
                 cursor333.execute("CREATE TEMPORARY TABLE IF NOT EXISTS stockresultstempforoldestlabel "
