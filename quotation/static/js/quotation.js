@@ -21,12 +21,7 @@ $(function () {
 // Dialog "Connecting..." begin
     $( "#dialog-message-connecting" ).dialog({
       autoOpen: false,
-      modal: true,
-      buttons: {
-        Ok: function() {
-          $( this ).dialog( "close" );
-        }
-      }
+      modal: true
     });
 
 // Dialog "Connecting..." end
@@ -324,7 +319,6 @@ $('#title').click(function() {
 
     $('#itsbutton').click(function() {
         var quotationid=$('#quotationdocid').text();
-                  $( "#dialog-message-connecting" ).dialog( "open" );
 
                     $.ajax({
                         type: 'POST',
@@ -336,7 +330,6 @@ $('#title').click(function() {
                         },
 
                         success: function(data){
-                        $( "#dialog-message-connecting" ).dialog( "close" );
                         $('#quotationtemplate').html(data);
                         //template dates setting begin
                         setTimeout(
@@ -394,6 +387,7 @@ $('#title').click(function() {
         main();
 
             function main(){
+                $( "#dialog-message-connecting" ).dialog( "open" );
 
 
                 for (i = 1; i <= issuetrackingsystemnumberofitems; i++) {
@@ -455,53 +449,14 @@ $('#title').click(function() {
             }
 
     });
-    $('#updateitsbutton').click(function() {
-        var quotationid=$('#quotationdocid').text();
-
-                  // send it out
-                  let xhr = new XMLHttpRequest();
-//                  xhr.open("GET","https://cors-anywhere.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6"); // https://cors-anywhere.herokuapp.com the header exchanger proxy server
-//                  xhr.open("POST","https://ancient-sierra-24943.herokuapp.com/http://13.58.18.245:3000//time_entries.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&project_id=4&activity_id=8"); // https://xxxxxxxx.herokuapp.com the header exchanger proxy server (own)
-                  xhr.open("POST","https://ancient-sierra-24943.herokuapp.com/http://13.58.18.245:3000//projects.xml?key=6a722899382b3495828b3f2d6c41f93d19adb5f6&name=%20na"); // https://xxxxxxxx.herokuapp.com the header exchanger proxy server (own)
-                  xhr.send();
-                  $( "#dialog-message-connecting" ).dialog("option", "buttons", {}); //remove OK button
-                  $( "#dialog-message-connecting" ).dialog( "open" );
-
-                  xhr.onload = function (){
-                                    console.log(xhr.response);
-                  $( "#dialog-message-connecting" ).dialog( "close" );
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'quotationissuetrackingsystempostitems',
-
-                        data: {
-                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                        },
-
-                        success: function(data){
-//                    $('#quotationtemplate').html(data);
-                                    console.log('success');
-
-                        },
-                        error: function(){
-
-                            alert('failure');
-                        },
-                        datatype: 'html'
-
-                    });
-
-                  };
-
-
-    });
     $('body').on("click", "#filterbutton", function() {
 
     var filteritemlist = []
     main();
 
         function main(){
+            $( "#dialog-message-connecting" ).dialog( "open" );
+
             addfilterselectalloptionsenable();
             $("#filteritemlistelementvaluesaccumulatortemplate").html('<!--Empty-->') // emptying filteritems accumulator
             for (i = 1; i <= filteritemmaxrowid; ++i) {
@@ -578,6 +533,8 @@ $('#title').click(function() {
 
                 success: function(data){
 //
+                    $( "#dialog-message-connecting" ).dialog( "close" );
+
                     $('#timeentrysearchtemplate').html(data);
 
                 },
@@ -786,6 +743,7 @@ console.log('searchphraseformainresults_var: '+ searchphraseformainresults_var);
         main();
 
             function main(){
+                $( "#dialog-message-connecting" ).dialog( "open" );
 
 
                 for (i = 1; i <= issuetrackingsystemnumberofitems; i++) {

@@ -92,6 +92,8 @@ $(function () {
     main();
 
         function main(){
+            $( "#dialog-message-requesting" ).dialog( "open" ); // Requesting...
+
             addfilterselectalloptionsenable();
             $("#filteritemlistelementvaluesaccumulatortemplate").html('<!--Empty-->') // emptying filteritems accumulator
 
@@ -169,6 +171,8 @@ $(function () {
                 },
 
                 success: function(data){
+
+                    $( "#dialog-message-requesting" ).dialog( "close" ); // Requesting... close
 
                     $('#productsearchtemplate').html(data);
                 },
@@ -598,12 +602,19 @@ $(function () {
 
     });
 
-// Dialog "Uploading..." begin
+// Dialog "Uploading..."  begin
     $( "#dialog-message" ).dialog({
       autoOpen: false,
       modal: true
     });
 // Dialog "Uploading..." end
+
+// Dialog "Requesting..."  begin
+    $( "#dialog-message-requesting" ).dialog({
+      autoOpen: false,
+      modal: true
+    });
+// Dialog "Requesting..." end
 
     $('body').on("click", "#auxfunctionfordatespentondefaultfill", function() {
 

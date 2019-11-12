@@ -542,9 +542,6 @@ def deliverynotepre(request):
         "supplierdescription_tblProduct_ctblDoc_details, "
         "COALESCE(sum(DD.Qty_tblDoc_details), 0) as ordered, "
         "COALESCE(sum(Denod.denodqty), 0) as denod "
-#        "COALESCE(sum(onstockingoing.onstockingoingqty), 0) as onstockingoing, "
-#        "COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstockoutgoing, "
-#        "COALESCE(sum(onstockingoing.onstockingoingqty), 0)-COALESCE(sum(onstockoutgoing.onstockoutgoingqty), 0) as onstock " #7
 
         "FROM quotation_tbldoc_details as DD "
 
@@ -567,7 +564,7 @@ def deliverynotepre(request):
         "                       ) as DD2 "
         "           ON quotation_tbldoc.Docid_tblDoc = DD2.docid "
 
-        "           WHERE obsolete_tbldoc = 0 "
+        "           WHERE obsolete_tbldoc = 0 and Doc_kindid_tblDoc_id = 8 "
         "           GROUP BY wheretodocid_tbldoc, productid "
         "           ) AS Denod "
         "ON (DD.Docid_tblDoc_details_id = Denod.wheretodocid_tbldoc and DD.Productid_tblDoc_details_id = Denod.productid) "

@@ -438,7 +438,7 @@ def customerinvoiceprint(request, docid):
                      "     docid_tblLabelidtemptable INT(11) NOT NULL, "
                      "     productid_tblLabelidtemptable INT(11) NOT NULL, "
                      "     podocdetailsidforlabel_tblLabelidtemptable INT(11) NOT NULL, "
-                     "     qty_tblLabelidtemptable DECIMAL(10,1) NULL,"
+                     "     qty_tblLabelidtemptable DECIMAL(10,2) NULL,"
                      "     unit_tblLabelidtemptable varchar(20) NULL,"
                      "     enablelabelkindflag_tblLabelidtemptable INT(11) NULL,"
                      "      fromstockflag_tblLabelidtemptable INT(11) NULL,"
@@ -702,7 +702,7 @@ def customerinvoicemake(request, docid):
     cursor222.execute("CREATE TEMPORARY TABLE IF NOT EXISTS denoddocdetailstemptable "
                     "    ( auxid INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,"
                     "     denoddocdetailsid INT(11) NOT NULL, "
-                    "     alreadyinvoicedflag INT(11) NULL) " # in cidetailslinkfromdeno_tbldocdetails got the alreadyinvoiced denodocdetailsid for this doc
+                    "     alreadyinvoicedflag INT(11) DEFAULT 0) " # in cidetailslinkfromdeno_tbldocdetails got the alreadyinvoiced denodocdetailsid for this doc
                     "      ENGINE=INNODB "                          # thus this flag needs to be set to 1 if cidetailslinkfromdeno_tbldocdetails contains the denoddocdetailsid (i.e. already invoiced)
                     "    ; ")
 
@@ -751,20 +751,33 @@ def customerinvoicemake(request, docid):
 
                         "WHERE cidetailslinkfromdeno_tbldocdetails=%s and obsolete_tbldoc = 0 ",
                         [denoddocdetailsid])
-        denoddocdetails = cursor1.fetchall()
-        denoddocdetailslength = len(denoddocdetails)
-        if denoddocdetailslength != 0: # if already invoiced needs to set flag
+        alreadyinvoiceddocdetails = cursor1.fetchall()
+        alreadyinvoiceddocdetailslength = len(alreadyinvoiceddocdetails)
+        if alreadyinvoiceddocdetailslength != 0: # if already invoiced needs to set flag
             cursor222.execute("UPDATE denoddocdetailstemptable SET "
                             "alreadyinvoicedflag = 1 "
                             "WHERE auxid =%s ", [maxauxid])
         # update alreadyinvoicedflag end
 
-    cursor222.execute("SELECT *  "
-                    "FROM denoddocdetailstemptable ")
-    denoddocdetailstemptableresult = cursor222.fetchall()
+    cursor222.execute("SELECT "
+                      "auxid, "
+                      "denoddocdetailsid, "
+                      "alreadyinvoicedflag "
+                      
+                      "FROM denoddocdetailstemptable "
+                      
+                      "WHERE alreadyinvoicedflag <> 1") #only items which are not invoiced yet
+    denoddocdetailstemptableresultwithalreadyinvoicedflag = cursor222.fetchall()
+    denoddocdetailstemptableresultwithalreadyinvoicedflaglength = len(denoddocdetailstemptableresultwithalreadyinvoicedflag)
+    #import pdb;
+    #pdb.set_trace()
+
+    if denoddocdetailstemptableresultwithalreadyinvoicedflaglength == 0:
+        return HttpResponseNotFound('No item to Invoice')
+
 # invoice items to temptable end
 
-# select order doc variables begin
+# select order doc variables  begin
     pk = docid
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -921,9 +934,8 @@ def customerinvoicemake(request, docid):
     for x in results:
         maxdocid = x[0]
 
-    for x3 in denoddocdetailstemptableresult:
+    for x3 in denoddocdetailstemptableresultwithalreadyinvoicedflag:
         denoddocdetailsid = x3[1]
-        alreadyinvoicedflag = x3[2]
 
         cursor3 = connection.cursor()
         cursor3.execute("SELECT  `Doc_detailsid_tblDoc_details`, "
@@ -992,55 +1004,54 @@ def customerinvoicemake(request, docid):
             unitsalespriceACU = x[18]
             podocdetailsidforlabel = x[26]
 
-            if alreadyinvoicedflag != 1: # only put item to invoice if not invoiced already
-                cursor4 = connection.cursor()
-                cursor4.execute(
-                    "INSERT INTO quotation_tbldoc_details "
-                    "( Docid_tblDoc_details_id, "
-                    "`Qty_tblDoc_details`, "
-                    "`customerdescription_tblProduct_ctblDoc_details`, "
-                    "firstnum_tblDoc_details, "
-                    "`fourthnum_tblDoc_details`, "
-                    "`secondnum_tblDoc_details`, "
-                    "`thirdnum_tblDoc_details`, "
-                    "`Note_tblDoc_details`, "
-                    "purchase_price_tblproduct_ctblDoc_details, "
-                    "listprice_tblDoc_details, "
-                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-                    "Productid_tblDoc_details_id, "
-                    "currencyrate_tblcurrency_ctblDoc_details, "
-                    "unitsalespriceACU_tblDoc_details, "
-                    "unit_tbldocdetails, "
-                    "suppliercompanyid_tbldocdetails, "
-                    "podocdetailsidforlabel_tbldocdetails, "
-                    "supplierdescription_tblProduct_ctblDoc_details, "
-                    "cidetailslinkfromdeno_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", #denodocdetailsid which is invoiced in this row
+            cursor4 = connection.cursor()
+            cursor4.execute(
+                "INSERT INTO quotation_tbldoc_details "
+                "( Docid_tblDoc_details_id, "
+                "`Qty_tblDoc_details`, "
+                "`customerdescription_tblProduct_ctblDoc_details`, "
+                "firstnum_tblDoc_details, "
+                "`fourthnum_tblDoc_details`, "
+                "`secondnum_tblDoc_details`, "
+                "`thirdnum_tblDoc_details`, "
+                "`Note_tblDoc_details`, "
+                "purchase_price_tblproduct_ctblDoc_details, "
+                "listprice_tblDoc_details, "
+                "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                "Productid_tblDoc_details_id, "
+                "currencyrate_tblcurrency_ctblDoc_details, "
+                "unitsalespriceACU_tblDoc_details, "
+                "unit_tbldocdetails, "
+                "suppliercompanyid_tbldocdetails, "
+                "podocdetailsidforlabel_tbldocdetails, "
+                "supplierdescription_tblProduct_ctblDoc_details, "
+                "cidetailslinkfromdeno_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", #denodocdetailsid which is invoiced in this row
 
-                    [maxdocid,
-                     qty,
-                     customerdescriptionclone,
-                     firstnum,
-                     fourthnum,
-                     secondnum,
-                     thirdnum,
-                     note,
-                     purchase_priceclone,
-                     listpricecomputed,
-                     currencyisocodeclone,
-                     productid,
-                     currencyrate,
-                     unitsalespriceACU,
-                     unitclone,
-                     suppliercompanyid,
-                     podocdetailsidforlabel,
-                     supplierdescriptionclone,
-                     denodocdetailsid])
+                [maxdocid,
+                 qty,
+                 customerdescriptionclone,
+                 firstnum,
+                 fourthnum,
+                 secondnum,
+                 thirdnum,
+                 note,
+                 purchase_priceclone,
+                 listpricecomputed,
+                 currencyisocodeclone,
+                 productid,
+                 currencyrate,
+                 unitsalespriceACU,
+                 unitclone,
+                 suppliercompanyid,
+                 podocdetailsidforlabel,
+                 supplierdescriptionclone,
+                 denodocdetailsid])
 
     #import pdb;
     #pdb.set_trace()
 
-    rowsnumber = len(docdetails)
-    customerordernumber = docid
+    #rowsnumber = len(docdetails)
+    #customerordernumber = docid
     return redirect('customerinvoiceform', pk=maxdocid)
 
 @login_required

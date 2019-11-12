@@ -1192,8 +1192,8 @@ def quotationissuetrackingsystemitemstoquotation(request):
         fourthnum = 0
         secondnum = 0
         thirdnum = 0
-        note = 'Projectname: ' + projectname + '\nIssue Subject: ' + issuesubject + '\nComment on Spent Time: ' + comments + '\nby ' + username + '\nTimeentry and Issue Id: ' + timeentryandissueid + ' '
-# supplier select begin
+        note = 'Projectname: ' + projectname + '\nIssue Subject: ' + issuesubject + '\nSpent On: ' + spenton + '\nComment on Spent Time: ' + comments + '\nby ' + username + '\nTimeentry and Issue Id: ' + timeentryandissueid + ' '
+# supplier  select begin
         if username == 'Redmine Admin':
             productid = 54
         elif username == 'ChiefGofri ChiefMaker':
