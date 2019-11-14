@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'blog',
     'quotation',
     'corsheaders',
+    'developer',
    # 'ist',
    # 'debug_toolbar',
 ]

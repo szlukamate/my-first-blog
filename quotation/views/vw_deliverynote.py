@@ -541,7 +541,7 @@ def deliverynotepre(request):
         "DD.Productid_tblDoc_details_id, "
         "supplierdescription_tblProduct_ctblDoc_details, "
         "COALESCE(sum(DD.Qty_tblDoc_details), 0) as ordered, "
-        "COALESCE(sum(Denod.denodqty), 0) as denod "
+        "COALESCE(Denod.denodqty, 0) as denod "
 
         "FROM quotation_tbldoc_details as DD "
 
@@ -573,7 +573,8 @@ def deliverynotepre(request):
 
         "GROUP BY   customerdescription_tblProduct_ctblDoc_details, "
         "           DD.Productid_tblDoc_details_id, "
-        "           supplierdescription_tblProduct_ctblDoc_details ",
+        "           supplierdescription_tblProduct_ctblDoc_details, "
+        "           denod ",
         [customerorderid])
 
     docdetailspre = cursor3.fetchall()

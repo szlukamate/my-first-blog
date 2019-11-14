@@ -1365,7 +1365,7 @@ def quotationissuetrackingsystemsearchcontent(request):
 
         if filteritemname == 'quoteddocdetailsid':
             if filteritemoperator == 'hasnotvalue':
-                quoteddocdetailsidphrase = "and quoteddocdetailsidtable.value is null "
+                quoteddocdetailsidphrase = "and quoteddocdetailsidtable.value is null or quoteddocdetailsidtable.value = '' "
             if filteritemoperator == 'hasvalue':
                 quoteddocdetailsidphrase = "and quoteddocdetailsidtable.value is not null "
 
