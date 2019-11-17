@@ -186,17 +186,6 @@ $(function () {
           });
         function updatesuccess (data, textStatus, jqXHR){
             console.log('datafromsql:' + data);
-//            $('input[name="' + fieldname + '"][rowid="' + rowid + '"').val(data);
-//            $('#sqlsaving').html('<span  class="glyphicon glyphicon-hdd"></span>');
-/*
-            setTimeout(
-              function()
-              {
-                $('#sqlsaving').html("");
-
-              }, 500);
-            console.log(fieldvalue);
-*/
         };
 
         function updateerror (){

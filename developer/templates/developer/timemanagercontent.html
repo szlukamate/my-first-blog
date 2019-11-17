@@ -1,8 +1,6 @@
+{% load staticfiles%}
 	{% block content %}
           
-
-
-
 		{% csrf_token %}
 
 		<span id="timedonesnumberofitems">{{timedonesnumberofitems}}</span><span> row(s)</span>
@@ -26,12 +24,15 @@
 									<td>Spenton</td>
 									<td>Time Entry Id in ITS</td>
 									<td>Uploading Datetime</td>
+									<td>Row Enabled for Manager</td>
+									<td>Row Latched by Manager</td>
 								</tr>
 							</thead>
 							<tbody>
 
 
 			{% for timedone in timedones %}
+
 								<tr>
 									<td><input type="text" class="timedoneid" value="{{timedone.9}}" maxlength="10" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" size="3" disabled></td>
 									<td><input type="text" class="projectid" value="{{timedone.2}}" maxlength="10" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" size="3" disabled></td>
@@ -86,7 +87,34 @@
 
 									{% endif %}
 
+
+									{% if timedone.14 == 1 %} <!-- enabled for manager -->
+
+
+										<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" checked><span class="slider"></span></label></td>
+
+
+									{% else %}
+
+										<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}"><span class="slider"></span></label></td>
+
+									{% endif %}
+
+
+									{% if timedone.15 == 1 %} <!-- latched by manager -->
+
+
+										<td><span class="glyphicon glyphicon-ok"></span></td>
+
+									{% else %}
+
+										<td><span class="glyphicon glyphicon-pencil"></span></td>
+
+									{% endif %}
+
+
 									<td><a href="{% url 'timedoneitemremove' pktimedoneid=timedone.9 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+
 
 								</tr>
 

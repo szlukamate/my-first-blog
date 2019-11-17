@@ -1,5 +1,5 @@
 /*
-timemanager.js
+developertimemanager.js
 */
 
             var msg="Hello Javascript2";
@@ -45,7 +45,7 @@ $(function () {
 
                    $.ajax({
                         type: 'POST',
-                        url: 'timemanagerfieldupdate',
+                        url: 'timemanagerdevfieldupdate',
 
                         data: {
                         'fieldvalue': fieldvalue,
@@ -161,7 +161,7 @@ $(function () {
 
             $.ajax({
                 type: 'POST',
-                url: 'timemanagersearchcontent',
+                url: 'timemanagerdevsearchcontent',
 
                 data: {
 
@@ -206,7 +206,7 @@ $(function () {
 
                     $.ajax({
                     type: 'POST',
-                    url: 'filtertemplatehtmlontimemanagerform',
+                    url: 'filtertemplatehtmlontimemanagerdevform',
 
                     data: {
                     'searchphraseformainresults': searchphraseformainresults_var,
@@ -278,7 +278,7 @@ $(function () {
 
                     $.ajax({
                     type: 'POST',
-                    url: 'filtertemplatehtmlontimemanagerform',
+                    url: 'filtertemplatehtmlontimemanagerdevform',
 
                     data: {
                     'searchphraseformainresults': searchphraseformainresults_var,
@@ -342,7 +342,7 @@ $(function () {
             timedoneid = $(this).attr( "timedoneid" )
                     $.ajax({
                     type: 'POST',
-                    url: 'timemanagerupdateprojectselect',
+                    url: 'timemanagerdevupdateprojectselect',
 
                     data: {
 
@@ -383,7 +383,7 @@ $(function () {
             timedoneid = $(this).attr( "timedoneid" )
                     $.ajax({
                     type: 'POST',
-                    url: 'timemanagerupdateuserselect',
+                    url: 'timemanagerdevupdateuserselect',
 
                     data: {
 
@@ -422,7 +422,7 @@ $(function () {
             timedoneid = $(this).attr( "timedoneid" )
                     $.ajax({
                     type: 'POST',
-                    url: 'timemanagerupdateissueselect',
+                    url: 'timemanagerdevupdateissueselect',
 
                     data: {
 
@@ -459,6 +459,7 @@ $(function () {
                     }
 
     });
+/*
     $('body').on("click", "#timedonesuploadtoitsbutton", function() {
                 var timedonesnumberofitems= $('#timedonesnumberofitems').text();
                 var itemdatalist=[];
@@ -546,6 +547,7 @@ $(function () {
             }
 
     });
+*/
     $('#auxfunctionforissueselectoptions').click(function(event, timedoneid, projectid) {
                     console.log('projectid in aux: ' + projectid);
                     console.log('timedoneid in aux: ' + timedoneid);
@@ -553,7 +555,7 @@ $(function () {
 
                     $.ajax({
                     type: 'POST',
-                    url: 'timemanagerupdateissueselectafterchangeprojectselect',
+                    url: 'timemanagerdevupdateissueselectafterchangeprojectselect',
 
                     data: {
 
@@ -641,6 +643,32 @@ $(function () {
                                     $('.secondinputbox[filteritemname="datespenton"]').val(tooutput);
 
 
+
+    });
+    $('body').on("change", ".rowenabledformanager", function() {
+
+        var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
+        var timedoneid = $(this).attr( "timedoneid" );
+
+           $.ajax({
+            type: 'POST',
+            url: 'timemanagerdevrowenabledformanager',
+
+            data: {
+           'timedoneid' : timedoneid,
+           'csrfmiddlewaretoken': CSRFtoken,
+           },
+           success: updatesuccess,
+           error: updateerror,
+           datatype: 'html'
+          });
+        function updatesuccess (data, textStatus, jqXHR){
+            console.log('datafromsql:' + data);
+        };
+
+        function updateerror (){
+            console.log('Failure in saving');
+        };
 
     });
 

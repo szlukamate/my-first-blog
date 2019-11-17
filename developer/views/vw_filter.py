@@ -18,7 +18,7 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
 # import pdb;
 # pdb.set_trace()
-def filtertemplatehtmlontimemanagerform(request):
+def filtertemplatehtmlontimemanagerdevform(request):
         invokedfrom = request.POST['invokedfrom']
         searchphraseformainresults = request.POST['searchphraseformainresults'] # 'a' when searchstring is empty
         #import pdb;

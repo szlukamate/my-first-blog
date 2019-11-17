@@ -20,7 +20,7 @@ from datetime import datetime, timedelta
 # import pdb;
 # pdb.set_trace()
 @login_required
-def timemanager(request):
+def timemanagerdev(request):
         # filtering options to Addfilter selectbox begin
         # Creates a list containing #h lists, each of #w items, all set to 0
         w, h = 3, 5;
@@ -48,7 +48,7 @@ def timemanager(request):
 
         return render(request, 'developer/timemanager.html', {'addfilterselectvaluesandoptions': addfilterselectvaluesandoptions})
 @login_required
-def timemanagersearchcontent(request):
+def timemanagerdevsearchcontent(request):
     filteritemlistraw = request.POST['filteritemlist']
     filteritemlist = json.loads(filteritemlistraw)
 
@@ -118,7 +118,9 @@ def timemanagersearchcontent(request):
                    "comments_tbltimedone, "
                    "spenton_tbltimedone, "
                    "timeentryidinits_tbltimedone, " #10
-                   "uploadingtimestamp_tbltimedone "
+                   "uploadingtimestamp_tbltimedone,"
+                   "rowenabledformanager_tbltimedone, "
+                   "rowlatchedbymanager_tbltimedone "
 
                    "FROM quotation_tbltimedone "
 
@@ -137,7 +139,7 @@ def timemanagersearchcontent(request):
                     "     projectid_tbltimedonetemptable INT(11) NULL, "
                     "     userid_tbltimedonetemptable INT(11) NULL, "
                     "     issueid_tbltimedonetemptable INT(11) NULL, "
-                    "     comments_tbltimedonetemptable varchar(1024) NULL,"
+                    "     comments_tbltimedonetemptable varchar(1024) NULL," #5
                     "     spenton_tbltimedonetemptable DATE NULL,"
                     "     timeentryidinits_tbltimedonetemptable INT(11) NULL, "
                     "     issueidredbackgroundflag_tbltimedonetemptable INT(11) NULL, " #if projectid alien for issueid the issueid background needs to be set to red
@@ -145,7 +147,9 @@ def timemanagersearchcontent(request):
                     "     name_tblprojects_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " #10 
                     "     username_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
                     "     issuesubject_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
-                    "     uploadingtimestamp_tbltimedonetemptable DATETIME NULL) " 
+                    "     uploadingtimestamp_tbltimedonetemptable DATETIME NULL, "
+                    "     rowenabledformanager_tbltimedonetemptable INT(11) NULL, " 
+                    "     rowlatchedbymanager_tbltimedonetemptable INT(11) NULL) " 
 
                     "      ENGINE=INNODB "
                     "    ; ")
@@ -168,6 +172,12 @@ def timemanagersearchcontent(request):
         uploadingtimestamp = x11[11]
         if uploadingtimestamp == None:
             uploadingtimestamp = '3000-12-31 23:59:59'
+        rowenabledformanager = x11[12]
+        if rowenabledformanager == None:
+            rowenabledformanager = 0
+        rowlatchedbymanager = x11[13]
+        if rowlatchedbymanager == None:
+            rowlatchedbymanager = 0
 
         cursor2.execute("INSERT INTO timedonetemptable (hours_tbltimedonetemptable, "
                         "projectid_tbltimedonetemptable, "
@@ -180,7 +190,9 @@ def timemanagersearchcontent(request):
                         "name_tblprojects_redmine_ctbltimedonetemptable, "
                         "username_redmine_ctbltimedonetemptable, "
                         "issuesubject_redmine_ctbltimedonetemptable, "
-                        "uploadingtimestamp_tbltimedonetemptable) VALUES ('" + str(hours) + "', "
+                        "uploadingtimestamp_tbltimedonetemptable, "
+                        "rowenabledformanager_tbltimedonetemptable, "
+                        "rowlatchedbymanager_tbltimedonetemptable) VALUES ('" + str(hours) + "', "
                                                     "'" + str(projectid) + "', "
                                                     "'" + str(userid) + "', "
                                                     "'" + str(issueid) + "', "
@@ -191,7 +203,9 @@ def timemanagersearchcontent(request):
                                                     "'" + str(projectname) + "', "
                                                     "'" + str(username) + "', "
                                                     "'" + str(issuesubject) + "', "
-                                                    "'" + str(uploadingtimestamp) + "');")
+                                                    "'" + str(uploadingtimestamp) + "', "
+                                                    "'" + str(rowenabledformanager) + "', "
+                                                    "'" + str(rowlatchedbymanager) + "');")
 
     cursor2.execute("SELECT   "
                         "auxid, "
@@ -207,7 +221,9 @@ def timemanagersearchcontent(request):
                     "   name_tblprojects_redmine_ctbltimedonetemptable, " #10
                     "   username_redmine_ctbltimedonetemptable, "
                     "   issuesubject_redmine_ctbltimedonetemptable, "
-                    "   uploadingtimestamp_tbltimedonetemptable "
+                    "   uploadingtimestamp_tbltimedonetemptable, "
+                    "   rowenabledformanager_tbltimedonetemptable, "
+                    "   rowlatchedbymanager_tbltimedonetemptable "
 
                         "FROM timedonetemptable ")
     timedonesunsetflag = cursor2.fetchall()
@@ -260,7 +276,9 @@ def timemanagersearchcontent(request):
                     "   name_tblprojects_redmine_ctbltimedonetemptable, " #10
                     "   username_redmine_ctbltimedonetemptable, "
                     "   issuesubject_redmine_ctbltimedonetemptable, "
-                    "   uploadingtimestamp_tbltimedonetemptable "
+                    "   uploadingtimestamp_tbltimedonetemptable, "
+                    "   rowenabledformanager_tbltimedonetemptable, "
+                    "   rowlatchedbymanager_tbltimedonetemptable " #15
 
                         "FROM timedonetemptable ")
     timedonessetflag = cursor2.fetchall()
@@ -319,7 +337,7 @@ def timemanagersearchcontent(request):
                                                        'issuerowsources': issuerowsources,
                                                        'timedonesnumberofitems': timedonesnumberofitems})
 @login_required
-def timemanagerupdateprojectselect(request):
+def timemanagerdevupdateprojectselect(request):
     if request.method == 'POST':
         timedoneidinjs = request.POST['timedoneidinjs']
         projectidinjs = request.POST['projectidinjs']
@@ -347,7 +365,7 @@ def timemanagerupdateprojectselect(request):
 
     return HttpResponse(json_data, content_type="application/json")
 @login_required
-def timemanagerupdateuserselect(request):
+def timemanagerdevupdateuserselect(request):
     if request.method == 'POST':
         timedoneidinjs = request.POST['timedoneidinjs']
         useridinjs = request.POST['useridinjs']
@@ -373,7 +391,7 @@ def timemanagerupdateuserselect(request):
 
     return HttpResponse(json_data, content_type="application/json")
 @login_required
-def timemanagerupdateissueselect(request):
+def timemanagerdevupdateissueselect(request):
     if request.method == 'POST':
         timedoneidinjs = request.POST['timedoneidinjs']
         issueidinjs = request.POST['issueidinjs']
@@ -399,7 +417,7 @@ def timemanagerupdateissueselect(request):
 
     return HttpResponse(json_data, content_type="application/json")
 @login_required
-def timemanagerfieldupdate(request):
+def timemanagerdevfieldupdate(request):
     if request.method == "POST":
         fieldvalue = request.POST['fieldvalue']
         rowid = request.POST['rowid']
@@ -415,7 +433,7 @@ def timemanagerfieldupdate(request):
 
         return HttpResponse(json_data, content_type="application/json")
 @login_required
-def timemanageruploadtoits(request):
+def timemanagerdevuploadtoits(request):
     creatorid = request.user.id
     BASE_DIR = settings.BASE_DIR
 
@@ -557,7 +575,7 @@ def timemanageruploadtoits(request):
 
 
 @login_required
-def timedoneitemnew(request):
+def timedonedevitemnew(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("INSERT INTO quotation_tbltimedone "
@@ -565,7 +583,7 @@ def timedoneitemnew(request):
 
     return redirect('timemanager')
 @login_required
-def timedoneitemremove(request,pktimedoneid):
+def timedonedevitemremove(request,pktimedoneid):
 
     cursor1 = connection.cursor()
     cursor1.execute(
@@ -575,7 +593,7 @@ def timedoneitemremove(request,pktimedoneid):
 
 
 @login_required
-def timemanagerupdateissueselectafterchangeprojectselect(request): # <-- see name
+def timemanagerdevupdateissueselectafterchangeprojectselect(request): # <-- see name
     timedoneidinjs = request.POST['timedoneidinjs']
     projectidinjs = request.POST['projectidinjs']
 
@@ -594,3 +612,46 @@ def timemanagerupdateissueselectafterchangeprojectselect(request): # <-- see nam
     return render(request, 'developer/timemanagerissueselecthtmlafterupdateprojectselect.html',
                   {'timedoneid': timedoneidinjs,
                   'selectoptions': selectoptions})
+@login_required
+def timemanagerdevrowenabledformanager(request):
+    if request.method == "POST":
+        timedoneid = request.POST['timedoneid']
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT "
+        "rowenabledformanager_tbltimedone "
+
+        "FROM quotation_tbltimedone "
+
+        "WHERE timedoneid_tbltimedone=%s ",
+        [timedoneid])
+    timedones = cursor1.fetchall()
+    for x in timedones:
+        flagoldvalue = x[0]
+
+    if flagoldvalue == 1:
+        flagnewvalue = 0
+    else:
+        flagnewvalue = 1
+
+    cursor1 = connection.cursor()
+    cursor1.execute("UPDATE quotation_tbltimedone SET "
+                    "rowenabledformanager_tbltimedone=" + str(flagnewvalue) + " "
+                    "WHERE timedoneid_tbltimedone=%s ",[timedoneid])
+    transaction.commit()
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT "
+        "rowenabledformanager_tbltimedone "
+
+        "FROM quotation_tbltimedone "
+
+        "WHERE timedoneid_tbltimedone=%s ",
+        [timedoneid])
+    timedoneverified = cursor1.fetchall()
+
+    json_data = json.dumps(timedoneverified)
+
+    return HttpResponse(json_data, content_type="application/json")

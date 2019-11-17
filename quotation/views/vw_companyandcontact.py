@@ -240,12 +240,14 @@ def contactsettodefaulttopurchaseorder(request):
     cursor1.execute(
         "SELECT "
         "purchaseordercontact_tblcontacts "
+
         "FROM quotation_tblcontacts "
+
         "WHERE Contactid_tblContacts=%s ",
         [rowid])
     contacts = cursor1.fetchall()
     for x in contacts:
-        flagoldvalue= x[0]
+        flagoldvalue = x[0]
 
     if flagoldvalue == 1:
         flagnewvalue = 0
@@ -262,7 +264,9 @@ def contactsettodefaulttopurchaseorder(request):
     cursor1.execute(
         "SELECT "
         "purchaseordercontact_tblcontacts "
+
         "FROM quotation_tblcontacts "
+
         "WHERE Contactid_tblContacts=%s ",
         [rowid])
     contactsverified = cursor1.fetchall()

@@ -6,14 +6,16 @@ from django.conf.urls.static import static
 #import ipdb
 #ipdb.set_trace()
 urlpatterns = [
-    url(r'^$', views.timemanager, name='timemanager'),
-    url(r'timemanager/$', views.timemanager, name='timemanager'),
-    url('timemanagersearchcontent$', views.timemanagersearchcontent, name='timemanagersearchcontent'),
-    url('timemanagerupdateprojectselect$', views.timemanagerupdateprojectselect, name='timemanagerupdateprojectselect'),
-    url('timemanagerupdateuserselect$', views.timemanagerupdateuserselect, name='timemanagerupdateuserselect'),
-    url('timemanagerupdateissueselect$', views.timemanagerupdateissueselect, name='timemanagerupdateissueselect'),
-    url('timemanagerfieldupdate$', views.timemanagerfieldupdate, name='timemanagerfieldupdate'),
-    url('timemanageruploadtoits$', views.timemanageruploadtoits, name='timemanageruploadtoits'),
-    url('filtertemplatehtmlontimemanagerform$', views.filtertemplatehtmlontimemanagerform,name='filtertemplatehtmlontimemanagerform'),
+    url(r'^$', views.timemanagerdev, name='timemanagerdev'),
+    url(r'timemanagerdev/$', views.timemanagerdev, name='timemanagerdev'),
+    url('timemanagerdevsearchcontent$', views.timemanagerdevsearchcontent, name='timemanagerdevsearchcontent'),
+    url('timemanagerdevupdateprojectselect$', views.timemanagerdevupdateprojectselect, name='timemanagerdevupdateprojectselect'),
+    url('timemanagerdevupdateuserselect$', views.timemanagerdevupdateuserselect, name='timemanagerdevupdateuserselect'),
+    url('timemanagerdevupdateissueselect$', views.timemanagerdevupdateissueselect, name='timemanagerdevupdateissueselect'),
+    url('timemanagerdevfieldupdate$', views.timemanagerdevfieldupdate, name='timemanagerdevfieldupdate'),
+    url('timemanagerdevuploadtoits$', views.timemanagerdevuploadtoits, name='timemanagerdevuploadtoits'),
+    url('filtertemplatehtmlontimemanagerdevform$', views.filtertemplatehtmlontimemanagerdevform, name='filtertemplatehtmlontimemanagerdevform'),
+    url('timemanagerdevupdateissueselectafterchangeprojectselect$', views.timemanagerdevupdateissueselectafterchangeprojectselect, name='timemanagerdevupdateissueselectafterchangeprojectselect'),
+    url('timemanagerdevrowenabledformanager$', views.timemanagerdevrowenabledformanager, name='timemanagerdevrowenabledformanager'),
 
 ]
