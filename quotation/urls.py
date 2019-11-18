@@ -128,5 +128,6 @@ urlpatterns = [
     url(r'purchaseorderpreframe/$', views.purchaseorderpreframe, name='purchaseorderpreframe'),
     url('filtertemplatehtmlonpurchaseorderpreform$', views.filtertemplatehtmlonpurchaseorderpreform, name='filtertemplatehtmlonpurchaseorderpreform'),
     url('quotationerasequoteddocdatainits$', views.quotationerasequoteddocdatainits, name='quotationerasequoteddocdatainits'),
+    url('timemanagerrowlatchedbymanager$', views.timemanagerrowlatchedbymanager, name='timemanagerrowlatchedbymanager'),
 
 ]

@@ -643,5 +643,31 @@ $(function () {
 
 
     });
+    $('body').on("change", ".rowlatchedbymanager", function() {
+
+        var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
+        var timedoneid = $(this).attr( "timedoneid" );
+
+           $.ajax({
+            type: 'POST',
+            url: 'timemanagerrowlatchedbymanager',
+
+            data: {
+           'timedoneid' : timedoneid,
+           'csrfmiddlewaretoken': CSRFtoken,
+           },
+           success: updatesuccess,
+           error: updateerror,
+           datatype: 'html'
+          });
+        function updatesuccess (data, textStatus, jqXHR){
+            console.log('datafromsql:' + data);
+        };
+
+        function updateerror (){
+            console.log('Failure in saving');
+        };
+
+    });
 
 });

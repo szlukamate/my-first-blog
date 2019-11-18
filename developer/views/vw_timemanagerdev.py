@@ -21,7 +21,7 @@ from datetime import datetime, timedelta
 # pdb.set_trace()
 @login_required
 def timemanagerdev(request):
-        # filtering options to Addfilter selectbox begin
+        # filtering  options to Addfilter selectbox begin
         # Creates a list containing #h lists, each of #w items, all set to 0
         w, h = 3, 5;
         addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
@@ -41,7 +41,7 @@ def timemanagerdev(request):
         addfilterselectvaluesandoptions[4][0] = 'Uploading Timestamp'
         addfilterselectvaluesandoptions[4][1] = 'uploadingtimestamp'
 
-        # filtering options to Addfilter selectbox end
+        # filtering  options to Addfilter selectbox end
 
         # import pdb;
         # pdb.set_trace()

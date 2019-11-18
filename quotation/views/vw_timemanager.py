@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 def timemanager(request):
         # filtering options to Addfilter selectbox begin
         # Creates a list containing #h lists, each of #w items, all set to 0
-        w, h = 3, 5;
+        w, h = 3, 6;
         addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
 
         addfilterselectvaluesandoptions[0][0] = 'Project Name'
@@ -40,6 +40,9 @@ def timemanager(request):
 
         addfilterselectvaluesandoptions[4][0] = 'Uploading Timestamp'
         addfilterselectvaluesandoptions[4][1] = 'uploadingtimestamp'
+
+        addfilterselectvaluesandoptions[5][0] = 'Row Enabled for Manager'
+        addfilterselectvaluesandoptions[5][1] = 'rowenabledformanager'
 
         # filtering options to Addfilter selectbox end
 
@@ -62,6 +65,7 @@ def timemanagersearchcontent(request):
     datespentonphrase = ""
     timeentryidphrase = ""
     uploadingtimestampphrase = ""
+    rowenabledformanagerphrase = ""
 
     for x in range(0,len(filteritemlist),4):
 
@@ -99,8 +103,13 @@ def timemanagersearchcontent(request):
                 uploadingtimestampphrase = "and date(uploadingtimestamp_tbltimedone) = '" + str((datetime.now()).date() - timedelta(days=1)) + "' "
             if filteritemoperator == 'lessthandaysago':
                 uploadingtimestampphrase = "and date(uploadingtimestamp_tbltimedone) BETWEEN '" + str((datetime.now()).date() - timedelta(days=int(filteritemfirstinput))) + "' AND '" + str((datetime.now()).date() - timedelta(days=0)) + "' "
+        if filteritemname == 'rowenabledformanager':
+            if filteritemoperator == 'enabled':
+                rowenabledformanagerphrase = "and rowenabledformanager_tbltimedone = 1 "
+            if filteritemoperator == 'notenabled':
+                rowenabledformanagerphrase = "and rowenabledformanager_tbltimedone = 0 "
 
-    searchphraseformainresults = (projectphrase + timedonephrase + datespentonphrase + timeentryidphrase + uploadingtimestampphrase + " ")
+    searchphraseformainresults = (projectphrase + timedonephrase + datespentonphrase + timeentryidphrase + uploadingtimestampphrase + rowenabledformanagerphrase + " ")
     searchphraseforrowsources = searchphraseformainresults
     #import pdb;
     #pdb.set_trace()
@@ -118,7 +127,9 @@ def timemanagersearchcontent(request):
                    "comments_tbltimedone, "
                    "spenton_tbltimedone, "
                    "timeentryidinits_tbltimedone, " #10
-                   "uploadingtimestamp_tbltimedone "
+                   "uploadingtimestamp_tbltimedone, "
+                   "rowenabledformanager_tbltimedone, "
+                   "rowlatchedbymanager_tbltimedone "
 
                    "FROM quotation_tbltimedone "
 
@@ -145,7 +156,9 @@ def timemanagersearchcontent(request):
                     "     name_tblprojects_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " #10 
                     "     username_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
                     "     issuesubject_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
-                    "     uploadingtimestamp_tbltimedonetemptable DATETIME NULL) " 
+                    "     uploadingtimestamp_tbltimedonetemptable DATETIME NULL, "
+                    "     rowenabledformanager_tbltimedonetemptable INT(11) NULL, " 
+                    "     rowlatchedbymanager_tbltimedonetemptable INT(11) NULL) " 
 
                     "      ENGINE=INNODB "
                     "    ; ")
@@ -168,6 +181,12 @@ def timemanagersearchcontent(request):
         uploadingtimestamp = x11[11]
         if uploadingtimestamp == None:
             uploadingtimestamp = '3000-12-31 23:59:59'
+        rowenabledformanager = x11[12]
+        if rowenabledformanager == None:
+            rowenabledformanager = 0
+        rowlatchedbymanager = x11[13]
+        if rowlatchedbymanager == None:
+            rowlatchedbymanager = 0
 
         cursor2.execute("INSERT INTO timedonetemptable (hours_tbltimedonetemptable, "
                         "projectid_tbltimedonetemptable, "
@@ -180,7 +199,9 @@ def timemanagersearchcontent(request):
                         "name_tblprojects_redmine_ctbltimedonetemptable, "
                         "username_redmine_ctbltimedonetemptable, "
                         "issuesubject_redmine_ctbltimedonetemptable, "
-                        "uploadingtimestamp_tbltimedonetemptable) VALUES ('" + str(hours) + "', "
+                        "uploadingtimestamp_tbltimedonetemptable, "
+                        "rowenabledformanager_tbltimedonetemptable, "
+                        "rowlatchedbymanager_tbltimedonetemptable) VALUES ('" + str(hours) + "', "
                                                     "'" + str(projectid) + "', "
                                                     "'" + str(userid) + "', "
                                                     "'" + str(issueid) + "', "
@@ -191,7 +212,9 @@ def timemanagersearchcontent(request):
                                                     "'" + str(projectname) + "', "
                                                     "'" + str(username) + "', "
                                                     "'" + str(issuesubject) + "', "
-                                                    "'" + str(uploadingtimestamp) + "');")
+                                                    "'" + str(uploadingtimestamp) + "', "
+                                                    "'" + str(rowenabledformanager) + "', "
+                                                    "'" + str(rowlatchedbymanager) + "');")
 
     cursor2.execute("SELECT   "
                         "auxid, "
@@ -207,7 +230,9 @@ def timemanagersearchcontent(request):
                     "   name_tblprojects_redmine_ctbltimedonetemptable, " #10
                     "   username_redmine_ctbltimedonetemptable, "
                     "   issuesubject_redmine_ctbltimedonetemptable, "
-                    "   uploadingtimestamp_tbltimedonetemptable "
+                    "   uploadingtimestamp_tbltimedonetemptable, "
+                    "   rowenabledformanager_tbltimedonetemptable, "
+                    "   rowlatchedbymanager_tbltimedonetemptable "
 
                         "FROM timedonetemptable ")
     timedonesunsetflag = cursor2.fetchall()
@@ -260,7 +285,9 @@ def timemanagersearchcontent(request):
                     "   name_tblprojects_redmine_ctbltimedonetemptable, " #10
                     "   username_redmine_ctbltimedonetemptable, "
                     "   issuesubject_redmine_ctbltimedonetemptable, "
-                    "   uploadingtimestamp_tbltimedonetemptable "
+                    "   uploadingtimestamp_tbltimedonetemptable, "
+                    "   rowenabledformanager_tbltimedonetemptable, "
+                    "   rowlatchedbymanager_tbltimedonetemptable " #15
 
                         "FROM timedonetemptable ")
     timedonessetflag = cursor2.fetchall()
@@ -594,3 +621,46 @@ def timemanagerupdateissueselectafterchangeprojectselect(request): # <-- see nam
     return render(request, 'quotation/timemanagerissueselecthtmlafterupdateprojectselect.html',
                   {'timedoneid': timedoneidinjs,
                   'selectoptions': selectoptions})
+@login_required
+def timemanagerrowlatchedbymanager(request):
+    if request.method == "POST":
+        timedoneid = request.POST['timedoneid']
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT "
+        "rowlatchedbymanager_tbltimedone "
+
+        "FROM quotation_tbltimedone "
+
+        "WHERE timedoneid_tbltimedone=%s ",
+        [timedoneid])
+    timedones = cursor1.fetchall()
+    for x in timedones:
+        flagoldvalue = x[0]
+
+    if flagoldvalue == 1:
+        flagnewvalue = 0
+    else:
+        flagnewvalue = 1
+
+    cursor1 = connection.cursor()
+    cursor1.execute("UPDATE quotation_tbltimedone SET "
+                    "rowlatchedbymanager_tbltimedone=" + str(flagnewvalue) + " "
+                    "WHERE timedoneid_tbltimedone=%s ",[timedoneid])
+    transaction.commit()
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT "
+        "rowlatchedbymanager_tbltimedone "
+
+        "FROM quotation_tbltimedone "
+
+        "WHERE timedoneid_tbltimedone=%s ",
+        [timedoneid])
+    timedoneverified = cursor1.fetchall()
+
+    json_data = json.dumps(timedoneverified)
+
+    return HttpResponse(json_data, content_type="application/json")
