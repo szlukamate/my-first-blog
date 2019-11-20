@@ -33,7 +33,7 @@ $(function () {
 
       }, 500);
 
-   $('body').on("focusout", ".updateable", function() {
+   $('body').on("change", ".updateable", function() {
 
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
@@ -79,12 +79,6 @@ $(function () {
                             function updateerror (){
                                 alert('Failure in saving');
                             };
-
-   });
-    $('body').on("click", ".updateable", function() {
-
-        $(this).css("background-color", "yellow");
-
 
    });
     $('#filterbutton').click(function() {

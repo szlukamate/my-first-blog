@@ -581,7 +581,7 @@ def timedonedevitemnew(request):
     cursor1.execute("INSERT INTO quotation_tbltimedone "
                     "(spenton_tbltimedone) VALUES ('" + str((datetime.now()).date()) + "')")
 
-    return redirect('timemanager')
+    return redirect('timemanagerdev')
 @login_required
 def timedonedevitemremove(request,pktimedoneid):
 
@@ -589,8 +589,7 @@ def timedonedevitemremove(request,pktimedoneid):
     cursor1.execute(
         "DELETE FROM quotation_tbltimedone WHERE timedoneid_tbltimedone=%s ", [pktimedoneid])
 
-    return redirect('timemanager')
-
+    return redirect('timemanagerdev')
 
 @login_required
 def timemanagerdevupdateissueselectafterchangeprojectselect(request): # <-- see name

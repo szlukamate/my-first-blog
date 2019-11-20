@@ -90,13 +90,27 @@
 
 									{% if timedone.14 == 1 %} <!-- enabled for manager -->
 
+										{% if timedone.15 == 1 %} <!-- if latched by manager is set then disabla checkbox -->
 
-										<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" checked><span class="slider"></span></label></td>
+											<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" checked disabled><span class="slider"></span></label></td>
 
+										{% else %}
+
+											<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" checked ><span class="slider"></span></label></td>
+
+										{% endif %}
 
 									{% else %}
 
-										<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}"><span class="slider"></span></label></td>
+										{% if timedone.15 == 1 %} <!-- if latched by manager is set then disabla checkbox -->
+
+											<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" disabled><span class="slider"></span></label></td>
+
+										{% else %}
+
+											<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" ><span class="slider"></span></label></td>
+
+										{% endif %}
 
 									{% endif %}
 
@@ -113,7 +127,7 @@
 									{% endif %}
 
 
-									<td><a href="{% url 'timedoneitemremove' pktimedoneid=timedone.9 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+									<td><a href="{% url 'timedonedevitemremove' pktimedoneid=timedone.9 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
 
 
 								</tr>

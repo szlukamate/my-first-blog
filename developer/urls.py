@@ -17,5 +17,7 @@ urlpatterns = [
     url('filtertemplatehtmlontimemanagerdevform$', views.filtertemplatehtmlontimemanagerdevform, name='filtertemplatehtmlontimemanagerdevform'),
     url('timemanagerdevupdateissueselectafterchangeprojectselect$', views.timemanagerdevupdateissueselectafterchangeprojectselect, name='timemanagerdevupdateissueselectafterchangeprojectselect'),
     url('timemanagerdevrowenabledformanager$', views.timemanagerdevrowenabledformanager, name='timemanagerdevrowenabledformanager'),
+    url(r'timedonedevitemnew$', views.timedonedevitemnew, name='timedonedevitemnew'),
+    url(r'^timedonedevitemremove/(?P<pktimedoneid>[0-9]+)/$', views.timedonedevitemremove, name='timedonedevitemremove'),
 
 ]
