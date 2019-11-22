@@ -25,7 +25,6 @@
 									<td>Time Entry Id in ITS</td>
 									<td>Uploading Datetime</td>
 									<td>Row Enabled for Manager</td>
-									<td>Row Latched by Manager</td>
 								</tr>
 							</thead>
 							<tbody>
@@ -90,42 +89,13 @@
 
 									{% if timedone.14 == 1 %} <!-- enabled for manager -->
 
-										{% if timedone.15 == 1 %} <!-- if latched by manager is set then disabla checkbox -->
-
-											<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" checked disabled><span class="slider"></span></label></td>
-
-										{% else %}
-
 											<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" checked ><span class="slider"></span></label></td>
 
-										{% endif %}
-
 									{% else %}
-
-										{% if timedone.15 == 1 %} <!-- if latched by manager is set then disabla checkbox -->
-
-											<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" disabled><span class="slider"></span></label></td>
-
-										{% else %}
 
 											<td><label class="switch" ><input type="checkbox" class="rowenabledformanager" name="rowenabledformanager_tbltimedone" timedoneid="{{timedone.9}}" rowid="{{ forloop.counter0 }}" ><span class="slider"></span></label></td>
 
-										{% endif %}
-
 									{% endif %}
-
-
-									{% if timedone.15 == 1 %} <!-- latched by manager -->
-
-
-										<td><span class="glyphicon glyphicon-plus"></span></td>
-
-									{% else %}
-
-										<td><span class="glyphicon glyphicon-minus"></span></td>
-
-									{% endif %}
-
 
 									<td><a href="{% url 'timedonedevitemremove' pktimedoneid=timedone.9 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
 

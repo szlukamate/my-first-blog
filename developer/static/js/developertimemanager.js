@@ -16,11 +16,10 @@ $(function () {
       function()
       {
 
-
-//            $("#addfilterselect option[value=datespenton]").attr('selected', 'selected'); // open and autofocus for this filter field
-//            $('#addfilterselect').trigger('change');
-
             $("#addfilterselect option[value=timeentryid]").attr('selected', 'selected'); // open and autofocus for this filter field
+            $('#addfilterselect').trigger('change');
+
+            $("#addfilterselect option[value=rowenabledformanager]").attr('selected', 'selected'); // open and autofocus for this filter field
             $('#addfilterselect').trigger('change');
             setTimeout(
               function()
@@ -453,95 +452,6 @@ $(function () {
                     }
 
     });
-/*
-    $('body').on("click", "#timedonesuploadtoitsbutton", function() {
-                var timedonesnumberofitems= $('#timedonesnumberofitems').text();
-                var itemdatalist=[];
-                var itemdataliststringified;
-                var useridisemptyflag = 0;
-
-        main();
-
-            function main(){
-
-
-                for (i = 1; i <= timedonesnumberofitems; i++) {
-                    itemdatacollect(i);
-
-                }
-                if (useridisemptyflag == 1) {
-                  return false;
-                }
-                $( "#dialog-message" ).dialog( "open" ); // Uploading...
-
-                itemdataliststringified = JSON.stringify(itemdatalist);
-                    console.log(timedonesnumberofitems);
-                    console.log(itemdataliststringified);
-
-                datatransmit();
-
-            }
-            function itemdatacollect(i){
-
-              timedoneid=$('input[class="timedoneid"][rowid="' + (i - 1) + '"]').val();
-              projectid=$('input[class="projectid"][rowid="' + (i - 1) + '"]').val();
-              userid=$('input[class="userid"][rowid="' + (i - 1) + '"]').val();
-              issueid=$('input[class="issueid"][rowid="' + (i - 1) + '"]').val();
-              hours=$('input[name="hours_tbltimedone"][rowid="' + (i - 1) + '"]').val();
-              comments=$('input[name="comments_tbltimedone"][rowid="' + (i - 1) + '"]').val();
-              spenton=$('input[name="spenton_tbltimedone"][rowid="' + (i - 1) + '"]').val();
-              timeentryid=$('input[name="timeentryidinits_tbltimedone"][rowid="' + (i - 1) + '"]').val();
-
-              projectname=$('td[class="projectname"][rowid="' + (i - 1) + '"]').text();
-              username=$('td[class="username"][rowid="' + (i - 1) + '"]').text();
-              activityname=$('td[class="activityname"][rowid="' + (i - 1) + '"]').text();
-
-              if (userid == 0) {
-                  useridisnotsetdialog(timedoneid);
-
-              }
-
-
-              itemdatalist.push(timedoneid, projectid, userid, issueid, hours, comments, spenton, timeentryid );
-
-                    console.log('itemdatalist: ' + itemdatalist);
-
-            }
-            function useridisnotsetdialog(useridemptyintimedoneid){
-            $('#dialog').data('useridemptyintimedoneid', useridemptyintimedoneid).dialog('open');
-            useridisemptyflag = 1;
-            }
-            function datatransmit(){
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'timemanageruploadtoits',
-
-                    data: {
-                    //'quotationdocid' : quotationdocid,
-                    //'quotationdocnumber' : quotationdocnumber,
-                    'timedonesnumberofitems' : timedonesnumberofitems,
-                    'itemdatalist': itemdataliststringified,
-
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                    },
-
-                    success: function(url){
-                    console.log('success');
-
-                    window.location.href = url;
-
-                    },
-                    error: function(){
-                        alert('failure');
-                    },
-                    datatype: 'html'
-
-                });
-            }
-
-    });
-*/
     $('#auxfunctionforissueselectoptions').click(function(event, timedoneid, projectid) {
                     console.log('projectid in aux: ' + projectid);
                     console.log('timedoneid in aux: ' + timedoneid);
@@ -643,6 +553,7 @@ $(function () {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var timedoneid = $(this).attr( "timedoneid" );
+        var checkedvalue = $(this).prop( "checked" );
 
            $.ajax({
             type: 'POST',
@@ -650,6 +561,7 @@ $(function () {
 
             data: {
            'timedoneid' : timedoneid,
+           'checkedvalue' : checkedvalue,
            'csrfmiddlewaretoken': CSRFtoken,
            },
            success: updatesuccess,

@@ -4,11 +4,13 @@
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/developer/static/js/developertimemanager.js" beforeDir="false" afterPath="$PROJECT_DIR$/developer/static/js/developertimemanager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/developer/templates/developer/timemanager.html" beforeDir="false" afterPath="$PROJECT_DIR$/developer/templates/developer/timemanager.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/developer/templates/developer/timemanagercontent.html" beforeDir="false" afterPath="$PROJECT_DIR$/developer/templates/developer/timemanagercontent.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/developer/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/developer/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/developer/views/vw_filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/developer/views/vw_filter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/developer/views/vw_timemanagerdev.py" beforeDir="false" afterPath="$PROJECT_DIR$/developer/views/vw_timemanagerdev.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quotation/static/js/timemanager.js" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/static/js/timemanager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/timemanagercontent.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/timemanagercontent.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_timemanager.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_timemanager.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

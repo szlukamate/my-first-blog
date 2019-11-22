@@ -103,6 +103,16 @@ def filtertemplatehtmlontimemanagerdevform(request):
 
                                 return render(request, 'quotation/filteritemtemplateinputbox.html', {'filteritemrowid': filteritemrowid})
 
+                if filteritemname == 'rowenabledformanager':
+                        if filteritemselectedvalue == 'enabled':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
+                        if filteritemselectedvalue == 'notenabled':
+
+                                return render(request, 'quotation/filteritemtemplateempty.html', {})
+
+
         if invokedfrom == 'addfilterselectchanged': # when we want to search first click the #Add Filter selectbox and add some filteritems to html
                 filteritemrowid = request.POST['filteritemmaxrowid']
                 selectedvalue = request.POST['selectedvalue']
@@ -187,6 +197,21 @@ def filtertemplatehtmlontimemanagerdevform(request):
 
                     filteritemselectoptions[3][0] = 'lessthandaysago'
                     filteritemselectoptions[3][1] = 'less than days ago'
+
+                if selectedvalue == 'rowenabledformanager':
+
+                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    w, h = 2, 2;
+                    filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
+
+                    filteritemname = 'rowenabledformanager' #attribute for elements
+
+                    filteritemselectoptions[0][0] = 'notenabled' #for inner use
+                    filteritemselectoptions[0][1] = 'not enabled' #for the user to show
+
+                    filteritemselectoptions[1][0] = 'enabled'
+                    filteritemselectoptions[1][1] = "enabled"
+
 
         return render(request, 'quotation/filtertemplatehtml.html',{'selectedoption': selectedoption,
                                                                     'filteritemrowid': filteritemrowid,

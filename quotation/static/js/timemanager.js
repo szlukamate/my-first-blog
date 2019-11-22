@@ -16,12 +16,13 @@ $(function () {
       function()
       {
 
-
-//            $("#addfilterselect option[value=datespenton]").attr('selected', 'selected'); // open and autofocus for this filter field
-//            $('#addfilterselect').trigger('change');
-
             $("#addfilterselect option[value=timeentryid]").attr('selected', 'selected'); // open and autofocus for this filter field
             $('#addfilterselect').trigger('change');
+
+            $("#addfilterselect option[value=rowenabledformanager]").attr('selected', 'selected'); // open and autofocus for this filter field
+            $('#addfilterselect').trigger('change');
+
+
             setTimeout(
               function()
               {
@@ -637,14 +638,14 @@ $(function () {
 
 
     });
-    $('body').on("change", ".rowlatchedbymanager", function() {
+    $('body').on("change", ".rowenabledformanager", function() {
 
         var CSRFtoken = $('input[name=csrfmiddlewaretoken]').val();
         var timedoneid = $(this).attr( "timedoneid" );
 
            $.ajax({
             type: 'POST',
-            url: 'timemanagerrowlatchedbymanager',
+            url: 'timemanagerrowenabledformanager',
 
             data: {
            'timedoneid' : timedoneid,

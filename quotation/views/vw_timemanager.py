@@ -128,8 +128,7 @@ def timemanagersearchcontent(request):
                    "spenton_tbltimedone, "
                    "timeentryidinits_tbltimedone, " #10
                    "uploadingtimestamp_tbltimedone, "
-                   "rowenabledformanager_tbltimedone, "
-                   "rowlatchedbymanager_tbltimedone "
+                   "rowenabledformanager_tbltimedone "
 
                    "FROM quotation_tbltimedone "
 
@@ -157,8 +156,7 @@ def timemanagersearchcontent(request):
                     "     username_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
                     "     issuesubject_redmine_ctbltimedonetemptable VARCHAR(255) NULL, " 
                     "     uploadingtimestamp_tbltimedonetemptable DATETIME NULL, "
-                    "     rowenabledformanager_tbltimedonetemptable INT(11) NULL, " 
-                    "     rowlatchedbymanager_tbltimedonetemptable INT(11) NULL) " 
+                    "     rowenabledformanager_tbltimedonetemptable INT(11) NULL) " 
 
                     "      ENGINE=INNODB "
                     "    ; ")
@@ -184,9 +182,6 @@ def timemanagersearchcontent(request):
         rowenabledformanager = x11[12]
         if rowenabledformanager == None:
             rowenabledformanager = 0
-        rowlatchedbymanager = x11[13]
-        if rowlatchedbymanager == None:
-            rowlatchedbymanager = 0
 
         cursor2.execute("INSERT INTO timedonetemptable (hours_tbltimedonetemptable, "
                         "projectid_tbltimedonetemptable, "
@@ -200,8 +195,7 @@ def timemanagersearchcontent(request):
                         "username_redmine_ctbltimedonetemptable, "
                         "issuesubject_redmine_ctbltimedonetemptable, "
                         "uploadingtimestamp_tbltimedonetemptable, "
-                        "rowenabledformanager_tbltimedonetemptable, "
-                        "rowlatchedbymanager_tbltimedonetemptable) VALUES ('" + str(hours) + "', "
+                        "rowenabledformanager_tbltimedonetemptable) VALUES ('" + str(hours) + "', "
                                                     "'" + str(projectid) + "', "
                                                     "'" + str(userid) + "', "
                                                     "'" + str(issueid) + "', "
@@ -213,8 +207,7 @@ def timemanagersearchcontent(request):
                                                     "'" + str(username) + "', "
                                                     "'" + str(issuesubject) + "', "
                                                     "'" + str(uploadingtimestamp) + "', "
-                                                    "'" + str(rowenabledformanager) + "', "
-                                                    "'" + str(rowlatchedbymanager) + "');")
+                                                    "'" + str(rowenabledformanager) + "');")
 
     cursor2.execute("SELECT   "
                         "auxid, "
@@ -231,8 +224,7 @@ def timemanagersearchcontent(request):
                     "   username_redmine_ctbltimedonetemptable, "
                     "   issuesubject_redmine_ctbltimedonetemptable, "
                     "   uploadingtimestamp_tbltimedonetemptable, "
-                    "   rowenabledformanager_tbltimedonetemptable, "
-                    "   rowlatchedbymanager_tbltimedonetemptable "
+                    "   rowenabledformanager_tbltimedonetemptable "
 
                         "FROM timedonetemptable ")
     timedonesunsetflag = cursor2.fetchall()
@@ -286,8 +278,7 @@ def timemanagersearchcontent(request):
                     "   username_redmine_ctbltimedonetemptable, "
                     "   issuesubject_redmine_ctbltimedonetemptable, "
                     "   uploadingtimestamp_tbltimedonetemptable, "
-                    "   rowenabledformanager_tbltimedonetemptable, "
-                    "   rowlatchedbymanager_tbltimedonetemptable " #15
+                    "   rowenabledformanager_tbltimedonetemptable "
 
                         "FROM timedonetemptable ")
     timedonessetflag = cursor2.fetchall()
@@ -622,14 +613,14 @@ def timemanagerupdateissueselectafterchangeprojectselect(request): # <-- see nam
                   {'timedoneid': timedoneidinjs,
                   'selectoptions': selectoptions})
 @login_required
-def timemanagerrowlatchedbymanager(request):
+def timemanagerrowenabledformanager(request):
     if request.method == "POST":
         timedoneid = request.POST['timedoneid']
 
     cursor1 = connection.cursor()
     cursor1.execute(
         "SELECT "
-        "rowlatchedbymanager_tbltimedone "
+        "rowenabledformanager_tbltimedone "
 
         "FROM quotation_tbltimedone "
 
@@ -646,14 +637,14 @@ def timemanagerrowlatchedbymanager(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("UPDATE quotation_tbltimedone SET "
-                    "rowlatchedbymanager_tbltimedone=" + str(flagnewvalue) + " "
+                    "rowenabledformanager_tbltimedone=" + str(flagnewvalue) + " "
                     "WHERE timedoneid_tbltimedone=%s ",[timedoneid])
     transaction.commit()
 
     cursor1 = connection.cursor()
     cursor1.execute(
         "SELECT "
-        "rowlatchedbymanager_tbltimedone "
+        "rowenabledformanager_tbltimedone "
 
         "FROM quotation_tbltimedone "
 
