@@ -288,7 +288,7 @@ def timemanagerdevsearchcontent(request):
     #pdb.set_trace()
 
 
-# setting issueidredbackgroundflag end
+#  setting issueidredbackgroundflag end
 
 
     cursor23 = connections['redmine'].cursor()
@@ -472,7 +472,7 @@ def timemanagerdevuploadtoits(request):
             cursor21.execute(
                 "DELETE FROM custom_values WHERE customized_id=%s and custom_field_id = 4 ", [timeentryidinits]) # remove custom_field name quoteddocdetailsid
 
-        # timeentry row delete if already exists in redmine end
+        #  timeentry row delete if already exists in redmine end
 
         firstnum = x + 1
         fourthnum = 0
@@ -579,7 +579,8 @@ def timedonedevitemnew(request):
 
     cursor1 = connection.cursor()
     cursor1.execute("INSERT INTO quotation_tbltimedone "
-                    "(spenton_tbltimedone) VALUES ('" + str((datetime.now()).date()) + "')")
+                    "(spenton_tbltimedone,"
+                    "rowenabledformanager_tbltimedone) VALUES ('" + str((datetime.now()).date()) + "',0)")
 
     return redirect('timemanagerdev')
 @login_required

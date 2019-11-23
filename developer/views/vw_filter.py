@@ -113,7 +113,7 @@ def filtertemplatehtmlontimemanagerdevform(request):
                                 return render(request, 'quotation/filteritemtemplateempty.html', {})
 
 
-        if invokedfrom == 'addfilterselectchanged': # when we want to search first click the #Add Filter selectbox and add some filteritems to html
+        if invokedfrom == 'addfilterselectchanged': #  when we want to search first click the #Add Filter selectbox and add some filteritems to html
                 filteritemrowid = request.POST['filteritemmaxrowid']
                 selectedvalue = request.POST['selectedvalue']
                 selectedoption = request.POST['selectedoption'] # name which appears for user
@@ -121,11 +121,11 @@ def filtertemplatehtmlontimemanagerdevform(request):
 
                 if selectedvalue == 'projectid': # here the value is text without space and small letter i.e. customerdescription
 
-                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    # Creates a  list containing #h lists, each of #w items, all set to 0
                     w, h = 2, 1;
                     filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
 
-                    filteritemname = 'projectid' #attribute for elements
+                    filteritemname = 'projectid' # attribute for elements
 
                     filteritemselectoptions[0][0] = 'is' #for inner use
                     filteritemselectoptions[0][1] = 'is' #for the user to show
