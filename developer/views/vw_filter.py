@@ -119,9 +119,9 @@ def filtertemplatehtmlontimemanagerdevform(request):
                 selectedoption = request.POST['selectedoption'] # name which appears for user
 
 
-                if selectedvalue == 'projectid': # here the value is text without space and small letter i.e. customerdescription
+                if selectedvalue == 'projectid': #  here the value is text without space and small letter i.e. customerdescription
 
-                    # Creates a  list containing #h lists, each of #w items, all set to 0
+                    #  Creates a  list containing #h lists, each of #w items, all set to 0
                     w, h = 2, 1;
                     filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
 
