@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
@@ -28,6 +28,20 @@ def docs(request):
                     "order by docid_tbldoc desc ")
     docs = cursor1.fetchall()
     return render(request, 'quotation/docs.html', {'docs': docs})
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    If the raise_exception parameter is given the PermissionDenied exception
+    is raised.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+
+@group_required("developer")
 @login_required
 def docsearch(request):
     cursor1 = connection.cursor()
@@ -50,7 +64,7 @@ def docsearch(request):
                     "GROUP BY Doc_kind_name_tblDoc_kind ")
     dockindnames = cursor1.fetchall()
 
-    #fromdate = datetime.today() - timedelta(365)
+    #   fromdate = datetime.today() - timedelta(365)
     #todate = datetime.today()
 
 
