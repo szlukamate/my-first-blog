@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 import datetime
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
@@ -20,6 +20,17 @@ import xml.dom.minidom as x12
 import base64
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+@group_required("manager")
 @login_required
 def customerinvoiceform(request, pk):
 
@@ -281,7 +292,7 @@ def customerinvoiceform(request, pk):
                                                            'creatordata': creatordata,
                                                            'currencycodes': currencycodes})
 
-
+@group_required("manager")
 @login_required
 def customerinvoiceprint(request, docid):
 
@@ -668,7 +679,7 @@ def customerinvoiceprint(request, docid):
                                                                 'labelidtemptableswithenablelabelkindflagset': labelidtemptableswithenablelabelkindflagset,
                                                                 'creatordata': creatordata})
 
-
+@group_required("manager")
 @login_required
 def customerinvoicebackpage(request):
 
@@ -691,6 +702,7 @@ def customerinvoicebackpage(request):
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def customerinvoicemake(request, docid):
 # invoice items to temptable begin
@@ -1053,7 +1065,7 @@ def customerinvoicemake(request, docid):
     #rowsnumber = len(docdetails)
     #customerordernumber = docid
     return redirect('customerinvoiceform', pk=maxdocid)
-
+@group_required("manager")
 @login_required
 def customerinvoicerowremove(request, pk):
     cursor2 = connection.cursor()
@@ -1070,6 +1082,7 @@ def customerinvoicerowremove(request, pk):
     transaction.commit()
 
     return redirect('customerinvoiceform', pk=na)
+@group_required("manager")
 @login_required
 def customerinvoicedispatch(request):
     customerinvoiceid = request.POST['customerinvoiceid']
@@ -1211,6 +1224,7 @@ def customerinvoicedispatch(request):
 
 
     return render(request, 'quotation/customerinvoicedispatchredirecturl.html', {'pk': customerinvoiceid})
+@group_required("manager")
 @login_required
 def customerinvoicexmlresponsepdfstacking(request):
     customerinvoicedocid = request.POST['customerinvoicedocid']
@@ -1228,6 +1242,7 @@ def customerinvoicexmlresponsepdfstacking(request):
     file.close()
 
     return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': customerinvoicedocid})
+@group_required("manager")
 @login_required
 def customerinvoiceviewpdf(request, pk):
     BASE_DIR = settings.BASE_DIR
@@ -1241,6 +1256,7 @@ def customerinvoiceviewpdf(request, pk):
             return response
     else:
         return HttpResponseNotFound("The requested pdf was not found in our server.")
+@group_required("manager")
 @login_required
 def customerinvoiceshowpdfbutton(request):
     BASE_DIR = settings.BASE_DIR

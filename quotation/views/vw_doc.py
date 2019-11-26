@@ -38,7 +38,6 @@ def group_required(group_name, login_url=None):
         if user.groups.filter(name=group_name).exists():
             return True
     return user_passes_test(check_group, login_url=login_url)
-
 @group_required("manager")
 @login_required
 def docsearch(request):
@@ -68,6 +67,7 @@ def docsearch(request):
 
     return render(request, 'quotation/docsearch.html', {'companies': companies,
                                                         'dockindnames':dockindnames})
+@group_required("manager")
 @login_required
 def docsearchcontent(request):
     docnumber = request.POST['docnumber']
@@ -203,7 +203,7 @@ def docsearchcontent(request):
     return render(request, 'quotation/docsearchcontent.html', {'docs': docs,
                                                                'companiesrowsources': companiesrowsources,
                                                                'dockindrowsources': dockindrowsources})
-
+@group_required("manager")
 @login_required
 def docadd(request):
     if request.method == "POST":
@@ -362,7 +362,7 @@ def docadd(request):
     transaction.commit()
 
     return render(request, 'quotation/docadd.html', {'dockinds': dockinds, 'contacts': contacts})
-
+@group_required("manager")
 @login_required
 def docselector(request, pk):
     cursor = connection.cursor()
@@ -391,7 +391,7 @@ def docselector(request, pk):
         return redirect('purchaseorderform', pk=pk)
     elif dockind == 8:  # Delivery Note
         return redirect('deliverynoteform', pk=pk)
-
+@group_required("manager")
 @login_required
 def docremove(request, pk):
     cursor1 = connection.cursor()
@@ -403,6 +403,7 @@ def docremove(request, pk):
     transaction.commit()
 
     return redirect('docsearch')
+@group_required("manager")
 @login_required
 def doclink(request, docid):
     fixstate = request.session.get('fixstate','0')
@@ -631,6 +632,7 @@ def doclink(request, docid):
                                                       'docslevel3': docslevel3,
                                                       'docslevel3widthforsvg': docslevel3widthforsvg,
                                                       'fixstate': fixstate})
+@group_required("manager")
 @login_required
 def doclinkfix(request, docid, fixstate):
     request.session['fixstate'] = fixstate  # set turn on/off fix

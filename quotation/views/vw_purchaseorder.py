@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
@@ -16,6 +16,17 @@ import subprocess
 import os
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+@group_required("manager")
 @login_required
 def purchaseorderpre(request):
     filteritemlistraw = request.POST['filteritemlist']
@@ -115,6 +126,7 @@ def purchaseorderpre(request):
 
     return render(request, 'quotation/purchaseorderpre.html', {'customerorders': customerorders,
                                                                'customerordersnumber': customerordersnumber})
+@group_required("manager")
 @login_required
 def purchaseorderpreframe(request):
         # filtering options to Addfilter selectbox begin
@@ -135,6 +147,7 @@ def purchaseorderpreframe(request):
 
         return render(request, 'quotation/purchaseorderpreframe.html', {'addfilterselectvaluesandoptions': addfilterselectvaluesandoptions})
 
+@group_required("manager")
 @login_required
 def purchaseordermake(request):
     if request.method == 'POST':
@@ -400,6 +413,7 @@ def purchaseordermake(request):
     return render(request, 'quotation/purchaseorderpreredirecturl.html',
                       {'maxdocid': maxdocid})
 
+@group_required("manager")
 @login_required
 def purchaseorderform(request, pk):
 
@@ -646,6 +660,7 @@ def purchaseorderform(request, pk):
 
                                                             'currencycodes': currencycodes})
 
+@group_required("manager")
 @login_required
 def purchaseorderprint(request, docid):
     cursor1 = connection.cursor()
@@ -745,6 +760,7 @@ def purchaseorderprint(request, docid):
     return render(request, 'quotation/purchaseorderprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount': docdetailscount,
                                                              'creatordata': creatordata})
+@group_required("manager")
 @login_required
 def purchaseorderemail(request, docid):
     cursor1 = connection.cursor()
@@ -796,6 +812,7 @@ def purchaseorderemail(request, docid):
                                                        'emailbodytext': emailbodytext,
                                                        'creatordata': creatordata
                                                        })
+@group_required("manager")
 @login_required
 def purchaseorderrowremove(request, pk):
     cursor2 = connection.cursor()
@@ -812,6 +829,7 @@ def purchaseorderrowremove(request, pk):
     transaction.commit()
 
     return redirect('purchaseorderform', pk=na)
+@group_required("manager")
 @login_required
 def purchaseorderbackpage(request):
 

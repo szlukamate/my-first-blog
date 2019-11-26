@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
@@ -18,6 +18,18 @@ import os
 
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+
+@group_required("manager")
 @login_required
 def stockmain(request):
     cursor22 = connection.cursor()
@@ -33,6 +45,7 @@ def stockmain(request):
     return render(request, 'quotation/stock.html', {'docdetails': docdetails,
                                                               'customerordernumber': customerordernumber,
                                                               'rowsnumber': rowsnumber})
+@group_required("manager")
 @login_required
 def stocklabellist(request): # labels on stockform for particular product
     productid = request.POST['productid']
@@ -146,6 +159,7 @@ def stocklabellist(request): # labels on stockform for particular product
 
     return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
 
+@group_required("manager")
 @login_required
 def stocktakingpreform(request): # Settings --> Stocktaking
     cursor3 = connection.cursor()
@@ -217,6 +231,7 @@ def stocktakingpreform(request): # Settings --> Stocktaking
                                                     'customerordernumber': customerordernumber,
                                                     'rowsnumber': rowsnumber})
 
+@group_required("manager")
 @login_required
 def stocknewdocforstocktaking(request): #create a new deno for stocktaking
     stockid = request.POST['stockid']
@@ -349,6 +364,7 @@ def stocknewdocforstocktaking(request): #create a new deno for stocktaking
             [maxdocid])
 
     return render(request, 'quotation/stocktakingpreformredirecturl.html', {})
+@group_required("manager")
 @login_required
 def stockcopyfromtimestampforstocktaking(request): #enabling a stocktaking
     stockid = request.POST['stockid']

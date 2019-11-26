@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction, connections
@@ -19,6 +19,18 @@ import xml.dom.minidom as x12
 from datetime import datetime, timedelta
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+
+@group_required("manager")
 @login_required
 def timemanager(request):
         #  filtering options to Addfilter selectbox begin
@@ -50,6 +62,7 @@ def timemanager(request):
         # pdb.set_trace()
 
         return render(request, 'quotation/timemanager.html', {'addfilterselectvaluesandoptions': addfilterselectvaluesandoptions})
+@group_required("manager")
 @login_required
 def timemanagersearchcontent(request):
     filteritemlistraw = request.POST['filteritemlist']
@@ -336,6 +349,7 @@ def timemanagersearchcontent(request):
                                                        'usernamerowsources': usernamerowsources,
                                                        'issuerowsources': issuerowsources,
                                                        'timedonesnumberofitems': timedonesnumberofitems})
+@group_required("manager")
 @login_required
 def timemanagerupdateprojectselect(request):
     if request.method == 'POST':
@@ -364,6 +378,7 @@ def timemanagerupdateprojectselect(request):
     #pdb.set_trace()
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def timemanagerupdateuserselect(request):
     if request.method == 'POST':
@@ -390,6 +405,7 @@ def timemanagerupdateuserselect(request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def timemanagerupdateissueselect(request):
     if request.method == 'POST':
@@ -416,6 +432,7 @@ def timemanagerupdateissueselect(request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def timemanagerfieldupdate(request):
     if request.method == "POST":
@@ -432,6 +449,7 @@ def timemanagerfieldupdate(request):
         json_data = json.dumps(results23)
 
         return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def timemanageruploadtoits(request):
     creatorid = request.user.id
@@ -573,7 +591,7 @@ def timemanageruploadtoits(request):
     return render(request, 'quotation/timemanagerafteruploadtoitsredirecturl.html',{})
 
 
-
+@group_required("manager")
 @login_required
 def timedoneitemnew(request):
 
@@ -582,6 +600,7 @@ def timedoneitemnew(request):
                     "(spenton_tbltimedone) VALUES ('" + str((datetime.now()).date()) + "')")
 
     return redirect('timemanager')
+@group_required("manager")
 @login_required
 def timedoneitemremove(request,pktimedoneid):
 
@@ -591,7 +610,7 @@ def timedoneitemremove(request,pktimedoneid):
 
     return redirect('timemanager')
 
-
+@group_required("manager")
 @login_required
 def timemanagerupdateissueselectafterchangeprojectselect(request): # <-- see name
     timedoneidinjs = request.POST['timedoneidinjs']
@@ -612,6 +631,7 @@ def timemanagerupdateissueselectafterchangeprojectselect(request): # <-- see nam
     return render(request, 'quotation/timemanagerissueselecthtmlafterupdateprojectselect.html',
                   {'timedoneid': timedoneidinjs,
                   'selectoptions': selectoptions})
+@group_required("manager")
 @login_required
 def timemanagerrowenabledformanager(request):
     if request.method == "POST":

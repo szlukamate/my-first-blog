@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction, connections
@@ -19,6 +19,18 @@ import xml.dom.minidom as x12
 
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+
+@group_required("manager")
 @login_required
 def quotationform(request, pk):
 
@@ -187,6 +199,7 @@ def quotationform(request, pk):
     return render(request, 'quotation/quotation.html', {'doc': doc, 'docdetails': docdetails, 'companyid': companyid, 'nextchapternums' : nextchapternums,
                                                         'creatordata': creatordata,
                                                         'currencycodes': currencycodes})
+@group_required("manager")
 @login_required
 def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml ):
     cursor0 = connection.cursor()
@@ -279,6 +292,7 @@ def quotationnewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumo
         transaction.commit()
 
     return redirect('quotationform', pk=pkdocid)
+@group_required("manager")
 @login_required
 def quotationnewrowadd(request):
     if request.method == "POST":
@@ -307,6 +321,7 @@ def quotationnewrowadd(request):
     #return redirect('quotationform', pk=1)
 
     return render(request, 'quotation/quotationnewrowadd.html',{'products': products, 'docid': quotationid, 'nextchapternumset': nextchapternumset, 'docdetailsid' : docdetailsid })
+@group_required("manager")
 @login_required
 def quotationrowremove(request, pk):
     cursor2 = connection.cursor()
@@ -323,6 +338,7 @@ def quotationrowremove(request, pk):
     transaction.commit()
 
     return redirect('quotationform', pk=na)
+@group_required("manager")
 @login_required
 def searchquotationcontacts(request):
     if request.method == 'POST':
@@ -347,6 +363,7 @@ def searchquotationcontacts(request):
     rownmbs=len(results)
 
     return render(request, 'quotation/ajax_search_quotation_contacts.html', {'results': results, 'rownmbs': rownmbs, 'docidinquotationjs': docidinquotationjs})
+@group_required("manager")
 @login_required
 def quotationupdatecontact(request, pkdocid, pkcontactid):
     cursor0 = connection.cursor()
@@ -398,6 +415,8 @@ def quotationupdatecontact(request, pkdocid, pkcontactid):
                                                 pkdocid,])
 
     return redirect('quotationform', pk=pkdocid)
+
+#@group_required("manager")
 #@login_required
 def quotationprint (request, docid):
     cursor1 = connection.cursor()
@@ -496,6 +515,7 @@ def quotationprint (request, docid):
     return render(request, 'quotation/quotationprint.html', {'doc': doc, 'docdetails': docdetails,
                                                              'docdetailscount':docdetailscount,
                                                              'creatordata': creatordata})
+@group_required("manager")
 @login_required
 def quotationuniversalselections (request):
 
@@ -519,6 +539,7 @@ def quotationuniversalselections (request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def quotationbackpage(request):
 
@@ -541,6 +562,7 @@ def quotationbackpage(request):
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def quotationemail(request, docid):
     BASE_DIR = settings.BASE_DIR
@@ -626,6 +648,7 @@ def quotationemail(request, docid):
                                                        'emailbodytext': emailbodytext,
                                                        'creatordata': creatordata
                                                        })
+@group_required("manager")
 @login_required
 def quotationsaveasmodern(request, pk):
     creatorid = request.user.id
@@ -861,6 +884,7 @@ def quotationsaveasmodern(request, pk):
              unitclone,
              suppliercompanyid])
     return redirect('docselector', pk=maxdocid)
+@group_required("manager")
 @login_required
 def quotationsaveasorder(request, pk):
     creatorid = request.user.id
@@ -1124,6 +1148,7 @@ def quotationsaveasorder(request, pk):
         # update redmine with ordereddetails end
 
     return redirect('docselector', pk=maxdocid)
+@group_required("manager")
 @login_required
 def quotationissuetrackingsystem(request):
     quotationid = request.POST['quotationid']
@@ -1164,6 +1189,7 @@ def quotationissuetrackingsystem(request):
 
     return render(request, 'quotation/quotationtimeentries.html',{'docid': quotationid,
                                                                   'addfilterselectvaluesandoptions': addfilterselectvaluesandoptions})
+@group_required("manager")
 @login_required
 def quotationissuetrackingsystemitemstoquotation(request):
 
@@ -1313,6 +1339,7 @@ def quotationissuetrackingsystemitemstoquotation(request):
         # update redmine table with docdetailsid end
 
     return render(request, 'quotation/quotationissuetrackingsystemredirecturl.html', {'pk': quotationdocid})
+@group_required("manager")
 @login_required
 def quotationissuetrackingsystempostitems(request):
 
@@ -1327,7 +1354,7 @@ def quotationissuetrackingsystempostitems(request):
 
     return HttpResponse(json_data, content_type="application/json")
 
-
+@group_required("manager")
 @login_required
 def quotationissuetrackingsystemsearchcontent(request):
     creatorid = request.user.id
@@ -1539,6 +1566,7 @@ def quotationissuetrackingsystemsearchcontent(request):
                                                                'searchphraseformainresults': searchphraseformainresults,
                                                                'usernamerowsources': usernamerowsources,
                                                                'activitynamerowsources': activitynamerowsources})
+@group_required("manager")
 @login_required
 def quotationerasequoteddocdatainits(request):
 

@@ -1,12 +1,23 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 #from .forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+@group_required("manager")
 @login_required
 def coredata_prefaceforquotation(request):
         if request.method == "POST":
@@ -35,6 +46,7 @@ def coredata_prefaceforquotation(request):
         prefacesforquotation = cursor3.fetchall()
 
         return render(request, 'quotation/prefaceforquotation.html', {'prefacesforquotation': prefacesforquotation })
+@group_required("manager")
 @login_required
 def coredata_prefaceforquotationadd(request):
         cursor1 = connection.cursor()
@@ -43,6 +55,7 @@ def coredata_prefaceforquotationadd(request):
         transaction.commit()
 
         return redirect('coredata_prefaceforquotation')
+@group_required("manager")
 @login_required
 def coredata_prefaceforquotationremove(request, pk):
         cursor1 = connection.cursor()
@@ -54,6 +67,7 @@ def coredata_prefaceforquotationremove(request, pk):
         transaction.commit()
 
         return redirect('coredata_prefaceforquotation')
+@group_required("manager")
 @login_required
 def coredata_backpageforquotation(request):
         if request.method == "POST":
@@ -82,6 +96,7 @@ def coredata_backpageforquotation(request):
         backpagesforquotation = cursor3.fetchall()
 
         return render(request, 'quotation/backpageforquotation.html', {'backpagesforquotation': backpagesforquotation })
+@group_required("manager")
 @login_required
 def coredata_backpageforquotationadd(request):
         cursor1 = connection.cursor()
@@ -90,6 +105,7 @@ def coredata_backpageforquotationadd(request):
         transaction.commit()
 
         return redirect('coredata_backpageforquotation')
+@group_required("manager")
 @login_required
 def coredata_backpageforquotationremove(request, pk):
         cursor1 = connection.cursor()
@@ -101,6 +117,7 @@ def coredata_backpageforquotationremove(request, pk):
         transaction.commit()
 
         return redirect('coredata_backpageforquotation')
+@group_required("manager")
 @login_required
 def coredata_payment(request):
         if request.method == "POST":
@@ -129,6 +146,7 @@ def coredata_payment(request):
         payments = cursor3.fetchall()
 
         return render(request, 'quotation/payment.html', {'payments': payments })
+@group_required("manager")
 @login_required
 def coredata_paymentadd(request):
         cursor1 = connection.cursor()
@@ -137,6 +155,7 @@ def coredata_paymentadd(request):
         transaction.commit()
 
         return redirect('coredata_payment')
+@group_required("manager")
 @login_required
 def coredata_paymentremove(request, pk):
         cursor1 = connection.cursor()
@@ -148,6 +167,7 @@ def coredata_paymentremove(request, pk):
         transaction.commit()
 
         return redirect('coredata_payment')
+@group_required("manager")
 @login_required
 def coredata_currency(request):
         if request.method == "POST":
@@ -180,6 +200,7 @@ def coredata_currency(request):
         currencys = cursor3.fetchall()
 
         return render(request, 'quotation/currency.html', {'currencys': currencys })
+@group_required("manager")
 @login_required
 def coredata_currencyadd(request):
         cursor1 = connection.cursor()
@@ -188,6 +209,7 @@ def coredata_currencyadd(request):
         transaction.commit()
 
         return redirect('coredata_currency')
+@group_required("manager")
 @login_required
 def coredata_currencyremove(request, pk):
         cursor1 = connection.cursor()

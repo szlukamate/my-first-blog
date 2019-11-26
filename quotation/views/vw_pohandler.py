@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
@@ -17,10 +17,23 @@ import os
 import time
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+
+@group_required("manager")
 @login_required
 def pohandlerframe(request):
 
     return render(request, 'quotation/pohandlerframe.html', {})
+@group_required("manager")
 @login_required
 def pohandlerfieldsupdate(request):
     if request.method == "POST":
@@ -37,6 +50,7 @@ def pohandlerfieldsupdate(request):
         json_data = json.dumps(results23, indent=4, sort_keys=True, default=str)
 
         return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def pohandlersearchresults(request):
     receivedstatus = request.POST['receivedstatus']
@@ -155,6 +169,7 @@ def pohandlersearchresults(request):
 
     return render(request, 'quotation/pohandler.html', {'pos': pos,
                                                         'porowsnumber': porowsnumber})
+@group_required("manager")
 @login_required
 def pohandlerrowsourceforarrivaldates(request):
     cursor0 = connection.cursor()
@@ -195,6 +210,7 @@ def pohandlerrowsourceforarrivaldates(request):
 
     return render(request, 'quotation/pohandlerrowsourceforarrivaldates.html', {'arrivaldates': arrivaldates, 'rownmbs': rownmbs})
 
+@group_required("manager")
 @login_required
 def pohandlerreception(request): #from pohandlerform
     dateofarrival = request.POST['dateofarrival']
@@ -1414,6 +1430,7 @@ def pohandlerreception(request): #from pohandlerform
 #deliverynote making end
 
     return render(request, 'quotation/pohandlerreceptionredirecturl.html',{})
+@group_required("manager")
 @login_required
 def pohandlersplit(request):
         newqty = request.POST['newqty']

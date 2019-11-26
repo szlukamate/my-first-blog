@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
@@ -9,6 +9,17 @@ import simplejson as json
 from django.http import HttpResponse
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+@group_required("manager")
 @login_required
 def products(request, pkproductid):
     '''
@@ -117,6 +128,7 @@ def products(request, pkproductid):
 
     return render(request, 'quotation/products.html', {'products': products,
                                                        'addfilterselectvaluesandoptions': addfilterselectvaluesandoptions})
+@group_required("manager")
 @login_required
 def productupdatecurrencyisocode(request):
     if request.method == 'POST':
@@ -150,6 +162,7 @@ def productupdatecurrencyisocode(request):
 
     return HttpResponse(json_data, content_type="application/json")
 
+@group_required("manager")
 @login_required
 def productlistpricefieldupdate(request):
     if request.method == 'POST':
@@ -177,6 +190,7 @@ def productlistpricefieldupdate(request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def productnew(request):
     serviceflag = request.POST['serviceflag']
@@ -191,6 +205,7 @@ def productnew(request):
     transaction.commit()
 
     return render(request, 'quotation/productnewredirecturl.html', {})
+@group_required("manager")
 @login_required
 def productremove(request,pkproductid):
     cursor1 = connection.cursor()
@@ -202,6 +217,7 @@ def productremove(request,pkproductid):
     transaction.commit()
 
     return redirect('products', pkproductid=0)
+@group_required("manager")
 @login_required
 def productupdatesupplier(request):
     if request.method == 'POST':
@@ -224,7 +240,7 @@ def productupdatesupplier(request):
 
     return HttpResponse(json_data, content_type="application/json")
 
-
+@group_required("manager")
 @login_required
 def productsearchcontent(request):
     filteritemlistraw = request.POST['filteritemlist']
@@ -312,6 +328,7 @@ def productsearchcontent(request):
                                                        'numberofitems': numberofitems,
                                                        'supplierlist': supplierlist})
 
+@group_required("manager")
 @login_required
 def productfieldupdate(request):
     if request.method == "POST":

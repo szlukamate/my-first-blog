@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
@@ -18,6 +18,17 @@ import os
 
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+@group_required("manager")
 @login_required
 def customerorderform(request, pk):
     if request.method == "POST":
@@ -249,7 +260,7 @@ def customerorderform(request, pk):
                    'polinks': polinks,
                    'stockradiobuttonrows': stockradiobuttonrows,
                    'currencycodes': currencycodes})
-
+@group_required("manager")
 @login_required
 def customerordernewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml,
                     nextthirdnumonhtml, nextfourthnumonhtml):
@@ -346,6 +357,7 @@ def customerordernewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirst
 
     return redirect('customerorderform', pk=pkdocid)
 
+@group_required("manager")
 @login_required
 def customerordernewrowadd(request):
     if request.method == "POST":
@@ -378,6 +390,7 @@ def customerordernewrowadd(request):
                   {'products': products, 'docid': customerorderid, 'nextchapternumset': nextchapternumset,
                    'docdetailsid': docdetailsid})
 
+@group_required("manager")
 @login_required
 def customerorderrowremove(request, pk):
     cursor2 = connection.cursor()
@@ -395,6 +408,7 @@ def customerorderrowremove(request, pk):
 
     return redirect('customerorderform', pk=na)
 
+@group_required("manager")
 @login_required
 def searchcustomerordercontacts(request):
     customerorderbackpage
@@ -423,6 +437,7 @@ def searchcustomerordercontacts(request):
     return render(request, 'quotation/ajax_search_customerorder_contacts.html',
                   {'results': results, 'rownmbs': rownmbs, 'docidincustomerorderjs': docidincustomerorderjs})
 
+@group_required("manager")
 @login_required
 def customerorderupdatecontact(request, pkdocid, pkcontactid):
     cursor0 = connection.cursor()
@@ -475,6 +490,7 @@ def customerorderupdatecontact(request, pkdocid, pkcontactid):
 
     return redirect('customerorderform', pk=pkdocid)
 
+@group_required("manager")
 @login_required
 def customerorderprint(request, docid):
     cursor1 = connection.cursor()
@@ -572,6 +588,7 @@ def customerorderprint(request, docid):
                                                              'docdetailscount': docdetailscount,
                                                              'creatordata': creatordata})
 
+@group_required("manager")
 @login_required
 def customerorderuniversalselections(request):
     fieldvalue = request.POST['fieldvalue']
@@ -595,6 +612,7 @@ def customerorderuniversalselections(request):
 
     return HttpResponse(json_data, content_type="application/json")
 
+@group_required("manager")
 @login_required
 def customerorderbackpage(request):
     if request.method == 'POST':

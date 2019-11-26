@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from collections import namedtuple
 from django.db import connection, transaction
 from array import *
@@ -14,6 +14,17 @@ import os
 import shutil
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+@group_required("manager")
 @login_required
 def emailadd (request, pk):
 
@@ -289,6 +300,7 @@ def emailadd (request, pk):
         return redirect('emailform', pk=maxdocid)
     else:
         return HttpResponseNotFound('The requested pdf was not found in our server.')
+@group_required("manager")
 @login_required
 def emailform(request, pk):
         if request.method == "POST":
@@ -389,6 +401,7 @@ def emailform(request, pk):
         return render(request, 'quotation/email.html', {'doc': doc,
                                                         'docdetails': docdetails,
                                                         'creatordata': creatordata})
+@group_required("manager")
 @login_required
 def emailviewattachment(request, pk):
     BASE_DIR = settings.BASE_DIR
@@ -417,6 +430,7 @@ def emailviewattachment(request, pk):
             return response
     else:
         return HttpResponseNotFound("The requested pdf was not found in our server.")
+@group_required("manager")
 @login_required
 def emailviewattachmentcandidate(request, pdffilename):
     creatorid = request.user.id

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
@@ -18,7 +18,17 @@ import time
 
 # import pdb;
 # pdb.set_trace()
-
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+@group_required("manager")
 @login_required
 def deliverynoteform(request, pk):
         if request.method == "POST":
@@ -205,6 +215,7 @@ def deliverynoteform(request, pk):
                                                               'nextchapternums': nextchapternums,
                                                               'creatordata': creatordata,
                                                               'currencycodes': currencycodes})
+@group_required("manager")
 @login_required
 def deliverynoteprint(request, docid):
     cursor1 = connection.cursor()
@@ -451,6 +462,7 @@ def deliverynoteprint(request, docid):
                                                              'docdetailscount': docdetailscount,
                                                              'labelidtemptableswithenablelabelkindflagset': labelidtemptableswithenablelabelkindflagset,
                                                              'creatordata': creatordata})
+@group_required("manager")
 @login_required
 def deliverynotebackpage(request):
 
@@ -473,6 +485,7 @@ def deliverynotebackpage(request):
     json_data = json.dumps(doc)
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
 @login_required
 def deliverynotepre(request):
 
@@ -635,6 +648,7 @@ def deliverynotepre(request):
                                                               'stockdetails': stockdetails,
                                                               'rowsnumber': rowsnumber})
 
+@group_required("manager")
 @login_required
 def deliverynotemake(request): #from deliverynotepre form (buttonpress comes here)
     customerordernumber = request.POST['customerordernumber']
@@ -1067,6 +1081,7 @@ def deliverynotemake(request): #from deliverynotepre form (buttonpress comes her
 # make new denoitems end
 
     return render(request, 'quotation/deliverynotepreredirecturl.html', {'pk': pk})
+@group_required("manager")
 @login_required
 def deliverynotenewrowadd(request):
     if request.method == "POST":
@@ -1095,6 +1110,7 @@ def deliverynotenewrowadd(request):
     #return redirect('quotationform', pk=1)
 
     return render(request, 'quotation/deliverynotenewrowadd.html',{'products': products, 'docid': deliverynoteid, 'nextchapternumset': nextchapternumset, 'docdetailsid' : docdetailsid })
+@group_required("manager")
 @login_required
 def deliverynotenewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml,
                     nextthirdnumonhtml, nextfourthnumonhtml):
@@ -1190,6 +1206,7 @@ def deliverynotenewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstn
         transaction.commit()
 
     return redirect('deliverynoteform', pk=pkdocid)
+@group_required("manager")
 @login_required
 def deliverynoterowremove(request, pk):
     cursor2 = connection.cursor()
@@ -1206,6 +1223,7 @@ def deliverynoterowremove(request, pk):
     transaction.commit()
 
     return redirect('deliverynoteform', pk=na)
+@group_required("manager")
 @login_required
 def deliverynotenewlabel(request):
     newlabelid = request.POST['newlabelid']
@@ -1297,6 +1315,7 @@ def deliverynotenewlabel(request):
 #    pk=deliverynotedocid
 
     return render(request, 'quotation/deliverynoteparameterstostocktaking.html', {'parametertostocktaking': parametertostocktaking})
+@group_required("manager")
 @login_required
 def deliverynoteafternewlabel(request):
     newlabelid = request.POST['newlabelid']
@@ -1425,6 +1444,7 @@ def deliverynoteafternewlabel(request):
 
     return render(request, 'quotation/deliverynotenewlabelredirecturl.html', {'pk': pk})
 
+@group_required("manager")
 @login_required
 def deliverynotechoosestock(request):  # labels on stockform for particular product
     productid = request.POST['productid']
@@ -1533,6 +1553,7 @@ def deliverynotechoosestock(request):  # labels on stockform for particular prod
         results = toresults
 
     return render(request, 'quotation/ajax_stocklabellist.html', {'results': results, 'productid': productid})
+@group_required("manager")
 @login_required
 def oldestlabeldelete(request):
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction, connections
@@ -18,6 +18,18 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+
+@group_required("manager")
 def filtertemplatehtmlonproductform(request):
         invokedfrom = request.POST['invokedfrom']
 
@@ -169,6 +181,7 @@ def filtertemplatehtmlonproductform(request):
                                                                     'filteritemrowid': filteritemrowid,
                                                                     'filteritemname': filteritemname,
                                                                     'filteritemselectoptions': filteritemselectoptions})
+@group_required("manager")
 def filtertemplatehtmlonquotationtimeentryform(request):
         invokedfrom = request.POST['invokedfrom']
         searchphraseformainresults = request.POST['searchphraseformainresults']
@@ -429,6 +442,7 @@ def filtertemplatehtmlonquotationtimeentryform(request):
                                                                     'filteritemrowid': filteritemrowid,
                                                                     'filteritemname': filteritemname,
                                                                     'filteritemselectoptions': filteritemselectoptions})
+@group_required("manager")
 def filtertemplatehtmlontimemanagerform(request):
         invokedfrom = request.POST['invokedfrom']
         searchphraseformainresults = request.POST['searchphraseformainresults'] # 'a' when searchstring is empty
@@ -626,6 +640,7 @@ def filtertemplatehtmlontimemanagerform(request):
                                                                     'filteritemrowid': filteritemrowid,
                                                                     'filteritemname': filteritemname,
                                                                     'filteritemselectoptions': filteritemselectoptions})
+@group_required("manager")
 def filtertemplatehtmlonpurchaseorderpreform(request):
         invokedfrom = request.POST['invokedfrom']
         searchphraseformainresults = request.POST['searchphraseformainresults'] # 'a' when searchstring is empty
