@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from quotation.models import tblDoc, tblDoc_kind, tblDoc_details
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction, connections
@@ -19,9 +19,21 @@ import xml.dom.minidom as x12
 from datetime import datetime, timedelta
 # import pdb;
 # pdb.set_trace()
+def group_required(group_name, login_url=None):
+    """
+    Decorator for views that checks whether a user belongs to a particular
+    group, redirecting to the log-in page if necessary.
+    """
+    def check_group(user):
+        # First check if the user belongs to the group
+        if user.groups.filter(name=group_name).exists():
+            return True
+    return user_passes_test(check_group, login_url=login_url)
+
+@group_required("developer")
 @login_required
 def timemanagerdev(request):
-        # filtering  options to Addfilter selectbox begin
+        # filtering options to Addfilter selectbox begin
         # Creates a list containing #h lists, each of #w items, all set to 0
         w, h = 3, 6;
         addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]
@@ -50,6 +62,7 @@ def timemanagerdev(request):
         # pdb.set_trace()
 
         return render(request, 'developer/timemanager.html', {'addfilterselectvaluesandoptions': addfilterselectvaluesandoptions})
+@group_required("developer")
 @login_required
 def timemanagerdevsearchcontent(request):
     filteritemlistraw = request.POST['filteritemlist']
@@ -336,6 +349,7 @@ def timemanagerdevsearchcontent(request):
                                                        'usernamerowsources': usernamerowsources,
                                                        'issuerowsources': issuerowsources,
                                                        'timedonesnumberofitems': timedonesnumberofitems})
+@group_required("developer")
 @login_required
 def timemanagerdevupdateprojectselect(request):
     if request.method == 'POST':
@@ -364,6 +378,7 @@ def timemanagerdevupdateprojectselect(request):
     #pdb.set_trace()
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("developer")
 @login_required
 def timemanagerdevupdateuserselect(request):
     if request.method == 'POST':
@@ -390,6 +405,7 @@ def timemanagerdevupdateuserselect(request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("developer")
 @login_required
 def timemanagerdevupdateissueselect(request):
     if request.method == 'POST':
@@ -416,6 +432,7 @@ def timemanagerdevupdateissueselect(request):
     json_data = json.dumps(results)
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("developer")
 @login_required
 def timemanagerdevfieldupdate(request):
     if request.method == "POST":
@@ -432,6 +449,7 @@ def timemanagerdevfieldupdate(request):
         json_data = json.dumps(results23)
 
         return HttpResponse(json_data, content_type="application/json")
+@group_required("developer")
 @login_required
 def timemanagerdevuploadtoits(request):
     creatorid = request.user.id
@@ -573,16 +591,38 @@ def timemanagerdevuploadtoits(request):
     return render(request, 'developer/timemanagerafteruploadtoitsredirecturl.html',{})
 
 
-
+@group_required("developer")
 @login_required
 def timedonedevitemnew(request):
+    useridindjango = request.user.id
+
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT "
+                     "useridinredmine_tblauth_user, "
+                     "usernameinredmine_tblauth_user "
+
+                     "FROM auth_user "
+
+                     "WHERE id = %s ", [useridindjango])
+
+    usermatingresults = cursor3.fetchall()
+    for x11 in usermatingresults:
+        useridinredmine = x11[0]
+        usernameinredmine = x11[1]
+
 
     cursor1 = connection.cursor()
     cursor1.execute("INSERT INTO quotation_tbltimedone "
                     "(spenton_tbltimedone,"
-                    "rowenabledformanager_tbltimedone) VALUES ('" + str((datetime.now()).date()) + "',0)")
+                    "rowenabledformanager_tbltimedone,"
+                    "userid_tbltimedone,"
+                    "username_redmine_ctbltimedone) VALUES ('" + str((datetime.now()).date()) + "', "
+                                                    "'0', "
+                                                    "'" + str(useridinredmine) + "', "
+                                                    "'" + str(usernameinredmine) + "');")
 
     return redirect('timemanagerdev')
+@group_required("developer")
 @login_required
 def timedonedevitemremove(request,pktimedoneid):
 
@@ -591,7 +631,7 @@ def timedonedevitemremove(request,pktimedoneid):
         "DELETE FROM quotation_tbltimedone WHERE timedoneid_tbltimedone=%s ", [pktimedoneid])
 
     return redirect('timemanagerdev')
-
+@group_required("developer")
 @login_required
 def timemanagerdevupdateissueselectafterchangeprojectselect(request): # <-- see name
     timedoneidinjs = request.POST['timedoneidinjs']
@@ -612,6 +652,7 @@ def timemanagerdevupdateissueselectafterchangeprojectselect(request): # <-- see 
     return render(request, 'developer/timemanagerissueselecthtmlafterupdateprojectselect.html',
                   {'timedoneid': timedoneidinjs,
                   'selectoptions': selectoptions})
+@group_required("developer")
 @login_required
 def timemanagerdevrowenabledformanager(request):
     if request.method == "POST":

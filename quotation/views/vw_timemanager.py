@@ -21,7 +21,7 @@ from datetime import datetime, timedelta
 # pdb.set_trace()
 @login_required
 def timemanager(request):
-        # filtering options to Addfilter selectbox begin
+        #  filtering options to Addfilter selectbox begin
         # Creates a list containing #h lists, each of #w items, all set to 0
         w, h = 3, 6;
         addfilterselectvaluesandoptions = [[0 for x in range(w)] for y in range(h)]

@@ -32,8 +32,6 @@ def group_required(group_name, login_url=None):
     """
     Decorator for views that checks whether a user belongs to a particular
     group, redirecting to the log-in page if necessary.
-    If the raise_exception parameter is given the PermissionDenied exception
-    is raised.
     """
     def check_group(user):
         # First check if the user belongs to the group
@@ -41,7 +39,7 @@ def group_required(group_name, login_url=None):
             return True
     return user_passes_test(check_group, login_url=login_url)
 
-@group_required("developer")
+@group_required("manager")
 @login_required
 def docsearch(request):
     cursor1 = connection.cursor()
