@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.~lock.190731 AWS after reboot activities.odt#" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/190731 AWS after reboot activities.odt" beforeDir="false" afterPath="$PROJECT_DIR$/190731 AWS after reboot activities.odt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_welcome.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_welcome.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/views/vw_filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_filter.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

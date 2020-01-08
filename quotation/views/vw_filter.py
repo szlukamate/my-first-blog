@@ -604,7 +604,7 @@ def filtertemplatehtmlontimemanagerform(request):
 
                 if selectedvalue == 'uploadingtimestamp': # here the value is text without space and small letter i.e. customerdescription
 
-                    # Creates a list containing #h lists, each of #w items, all set to 0
+                    # Creates a list containing #h lists, each of #w  items, all set to 0
                     w, h = 2, 4;
                     filteritemselectoptions = [[0 for x in range(w)] for y in range(h)]
 
