@@ -3,22 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_account.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_account.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_companyandcontact.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_companyandcontact.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_coredata.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_coredata.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_customerinvoice.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_customerinvoice.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_customerorder.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_customerorder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_deliverynote.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_doc.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_doc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_email.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_email.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_filter.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_filter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_jobnumber.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_jobnumber.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_pohandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_pohandler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_product.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_product.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_purchaseorder.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_purchaseorder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_quotation.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_quotation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_stock.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quotation/views/vw_timemanager.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_timemanager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.~lock.190731 AWS after reboot activities.odt#" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/190731 AWS after reboot activities.odt" beforeDir="false" afterPath="$PROJECT_DIR$/190731 AWS after reboot activities.odt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quotation/views/vw_welcome.py" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/views/vw_welcome.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

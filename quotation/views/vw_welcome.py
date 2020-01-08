@@ -24,7 +24,7 @@ def group_required(group_name, login_url=None):
     group, redirecting to the log-in page if necessary.
     """
     def check_group(user):
-        # First check if the user belongs to the group
+        # First check if the user belongs to the  group
         if user.groups.filter(name=group_name).exists():
             return True
     return user_passes_test(check_group, login_url=login_url)
