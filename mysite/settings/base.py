@@ -38,14 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'quotation',
-    'corsheaders',
+   # 'corsheaders',
     'developer',
    # 'ist',
    # 'debug_toolbar',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    #'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
