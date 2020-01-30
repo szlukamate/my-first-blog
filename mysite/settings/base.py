@@ -24,7 +24,7 @@ SECRET_KEY = '4sirb^x^58_%1-1j6ld401-d_p%dh##^24q3-3^ueh)x7rnu1r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', '13.58.18.245']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', '3.137.67.216']
 
 
 # Application definition
@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': 'redmine',
         'USER': 'redmineremoteaccessor',
         'PASSWORD': 'F4sHJQsb',
-        'HOST': '13.58.18.245',
+        'HOST': '3.137.67.216',
         'PORT': '3306',
     }
 }

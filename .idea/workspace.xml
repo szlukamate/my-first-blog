@@ -3,66 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.~lock.190731 AWS after reboot activities.odt#" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mysite/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quotation/templates/quotation/quotationtimeentries.html" beforeDir="false" afterPath="$PROJECT_DIR$/quotation/templates/quotation/quotationtimeentries.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>purchaseorder</find>
-      <find>datep</find>
-      <find>dialog</find>
-      <find>update</find>
-      <find>docnumber</find>
-      <find>polink</find>
-      <find>updatecon</find>
-      <find>ingoing</find>
-      <find>docdetails</find>
-      <find>productqty</find>
-      <find>dia</find>
-      <find>podocdetailsid</find>
-      <find>quotation</find>
-      <find>denodocid</find>
-      <find>custom</find>
-      <find>down</find>
-      <find>newrow</find>
-      <find>newrow00</find>
-      <find>tables</find>
-      <find>corqty</find>
-      <find>poqty</find>
-      <find>lateststocktaking</find>
-      <find>denoqty</find>
-      <find>subj</find>
-      <find>bactostockdocid</find>
-      <find>fromstockitemqtyinfromstocklist</find>
-      <find>backtostockforcordocid_tbldoc</find>
-      <find>defactobackqty</find>
-      <find>cordocidfromstocklist</find>
-      <find>subjecttext</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>quotation</replace>
-      <replace>customer</replace>
-      <replace>customerd</replace>
-      <replace>customerorder</replace>
-      <replace>to</replace>
-      <replace>x</replace>
-      <replace>sor</replace>
-      <replace>supplierorder</replace>
-      <replace>purchase</replace>
-      <replace>podetailslink</replace>
-      <replace>denotopolink</replace>
-      <replace>outgoing</replace>
-      <replace>product</replace>
-      <replace>deliverynote</replace>
-      <replace>companyidlookup</replace>
-      <replace>backtostockdocid</replace>
-      <replace>neededitemqty</replace>
-    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
