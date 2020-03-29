@@ -1,0 +1,45 @@
+{% extends 'aid/abase.html' %}
+{% load staticfiles%}
+	{% block content %}
+
+							{% csrf_token %}
+
+							<p align="center" style="font-size:160%;">Docsearch Form</p>
+
+							<p align="right"><a href="{% url 'adocadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+							<label for="docnumber" >Docnumber</label>
+							<input id="docnumber" type="text" value="" name="docnumber" maxlength="50" size="10">
+
+							<label for="dockind" >Dockind</label>
+							  <select id="dockindname">
+									<option value="" ></option>
+									{% for dockindname in dockindnames %}
+										<option value="{{ dockindname.0 }}">{{ dockindname.0 }}</option>
+									{% endfor %}
+							  </select>
+
+							<label for="from" >From</label>
+							<input id="fromdate" type="text" value="" name="from" maxlength="50" size="10">
+
+							<label for="to" >To</label>
+							<input id="todate" type="text" value="" name="to" maxlength="50" size="10">
+
+							  <label for="company" >Company</label>
+							  <select id="company">
+									<option value="" ></option>
+									{% for company in companies %}
+										<option value="{{ company.0 }}">{{ company.0 }}</option>
+									{% endfor %}
+							  </select>
+
+							<button id="searchbutton" type="submit">
+							   <span class="glyphicon glyphicon-filter"></span>
+							</button>
+
+							<button id="searchoutbutton" type="button">
+							   <span class="glyphicon glyphicon-trash"></span>
+							</button>
+
+							<span id="docsearchtemplate" ></span>
+		<script type="text/javascript" src="{% static 'js/adocsearch.js' %}"></script>
+	{% endblock %}

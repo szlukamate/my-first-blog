@@ -1,0 +1,48 @@
+{% load static %}
+<html>
+    <head>
+        <title>Quotation Maker</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="{% static 'css/aid.css' %}">
+
+
+	<link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+	<div class="page-header">
+	    {% if user.is_authenticated %}
+		<p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
+	    {% else %}
+                <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
+	    {% endif %}
+	</div>
+	<div class="container" id="mainmenu">
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+			<div class="navbar-header">
+			  <a class="navbar-brand" href="{% url 'awelcome' %}">Aid</a>
+			</div>
+			<ul class="nav navbar-nav" id="mainnavbar">
+				<li><a href="{% url 'adocsearch' %}">Docsearch</a></li>
+			</ul>
+		  </div>
+		</nav>
+	</div>
+
+	<div class="container-fluid">
+	    <div class="row">
+	        <div >
+			{% block content %}
+			{% endblock %}
+        </div>
+    </div>
+</div>
+
+{% block javascript %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,26 @@
+{% extends 'aid/abase.html' %}
+ 	{% block content %}
+
+				    <p id="formtitle" align="center" style="font-size:260%">Docadd Form</p>
+
+                    <p onclick="$(this).hide();"> This is an inner jq</p>
+                    <p id="para" > This is an external jq</p>
+
+
+                            <form action="{% url 'adocadd' %}" method="post">{% csrf_token %}
+                                <select name="dockindidfornewdoc">
+>
+                                    {% for dockind in  dockinds %}
+                                        <option value="{{ dockind.0}}">{{ dockind.0}} {{ dockind.1}}</option>
+                                    {% endfor %}
+                                </select><br>
+                                <select name="contactidfornewdoc">
+                                    {% for contact in contacts %}
+                                        <option value="{{ contact.0}}">{{ contact.0}} {{ contact.1}} {{ contact.2}} {{ contact.3}}</option>
+                                    {% endfor %}
+                                </select><br>
+                                <input type="submit" value="Make a new doc">
+				            </form>
+
+	{% endblock %}
+

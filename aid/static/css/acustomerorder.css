@@ -1,0 +1,163 @@
+
+#tabs1 {
+    width: 150mm;
+}
+#tabs2 {
+    width: 450mm;
+}
+
+#infoframe {
+position: absolute;
+left:200mm;
+}
+
+#total {
+position: absolute;
+top: 15mm;
+left:200mm;
+}
+#deliverydays {
+position: absolute;
+top: 25mm;
+left:200mm;
+}
+#payment {
+position: absolute;
+top: 35mm;
+left:200mm;
+}
+#currencyinreport {
+position: absolute;
+top: 45mm;
+left:200mm;
+}
+
+#labels{
+font-size: 9pt;
+//position: absolute;
+top: 0 mm;
+left: 0 mm;
+
+}
+/*
+#Pridlabel{
+position: relative;
+top: 12mm;
+}
+#Ddetidlabel{
+position: relative;
+top: 12mm;
+}
+#C1label{
+position: relative;
+top: 12mm;
+}
+#C2label{
+position: relative;
+top: 12mm;
+}
+#C3label{
+position: relative;
+top: 12mm;
+}
+#C4label{
+position: relative;
+top: 12mm;
+}
+#Qtylabel{
+position: relative;
+top: 12mm;
+}
+#Unitlabel{
+position: relative;
+top: 12mm;
+}
+#customerdescriptionlabel{
+position: relative;
+top: 12mm;
+}
+#supplierdescriptionlabel{
+position: relative;
+top: 12mm;
+}
+#Notelabel{
+position: relative;
+top: 12mm;
+}
+*/
+#Purchasepricelabel{
+position: absolute;
+top: 12mm;
+left:160mm;
+}
+#newquotationrowsdiv{
+position: absolute;
+right: 5mm;
+top: 1.7mm;
+}
+#listpricemarginlabel{
+position: absolute;
+top: 18mm;
+left:189mm;
+}
+#listpricelabel{
+position: absolute;
+top: 12mm;
+left: 203mm;
+}
+#currencycodelabel{
+position: absolute;
+top: 18mm;
+left: 230mm;
+}
+#purchasepriceACUlabel{
+position: absolute;
+top: 12mm;
+left: 244mm;
+}
+#currencyratelabel{
+position: absolute;
+top: 18mm;
+left: 273mm;
+}
+#unitsalespricemarginlabel{
+position: absolute;
+top: 12mm;
+left: 286mm;
+}
+#listpriceACUlabel{
+position: absolute;
+top: 18mm;
+left: 300mm;
+}
+#unitsalespriceACUlabel{
+position: absolute;
+top: 12mm;
+left: 328mm;
+}
+#discountlabel{
+position: absolute;
+top: 18mm;
+left: 358mm;
+}
+#supplierlabel{
+position: absolute;
+top: 12mm;
+left: 371mm;
+}
+#title {
+color:white;
+background-color: blue;
+font-size: 173%;
+}
+.ui-dialog {
+    left: 50% !important;
+    top: 50% !important;
+    margin-left: -175px !important;
+    margin-top: -175px !important;
+}
+#deferredpaymentdays {
+position: absolute;
+top: 55mm;
+left:200mm;
+}
