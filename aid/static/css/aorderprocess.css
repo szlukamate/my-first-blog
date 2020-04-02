@@ -1,0 +1,30 @@
+
+#tabs {
+    width: 250mm;
+}
+.ui-dialog {
+    left: 50% !important;
+    top: 50% !important;
+    margin-left: -175px !important;
+    margin-top: -175px !important;
+}
+
+button {
+border: 1px solid black;
+transition: 250ms background-color;
+}
+
+button:disabled {
+border: 0px solid black;
+}
+
+button:hover {
+cursor: pointer;
+background-color: black;
+color: white;
+}
+
+button:disabled:hover {
+cursor: not-allowed;
+opacity: 0.6;
+}

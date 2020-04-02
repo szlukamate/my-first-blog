@@ -73,8 +73,8 @@ $(function () {
     } catch(e) {}
 
     $( "#tabs1" ).tabs({
-        active: oldIndex1,
-        activate: function(event, ui) {
+        active: oldIndex1,  //run when initialized
+        activate: function(event, ui) {  //run when clicked
             //  Get future value
             var newIndex1 = ui.newTab.parent().children().index(ui.newTab);
             //  Set future value

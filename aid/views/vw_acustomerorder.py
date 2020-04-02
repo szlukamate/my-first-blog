@@ -262,23 +262,23 @@ def acustomerorderform(request, pk):
                    'currencycodes': currencycodes})
 @group_required("manager")
 @login_required
-def customerordernewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml,
+def acustomerordernewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirstnumonhtml, nextsecondnumonhtml,
                     nextthirdnumonhtml, nextfourthnumonhtml):
     cursor0 = connection.cursor()
     cursor0.execute(
-        "SELECT `Productid_tblProduct`, "
-        "`purchase_price_tblproduct`, `"
-        "customerdescription_tblProduct`, "
-        "`margin_tblproduct`, "
-        "`currencyisocode_tblcurrency_ctblproduct`, "
-        "currencyrate_tblcurrency, "
-        "unit_tblproduct, "
-        "supplierdescription_tblProduct, "
-        "suppliercompanyid_tblProduct "
-        "FROM `quotation_tblproduct` "
-        "LEFT JOIN quotation_tblcurrency "
-        "ON quotation_tblproduct.currencyisocode_tblcurrency_ctblproduct=quotation_tblcurrency.currencyisocode_tblcurrency "
-        "WHERE Productid_tblProduct= %s", [pkproductid])
+        "SELECT `Productid_tblaProduct`, "
+        "`purchase_price_tblaproduct`, `"
+        "customerdescription_tblaProduct`, "
+        "`margin_tblaproduct`, "
+        "`currencyisocode_tblcurrency_ctblaproduct`, "
+        "currencyrate_tblacurrency, "
+        "unit_tblaproduct, "
+        "supplierdescription_tblaProduct, "
+        "suppliercompanyid_tblaProduct "
+        "FROM `aid_tblaproduct` "
+        "LEFT JOIN aid_tblacurrency "
+        "ON aid_tblaproduct.currencyisocode_tblcurrency_ctblaproduct=aid_tblacurrency.currencyisocode_tblacurrency "
+        "WHERE Productid_tblaProduct= %s", [pkproductid])
     results = cursor0.fetchall()
     for instancesingle in results:
         purchase_priceclone = instancesingle[1]
@@ -298,22 +298,22 @@ def customerordernewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirst
     if int(pkdocdetailsid) != 0:  # only modifying row
         cursor2 = connection.cursor()
         cursor2.execute(
-            "UPDATE quotation_tbldoc_details SET "
-            "Productid_tblDoc_details_id= %s, "
-            "firstnum_tblDoc_details=%s, "
-            "secondnum_tblDoc_details=%s, "
-            "thirdnum_tblDoc_details=%s, "
-            "fourthnum_tblDoc_details=%s, "
-            "purchase_price_tblproduct_ctblDoc_details=%s, "
-            "customerdescription_tblProduct_ctblDoc_details=%s, "
-            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details=%s, "
-            "listprice_tblDoc_details=%s, "
-            "currencyrate_tblcurrency_ctblDoc_details=%s, "
-            "unitsalespriceACU_tblDoc_details=%s, "
-            "unit_tbldocdetails=%s, "
-            "supplierdescription_tblProduct_ctblDoc_details=%s, "
-            "suppliercompanyid_tblDocdetails=%s "
-            "WHERE doc_detailsid_tbldoc_details =%s ",
+            "UPDATE aid_tbladoc_details SET "
+            "Productid_tblaDoc_details_id= %s, "
+            "firstnum_tblaDoc_details=%s, "
+            "secondnum_tblaDoc_details=%s, "
+            "thirdnum_tblaDoc_details=%s, "
+            "fourthnum_tblaDoc_details=%s, "
+            "purchase_price_tblproduct_ctblaDoc_details=%s, "
+            "customerdescription_tblProduct_ctblaDoc_details=%s, "
+            "currencyisocode_tblcurrency_ctblproduct_ctblaDoc_details=%s, "
+            "listprice_tblaDoc_details=%s, "
+            "currencyrate_tblcurrency_ctblaDoc_details=%s, "
+            "unitsalespriceACU_tblaDoc_details=%s, "
+            "unit_tbladocdetails=%s, "
+            "supplierdescription_tblProduct_ctblaDoc_details=%s, "
+            "suppliercompanyid_tblaDocdetails=%s "
+            "WHERE doc_detailsid_tbladoc_details =%s ",
             [pkproductid, nextfirstnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml, nextfourthnumonhtml,
              purchase_priceclone, customerdescriptionclone, currencyisocodeclone, listpricecomputed, currencyrateclone,
              unitsalespriceACU,
@@ -325,24 +325,24 @@ def customerordernewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirst
     else:
         cursor1 = connection.cursor()  # new row needed
         cursor1.execute(
-            "INSERT INTO quotation_tbldoc_details "
-            "(`Qty_tblDoc_details`, "
-            "`Docid_tblDoc_details_id`, "
-            "`Productid_tblDoc_details_id`, "
-            "`firstnum_tblDoc_details`, "
-            "`fourthnum_tblDoc_details`, "
-            "`secondnum_tblDoc_details`, "
-            "`thirdnum_tblDoc_details`, "
-            "`Note_tblDoc_details`, "
-            "`purchase_price_tblproduct_ctblDoc_details`, "
-            "`customerdescription_tblProduct_ctblDoc_details`, "
-            "`currencyisocode_tblcurrency_ctblproduct_ctblDoc_details`, "
-            "listprice_tblDoc_details, "
-            "currencyrate_tblcurrency_ctblDoc_details, "
-            "unitsalespriceACU_tblDoc_details, "
-            "unit_tbldocdetails, "
-            "`supplierdescription_tblProduct_ctblDoc_details`, "
-            "suppliercompanyid_tblDocdetails) "
+            "INSERT INTO aid_tbladoc_details "
+            "(`Qty_tblaDoc_details`, "
+            "`Docid_tblaDoc_details_id`, "
+            "`Productid_tblaDoc_details_id`, "
+            "`firstnum_tblaDoc_details`, "
+            "`fourthnum_tblaDoc_details`, "
+            "`secondnum_tblaDoc_details`, "
+            "`thirdnum_tblaDoc_details`, "
+            "`Note_tblaDoc_details`, "
+            "`purchase_price_tblproduct_ctblaDoc_details`, "
+            "`customerdescription_tblProduct_ctblaDoc_details`, "
+            "`currencyisocode_tblcurrency_ctblproduct_ctblaDoc_details`, "
+            "listprice_tblaDoc_details, "
+            "currencyrate_tblcurrency_ctblaDoc_details, "
+            "unitsalespriceACU_tblaDoc_details, "
+            "unit_tbladocdetails, "
+            "`supplierdescription_tblProduct_ctblaDoc_details`, "
+            "suppliercompanyid_tblaDocdetails) "
 
             "VALUES (1, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             [pkdocid, pkproductid, nextfirstnumonhtml, nextfourthnumonhtml, nextsecondnumonhtml, nextthirdnumonhtml,
@@ -355,11 +355,11 @@ def customerordernewrow(request, pkdocid, pkproductid, pkdocdetailsid, nextfirst
              suppliercompanyidclone])
         transaction.commit()
 
-    return redirect('customerorderform', pk=pkdocid)
+    return redirect('acustomerorderform', pk=pkdocid)
 
 @group_required("manager")
 @login_required
-def customerordernewrowadd(request):
+def acustomerordernewrowadd(request):
     if request.method == "POST":
         docdetailsid = request.POST['docdetailsid']
         customerorderid = request.POST['customerorderid']
@@ -373,29 +373,29 @@ def customerordernewrowadd(request):
 
     cursor1 = connection.cursor()
     cursor1.execute(
-        "SELECT Productid_tblProduct, "
-        "purchase_price_tblproduct, "
-        "margin_tblproduct, "
-        "round((100*purchase_price_tblproduct)/(100-margin_tblproduct),2) as listprice, "
-        "customerdescription_tblProduct, "
-        "currencyisocode_tblcurrency_ctblproduct, "
-        "supplierdescription_tblProduct "
-        "FROM quotation_tblproduct "
-        "WHERE obsolete_tblproduct=0 ")
+        "SELECT Productid_tblaProduct, "
+        "purchase_price_tblaproduct, "
+        "margin_tblaproduct, "
+        "round((100*purchase_price_tblaproduct)/(100-margin_tblaproduct),2) as listprice, "
+        "customerdescription_tblaProduct, "
+        "currencyisocode_tblcurrency_ctblaproduct, "
+        "supplierdescription_tblaProduct "
+        "FROM aid_tblaproduct "
+        "WHERE obsolete_tblaproduct=0 ")
     products = cursor1.fetchall()
     transaction.commit()
     # return redirect('quotationform', pk=1)
 
-    return render(request, 'quotation/customerordernewrowadd.html',
+    return render(request, 'aid/acustomerordernewrowadd.html',
                   {'products': products, 'docid': customerorderid, 'nextchapternumset': nextchapternumset,
                    'docdetailsid': docdetailsid})
 
 @group_required("manager")
 @login_required
-def customerorderrowremove(request, pk):
+def acustomerorderrowremove(request, pk):
     cursor2 = connection.cursor()
     cursor2.execute(
-        "SELECT Docid_tblDoc_details_id FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [pk])
+        "SELECT Docid_tblaDoc_details_id FROM aid_tbladoc_details WHERE Doc_detailsid_tblaDoc_details=%s ", [pk])
     results = cursor2.fetchall()
     for x in results:
         na = x[0]
@@ -403,10 +403,10 @@ def customerorderrowremove(request, pk):
 
     cursor1 = connection.cursor()
     cursor1.execute(
-        "DELETE FROM quotation_tbldoc_details WHERE Doc_detailsid_tblDoc_details=%s ", [pk])
+        "DELETE FROM aid_tbladoc_details WHERE Doc_detailsid_tblaDoc_details=%s ", [pk])
     transaction.commit()
 
-    return redirect('customerorderform', pk=na)
+    return redirect('acustomerorderform', pk=na)
 
 @group_required("manager")
 @login_required

@@ -209,7 +209,7 @@
 						{% endfor %}
 
 
-						<a href="{% url 'customerorderrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="customerorderproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
+						<a href="{% url 'acustomerorderrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="customerorderproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
 
 						<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->
 						{% if tblDoc_details.15 > 0 %}

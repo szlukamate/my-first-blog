@@ -241,7 +241,7 @@ $('#title').click(function() {
 
             $.ajax({
                 type: 'POST',
-                url: 'customerordernewrowadd',
+                url: 'acustomerordernewrowadd/',
 
                 data: {
                 'customerorderid' : customerorderid,
