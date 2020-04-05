@@ -19,5 +19,6 @@ urlpatterns = [
         views.acustomerordernewrow, name='acustomerordernewrow'),
     url(r'^acustomerorderrowremove/(?P<pk>[0-9]+)/$', views.acustomerorderrowremove, name='acustomerorderrowremove'),
     url(r'aorderprocess/$', views.aorderprocess, name='aorderprocess'),
+    url(r'adocorderadd/$', views.adocorderadd, name='adocorderadd'),
 
 ]

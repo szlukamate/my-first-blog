@@ -10,9 +10,9 @@
         <button id="nextbutton" type="submit">
            <span>Next</span>
         </button>
-        <button id="finishbutton" type="submit">
-           <span>Finish</span>
-        </button>
+        <form action="{% url 'adocorderadd' %}" method="post" >{% csrf_token %}
+            <input id="finishbutton" type="submit" value="Finish" />
+        </form>
 
         <div id="tabs">
           <ul>

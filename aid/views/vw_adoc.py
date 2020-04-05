@@ -648,3 +648,192 @@ def doclinkfix(request, docid, fixstate):
     request.session['fixtothis'] = docid #set
 
     return redirect('doclink', docid=docid)
+
+
+@group_required("manager")
+@login_required
+def adocorderadd(request):
+    if request.method == "POST":
+#        dockindidfornewdoc = request.POST['dockindidfornewdoc']
+#        contactidfornewdoc = request.POST['contactidfornewdoc']
+        creatorid = request.user.id
+        '''
+        cursor1 = connection.cursor()
+        cursor1.execute(
+            "SELECT contactid_tblacontacts, "
+            "companyname_tblacompanies, "
+            "Companyid_tblaCompanies, "
+            "Firstname_tblacontacts, "
+            "lastname_tblacontacts, "
+            "title_tblacontacts, "
+            "mobile_tblacontacts, "
+            "email_tblacontacts, "
+            "pcd_tblacompanies, "
+            "town_tblacompanies, "
+            "address_tblacompanies "
+
+            "FROM aid_tblacontacts "
+
+            "JOIN aid_tblacompanies "
+            "ON aid_tblacompanies.companyid_tblacompanies = aid_tblacontacts.companyid_tblacontacts_id "
+
+            "WHERE contactid_tblacontacts =%s", [contactidfornewdoc])
+        companyandcontactdata = cursor1.fetchall()
+        '''
+#        for instancesingle in companyandcontactdata:
+#            companynameclone = instancesingle[1]
+        companynameclone = '1'
+#            companyid = instancesingle[2]  # for the lookup the default values in the tblcompanies (i.e. defaultpreface)
+#            firstnameclone = instancesingle[3]
+        firstnameclone = '1'
+#            lastnameclone = instancesingle[4]
+        lastnameclone = '1'
+#            titleclone = instancesingle[5]
+        titleclone = '1'
+#            mobileclone = instancesingle[6]
+        mobileclone = '1'
+#            emailclone = instancesingle[7]
+        emailclone = '1'
+#            pcdclone = instancesingle[8]
+        pcdclone = '1'
+#            townclone = instancesingle[9]
+        townclone = '1'
+#            addressclone = instancesingle[10]
+        addressclone = '1'
+        '''
+        cursor5 = connection.cursor()
+        cursor5.execute(
+            "SELECT defaultbackpageidforquotation_tblcompanies, "
+            "defaultprefaceidforquotation_tblcompanies, "
+            "defaultpaymentid_tblcompanies "
+            "FROM quotation_tblcompanies "
+            "WHERE Companyid_tblCompanies = %s", [companyid])
+        defaultsfromtblcompanies = cursor5.fetchall()
+        '''
+#        for instancesingle in defaultsfromtblcompanies:
+#            defaultbackpageidforquotation = instancesingle[0]
+        defaultbackpageidforquotation = '1'
+#            defaultprefaceidforquotation = instancesingle[1]
+        defaultprefaceidforquotation = '1'
+#            defaultpaymentid = instancesingle[2]
+        defaultpaymentid = '1'
+        '''
+        cursor6 = connection.cursor()
+        cursor6.execute(
+            "SELECT paymenttextforquotation_tblpayment "
+            "FROM quotation_tblpayment "
+            "WHERE paymentid_tblpayment = %s", [defaultpaymentid])
+        paymentset = cursor6.fetchall()
+        for instancesingle in paymentset:
+        '''
+#            paymenttextcloneforquotation = instancesingle[0]
+        paymenttextcloneforquotation = '1'
+        '''
+        cursor6 = connection.cursor()
+        cursor6.execute(
+            "SELECT backpagetextforquotation_tblbackpageforquotation "
+            "FROM quotation_tblbackpageforquotation "
+            "WHERE backpageidforquotation_tblbackpageforquotation = %s", [defaultbackpageidforquotation])
+        backpageset = cursor6.fetchall()
+        for instancesingle in backpageset:
+        '''
+#            backpagetextcloneforquotation = instancesingle[0]
+        backpagetextcloneforquotation = '1'
+        '''
+        cursor7 = connection.cursor()
+        cursor7.execute(
+            "SELECT prefacetextforquotation_tblprefaceforquotation "
+            "FROM quotation_tblprefaceforquotation "
+            "WHERE prefaceidforquotation_tblprefaceforquotation = %s", [defaultprefaceidforquotation])
+        prefaceset = cursor7.fetchall()
+        for instancesingle in prefaceset:
+        '''
+#            prefacecloneforquotation = instancesingle[0]
+        prefacecloneforquotation = '1'
+        '''
+        cursor7 = connection.cursor()
+        cursor7.execute(
+            "SELECT currencyisocode_tblcurrency "
+            "FROM quotation_tblcurrency "
+            "WHERE accountcurrency_tblcurrency = 1")
+        results = cursor7.fetchall()
+        for instancesingle in results:
+        '''
+#            accountcurrencycodeclone = instancesingle[0]
+        accountcurrencycodeclone = '1'
+
+        cursor8 = connection.cursor()
+        cursor8.execute("SELECT max(docnumber_tblaDoc) FROM aid_tbladoc "
+                        "WHERE Doc_kindid_tblaDoc_id = %s", ['2'])
+        results = cursor8.fetchall()
+        resultslen = len(results)
+        # import pdb;
+        # pdb.set_trace()
+
+        if results[0][0] is not None:  # only if there is not doc yet (this would be the first instance)
+            for x in results:
+                docnumber = x[0]
+                docnumber += 1
+        else:
+            docnumber = 80  # arbitrary number
+
+        cursor2 = connection.cursor()
+        cursor2.execute("INSERT INTO aid_tbladoc "
+                        "( Doc_kindid_tblaDoc_id, "
+                        "Contactid_tblaDoc_id,"
+                        "companyname_tblcompanies_ctbladoc, "
+                        "firstname_tblcontacts_ctbladoc, "
+                        "lastname_tblcontacts_ctbladoc, "
+                        "prefacetextforquotation_tblprefaceforquotation_ctbladoc, "
+                        "backpagetextforquotation_tblbackpageforquotation_ctbladoc, "
+                        "docnumber_tblaDoc, "
+                        "creatorid_tbladoc, "
+                        "title_tblcontacts_ctbladoc, "
+                        "mobile_tblcontacts_ctbladoc, "
+                        "email_tblcontacts_ctbladoc, "
+                        "pcd_tblcompanies_ctbladoc, "
+                        "town_tblcompanies_ctbladoc, "
+                        "address_tblcompanies_ctbladoc, "
+                        "paymenttextforquotation_tblpayment_ctbladoc, "
+                        "accountcurrencycode_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        ['2', '1', companynameclone, firstnameclone, lastnameclone,
+                         prefacecloneforquotation, backpagetextcloneforquotation, docnumber, creatorid,
+                         titleclone,
+                         mobileclone,
+                         emailclone,
+                         pcdclone,
+                         townclone,
+                         addressclone,
+                         paymenttextcloneforquotation,
+                         accountcurrencycodeclone])
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT max(Docid_tblaDoc) FROM aid_tbladoc")
+        results = cursor3.fetchall()
+        for x in results:
+            maxdocid = x[0]
+
+        cursor4 = connection.cursor()
+        cursor4.execute(
+            "INSERT INTO aid_tbladoc_details ( Docid_tblaDoc_details_id) VALUES (%s)",
+            [maxdocid])
+
+        return redirect('adocselector', pk=maxdocid)
+
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT aid_tblacontacts.contactid_tblacontacts, aid_tblacompanies.companyname_tblacompanies,"
+        "aid_tblacontacts.Firstname_tblacontacts, aid_tblacontacts.lastname_tblacontacts "
+        "FROM aid_tblacontacts "
+        "JOIN aid_tblacompanies "
+        "ON aid_tblacompanies.companyid_tblacompanies = aid_tblacontacts.companyid_tblacontacts_id "
+        "ORDER BY companyname_tblacompanies")
+    contacts = cursor0.fetchall()
+    transaction.commit()
+
+    cursor = connection.cursor()
+    cursor.execute("SELECT doc_kindid_tbldoc_kind, doc_kind_name_tbldoc_kind FROM quotation_tbldoc_kind")
+    dockinds = cursor.fetchall()
+    transaction.commit()
+
+    return render(request, 'aid/adocadd.html', {'dockinds': dockinds, 'contacts': contacts})
