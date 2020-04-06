@@ -654,9 +654,12 @@ def doclinkfix(request, docid, fixstate):
 @login_required
 def adocorderadd(request):
     if request.method == "POST":
-#        dockindidfornewdoc = request.POST['dockindidfornewdoc']
+        qty2 = request.POST['qty2']
 #        contactidfornewdoc = request.POST['contactidfornewdoc']
         creatorid = request.user.id
+        import pdb;
+        pdb.set_trace()
+
         '''
         cursor1 = connection.cursor()
         cursor1.execute(

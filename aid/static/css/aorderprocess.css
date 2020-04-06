@@ -29,3 +29,15 @@ button:disabled:hover, input:disabled:hover  {
 cursor: not-allowed;
 opacity: 0.6;
 }
+#cartframe {
+position: absolute;
+left:300mm;
+}
+#custom-handle-aidkind, #custom-handle-carusage {
+    width: 3em;
+    height: 1.6em;
+    top: 50%;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+  }
