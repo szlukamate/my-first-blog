@@ -92,6 +92,7 @@ $(function () {
         handleaidkind.text( ui.value );
         window.cartitemquantity = ui.value
         cartupdate();
+        $('input[name="qty2"]').val(ui.value)
 
       }
     });

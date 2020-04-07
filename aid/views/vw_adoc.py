@@ -246,11 +246,13 @@ def adocadd(request):
 
         cursor5 = connection.cursor()
         cursor5.execute(
-            "SELECT defaultbackpageidforquotation_tblcompanies, "
-            "defaultprefaceidforquotation_tblcompanies, "
-            "defaultpaymentid_tblcompanies "
-            "FROM quotation_tblcompanies "
-            "WHERE Companyid_tblCompanies = %s", [companyid])
+            "SELECT defaultbackpageidforquotation_tblacompanies, "
+            "defaultprefaceidforquotation_tblacompanies, "
+            "defaultpaymentid_tblacompanies "
+
+            "FROM aid_tblacompanies "
+
+            "WHERE Companyid_tblaCompanies = %s", [companyid])
         defaultsfromtblcompanies = cursor5.fetchall()
         for instancesingle in defaultsfromtblcompanies:
             defaultbackpageidforquotation = instancesingle[0]
@@ -363,7 +365,7 @@ def adocadd(request):
     transaction.commit()
 
     cursor = connection.cursor()
-    cursor.execute("SELECT doc_kindid_tbldoc_kind, doc_kind_name_tbldoc_kind FROM quotation_tbldoc_kind")
+    cursor.execute("SELECT doc_kindid_tbladoc_kind, doc_kind_name_tbladoc_kind FROM aid_tbladoc_kind")
     dockinds = cursor.fetchall()
     transaction.commit()
 
@@ -400,6 +402,8 @@ def adocselector(request, pk):
         return redirect('purchaseorderform', pk=pk)
     elif dockind == 8:  # Delivery Note
         return redirect('deliverynoteform', pk=pk)
+    elif dockind == 9:  # Customer Acknowledgement
+        return redirect('acustomeracknowledgementform', pk=pk)
 @group_required("manager")
 @login_required
 def adocremove(request, pk):
@@ -657,8 +661,8 @@ def adocorderadd(request):
         qty2 = request.POST['qty2']
 #        contactidfornewdoc = request.POST['contactidfornewdoc']
         creatorid = request.user.id
-        import pdb;
-        pdb.set_trace()
+#        import pdb;
+#        pdb.set_trace()
 
         '''
         cursor1 = connection.cursor()
@@ -815,11 +819,78 @@ def adocorderadd(request):
         results = cursor3.fetchall()
         for x in results:
             maxdocid = x[0]
+#product variables filling begin
+        cursor0 = connection.cursor()
+        cursor0.execute(
+            "SELECT `Productid_tblaProduct`, "
+            "`purchase_price_tblaproduct`, `"
+            "customerdescription_tblaProduct`, "
+            "`margin_tblaproduct`, "
+            "`currencyisocode_tblcurrency_ctblaproduct`, "
+            "currencyrate_tblacurrency, "
+            "unit_tblaproduct, "
+            "supplierdescription_tblaProduct, "
+            "suppliercompanyid_tblaProduct "
+            "FROM `aid_tblaproduct` "
+            "LEFT JOIN aid_tblacurrency "
+            "ON aid_tblaproduct.currencyisocode_tblcurrency_ctblaproduct=aid_tblacurrency.currencyisocode_tblacurrency "
+            "WHERE Productid_tblaProduct= %s", ['2'])
+        results = cursor0.fetchall()
+        for instancesingle in results:
+            purchase_priceclone = instancesingle[1]
+            customerdescriptionclone = instancesingle[2]
+            currencyisocodeclone = instancesingle[4]
+            marginfromproducttable = instancesingle[3]
+            listpricecomputed = round((100 * purchase_priceclone) / (100 - marginfromproducttable), 2)
+            currencyrateclone = instancesingle[5]
+            unitclone = instancesingle[6]
+            supplierdescriptionclone = instancesingle[7]
+            suppliercompanyidclone = instancesingle[8]
 
-        cursor4 = connection.cursor()
-        cursor4.execute(
-            "INSERT INTO aid_tbladoc_details ( Docid_tblaDoc_details_id) VALUES (%s)",
-            [maxdocid])
+            unitsalespriceACU = listpricecomputed * currencyrateclone
+        # import pdb;
+        # pdb.set_trace()
+# product variables filling end
+# product row to docdetails begin
+        cursor1 = connection.cursor()  # new row needed
+        cursor1.execute(
+            "INSERT INTO aid_tbladoc_details "
+            "(`Qty_tblaDoc_details`, "
+            "`Docid_tblaDoc_details_id`, "
+            "`Productid_tblaDoc_details_id`, "
+            "`firstnum_tblaDoc_details`, "
+            "`fourthnum_tblaDoc_details`, "
+            "`secondnum_tblaDoc_details`, "
+            "`thirdnum_tblaDoc_details`, "
+            "`Note_tblaDoc_details`, "
+            "`purchase_price_tblproduct_ctblaDoc_details`, "
+            "`customerdescription_tblProduct_ctblaDoc_details`, "
+            "`currencyisocode_tblcurrency_ctblproduct_ctblaDoc_details`, "
+            "listprice_tblaDoc_details, "
+            "currencyrate_tblcurrency_ctblaDoc_details, "
+            "unitsalespriceACU_tblaDoc_details, "
+            "unit_tbladocdetails, "
+            "`supplierdescription_tblProduct_ctblaDoc_details`, "
+            "suppliercompanyid_tblaDocdetails) "
+        
+            "VALUES (%s, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            [qty2,
+             maxdocid,
+             '2',
+             '1',
+             '1',
+             '1',
+             '1',
+             purchase_priceclone,
+             customerdescriptionclone,
+             currencyisocodeclone,
+             listpricecomputed,
+             currencyrateclone,
+             unitsalespriceACU,
+             unitclone,
+             supplierdescriptionclone,
+             suppliercompanyidclone])
+# product row to docdetails end
 
         return redirect('adocselector', pk=maxdocid)
 

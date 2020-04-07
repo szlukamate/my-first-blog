@@ -20,5 +20,8 @@ urlpatterns = [
     url(r'^acustomerorderrowremove/(?P<pk>[0-9]+)/$', views.acustomerorderrowremove, name='acustomerorderrowremove'),
     url(r'aorderprocess/$', views.aorderprocess, name='aorderprocess'),
     url(r'adocorderadd/$', views.adocorderadd, name='adocorderadd'),
+    url(r'^acustomeracknowledgementform/(?P<pk>[0-9]+)/$', views.acustomeracknowledgementform, name='acustomeracknowledgementform'),
+    url(r'^acustomerordersaveasacknowledgement/(?P<pk>[0-9]+)/$', views.acustomerordersaveasacknowledgement, name='acustomerordersaveasacknowledgement'),
+    url(r'acustomerorderemailtry/(?P<docid>[0-9]+)/$', views.acustomerorderemailtry, name='acustomerorderemailtry'),
 
 ]

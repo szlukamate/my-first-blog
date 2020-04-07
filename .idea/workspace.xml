@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/static/css/aorderprocess.css" beforeDir="false" afterPath="$PROJECT_DIR$/aid/static/css/aorderprocess.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aid/static/js/aorderprocess.js" beforeDir="false" afterPath="$PROJECT_DIR$/aid/static/js/aorderprocess.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/aorderprocess.html" beforeDir="false" afterPath="$PROJECT_DIR$/aid/templates/aid/aorderprocess.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/templates/aid/acustomerorder.html" beforeDir="false" afterPath="$PROJECT_DIR$/aid/templates/aid/acustomerorder.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/views/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/views/vw_acustomerorder.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/vw_acustomerorder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aid/views/vw_adoc.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/vw_adoc.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

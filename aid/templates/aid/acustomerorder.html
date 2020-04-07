@@ -38,6 +38,12 @@
 							<form action="{% url 'customerinvoicemake' docid=doc.0.0 %}">
 								<input type="submit" value="Customer Invoice" />
 							</form>
+							<form action="{% url 'acustomerordersaveasacknowledgement' pk=doc.0.0 %}">
+								<input type="submit" value="Customer Acknowledgement" />
+							</form>
+							<form action="{% url 'acustomerorderemailtry' docid=doc.0.0 %}">
+								<input type="submit" value="Emailtry" />
+							</form>
 
 
 
