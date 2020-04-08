@@ -1,0 +1,21 @@
+{% load staticfiles %}
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>nahtml</title>
+  </head>
+  <body>
+				<img id="logo" src="{% static 'pic/abstract-logos.png' %}" alt="Logo header template" width="20" style="height: auto;"/>
+
+            <p >Thank you for your order from Aid!</p>
+
+  {{ foo }}
+								  	<select name="total_tbldoc" >
+										<option value="1" disabled selected>1</option>
+										<option value="Total_Off">Total_Off</option>
+										<option value="Total_On">Total_On</option>
+									</select>
+
+  </body>
+</html>

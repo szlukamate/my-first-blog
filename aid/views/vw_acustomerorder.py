@@ -856,8 +856,10 @@ def acustomerordersaveasacknowledgement(request, pk):
 @group_required("manager")
 @login_required
 def acustomerorderemailtry(request, docid):
-
+    foo = 11
+    html_message = render_to_string('aid/mail_template.html', {'context': 'values', 'foo': foo})
     email = EmailMessage(
-        'na', 'nabody', 'from@me.com', ['szluka.mate@gmail.com'])#, cc=[cc])
-
+        'na', html_message, 'from@me.com', ['szluka.mate@gmail.com'])#, cc=[cc])
+    email.content_subtype = "html"
+    email.send()
     return redirect('adocselector', pk=docid)

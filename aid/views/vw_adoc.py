@@ -6,6 +6,8 @@ from quotation.forms import quotationroweditForm
 from collections import namedtuple
 from django.db import connection, transaction
 from datetime import datetime, timedelta
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 # import pdb;
 # pdb.set_trace()
@@ -664,7 +666,7 @@ def adocorderadd(request):
 #        import pdb;
 #        pdb.set_trace()
 
-        '''
+
         cursor1 = connection.cursor()
         cursor1.execute(
             "SELECT contactid_tblacontacts, "
@@ -684,30 +686,21 @@ def adocorderadd(request):
             "JOIN aid_tblacompanies "
             "ON aid_tblacompanies.companyid_tblacompanies = aid_tblacontacts.companyid_tblacontacts_id "
 
-            "WHERE contactid_tblacontacts =%s", [contactidfornewdoc])
+            "WHERE contactid_tblacontacts =%s", [13])
         companyandcontactdata = cursor1.fetchall()
-        '''
-#        for instancesingle in companyandcontactdata:
-#            companynameclone = instancesingle[1]
-        companynameclone = '1'
-#            companyid = instancesingle[2]  # for the lookup the default values in the tblcompanies (i.e. defaultpreface)
-#            firstnameclone = instancesingle[3]
-        firstnameclone = '1'
-#            lastnameclone = instancesingle[4]
-        lastnameclone = '1'
-#            titleclone = instancesingle[5]
-        titleclone = '1'
-#            mobileclone = instancesingle[6]
-        mobileclone = '1'
-#            emailclone = instancesingle[7]
-        emailclone = '1'
-#            pcdclone = instancesingle[8]
-        pcdclone = '1'
-#            townclone = instancesingle[9]
-        townclone = '1'
-#            addressclone = instancesingle[10]
-        addressclone = '1'
-        '''
+
+        for instancesingle in companyandcontactdata:
+            companynameclone = instancesingle[1]
+
+            companyid = instancesingle[2]  # for the lookup the default values in the tblcompanies (i.e. defaultpreface)
+            firstnameclone = instancesingle[3]
+            lastnameclone = instancesingle[4]
+            titleclone = instancesingle[5]
+            mobileclone = instancesingle[6]
+            emailclone = instancesingle[7]
+            pcdclone = instancesingle[8]
+            townclone = instancesingle[9]
+            addressclone = instancesingle[10]
         cursor5 = connection.cursor()
         cursor5.execute(
             "SELECT defaultbackpageidforquotation_tblcompanies, "
@@ -716,15 +709,10 @@ def adocorderadd(request):
             "FROM quotation_tblcompanies "
             "WHERE Companyid_tblCompanies = %s", [companyid])
         defaultsfromtblcompanies = cursor5.fetchall()
-        '''
-#        for instancesingle in defaultsfromtblcompanies:
-#            defaultbackpageidforquotation = instancesingle[0]
-        defaultbackpageidforquotation = '1'
-#            defaultprefaceidforquotation = instancesingle[1]
-        defaultprefaceidforquotation = '1'
-#            defaultpaymentid = instancesingle[2]
-        defaultpaymentid = '1'
-        '''
+        for instancesingle in defaultsfromtblcompanies:
+            defaultbackpageidforquotation = instancesingle[0]
+            defaultprefaceidforquotation = instancesingle[1]
+            defaultpaymentid = instancesingle[2]
         cursor6 = connection.cursor()
         cursor6.execute(
             "SELECT paymenttextforquotation_tblpayment "
@@ -732,10 +720,7 @@ def adocorderadd(request):
             "WHERE paymentid_tblpayment = %s", [defaultpaymentid])
         paymentset = cursor6.fetchall()
         for instancesingle in paymentset:
-        '''
-#            paymenttextcloneforquotation = instancesingle[0]
-        paymenttextcloneforquotation = '1'
-        '''
+            paymenttextcloneforquotation = instancesingle[0]
         cursor6 = connection.cursor()
         cursor6.execute(
             "SELECT backpagetextforquotation_tblbackpageforquotation "
@@ -743,10 +728,7 @@ def adocorderadd(request):
             "WHERE backpageidforquotation_tblbackpageforquotation = %s", [defaultbackpageidforquotation])
         backpageset = cursor6.fetchall()
         for instancesingle in backpageset:
-        '''
-#            backpagetextcloneforquotation = instancesingle[0]
-        backpagetextcloneforquotation = '1'
-        '''
+            backpagetextcloneforquotation = instancesingle[0]
         cursor7 = connection.cursor()
         cursor7.execute(
             "SELECT prefacetextforquotation_tblprefaceforquotation "
@@ -754,10 +736,7 @@ def adocorderadd(request):
             "WHERE prefaceidforquotation_tblprefaceforquotation = %s", [defaultprefaceidforquotation])
         prefaceset = cursor7.fetchall()
         for instancesingle in prefaceset:
-        '''
-#            prefacecloneforquotation = instancesingle[0]
-        prefacecloneforquotation = '1'
-        '''
+            prefacecloneforquotation = instancesingle[0]
         cursor7 = connection.cursor()
         cursor7.execute(
             "SELECT currencyisocode_tblcurrency "
@@ -765,9 +744,7 @@ def adocorderadd(request):
             "WHERE accountcurrency_tblcurrency = 1")
         results = cursor7.fetchall()
         for instancesingle in results:
-        '''
-#            accountcurrencycodeclone = instancesingle[0]
-        accountcurrencycodeclone = '1'
+            accountcurrencycodeclone = instancesingle[0]
 
         cursor8 = connection.cursor()
         cursor8.execute("SELECT max(docnumber_tblaDoc) FROM aid_tbladoc "
@@ -891,6 +868,15 @@ def adocorderadd(request):
              supplierdescriptionclone,
              suppliercompanyidclone])
 # product row to docdetails end
+        # email acknowledgement begin
+        foo = 11
+        html_message = render_to_string('aid/acustomeracknowledgementemail.html', {'context': 'values', 'foo': foo})
+        email = EmailMessage(
+            'Aid Order Acknowledgement', html_message, 'from@me.com', ['szluka.mate@gmail.com'])  # , cc=[cc])
+        email.content_subtype = "html"
+        email.send()
+
+        # email acknowledgement end
 
         return redirect('adocselector', pk=maxdocid)
 

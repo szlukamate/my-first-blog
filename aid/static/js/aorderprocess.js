@@ -10,7 +10,7 @@ localStorage.lastname = "Smith";
 $(function () {
 
     var currentstep = 0;
-    var maxstep = 3; //only this parameter is needed to adjust if the number of tabs would change
+    var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
     //initialize tabs
     $( "#tabs" ).tabs({ //first tab let be active
         active: 0,
