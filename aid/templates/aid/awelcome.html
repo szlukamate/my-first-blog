@@ -2,5 +2,15 @@
 {% load staticfiles%}
  	{% block content %}
 				<img id="logo" src="{% static 'pic/aidlogo.svg' %}" alt="Logo header template">
+				<img id="tescologo" src="{% static 'pic/tescologo.gif' %}" alt="Logo header template">
+	<div class="logocss" style="color: green;">
+		<p>Aid</p>
+		<div class="verticalcross"></div>
+		<div class="horizontalcross"></div>
+	</div>
+	<link rel="stylesheet" href="{% static 'css/awelcome.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<span class="fa fa-star checked"></span>
 
 	{% endblock %}
