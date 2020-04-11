@@ -1,28 +1,267 @@
-{% load staticfiles %}
-
 <html>
   <head>
     <meta charset="UTF-8">
     <title>nahtml</title>
   </head>
   <body>
-				<img id="aidlogo" src="https://drive.google.com/uc?export=view&id=1hI_SN7Uj9GEpkHdxt_gVYn6UIkjR4ACf" alt="Logo header template">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA
-AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
-9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot" />
+    <div>
+        <table border="0" cellpadding="0" cellspacing="0" width="700" style="border:1px solid #b5b6b2">
+            <tbody>
+              <tr>
+                <td>
+                    <div style="width:700px;font-family:Arial,Helvetica,sans-serif">
+                        <div style="overflow:hidden;border-bottom:4px solid #0d4c87;zoom:1">
+                            <table border="0" cellpadding="20" cellspacing="0" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td align="left"><img id="aidlogo" src="https://drive.google.com/uc?export=view&id=1hI_SN7Uj9GEpkHdxt_gVYn6UIkjR4ACf" alt="Logo header template" width="100px"></td>
+                                        <td align="right">x</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="overflow:hidden">
+                            <table cellpadding="20" cellspacing="0" border="0" width="100%">
+                                <tbody>
+                                    <tr>
+                                        <td width="305" valign="top">
+                                            <div style="width:315px;font-family:Arial,Helvetica,sans-serif;vertical-align:top">
+                                                <p>
+                                                    <span style="font-size:18px;padding:20px 0 0;color:#00539f;font-weight:bold">Thank you for your order from Aid!</span>
+                                                </p>
+                                                <p style="margin:0;padding-bottom:15px">
+                                                    <span style="display:block;font-size:14px;margin-left:10px">Your order reference:</span>
+                                                    <br>
+                                                    <span style="font-size:18px;margin:10px 0 15px 10px;color:#010101;font-weight:bold">{{ customerordernumber }}&nbsp;</span>
+                                                </p>
+                                                <p style="font-size:12px;border-top:1px solid #ccc;padding-top:15px;margin-left:10px">
+                                                    Fizetési mód:
+                                                    <br>
+                                                    <span style="font-weight:bold">&nbsp;&nbsp;&nbsp;&nbsp;Fizetés online, biztonságosan.</span>
+                                                    <br>
+                                                    <br>
+                                                        A fizetés a termékek kiszállítása után történik.
+                                                    <br>
+                                                </p>
+                                                <div style="border-bottom:1px solid #ccc;padding-bottom:20px;margin-left:10px">
+                                                    <p style="font-size:12px;padding:0;margin:0">
+                                                        Elsődleges telefonszám: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 307298725<br>
+                                                    </p>
+                                                    <p style="font-size:12px;padding:0;margin:20px 0 0 0">A termékeit bevásárlótáskában szállítjuk</p>
+                                                </div>
+                                                <div style="margin-left:10px">
+                                                    <h2 style="font-size:18px;color:#00539f;margin:20px 0 5px;padding:0;font-weight:normal">Bevásárlás módosítása</h2>
+                                                    <p style="font-size:12px;padding:10px 0 5px;margin:0">
+                                                        Szeretné módosítani vagy törölni bevásárlását?
+                                                    </p>
+                                                    <p style="font-size:12px;padding:10px 0 5px;margin:0">
+                                                        Ezt a kiszállítást megelőző nap 23:00 óráig bármikor megteheti a Bevásárlásaim menüpont alatt.
+                                                    </p>
+                                                    <p style="padding:0;margin:5px 0;font-size:12px">
+                                                        Bevásárlásának megtekintéséhez <a href="#" style="color:#00539f;text-decoration:none" target="_blank" >kattintson ide</a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
 
-            <p >Thank you for your order from Aid!</p>
 
-  {{ foo }}
-								  	<select name="total_tbldoc" >
-										<option value="1" disabled selected>1</option>
-										<option value="Total_Off">Total_Off</option>
-										<option value="Total_On">Total_On</option>
-									</select>
-	<link rel="stylesheet" href="{% static 'css/acustomeracknowledgementemail.css' %}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                                        <td width="282" align="right" valign="top">
+                                            <div style="text-align:left;font-family:arial;vertical-align:top">
+                                                <table cellpadding="0" cellspacing="0" border="0" width="282" style="font-family:Arial,Helvetica,sans-serif">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <div style="width:282px">
+                                                                    <div style="height:7px;font-size:0px">
+                                                                        <img src="https://ci5.googleusercontent.com/proxy/-K8qiP9erbkZviI4xtkGdPEbmGSw6Hz1ws_HIRrDawXEeEAFgjsSVQ2mBhTTeSl-qy9pnzz2iziFnzj6HOyuPcK8bSQFKZSRa39kEBhEjM-3cCm99RZ_vylfIVSFipeUcFUbYR4beu9-ORu7ErMnneTIEYj8ozUVTvbV=s0-d-e1-ft#https://secure.ce-tescoassets.com/UIAssets/HU/grocery/default/i/email/orderConfirmation/orderConfTop.gif" alt="" width="282" height="7" align="bottom" class="CToWUd">
+                                                                    </div>
+                                                                    <div style="padding:0 10px 7px 10px;border-bottom:1px solid #bababa;border-left:1px solid #bababa;border-right:1px solid #bababa">
+                                                                        <h2 style="padding:0;margin:0;font-size:18px;font-weight:normal">Bevásárlás összegzése</h2>
+                                                                    </div>
+                                                                    <table bgcolor="#e3f4e1" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-right:1px solid #bababa;border-left:1px solid #bababa;border-bottom:1px solid #bababa">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td style="font-family:Arial,Helvetica,sans-serif">
+                                                                                    <div>
+                                                                                        <table cellpadding="0" cellspacing="0" border="0" style="margin-left:10px;margin-right:5px;margin-top:5px;margin-bottom:5px">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td colspan="2" style="font-size:12px;padding-bottom:10px;font-family:Arial,Helvetica,sans-serif">
+                                                                                                        Kiszállítási cím:
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td style="font-size:14px;margin:0">
+                                                                                                        <table cellpadding="0" cellspacing="0" border="0" style="font-size:14px;width:95%">
+                                                                                                            <tbody>
+                                                                                                                <tr>
+                                                                                                                    <td style="vertical-align:top">
+                                                                                                                        <img src="https://ci4.googleusercontent.com/proxy/coQ3SNJ-9Mf3XdbpEIfIDjCsqlKPHb_8pYBgeH7Yh7hsY3ul5_YPI1Bm45jFtbbZOlnn4CU64F0TCQWr11zAsCYMdqAJrXrGIXVMhv7JpPl7X12j5lVBtFk_aVRJXS_GLsSEAHAKp644mgOVGplRFJWtzg=s0-d-e1-ft#https://secure.ce-tescoassets.com/UIAssets/HU/grocery/default/i/email/orderConfirmation/tick.png" alt="" width="18" height="20" align="middle" class="CToWUd">&nbsp;
+                                                                                                                    </td>
+                                                                                                                    <td style="padding-left:15px;font-size:14px;font-family:Arial,Helvetica,sans-serif;word-break:break-all;word-wrap:break-word">
+                                                                                                                        <strong>Akácfa utca 166726SzegedCsongrád</strong>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            </tbody>
+                                                                                                        </table>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                        <br>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <table bgcolor="#e3f4e1" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-right:1px solid #bababa;border-left:1px solid #bababa;border-bottom:1px solid #bababa">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td style="font-family:Arial,Helvetica,sans-serif">
+                                                                                    <div>
+                                                                                        <table cellspacing="0" cellpadding="0" border="0" style="margin-left:10px;margin-right:5px;margin-top:5px;margin-bottom:5px">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td colspan="2" style="font-size:12px;padding-bottom:10px;font-family:Arial,Helvetica,sans-serif">Kiszállítás időpontja:</td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td style="vertical-align:top;width:20px">
+                                                                                                        <img src="https://ci4.googleusercontent.com/proxy/coQ3SNJ-9Mf3XdbpEIfIDjCsqlKPHb_8pYBgeH7Yh7hsY3ul5_YPI1Bm45jFtbbZOlnn4CU64F0TCQWr11zAsCYMdqAJrXrGIXVMhv7JpPl7X12j5lVBtFk_aVRJXS_GLsSEAHAKp644mgOVGplRFJWtzg=s0-d-e1-ft#https://secure.ce-tescoassets.com/UIAssets/HU/grocery/default/i/email/orderConfirmation/tick.png" alt="" width="18" height="20" align="middle" class="CToWUd">&nbsp;
+                                                                                                    </td>
+                                                                                                    <td style="padding-left:15px;font-size:14px;font-family:Arial,Helvetica,sans-serif">
+                                                                                                        <span style="color:#000"><strong>2020.április&nbsp;03. péntek</strong><br>
+                                                                                                        <span style="font-size:14px;font-weight:bold;font-family:Arial,Helvetica,sans-serif">12:00 és 14:00 óra között</span></span>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                        <br>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <div style="border-left:1px solid #ccc;border-bottom:1px solid #ccc">
+                                                                        <table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;border-right:1px solid #ccc" width="281">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="font-size:14px;padding:10px;font-family:Arial,Helvetica,sans-serif">
+                                                                                        Az Ön kosarának a tartalma:
+                                                                                    </td>
+                                                                                    <td style="font-size:14px;text-align:right;padding:10px;font-family:Arial,Helvetica,sans-serif">86</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td colspan="2">
+                                                                                        <div style="border:0;border-bottom:1px solid #ccc;height:1px;margin:0 10px;width:95%;line-height:1px;font-size:0">&nbsp;</div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td width="200" style="font-size:14px;width:200px;padding:10px 0 0 10px;font-family:Arial,Helvetica,sans-serif">
+                                                                                        <table cellpadding="0" cellspacing="0" border="0">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td style="font-size:14px;font-family:Arial,Helvetica,sans-serif">
+                                                                                                        Irányár<span style="color:#ff0000">*</span>
+                                                                                                    </td>
+                                                                                                    <td style="font-size:14px;font-family:Arial,Helvetica,sans-serif">:</td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                    <td width="110" style="font-size:14px;width:110px;text-align:right;padding:10px 10px 0 10px;font-family:Arial,Helvetica,sans-serif">37 786&nbsp;Ft
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="width:150px;padding:10px 0 0 10px;font-size:14px;font-family:Arial,Helvetica,sans-serif">Szolgáltatási díj:</td>
+                                                                                    <td style="width:110px;text-align:right;padding:10px 10px 0 10px;font-size:14px;font-family:Arial,Helvetica,sans-serif">Ingyenes</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="width:150px;padding:10px 0 0 10px;font-size:14px;font-family:Arial,Helvetica,sans-serif">Bevásárlótáska ára:</td>
+                                                                                    <td style="width:110px;text-align:right;padding:10px 10px 0 10px;font-size:14px;font-family:Arial,Helvetica,sans-serif">138&nbsp;Ft</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td height="10"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td colspan="2" width="100%" style="margin-top:10px;border-top:1px solid #ccc;border-right:1px solid #e3f4e1;border-bottom:1px solid #ccc">
+                                                                                        <table bgcolor="#e3f4e1" width="100%" cellpadding="0" cellspacing="0" style="border-left:1px solid #e3f4e1">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td style="padding:10px">
+                                                                                                        <div>
+                                                                                                            <table cellpadding="0" cellspacing="0" border="0">
+                                                                                                                <tbody>
+                                                                                                                    <tr>
+                                                                                                                        <td cellpadding="0" cellspacing="0" border="0" style="width:100%;font-size:12px;font-family:Arial,Helvetica,sans-serif;line-height:16px">
+                                                                                                                            Nagyszerű hírek - amennyiben többet költ mint
+                                                                                                                            35 000Ft,
+                                                                                                                            a vásárlását ingyen kiszállítjuk.
+                                                                                                                            <a href="http://tesco.hu/bevasarlas/help-booking-a-delivery.html" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://tesco.hu/bevasarlas/help-booking-a-delivery.html&amp;source=gmail&amp;ust=1586702270208000&amp;usg=AFQjCNF_uoc6cPspPTU7iSLK4tPQScEaAw">
+                                                                                                                            <img src="https://ci3.googleusercontent.com/proxy/WwgKNqXNKov6U5G6_dnl1gzoWAwCwD1iaC_D7eWfiqYlqbdoBmaL-J24ywmYXUpjE_Tvt7IYz_1CKL3qK7WzI9AgiHsDSG35bHE2Jtf2Ym6HW6V3CTvj6mAil70BDK426msfN9wNeHo7QxQ7XFKv=s0-d-e1-ft#https://secure.ce-tescoassets.com/UIAssets/SharedSCSS/grocery/default/i/common/help_icon.svg" alt="" width="10" height="10" class="CToWUd"></a>
+                                                                                                                        </td>
+                                                                                                                    </tr>
+                                                                                                                </tbody>
+                                                                                                            </table>
+                                                                                                        </div>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td style="width:150px;font-size:14px;padding:10px 0 10px 10px;font-family:Arial,Helvetica,sans-serif">
+                                                                                        <strong>Összesen</strong>
+                                                                                    </td>
+                                                                                    <td style="width:110px;text-align:right;margin:0;font-size:14px;font-family:Arial,Helvetica,sans-serif;padding:10px 10px 10px 10px">
+                                                                                        <strong>37 924&nbsp;Ft</strong>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div>
+                                                                        <table cellpadding="0" cellspacing="0" border="0" style="padding-top:5px;border-left:1px solid #ccc;border-right:1px solid #ccc" width="100%">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="width:25px;padding-left:5px">
+                                                                                        <img src="https://ci5.googleusercontent.com/proxy/bLi-WtvRbMM0IZtVlOb_IvNoLIf5tdn28-qsOKo3D12tFkZAJdkefxs2ld1GTsRPFcEvnGfhUEYtQnS7pHqfymz2q-vqw7TnjWUoGymimENhfnNpS6VBjCXW8nxF1Ao3Xtmd0oADbISqjS97XDHJNEri3g=s0-d-e1-ft#https://secure.ce-tescoassets.com/UIAssets/HU/grocery/default/i/email/orderConfirmation/info.png" alt="" width="22" height="22" align="middle" class="CToWUd">
+                                                                                    </td>
+                                                                                    <td style="padding:4px 2px 0 0" valign="top">
+                                                                                        <img src="https://ci4.googleusercontent.com/proxy/18u03OAtDKSXGauR56gU6FyfMLY-lpT-CgAW6HSm8J5m_5dfI_UNbjds_Oceuvu9ZnvNQmno2lC_hMeqeYg3EkX5SAneZXASCdLg7_Azh6-VzH4n-zJESkBd8ckYMfABNA=s0-d-e1-ft#https://secure.ce-tescoassets.com/UIAssets/HU/grocery/default/hu-HU/i/star.gif" alt="" width="5" height="5" valign="top" class="CToWUd">
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a href="http://www.tesco.hu/bevasarlas/segitseg-mit-jelent-az-iranyar.html" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#00539f;text-decoration:none" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://www.tesco.hu/bevasarlas/segitseg-mit-jelent-az-iranyar.html&amp;source=gmail&amp;ust=1586702270209000&amp;usg=AFQjCNEI1mVfJk1UxDvTJ2l_IbzeSLWKgw">Információ az irányárról</a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div style="height:7px;font-size:0px">
+                                                                        <img src="https://ci6.googleusercontent.com/proxy/lE4G2F_huEYEFoyWX6h0bPhpmZV-1sb7UKU1TfqYJFl6OfGVcCUYYiB0E1tbQobm5q93cBSxsIFFMkLwG0Hbp32XBnyprPEB9vU6S4mxM6Veo_Tx2_sz1UqY4hZZQiDOGvsZGOu6t0iCfKOCusHGL7hFw0r1emi1KW_hwFD9=s0-d-e1-ft#https://secure.ce-tescoassets.com/UIAssets/HU/grocery/default/i/email/orderConfirmation/orderConfBottom.gif" alt="" width="282" height="7" align="bottom" class="CToWUd">
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
 
-<span class="fa fa-star checked"></span>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+            <p style="font-size:18px;padding:20px 0 0;color:#00539f;font-weight:bold">Thank you for your order from Aid!</p>
+            <p >Your order reference: {{ customerordernumber }}</p>
+    </div>
+
 
   </body>
 </html>

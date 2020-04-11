@@ -792,10 +792,30 @@ def adocorderadd(request):
                          accountcurrencycodeclone])
 
         cursor3 = connection.cursor()
-        cursor3.execute("SELECT max(Docid_tblaDoc) FROM aid_tbladoc")
+        cursor3.execute("SELECT max(Docid_tblaDoc) "
+                        ""
+                        "FROM aid_tbladoc")
         results = cursor3.fetchall()
         for x in results:
             maxdocid = x[0]
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT "
+                        "Doc_kindid_tblaDoc_id, "
+                        "docnumber_tblaDoc, "
+                        "pretag_tbladockind "
+
+                        "FROM aid_tbladoc "
+
+                        "JOIN aid_tbladoc_kind as DK "
+                        "ON Doc_kindid_tblaDoc_id = DK.Doc_kindid_tblaDoc_kind "
+
+                        "WHERE docid_tbladoc=%s ", [maxdocid])
+        customerordernumbers = cursor3.fetchall()
+        for x in customerordernumbers:
+            customerordernumberdocnumber = x[1]
+            customerordernumberpretag = x[2]
+        customerordernumber = str(customerordernumberpretag) + str(customerordernumberdocnumber)
 #product variables filling begin
         cursor0 = connection.cursor()
         cursor0.execute(
@@ -870,7 +890,7 @@ def adocorderadd(request):
 # product row to docdetails end
         # email acknowledgement begin
         foo = 11
-        html_message = render_to_string('aid/acustomeracknowledgementemail.html', {'context': 'values', 'foo': foo})
+        html_message = render_to_string('aid/acustomeracknowledgementemail.html', {'context': 'values', 'customerordernumber': customerordernumber})
         email = EmailMessage(
             'Aid Order Acknowledgement', html_message, 'from@me.com', ['szluka.mate@gmail.com'])  # , cc=[cc])
         email.content_subtype = "html"
