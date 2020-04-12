@@ -917,3 +917,32 @@ def adocorderadd(request):
     transaction.commit()
 
     return render(request, 'aid/adocadd.html', {'dockinds': dockinds, 'contacts': contacts})
+@group_required("manager")
+@login_required
+def adocmyorderssearch(request):
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "companyname_tblcompanies_ctbldoc "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE obsolete_tbldoc = 0 "
+                    "GROUP BY companyname_tblcompanies_ctbldoc ")
+    companies = cursor1.fetchall()
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Doc_kind_name_tblDoc_kind "
+                    "FROM quotation_tbldoc "
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+                    "WHERE obsolete_tbldoc = 0 "
+                    "GROUP BY Doc_kind_name_tblDoc_kind ")
+    dockindnames = cursor1.fetchall()
+
+    #   fromdate = datetime.today() - timedelta(365)
+    #todate = datetime.today()
+
+
+    return render(request, 'aid/adocmyorderssearch.html', {'companies': companies,
+                                                        'dockindnames':dockindnames})

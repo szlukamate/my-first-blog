@@ -1,0 +1,12 @@
+{% extends 'aid/abase.html' %}
+{% load staticfiles%}
+	{% block content %}
+
+							{% csrf_token %}
+
+							<p align="center" style="font-size:160%;">My orders Docsearch Form</p>
+							<p align="right"><a href="{% url 'adocadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
+
+							<span id="docsearchtemplate" ></span>
+		<script type="text/javascript" src="{% static 'js/adocmyorderssearch.js' %}"></script>
+	{% endblock %}
