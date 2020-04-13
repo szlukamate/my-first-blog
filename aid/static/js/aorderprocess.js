@@ -9,6 +9,8 @@ localStorage.lastname = "Smith";
  console.log(localStorage.lastname);
 $(function () {
 
+    $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
+
     var currentstep = 0;
     var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
     //initialize tabs

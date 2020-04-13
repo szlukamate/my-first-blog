@@ -13,7 +13,7 @@
         <form action="{% url 'adocorderadd' %}" method="post" >{% csrf_token %}
 
 
-            <input name="qty2" type="text" value="xss" />
+            <input name="qty2" type="text" value="xss" hidden/>
             <input id="finishbutton" type="submit" value="Finish" />
         </form>
         <div id="cartframe">

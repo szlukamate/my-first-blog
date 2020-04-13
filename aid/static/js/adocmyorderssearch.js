@@ -7,13 +7,13 @@ adocsearch.js
 
 $(function () {
 
-$('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate products tab on navbar
+$('a[href="/aid/adocmyorderssearch/"]').parent().addClass('active');
 
     setTimeout(
       function()
       {
-            $('#docnumber').val(sessionStorage.docnumber);
-            $('#dockindname').val(sessionStorage.dockindname);
+//            $('#docnumber').val(sessionStorage.docnumber);
+//            $('#dockindname').val(sessionStorage.dockindname);
 
             if (typeof sessionStorage.fromdate === 'undefined') {
 
@@ -56,24 +56,25 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
             }
 
 
-            $('#company').val(sessionStorage.company);
+//            $('#company').val(sessionStorage.company);
 
             $('#searchbutton').trigger('click');
 
       }, 500);
 
     $('#searchbutton').click(function() {
+                    console.log('na');
 
             $.ajax({
                 type: 'POST',
-                url: 'adocsearchcontent/',
+                url: 'adocmyorderssearchcontent/',
 
                 data: {
-                'docnumber': $('#docnumber').val(),
-                'dockindname': $('#dockindname').val(),
+//                'docnumber': $('#docnumber').val(),
+//                'dockindname': $('#dockindname').val(),
                 'fromdate': $('#fromdate').val(),
                 'todate': $('#todate').val(),
-                'company': $('#company').val(),
+//                'company': $('#company').val(),
 
                 'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                 },
@@ -89,6 +90,7 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
                 datatype: 'html'
 
             });
+/*
                 setTimeout(
                   function()
                   {
@@ -108,17 +110,17 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
         sessionStorage.fromdate = $('#fromdate').val();
         sessionStorage.todate = $('#todate').val();
         sessionStorage.company = $('#company').val();
-
+*/
     });
     $('#searchoutbutton').click(function() {
-        $('#docnumber').val("");
-        sessionStorage.docnumber = ""
+//        $('#docnumber').val("");
+//        sessionStorage.docnumber = ""
 
-        $('#dockindname').val("");
-        sessionStorage.dockindname = ""
+//        $('#dockindname').val("");
+//        sessionStorage.dockindname = ""
 
-        $('#company').val("");
-        sessionStorage.company = ""
+//        $('#company').val("");
+//        sessionStorage.company = ""
 
         $('#searchbutton').trigger('click');
 
@@ -137,11 +139,11 @@ $('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate pro
 
        window.location.href = djangourl;
     });
-    $('#docnumber').keypress(function(event) {
-        if (event.keyCode == 13) {
-            $('#searchbutton').trigger('click');
-        }
-    });
+//    $('#docnumber').keypress(function(event) {
+//        if (event.keyCode == 13) {
+//            $('#searchbutton').trigger('click');
+//        }
+//    });
 
 
 });

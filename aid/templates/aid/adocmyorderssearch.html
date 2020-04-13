@@ -7,6 +7,21 @@
 							<p align="center" style="font-size:160%;">My orders Docsearch Form</p>
 							<p align="right"><a href="{% url 'adocadd' %}"><span class="glyphicon glyphicon-plus"></span></a></p>
 
+							<label for="from" >From</label>
+							<input id="fromdate" type="text" value="" name="from" maxlength="50" size="10">
+
+							<label for="to" >To</label>
+							<input id="todate" type="text" value="" name="to" maxlength="50" size="10">
+
+							<button id="searchbutton" type="submit">
+							   <span class="glyphicon glyphicon-filter"></span>
+							</button>
+
+							<button id="searchoutbutton" type="button">
+							   <span class="glyphicon glyphicon-trash"></span>
+							</button>
+
+
 							<span id="docsearchtemplate" ></span>
 		<script type="text/javascript" src="{% static 'js/adocmyorderssearch.js' %}"></script>
 	{% endblock %}

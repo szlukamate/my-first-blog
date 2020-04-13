@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^acustomerordersaveasacknowledgement/(?P<pk>[0-9]+)/$', views.acustomerordersaveasacknowledgement, name='acustomerordersaveasacknowledgement'),
     url(r'acustomerorderemailtry/(?P<docid>[0-9]+)/$', views.acustomerorderemailtry, name='acustomerorderemailtry'),
     url(r'adocmyorderssearch/$', views.adocmyorderssearch, name='adocmyorderssearch'),
+    url('adocmyorderssearchcontent/$', views.adocmyorderssearchcontent, name='adocmyorderssearchcontent'),
 
 ]

@@ -7,7 +7,7 @@ adocsearch.js
 
 $(function () {
 
-$('a[href="/quotation/docsearch/"]').parent().addClass('active'); //activate products tab on navbar
+$('a[href="/aid/adocsearch/"]').parent().addClass('active');
 
     setTimeout(
       function()

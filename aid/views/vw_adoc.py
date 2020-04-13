@@ -946,3 +946,111 @@ def adocmyorderssearch(request):
 
     return render(request, 'aid/adocmyorderssearch.html', {'companies': companies,
                                                         'dockindnames':dockindnames})
+
+
+@group_required("manager")
+@login_required
+def adocmyorderssearchcontent(request):
+    creatorid = request.user.id
+
+    fromdate = request.POST['fromdate']
+    todate = request.POST['todate']
+    datephraseformainresults = ''
+    datephraseforrowsources = ''
+
+    searchphraseformainresults = datephraseformainresults + " "
+    searchphraseforrowsources = " "
+
+    cursor1 = connection.cursor()
+
+    cursor1.execute("SELECT D1.docid_tbladoc, "
+                    "D1.pcd_tblcompanies_ctbladoc, "
+                    "D1.town_tblcompanies_ctbladoc, "
+                    "D1.Doc_kindid_tblaDoc_id, "
+                    "D1.companyname_tblcompanies_ctbladoc, "
+                    "D1.firstname_tblcontacts_ctbladoc, "
+                    "D1.lastname_tblcontacts_ctbladoc, "
+                    "D1.creationtime_tbladoc, "
+                    "Doc_kind_name_tblaDoc_kind, "
+                    "pretag_tbladockind, "
+                    "D1.docnumber_tbladoc, "  # 10
+                    "Doc_kindid_tblaDoc_kind, "
+                    "D1.subject_tbladoc, "
+                    "D1.wherefromdocid_tbladoc, "
+                    "D1.wheretodocid_tbladoc, "
+                    "Dfrom.fromcompanyname, "
+                    "Dto.tocompanyname, "
+                    "D1.obsolete_tbladoc, "
+                    "Dfrom.frompretag, "
+                    "Dfrom.fromdocnumber, "
+                    "Dto.topretag, "  # 20
+                    "Dto.todocnumber, "
+                    "D1.stocktakingdeno_tbladoc, "
+                    "D1.denoenabledflag_tbladoc, "
+                    "D1.machinemadedocflag_tbladoc, "
+                    "D1.Contactid_tbladoc_id "
+
+                    "FROM aid_tbladoc as D1 "
+
+                    "JOIN aid_tbladoc_kind "
+                    "ON D1.Doc_kindid_tblaDoc_id=aid_tbladoc_kind.doc_kindid_tbladoc_kind "
+
+                    "LEFT JOIN (SELECT companyname_tblcompanies_ctbladoc as fromcompanyname, "
+                    "                   docid_tbladoc as fromdocid, "
+                    "                   pretag_tbladockind as frompretag, "
+                    "                   docnumber_tbladoc as fromdocnumber "
+
+                    "                   FROM aid_tbladoc "
+
+                    "                   JOIN aid_tbladoc_kind "
+                    "                   ON aid_tbladoc.Doc_kindid_tblaDoc_id=aid_tbladoc_kind.doc_kindid_tbladoc_kind "
+
+                    "           ) as Dfrom "
+                    "ON D1.wherefromdocid_tbladoc = Dfrom.fromdocid "
+
+                    "LEFT JOIN (SELECT companyname_tblcompanies_ctbladoc as tocompanyname, "
+                    "                   docid_tbladoc as todocid, "
+                    "                   pretag_tbladockind as topretag, "
+                    "                   docnumber_tbladoc as todocnumber "
+
+                    "                   FROM aid_tbladoc "
+
+                    "                   JOIN aid_tbladoc_kind "
+                    "                   ON aid_tbladoc.Doc_kindid_tblaDoc_id=aid_tbladoc_kind.doc_kindid_tbladoc_kind "
+
+                    "           ) as Dto "
+                    "ON D1.wheretodocid_tbladoc = Dto.todocid "
+
+                    "HAVING D1.obsolete_tbladoc = 0 " + searchphraseformainresults + " and D1.Contactid_tbladoc_id = " + str(creatorid) + " "
+                                                                                     "order by D1.docid_tbladoc desc ")
+    docs = cursor1.fetchall()
+
+    cursor2 = connection.cursor()
+    cursor2.execute("SELECT "
+                    "companyname_tblcompanies_ctbldoc "
+
+                    "FROM quotation_tbldoc "
+
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "WHERE quotation_tbldoc.obsolete_tbldoc = 0 " + searchphraseforrowsources + ""
+                                                                                                "GROUP BY companyname_tblcompanies_ctbldoc ")
+
+    companiesrowsources = cursor2.fetchall()
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Doc_kind_name_tblDoc_kind "
+
+                    "FROM quotation_tbldoc "
+
+                    "JOIN quotation_tbldoc_kind "
+                    "ON quotation_tbldoc.Doc_kindid_tblDoc_id=quotation_tbldoc_kind.doc_kindid_tbldoc_kind "
+
+                    "WHERE quotation_tbldoc.obsolete_tbldoc = 0 " + searchphraseforrowsources + ""
+                                                                                                "GROUP BY Doc_kind_name_tblDoc_kind ")
+
+    dockindrowsources = cursor1.fetchall()
+    return render(request, 'aid/adocmyorderssearchcontent.html', {'docs': docs,
+                                                          'companiesrowsources': companiesrowsources,
+                                                          'dockindrowsources': dockindrowsources})
