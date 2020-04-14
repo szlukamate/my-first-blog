@@ -9,7 +9,6 @@
 
                             <form action="{% url 'adocadd' %}" method="post">{% csrf_token %}
                                 <select name="dockindidfornewdoc">
->
                                     {% for dockind in  dockinds %}
                                         <option value="{{ dockind.0}}">{{ dockind.0}} {{ dockind.1}}</option>
                                     {% endfor %}

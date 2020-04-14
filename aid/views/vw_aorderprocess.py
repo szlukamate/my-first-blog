@@ -20,4 +20,20 @@ import xml.dom.minidom as x12
 # pdb.set_trace()
 @login_required
 def aorderprocess(request):
-        return render(request, 'aid/aorderprocess.html', {})
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT "
+                         "Productid_tblaProduct, "
+                         "purchase_price_tblaproduct, "
+                         "customerdescription_tblaProduct, "
+                         "margin_tblaproduct, "
+                         "unit_tblaproduct, "
+                         "enabletoorderprocess_tblaproduct, "
+                         "obsolete_tblaproduct, "
+                         "currencyisocode_tblcurrency_ctblaproduct "
+
+                         "FROM aid_tblaproduct "
+
+                         "WHERE enabletoorderprocess_tblaproduct=1 and obsolete_tblaproduct=0 ")
+        enabledproductstoorderprocess = cursor1.fetchall()
+
+        return render(request, 'aid/aorderprocess.html', {'enabledproductstoorderprocess': enabledproductstoorderprocess})

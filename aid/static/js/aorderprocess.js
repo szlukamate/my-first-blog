@@ -10,6 +10,7 @@ localStorage.lastname = "Smith";
 $(function () {
 
     $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
+    var itemlistincart = [];
 
     var currentstep = 0;
     var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
@@ -21,6 +22,11 @@ $(function () {
     $( "#tabs" ).tabs("enable", 0); //but first
     $('#previousbutton').prop("disabled", true) //default previousbutton is disabled
     $('#finishbutton').prop("disabled", true) //default finishbutton is disabled
+
+    //addtocartbutton eventlistener script
+    $('#addtocartbutton').click(function() {
+        addtocart_main();
+    });
 
     //nextbutton eventlistener script
     $('#nextbutton').click(function() {
@@ -38,6 +44,26 @@ $(function () {
     $('#finishbutton').click(function() {
         location.reload();
     });
+    function addtocart_main(){
+
+        var numberofrowsincart = itemlistincart.length/7;
+        var linenumberforrow = numberofrowsincart + 1;
+//        var linenumberforrow = 22;
+
+        var productidvar = $('#addtocartselect').find(":selected").attr('productid');
+        var purchasepricevar = $('#addtocartselect').find(":selected").attr('purchaseprice');
+        var customerdescriptionvar = $('#addtocartselect').find(":selected").attr('customerdescription');
+        var marginvar = $('#addtocartselect').find(":selected").attr('margin');
+        var unitvar = $('#addtocartselect').find(":selected").attr('unit');
+        var currencyisocodevar = $('#addtocartselect').find(":selected").attr('currencyisocode');
+            var customerpricevar=Math.round(purchasepricevar/(1-marginvar/100));
+
+        itemlistincart.push(linenumberforrow, productidvar, customerpricevar, customerdescriptionvar, marginvar, unitvar, currencyisocodevar );
+                    console.log(linenumberforrow);
+                    console.log(itemlistincart);
+
+                    addtocart_cartupdate(itemlistincart);
+    }
 
     function tabactivator(){
             if (currentstep == 0 ) {
@@ -130,6 +156,24 @@ $(function () {
         //cart filling begin
         $('#cartitemstemplate').text(cartitemlinenumber + '. ' + cartitemdescription + ' ' + window.cartitemquantity + ' ' + cartitemunit + ' ' + cartitemquantity*cartitemunitprice + ' ' + cartitemiso)
         //cart filling end
+    }
+    function addtocart_cartupdate(itemlistincart){
+        var carthtmlphrase = ''
+        var rowsincart = itemlistincart.length/7-1
+          for (j = 0; j < rowsincart+1; j++) {
+            var cartitemlinenumber = itemlistincart[j*7+0]
+            var cartitemproductid = 2
+            var cartitemdescription = itemlistincart[j*7+3]
+            var cartitemunitprice = 2300
+            var cartitemiso = 'HUF'
+            var cartitemunit = 'hrs'
+            var cartitemquantity = 4
+
+            carthtmlphrase = carthtmlphrase + '<p>' + cartitemlinenumber + '. ' + cartitemdescription + ' ' + cartitemquantity + ' ' + cartitemunit + ' ' + cartitemquantity*cartitemunitprice + ' ' + cartitemiso + '</p><br>'
+            }
+        $('#cartitemstemplate').text(cartitemlinenumber + '. ' + cartitemdescription + ' ' + cartitemquantity + ' ' + cartitemunit + ' ' + cartitemquantity*cartitemunitprice + ' ' + cartitemiso)
+        $('#cartitemstemplate').html(carthtmlphrase)
+
     }
 //Cart scrpt end
 });
