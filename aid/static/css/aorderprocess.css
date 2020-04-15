@@ -32,6 +32,7 @@ opacity: 0.6;
 #cartframe {
 position: absolute;
 left:300mm;
+max-width: 550px;
 }
 #custom-handle-aidkind, #custom-handle-carusage {
     width: 3em;

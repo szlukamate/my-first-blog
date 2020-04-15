@@ -1,0 +1,254 @@
+{% extends 'aid/abase.html' %}
+{% load staticfiles%}
+	{% block content %}
+
+
+	<p><span>Docid:</span><span id="customerorderdocid">{{ doc.0.0}}</span></p>
+	<span id="customerordertemplate" ></span>
+	<span id="deliverynotepretemplate" ></span>
+
+	<p>Contactid:{{ doc.0.1}} hidden</p>
+
+
+	<p align="center" id="title" >Customer Cart Form</p>{% csrf_token %}
+			<div id="infoframe">
+				<p >Number of Customer Cart: {{ doc.0.25 }}{{ doc.0.10 }}</p>
+				<p >Creator: {{ creatordata.0.1 }} {{ creatordata.0.2 }}</p>
+				<p >Time of Creation: {{ doc.0.12|date:"M.d.Y" }} {{ doc.0.12|time:"H:i" }}</p>
+			</div>
+			<div id="tabs1">
+			  <ul>
+				<li><a href="#tabs1fragment-1">Company</a></li>
+				<li><a href="#tabs1fragment-2">New Docs</a></li>
+				<li><a href="#tabs1fragment-3">Utils</a></li>
+
+			  </ul>
+			  <div id="tabs1fragment-1">
+					<p>Company:{{ doc.0.3}} Companyid:{{ companyid.0.0}}<a href="{% url 'companyedit' pk=companyid.0.0 %}"><span class="glyphicon glyphicon-arrow-right"></span></a></p>
+					<p>{{ doc.0.16}} {{ doc.0.17}} {{ doc.0.18}}</p>
+					<p>Contact: {{ doc.0.13}} {{ doc.0.4}} {{ doc.0.5}}</p>
+					<p>Mobile: {{ doc.0.14}} Email: {{ doc.0.15}}</p>
+
+
+			  </div>
+			  <div id="tabs1fragment-2">
+							<button id="choosestockbutton" type="submit">
+							   <span>Delivery Note</span>
+							</button>
+							<form action="{% url 'customerinvoicemake' docid=doc.0.0 %}">
+								<input type="submit" value="Customer Invoice" />
+							</form>
+							<form action="{% url 'acustomerordersaveasacknowledgement' pk=doc.0.0 %}">
+								<input type="submit" value="Customer Acknowledgement" />
+							</form>
+							<form action="{% url 'acustomerorderemailtry' docid=doc.0.0 %}">
+								<input type="submit" value="Emailtry" />
+							</form>
+
+
+
+			  </div>
+			  <div id="tabs1fragment-3">
+				{% block sidebar %}
+					{% csrf_token %}
+					<input type="text" id="search" name="search" />
+
+					<ul id="search-results" style="list-style-type: none;">
+
+
+					</ul>
+				{% endblock sidebar %}
+						<form action="{% url 'customerorderprint' docid=doc.0.0 %}">
+							<input type="submit" value="Print" />
+						</form>
+
+						<form action="{% url 'doclink' docid=doc.0.0 %}">
+							<input type="submit" value="Doclink" />
+						</form>
+
+			  </div>
+
+			</div>
+		<div id="sqlsaving"></div><br>
+			<div id="tabs2">
+			  <ul>
+				<li><a href="#tabs2fragment-1">customerorder</a></li>
+				<li><a href="#tabs2fragment-2">Items</a></li>
+				<li><a href="#tabs2fragment-3">Preface</a></li>
+				<li><a href="#tabs2fragment-4">Backpage</a></li>
+
+			  </ul>
+			  <div id="tabs2fragment-1">
+				  <label for="prefacespecforcustomerorder_tbldoc" >Prefacespec</label>
+				  <textarea rows="10" cols="60" class="updateabletbldoc" name="prefacespecforcustomerorder_tbldoc">{{ doc.0.8}}</textarea>
+				  <label for="subject_tbldoc" >Subject</label>
+				  <input type="text" class="updateabletbldoc" value="{{ doc.0.9}}" name="subject_tbldoc" >
+				  <div id="total">
+						<select class="selection" fieldname="total_tbldoc" >
+							<option value="" disabled selected>{{ doc.0.19}}</option>
+							<option value="Total_Off">Total_Off</option>
+							<option value="Total_On">Total_On</option>
+						</select>
+				  </div>
+				  <div id="deliverydays">
+					  <label for="deliverydays_tbldoc" >Deliverydays:</label>
+					  <input type="text" class="updateabletbldoc" value="{{ doc.0.20}}" name="deliverydays_tbldoc" size="3">
+				  </div>
+				  <div id="payment">
+					  <label for="payment" >Payment:</label>
+					  <select class="selection" fieldname="paymenttextforcustomerorder_tblpayment_ctbldoc" >
+							<option value="" disabled selected>{{ doc.0.21}}</option>
+							<option value="Total_Off">Total_Off</option>
+							<option value="Total_On">Total_On</option>
+					  </select>
+				  </div>
+				  <div id="currencyinreport">
+					  <label for="currencyinreport" >CurrencyinReport:</label>
+					  <select class="selection" fieldname="currencycodeinreport_tbldoc" >
+							<option value="" disabled selected>{{ doc.0.22}}</option>
+							{% for currencycode in currencycodes %}
+								<option value="{{ currencycode.1 }}">{{ currencycode.1}}</option>
+							{% endfor %}
+					  </select>
+					  <input type="text" class="updateabletbldoc" value="{{ doc.0.23}}" name="currencyrateinreport_tbldoc" size="3">
+				  </div>
+				  <div id="deferredpaymentdays">
+					  <label for="deferredpaymentdaysincustomerorder_tbldoc" >Payment Days:</label>
+					  <input type="text" class="updateabletbldoc" value="{{ doc.0.26}}" name="deferredpaymentdaysincustomerorder_tbldoc" size="8">
+				  </div>
+
+			  </div>
+			  <div id="tabs2fragment-2">
+
+				  <div id="newcustomerorderrowsdiv">
+					<input type="text" value="{{ nextchapternums.0 }}" id="nextfirstnumonhtml" maxlength="10" size="2">
+					<input type="text" value="{{ nextchapternums.1 }}" id="nextsecondnumonhtml" maxlength="10" size="2">
+					<input type="text" value="{{ nextchapternums.2 }}" id="nextthirdnumonhtml" maxlength="10" size="2">
+					<input type="text" value="{{ nextchapternums.3 }}" id="nextfourthnumonhtml" maxlength="10" size="2">
+					<a href="#" ><span id="newcustomerorderrowsignonhtml" class="glyphicon glyphicon-arrow-down"></span></a>
+
+				  </div>
+
+				<br>
+				<br>
+					<div id="labels">
+						<label id="Pridlabel" for="Productid_tblDoc_details_id" >Prid</label>
+						<label id="Ddetidlabel" for="Doc_detailsid_tblDoc_details" >Ddetid</label>
+						<label id="C1label" for="firstnum_tblDoc_details" >C1</label>
+						<label id="C2label" for="secondnum_tblDoc_details" >C2</label>
+						<label id="C3label" for="thirdnum_tblDoc_details" >C3</label>
+						<label id="C4label" for="fourthnum_tblDoc_details" >C4</label>
+						<label id="Qtylabel" for="Qty_tblDoc_details" >Qty</label>
+						<label id="Unitlabel" for="unit_tblDoc_details" >Unit</label>
+						<label id="customerdescriptionlabel" for="customerdescription" >Customer Description</label>
+						<label id="supplierdescriptionlabel" for="supplierdescription" >Supplier Description</label>
+						<label id="Notelabel" for="Note_tblDoc_details" >Note</label>
+						<label id="Purchasepricelabel" for="purchase_price_tblproduct_ctblDoc_details" style="padding-left: 19px;">Purchaseprice</label>
+						<label id="listpricemarginlabel" for="listpricemargin" style="padding-left: 19px;">Listpricemargin</label>
+						<label id="listpricelabel" for="listprice_tblDoc_details" style="padding-left: 9px;">Listprice</label>
+						<label id="currencycodelabel"for="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" style="padding-left: 13px;">Currency Code</label>
+
+						<label id="purchasepriceACUlabel"for="purchasepriceACU" style="padding-left: 13px;">Purchaseprice{{ doc.0.24}}</label>
+						<label id="currencyratelabel" for="currencyrate_tblcurrency_ctblDoc_details" style="padding-left: 13px;">Currency Rate</label>
+						<label id="unitsalespricemarginlabel" for="unitsalespricemargin" style="padding-left: 13px;">Unitsalespricemargin</label>
+
+						<label id="listpriceACUlabel" for="listpriceACU" style="padding-left: 9px;">Listprice{{ doc.0.24}}</label>
+						<label id="unitsalespriceACUlabel" for="unitsalespriceACU" style="padding-left: 13px;">Unitsalesprice{{ doc.0.24}}</label><br>
+						<label id="discountlabel" for="Discount" style="padding-left: 13px;">Discount</label><br>
+						<label id="supplierlabel" for="Supplier" style="padding-left: 13px;">Supplier</label><br>
+					</div>
+
+					{% for tblDoc_details in  docdetails %}
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.13}}" name="Productid_tblDoc_details_id" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2" disabled>
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.14}}" name="Doc_detailsid_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="5" disabled>
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.4}}" name="firstnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.6}}" name="secondnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.7}}" name="thirdnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.5}}" name="fourthnum_tblDoc_details" maxlength="10" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.1}}" name="Qty_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.23}}" name="unit_tbldocdetails" rowid="{{ tblDoc_details.0}}" size="2">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.3}}" name="customerdescription_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.25}}" name="supplierdescription_tblProduct_ctblDoc_details" rowid="{{ tblDoc_details.0}}" size="9">
+						<input type="text" class="updateabletbldocdetails" value="{{ tblDoc_details.8}}"  name="Note_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="3">
+						<input type="text" style="color:white; background-color: lightCoral;" value="{{ tblDoc_details.10}}" name="purchase_price_tblproduct_ctblDoc_details" size="10" disabled>
+						<input type="text" style="color:white; background-color: lightCoral;"  value="{{ tblDoc_details.17}}" name="listpricemargin" size="2" disabled >
+						<input type="text" style="color:white; background-color: lightCoral;" value="{{ tblDoc_details.11}}" name="listprice_tblDoc_details" size="10" disabled >
+						<input type="text" style="color:white; background-color: Coral;" value="{{ tblDoc_details.12}}" name="currencyisocode_tblcurrency_ctblproduct_ctblDoc_details" size="3" disabled>
+
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.19}}" name="purchasepriceACU" size="10" disabled>
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.16}}" name="currencyirate_tblcurrency_ctblDoc_details" size="3" disabled>
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.20}}" name="unitsalespricemargin" size="3" disabled>
+
+
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.21}}" name="listpriceACU" size="10" disabled >
+						<input type="text" style="color:white; background-color: Green;" class="updateabletbldocdetails" value="{{ tblDoc_details.18}}"  name="unitsalespriceACU_tblDoc_details" rowid="{{ tblDoc_details.0}}" size="10">
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.22}}" name="Discount" size="3" disabled>
+						<input type="text" style="color:white; background-color: Green;" value="{{ tblDoc_details.24}}" name="Supplier" size="6" disabled><br>
+						{% for polink in polinks %}
+
+
+
+								{% if tblDoc_details.0 == polink.0 %} <!-- match docdetailsids -->
+
+									{% if tblDoc_details.1 == polink.6 %} <!-- if matches sumqty(corqty==sumpoqty)-->
+										{% if polink.2 != tblDoc_details.1 %} <!-- if many POs (poqty!=corqty-->
+											<a href="{% url 'purchaseorderform' pk=polink.5 %}"><span style="color:black; background-color: #33cccc;" >{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})/{{ polink.2}}</a><br>
+										{% else %}
+										<!-- if only one PO-->
+											<a href="{% url 'purchaseorderform' pk=polink.5 %}"><span style="color:black; background-color: #33cccc;" >{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})</a><br>
+										{% endif %}
+									{% else %}
+
+										{% if polink.6 == None %} <!-- if no PO-->
+											<a href="#"><span style="color:black; background-color: #33cccc; border-width:3px; border-style:dashed; border-color: red;">No PO line </a><br>
+										{% else %}
+
+
+											<a href="{% url 'purchaseorderform' pk=polink.5 %}"><span style="color:black; background-color: #33cccc; border-width:3px; border-style:dashed; border-color: red;">{{ polink.4}}{{ polink.3}}(PODDId:{{ polink.1}})/{{ polink.2}}</a><br>
+										{% endif %}
+									{% endif %}
+
+
+								{% endif %}
+
+
+						{% endfor %}
+
+
+						<a href="{% url 'acustomercartrowremove' pk=tblDoc_details.0 %}"><span class="glyphicon glyphicon-remove"></span></a><a href="#"><span class="glyphicon glyphicon-arrow-right" name="customerorderproductforrow" rowid="{{ tblDoc_details.0}}"></span></a>
+
+						<!-- if exists the product in product table then jump to product (the glyphicon is visible otherwise missing) -->
+						{% if tblDoc_details.15 > 0 %}
+						<a href="{% url 'products' pkproductid=tblDoc_details.13 %}"><span class="glyphicon glyphicon-filter" ></span></a><br><hr>
+						{% else %}
+						<br><hr>
+						{% endif %}
+
+
+					{% endfor %}
+
+			  </div>
+			  <div id="tabs2fragment-3">
+				  <label for="prefacetextforcustomerorder_tblprefaceforcustomerorder_ctbldoc" >Preface</label>
+				  <textarea rows="8" cols="50" class="updateabletbldoc" name="prefacetextforcustomerorder_tblprefaceforcustomerorder_ctbldoc">{{ doc.0.6}}</textarea>
+
+			  </div>
+
+			  <div id="tabs2fragment-4">
+				  <label for="backpagetext_tbldoc" >Backpage</label>
+				  <textarea rows="8" cols="50" class="updateabletbldoc" name="backpagetextforcustomerorder_tblbackpageforcustomerorder_ctbldoc">{{ doc.0.7}}</textarea>
+			  </div>
+
+			  <div id="stockradiobutton" class="widget">
+				  <fieldset>
+					<legend>Select a Stock: </legend>
+					{% for stockradiobuttonrow in stockradiobuttonrows %}
+					<label for="radio-{{ forloop.counter }}">{{ stockradiobuttonrow.1}}</label>
+					<input type="radio" value="{{ stockradiobuttonrow.0}}" name="stockradio" id="radio-{{ forloop.counter }}"><br>
+					{% endfor %}
+				  </fieldset>
+			  </div>
+	<script type="text/javascript" src="{% static 'js/acustomercart.js' %}"></script>
+	<link rel="stylesheet" href="{% static 'css/acustomercart.css' %}">
+
+	{% endblock %}

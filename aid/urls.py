@@ -25,5 +25,9 @@ urlpatterns = [
     url(r'acustomerorderemailtry/(?P<docid>[0-9]+)/$', views.acustomerorderemailtry, name='acustomerorderemailtry'),
     url(r'adocmyorderssearch/$', views.adocmyorderssearch, name='adocmyorderssearch'),
     url('adocmyorderssearchcontent/$', views.adocmyorderssearchcontent, name='adocmyorderssearchcontent'),
+    url(r'^acustomercartform/(?P<pk>[0-9]+)/$', views.acustomercartform, name='acustomercartform'),
+    url(r'acustomercartadditemtocart/$', views.acustomercartadditemtocart, name='acustomercartadditemtocart'),
+    url(r'^acustomercartrowremove/(?P<pk>[0-9]+)/$', views.acustomercartrowremove, name='acustomercartrowremove'),
+    url(r'acustomercartrefresh/$', views.acustomercartrefresh, name='acustomercartrefresh'),
 
 ]

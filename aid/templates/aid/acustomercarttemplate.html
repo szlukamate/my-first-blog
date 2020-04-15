@@ -1,0 +1,26 @@
+	{% block content %}
+				{% csrf_token %}
+							<div>
+										<table class="table table-striped">
+											<thead>
+
+												<tr>
+													<td>C1</td>
+												</tr>
+											</thead>
+
+											<tbody>
+												{%  for docdetail in  docdetails %}
+
+													<tr>
+														<td>{{ docdetail.4 }}</td>
+													</tr>
+
+
+
+												{% endfor %}
+											</tbody>
+
+										</table>
+							</div>
+	{% endblock %}

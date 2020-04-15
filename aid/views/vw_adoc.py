@@ -406,6 +406,8 @@ def adocselector(request, pk):
         return redirect('deliverynoteform', pk=pk)
     elif dockind == 9:  # Customer Acknowledgement
         return redirect('acustomeracknowledgementform', pk=pk)
+    elif dockind == 10:  # Customer Cart
+        return redirect('acustomercartform', pk=pk)
 @group_required("manager")
 @login_required
 def adocremove(request, pk):
