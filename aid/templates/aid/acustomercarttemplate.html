@@ -1,6 +1,6 @@
 	{% block content %}
 				{% csrf_token %}
-							<div>
+							<div class="x">
 										<table class="table table-striped">
 											<thead>
 
@@ -13,7 +13,16 @@
 												{%  for docdetail in  docdetails %}
 
 													<tr>
-														<td>{{ docdetail.4 }}</td>
+														<td>
+															<div class="productframeincart">
+																<a href="#" ><span class="glyphicon glyphicon-plus productincreasebutton" docdetalsid="{{ docdetail.0 }}"></span></a>
+																<a href="#" ><span class="glyphicon glyphicon-minus productdecreasebutton" docdetalsid="{{ docdetail.0 }}"></span></a>
+																<a href="#" ><span class="glyphicon glyphicon-remove productremovebutton" docdetalsid="{{ docdetail.0 }}"></span></a>
+																<span class="qtyandunit">{{ docdetail.1 }} {{ docdetail.23 }}</span>
+																<span class="priceandiso">{{ docdetail.26 }} {{ docdetail.12 }}</span>
+																{{ docdetail.4 }}. {{ docdetail.3 }}
+															</div>
+														</td>
 													</tr>
 
 

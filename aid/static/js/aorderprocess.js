@@ -11,6 +11,7 @@ $(function () {
 
     $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
 //    var itemlistincart = [];
+    cartrefresh();
 
     var currentstep = 0;
     var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
@@ -44,6 +45,19 @@ $(function () {
     $('#finishbutton').click(function() {
         location.reload();
     });
+    $('body').on("click", ".productincreasebutton", function() {
+        var docdetalsid = $(this).attr( "docdetalsid" );
+        acustomercartincreasingqty(docdetalsid);
+    });
+    $('body').on("click", ".productdecreasebutton", function() {
+        var docdetalsid = $(this).attr( "docdetalsid" );
+        acustomercartdecreasingqty(docdetalsid);
+    });
+    $('body').on("click", ".productremovebutton", function() {
+        var docdetalsid = $(this).attr( "docdetalsid" );
+        acustomercartproductremove(docdetalsid);
+    });
+
 //    function addtocart_main(){
 
 //        var numberofrowsincart = itemlistincart.length/7;
@@ -64,6 +78,75 @@ $(function () {
 
 //                    addtocart_cartupdate(itemlistincart);
 //    }
+    function acustomercartincreasingqty(docdetalsid){
+                $.ajax({
+                    type: 'POST',
+                    url: 'acustomercartincreasingqty/',
+
+                    data: {
+                    'docdetailsid' : docdetalsid,
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(){
+                      cartrefresh();
+
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+
+    }
+    function acustomercartdecreasingqty(docdetalsid){
+                $.ajax({
+                    type: 'POST',
+                    url: 'acustomercartdecreasingqty/',
+
+                    data: {
+                    'docdetailsid' : docdetalsid,
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(){
+                      cartrefresh();
+
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+
+    }
+    function acustomercartproductremove(docdetalsid){
+                $.ajax({
+                    type: 'POST',
+                    url: 'acustomercartproductremove/',
+
+                    data: {
+                    'docdetailsid' : docdetalsid,
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(){
+                      cartrefresh();
+
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+
+    }
     function cartrefresh(){
                 $.ajax({
                     type: 'POST',
@@ -74,7 +157,6 @@ $(function () {
                     },
 
                     success: function(cartcontent){
-//                    window.location.href = url;
                       $('#cartitemstemplate').html(cartcontent)
 
                     },
@@ -99,7 +181,6 @@ $(function () {
                     },
 
                     success: function(url){
-//                    window.location.href = url;
                       cartrefresh();
 
                     },

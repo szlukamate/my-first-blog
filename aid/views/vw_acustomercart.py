@@ -265,7 +265,8 @@ def acustomercartform(request, pk):
 @login_required
 def acustomercartrefresh(request):
     cursor3 = connection.cursor()
-    cursor3.execute("SELECT  DD.Doc_detailsid_tblaDoc_details, "
+    cursor3.execute("SELECT  "
+                    "DD.Doc_detailsid_tblaDoc_details, "
                     "DD.Qty_tblaDoc_details, "
                     "DD.Docid_tblaDoc_details_id, "
                     "DD.customerdescription_tblProduct_ctblaDoc_details, "
@@ -290,7 +291,8 @@ def acustomercartrefresh(request):
                     "(100-round(((DD.unitsalespriceACU_tblaDoc_details/(DD.listprice_tblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details))*100),1)) as discount, "
                     "DD.unit_tbladocdetails, "
                     "companyname_tblacompanies, "
-                    "DD.supplierdescription_tblProduct_ctblaDoc_details "  # 25
+                    "DD.supplierdescription_tblProduct_ctblaDoc_details, "  # 25
+                    "round((DD.Qty_tblaDoc_details * DD.listprice_tblaDoc_details),1) as salesprice "
 
                     "FROM aid_tbladoc_details as DD "
 
@@ -414,6 +416,66 @@ def acustomercartadditemtocart(request):
 #        [113])
 
     return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': customerinvoicedocid}) #same redirect when xmlresponse arrives therefore same redirecturl.html
+@group_required("manager")
+@login_required
+def acustomercartincreasingqty(request):
+    docdetailsid = request.POST['docdetailsid']
+
+    cursor2 = connection.cursor()
+    cursor2.execute(
+        "SELECT Qty_tblaDoc_details "
+
+        "FROM aid_tbladoc_details "
+
+        "WHERE Doc_detailsid_tblaDoc_details=%s ", [docdetailsid])
+    results = cursor2.fetchall()
+    for x in results:
+        oldqty = x[0]
+    newqty = oldqty + 1
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+
+        "UPDATE aid_tbladoc_details SET "
+        "Qty_tblaDoc_details=%s "
+        "WHERE Doc_detailsid_tblaDoc_details =%s ", [newqty, docdetailsid])
+
+    return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': 1}) #same redirect when xmlresponse arrives therefore same redirecturl.html
+@group_required("manager")
+@login_required
+def acustomercartdecreasingqty(request):
+    docdetailsid = request.POST['docdetailsid']
+
+    cursor2 = connection.cursor()
+    cursor2.execute(
+        "SELECT Qty_tblaDoc_details "
+
+        "FROM aid_tbladoc_details "
+
+        "WHERE Doc_detailsid_tblaDoc_details=%s ", [docdetailsid])
+    results = cursor2.fetchall()
+    for x in results:
+        oldqty = x[0]
+    newqty = oldqty - 1
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+
+        "UPDATE aid_tbladoc_details SET "
+        "Qty_tblaDoc_details=%s "
+        "WHERE Doc_detailsid_tblaDoc_details =%s ", [newqty, docdetailsid])
+
+    return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': 1}) #same redirect when xmlresponse arrives therefore same redirecturl.html
+def acustomercartproductremove(request):
+    docdetailsid = request.POST['docdetailsid']
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "DELETE FROM aid_tbladoc_details "
+        "WHERE Doc_detailsid_tblaDoc_details=%s ", [docdetailsid])
+
+
+    return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': 1}) #same redirect when xmlresponse arrives therefore same redirecturl.html
 @group_required("manager")
 @login_required
 def acustomercartrowremove(request, pk):

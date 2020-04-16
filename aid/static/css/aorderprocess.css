@@ -42,3 +42,34 @@ max-width: 550px;
     text-align: center;
     line-height: 1.6em;
   }
+.productframeincart {
+position: relative;
+background-color: lightgray;
+width: 300px;
+height: 100px;
+}
+.glyphicon-plus {
+position: absolute;
+left:0mm;
+top: 10mm;
+}
+.glyphicon-minus {
+position: absolute;
+left:0mm;
+top: 20mm;
+}
+.glyphicon-remove {
+position: absolute;
+right:1mm;
+top: 1mm;
+}
+.qtyandunit {
+position: absolute;
+left:0mm;
+top: 15mm;
+}
+.priceandiso {
+position: absolute;
+right:15mm;
+bottom: 5mm;
+}
