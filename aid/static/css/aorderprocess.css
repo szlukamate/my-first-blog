@@ -47,6 +47,9 @@ position: relative;
 background-color: lightgray;
 width: 300px;
 height: 100px;
+overflow:hidden;
+border-bottom:1px solid gray;
+zoom:1
 }
 .glyphicon-plus {
 position: absolute;
@@ -63,7 +66,7 @@ position: absolute;
 right:1mm;
 top: 1mm;
 }
-.qtyandunit {
+.qty {
 position: absolute;
 left:0mm;
 top: 15mm;
@@ -72,4 +75,30 @@ top: 15mm;
 position: absolute;
 right:15mm;
 bottom: 5mm;
+}
+.loader {
+  position: absolute;
+  right:0mm;
+  top: 0mm;
+  border: 6px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 6px solid #3498db;
+  width: 30px;
+  height: 30px;
+//  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 0.5s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+#carttoptemplate {
+height: 20px;
+width: 300px;
+}
+.glyphicon-shopping-cart {
+  position: absolute;
+  right:0mm;
+  top: 0mm;
+  font-size: 30px;
 }

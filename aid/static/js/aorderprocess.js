@@ -13,6 +13,8 @@ $(function () {
 //    var itemlistincart = [];
     cartrefresh();
 
+    var loadervisibilitydelaydoneflag = 0;
+    var loadervisibilitydatadoneflag = 0;
     var currentstep = 0;
     var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
     //initialize tabs
@@ -148,6 +150,17 @@ $(function () {
 
     }
     function cartrefresh(){
+                loadervisibilitydelaydoneflag = 0;
+                loadervisibilitydatadoneflag = 0;
+                showloader();
+
+                setTimeout(
+                  function()
+                  {
+                  loadervisibilitydelaydoneflag = 1;
+                  hideloader();
+                  }, 1000);
+
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartrefresh/',
@@ -158,7 +171,8 @@ $(function () {
 
                     success: function(cartcontent){
                       $('#cartitemstemplate').html(cartcontent)
-
+                        loadervisibilitydatadoneflag = 1;
+                        hideloader();
                     },
                     error: function(){
                         alert('failure');
@@ -192,6 +206,17 @@ $(function () {
                 });
 
     }
+    function showloader(){
+                $('#carttoptemplate').html('<div class="loader"></div>');
+    }
+    function hideloader(){
+            if ((loadervisibilitydelaydoneflag === 1) && (loadervisibilitydatadoneflag === 1 )) {
+                $('#carttoptemplate').html('<span class="glyphicon glyphicon-shopping-cart"></span>').fadeOut(1);
+                $('#carttoptemplate').html('<span class="glyphicon glyphicon-shopping-cart"></span>').fadeIn(100);
+            }
+
+    }
+
     function tabactivator(){
             if (currentstep == 0 ) {
                 setactivetab(currentstep);
