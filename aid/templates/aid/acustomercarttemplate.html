@@ -16,11 +16,18 @@
 													<tr>
 														<td>
 															<div class="productframeincart">
-																<a href="#" ><span class="glyphicon glyphicon-plus productincreasebutton" docdetalsid="{{ docdetail.0 }}"></span></a>
-																<a href="#" ><span class="glyphicon glyphicon-minus productdecreasebutton" docdetalsid="{{ docdetail.0 }}"></span></a>
-																<a href="#" ><span class="glyphicon glyphicon-remove productremovebutton" docdetalsid="{{ docdetail.0 }}"></span></a>
-																<span class="qty">{{ docdetail.1 }}<span x="unit">{{ docdetail.23 }}</span></span>
-																<span class="priceandiso">{{ docdetail.26 }} {{ docdetail.12 }}</span>
+																<a href="#" x="xx" class="glyphicon glyphicon-plus productincreasebutton" docdetailsid="{{ docdetail.0 }}"></a>
+																<a href="#" ><span class="glyphicon glyphicon-minus productdecreasebutton" docdetailsid="{{ docdetail.0 }}"></span></a>
+																<a href="#" ><span class="glyphicon glyphicon-remove productremovebutton" docdetailsid="{{ docdetail.0 }}"></span></a>
+																<div class="qtydiv">
+																	<span class="qty" docdetailsid="{{ docdetail.0 }}">{{ docdetail.1 }}</span>
+																	<span class="unit" docdetailsid="{{ docdetail.0 }}">{{ docdetail.23 }}</span>
+																</div>
+																<div class="pricediv">
+																	<span class="price" docdetailsid="{{ docdetail.0 }}">{{ docdetail.26 }} </span>
+																	<span class="iso" docdetailsid="{{ docdetail.0 }}">{{ docdetail.12 }}</span>
+																	<span name="maxqtyincart" docdetailsid="{{ docdetail.0 }}" hidden>{{ docdetail.27 }}</span>
+																</div>
 																{{ docdetail.4 }}. {{ docdetail.3 }}
 															</div>
 														</td>

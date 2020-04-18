@@ -53,12 +53,12 @@ zoom:1
 }
 .glyphicon-plus {
 position: absolute;
-left:0mm;
+left:5mm;
 top: 10mm;
 }
 .glyphicon-minus {
 position: absolute;
-left:0mm;
+left:5mm;
 top: 20mm;
 }
 .glyphicon-remove {
@@ -67,11 +67,24 @@ right:1mm;
 top: 1mm;
 }
 .qty {
-position: absolute;
-left:0mm;
-top: 15mm;
+font-size: 10px;
 }
-.priceandiso {
+.unit {
+font-size: 10px;
+}
+.qtydiv {
+position: absolute;
+height: 26px;
+width: 50px;
+//border:1px solid gray;
+left:0mm;
+top: 14mm;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.pricediv {
 position: absolute;
 right:15mm;
 bottom: 5mm;

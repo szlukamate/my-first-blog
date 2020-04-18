@@ -48,51 +48,52 @@ $(function () {
         location.reload();
     });
     $('body').on("click", ".productincreasebutton", function() {
-        var docdetalsid = $(this).attr( "docdetalsid" );
-        acustomercartincreasingqty(docdetalsid);
+        var docdetailsid = $(this).attr( "docdetailsid" );
+        var maxqty = $('span[name="maxqtyincart"][docdetailsid="' + docdetailsid + '"]').html();
+        var currentqty = $('span[class="qty"][docdetailsid="' + docdetailsid + '"]').html();
+                    console.log(maxqty);
+                    console.log(currentqty);
+
+        var incrementedqty = currentqty + 1;
+
+
+            if (incrementedqty >= maxqty ) {
+                    console.log('max');
+//                    $('[x="xx"][docdetailsid="' + docdetailsid + '"]').addClass('disabled').removeAttr("href");
+                    $("[href]").removeAttr("href");
+//                    $('a[x="xx"][docdetailsid="' + docdetailsid + '"]').removeAttr("href");
+//                    $('a').removeAttr("href");
+//                    $('a').removeAttr("href");
+                    $("span").css("background-color","yellow");
+            }
+
+        acustomercartincreasingqty(docdetailsid);
     });
     $('body').on("click", ".productdecreasebutton", function() {
-        var docdetalsid = $(this).attr( "docdetalsid" );
-        acustomercartdecreasingqty(docdetalsid);
+        var docdetailsid = $(this).attr( "docdetailsid" );
+        acustomercartdecreasingqty(docdetailsid);
     });
     $('body').on("click", ".productremovebutton", function() {
-        var docdetalsid = $(this).attr( "docdetalsid" );
-        acustomercartproductremove(docdetalsid);
+        var docdetailsid = $(this).attr( "docdetailsid" );
+        acustomercartproductremove(docdetailsid);
     });
+    function acustomercartincreasingqty(docdetailsid){
+                loaderstartingandsetting();
 
-//    function addtocart_main(){
-
-//        var numberofrowsincart = itemlistincart.length/7;
-//        var linenumberforrow = numberofrowsincart + 1;
-//        var linenumberforrow = 22;
-
-//        var productidvar = $('#addtocartselect').find(":selected").attr('productid');
-//        var purchasepricevar = $('#addtocartselect').find(":selected").attr('purchaseprice');
-//        var customerdescriptionvar = $('#addtocartselect').find(":selected").attr('customerdescription');
-//        var marginvar = $('#addtocartselect').find(":selected").attr('margin');
-//        var unitvar = $('#addtocartselect').find(":selected").attr('unit');
-//        var currencyisocodevar = $('#addtocartselect').find(":selected").attr('currencyisocode');
-//            var customerpricevar=Math.round(purchasepricevar/(1-marginvar/100));
-
-//        itemlistincart.push(linenumberforrow, productidvar, customerpricevar, customerdescriptionvar, marginvar, unitvar, currencyisocodevar );
-//                    console.log(linenumberforrow);
-//                    console.log(itemlistincart);
-
-//                    addtocart_cartupdate(itemlistincart);
-//    }
-    function acustomercartincreasingqty(docdetalsid){
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartincreasingqty/',
 
                     data: {
-                    'docdetailsid' : docdetalsid,
+                    'docdetailsid' : docdetailsid,
 
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
 
                     success: function(){
-                      cartrefresh();
+//                      cartrefresh();
+                        loadervisibilitydatadoneflag = 1;
+                        hideloader();
 
                     },
                     error: function(){
@@ -103,13 +104,13 @@ $(function () {
                 });
 
     }
-    function acustomercartdecreasingqty(docdetalsid){
+    function acustomercartdecreasingqty(docdetailsid){
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartdecreasingqty/',
 
                     data: {
-                    'docdetailsid' : docdetalsid,
+                    'docdetailsid' : docdetailsid,
 
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
@@ -126,13 +127,13 @@ $(function () {
                 });
 
     }
-    function acustomercartproductremove(docdetalsid){
+    function acustomercartproductremove(docdetailsid){
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartproductremove/',
 
                     data: {
-                    'docdetailsid' : docdetalsid,
+                    'docdetailsid' : docdetailsid,
 
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
@@ -150,16 +151,7 @@ $(function () {
 
     }
     function cartrefresh(){
-                loadervisibilitydelaydoneflag = 0;
-                loadervisibilitydatadoneflag = 0;
-                showloader();
-
-                setTimeout(
-                  function()
-                  {
-                  loadervisibilitydelaydoneflag = 1;
-                  hideloader();
-                  }, 1000);
+                loaderstartingandsetting();
 
                 $.ajax({
                     type: 'POST',
@@ -181,6 +173,18 @@ $(function () {
 
                 });
 
+    }
+    function loaderstartingandsetting(){
+                loadervisibilitydelaydoneflag = 0;
+                loadervisibilitydatadoneflag = 0;
+                showloader();
+
+                setTimeout(
+                  function()
+                  {
+                  loadervisibilitydelaydoneflag = 1;
+                  hideloader();
+                  }, 1000);
     }
     function addtocartdoc(){
                 $.ajax({
@@ -212,7 +216,7 @@ $(function () {
     function hideloader(){
             if ((loadervisibilitydelaydoneflag === 1) && (loadervisibilitydatadoneflag === 1 )) {
                 $('#carttoptemplate').html('<span class="glyphicon glyphicon-shopping-cart"></span>').fadeOut(1);
-                $('#carttoptemplate').html('<span class="glyphicon glyphicon-shopping-cart"></span>').fadeIn(100);
+                $('#carttoptemplate').html('<span class="glyphicon glyphicon-shopping-cart"></span>').fadeIn(500);
             }
 
     }
@@ -292,40 +296,4 @@ $(function () {
       }
     });
     //car usage script end
-//    function cartupdate(){
-
-//        var cartitemlinenumber = 1
-//        var cartitemproductid = 2
-//        var cartitemdescription = 'Escort to Doctor'
-//        var cartitemunitprice = 2300
-//        var cartitemiso = 'HUF'
-//        var cartitemunit = 'hrs'
-
-        //var cartitemlist = []
-        //cartitemlist.push(cartitemlinenumber,cartitemproductid,cartitemdescription,cartitemunitprice,cartitemunit,cartitemquantity,cartitemiso)
-        //console.log(cartitemlist);
-
-        //cart filling begin
-//        $('#cartitemstemplate').text(cartitemlinenumber + '. ' + cartitemdescription + ' ' + window.cartitemquantity + ' ' + cartitemunit + ' ' + cartitemquantity*cartitemunitprice + ' ' + cartitemiso)
-        //cart filling end
-//    }
-//    function addtocart_cartupdate(itemlistincart){
-//        var carthtmlphrase = ''
-//        var rowsincart = itemlistincart.length/7-1
-//         for (j = 0; j < rowsincart+1; j++) {
-//            var cartitemlinenumber = itemlistincart[j*7+0]
-//            var cartitemproductid = 2
-//            var cartitemdescription = itemlistincart[j*7+3]
-//            var cartitemunitprice = 2300
-//            var cartitemiso = 'HUF'
-//            var cartitemunit = 'hrs'
-//            var cartitemquantity = 4
-
-//            carthtmlphrase = carthtmlphrase + '<p>' + cartitemlinenumber + '. ' + cartitemdescription + ' ' + cartitemquantity + ' ' + cartitemunit + ' ' + cartitemquantity*cartitemunitprice + ' ' + cartitemiso + '</p><br>'
-//            }
-//        $('#cartitemstemplate').text(cartitemlinenumber + '. ' + cartitemdescription + ' ' + cartitemquantity + ' ' + cartitemunit + ' ' + cartitemquantity*cartitemunitprice + ' ' + cartitemiso)
-//        $('#cartitemstemplate').html(carthtmlphrase)
-
-//    }
-//Cart scrpt end
 });

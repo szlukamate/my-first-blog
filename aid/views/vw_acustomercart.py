@@ -292,7 +292,8 @@ def acustomercartrefresh(request):
                     "DD.unit_tbladocdetails, "
                     "companyname_tblacompanies, "
                     "DD.supplierdescription_tblProduct_ctblaDoc_details, "  # 25
-                    "round((DD.Qty_tblaDoc_details * DD.listprice_tblaDoc_details),1) as salesprice "
+                    "round((DD.Qty_tblaDoc_details * DD.listprice_tblaDoc_details),1) as salesprice, "
+                    "maxqtyincart_tblaproduct_ctblaDoc_details "
 
                     "FROM aid_tbladoc_details as DD "
 
@@ -321,10 +322,11 @@ def acustomercartadditemtocart(request):
         "customerdescription_tblaProduct`, "
         "`margin_tblaproduct`, "
         "`currencyisocode_tblcurrency_ctblaproduct`, "
-        "currencyrate_tblacurrency, "
+        "currencyrate_tblacurrency, " #5
         "unit_tblaproduct, "
         "supplierdescription_tblaProduct, "
-        "suppliercompanyid_tblaProduct "
+        "suppliercompanyid_tblaProduct, "
+        "maxqtyincart_tblaproduct "
 
         "FROM `aid_tblaproduct` "
 
@@ -343,6 +345,7 @@ def acustomercartadditemtocart(request):
         unitclone = instancesingle[6]
         supplierdescriptionclone = instancesingle[7]
         suppliercompanyidclone = instancesingle[8]
+        maxqtyincartclone = instancesingle[9]
 
         unitsalespriceACU=listpricecomputed * currencyrateclone
     #import pdb;
@@ -387,9 +390,10 @@ def acustomercartadditemtocart(request):
             "unitsalespriceACU_tblaDoc_details, "
             "unit_tbladocdetails, "
             "`supplierdescription_tblProduct_ctblaDoc_details`, "
-            "suppliercompanyid_tblaDocdetails) " 
+            "suppliercompanyid_tblaDocdetails, "
+            "maxqtyincart_tblaproduct_ctblaDoc_details ) " 
 
-            "VALUES (%s, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            "VALUES (%s, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             [qty,
              113,
              productid,
@@ -405,7 +409,8 @@ def acustomercartadditemtocart(request):
              unitsalespriceACU,
              unitclone,
              supplierdescriptionclone,
-             suppliercompanyidclone])
+             suppliercompanyidclone,
+             maxqtyincartclone])
         transaction.commit()
 
     customerinvoicedocid = 1
