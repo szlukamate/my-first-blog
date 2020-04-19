@@ -11,12 +11,16 @@ $(function () {
 
     $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
 //    var itemlistincart = [];
-    cartrefresh();
 
     var loadervisibilitydelaydoneflag = 0;
     var loadervisibilitydatadoneflag = 0;
     var currentstep = 0;
     var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
+
+    loaderstartingandsetting();
+    hideloader();
+    cartrefresh();
+
     //initialize tabs
     $( "#tabs" ).tabs({ //first tab let be active
         active: 0,
@@ -50,21 +54,16 @@ $(function () {
     $('body').on("click", ".productincreasebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
         var maxqty = $('span[name="maxqtyincart"][docdetailsid="' + docdetailsid + '"]').html();
-        var currentqty = $('span[class="qty"][docdetailsid="' + docdetailsid + '"]').html();
-                    console.log(maxqty);
+        var currentqty = $('span[class="qtypurenumber"][docdetailsid="' + docdetailsid + '"]').html();
+
+        var incrementedqty = Number(currentqty) + 1.00;
                     console.log(currentqty);
-
-        var incrementedqty = currentqty + 1;
-
+                    console.log(incrementedqty);
 
             if (incrementedqty >= maxqty ) {
                     console.log('max');
-//                    $('[x="xx"][docdetailsid="' + docdetailsid + '"]').addClass('disabled').removeAttr("href");
-                    $("[href]").removeAttr("href");
-//                    $('a[x="xx"][docdetailsid="' + docdetailsid + '"]').removeAttr("href");
-//                    $('a').removeAttr("href");
-//                    $('a').removeAttr("href");
-                    $("span").css("background-color","yellow");
+                    $('[class="productincreasebutton"][docdetailsid="' + docdetailsid + '"]').prop('disabled', true);
+                    $('[class="maxtag"][docdetailsid="' + docdetailsid + '"]').prop('hidden', false);
             }
 
         acustomercartincreasingqty(docdetailsid);
@@ -105,6 +104,7 @@ $(function () {
 
     }
     function acustomercartdecreasingqty(docdetailsid){
+                loaderstartingandsetting();
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartdecreasingqty/',
@@ -151,7 +151,7 @@ $(function () {
 
     }
     function cartrefresh(){
-                loaderstartingandsetting();
+//                loaderstartingandsetting();
 
                 $.ajax({
                     type: 'POST',

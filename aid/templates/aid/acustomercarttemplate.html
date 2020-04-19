@@ -16,12 +16,20 @@
 													<tr>
 														<td>
 															<div class="productframeincart">
-																<a href="#" x="xx" class="glyphicon glyphicon-plus productincreasebutton" docdetailsid="{{ docdetail.0 }}"></a>
-																<a href="#" ><span class="glyphicon glyphicon-minus productdecreasebutton" docdetailsid="{{ docdetail.0 }}"></span></a>
+																<button class="productincreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit">
+																   <span class="glyphicon glyphicon-plus"></span>
+																</button>
+																<button class="productdecreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit">
+																   <span class="glyphicon glyphicon-minus"></span>
+																</button>
+
 																<a href="#" ><span class="glyphicon glyphicon-remove productremovebutton" docdetailsid="{{ docdetail.0 }}"></span></a>
 																<div class="qtydiv">
-																	<span class="qty" docdetailsid="{{ docdetail.0 }}">{{ docdetail.1 }}</span>
-																	<span class="unit" docdetailsid="{{ docdetail.0 }}">{{ docdetail.23 }}</span>
+																	<span class="qty" docdetailsid="{{ docdetail.0 }}">{{ docdetail.1 }}{{ docdetail.23 }}</span>
+																	<span class="maxtag" docdetailsid="{{ docdetail.0 }}" hidden>MAX</span>
+																</div>
+																<div hidden>
+																	<span class="qtypurenumber" docdetailsid="{{ docdetail.0 }}">{{ docdetail.1 }}</span>
 																</div>
 																<div class="pricediv">
 																	<span class="price" docdetailsid="{{ docdetail.0 }}">{{ docdetail.26 }} </span>
