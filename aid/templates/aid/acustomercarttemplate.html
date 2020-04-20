@@ -1,5 +1,6 @@
 	{% block content %}
 				{% csrf_token %}
+							<p>{% now "U" %}</p>
 							<div>
 										<table>
 											<thead>
@@ -16,27 +17,38 @@
 													<tr>
 														<td>
 															<div class="productframeincart">
-																<button class="productincreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit">
-																   <span class="glyphicon glyphicon-plus"></span>
-																</button>
-																<button class="productdecreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit">
-																   <span class="glyphicon glyphicon-minus"></span>
-																</button>
 
-																<a href="#" ><span class="glyphicon glyphicon-remove productremovebutton" docdetailsid="{{ docdetail.0 }}"></span></a>
-																<div class="qtydiv">
-																	<span class="qty" docdetailsid="{{ docdetail.0 }}">{{ docdetail.1 }}{{ docdetail.23 }}</span>
-																	<span class="maxtag" docdetailsid="{{ docdetail.0 }}" hidden>MAX</span>
-																</div>
-																<div hidden>
-																	<span class="qtypurenumber" docdetailsid="{{ docdetail.0 }}">{{ docdetail.1 }}</span>
-																</div>
-																<div class="pricediv">
-																	<span class="price" docdetailsid="{{ docdetail.0 }}">{{ docdetail.26 }} </span>
-																	<span class="iso" docdetailsid="{{ docdetail.0 }}">{{ docdetail.12 }}</span>
-																	<span name="maxqtyincart" docdetailsid="{{ docdetail.0 }}" hidden>{{ docdetail.27 }}</span>
-																</div>
-																{{ docdetail.4 }}. {{ docdetail.3 }}
+																{% if docdetail.1 >= docdetail.27 %} <!-- if MAX qty then increase button disabled-->
+																	<button class="productincreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit" disabled>
+																	   <span class="glyphicon glyphicon-plus"></span>
+																	</button>
+																{% else %}
+																	<button class="productincreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit">
+																	   <span class="glyphicon glyphicon-plus"></span>
+																	</button>
+																{% endif %}
+
+																	<button class="productdecreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit">
+																	   <span class="glyphicon glyphicon-minus"></span>
+																	</button>
+
+																	<a href="#" ><span class="glyphicon glyphicon-remove productremovebutton" docdetailsid="{{ docdetail.0 }}"></span></a>
+																	<div class="qtydiv">
+																		<span class="qty" docdetailsid="{{ docdetail.0 }}"><span class="qtynumber" docdetailsid="{{ docdetail.0 }}">{{ docdetail.1 }}</span>{{ docdetail.23 }}</span>
+																{% if docdetail.1 >= docdetail.27 %} <!-- if MAX qty then maxtag not hidden-->
+																		<span class="maxtag" docdetailsid="{{ docdetail.0 }}" >MAX</span>
+																{% else %}
+																		<span class="maxtag" docdetailsid="{{ docdetail.0 }}" hidden>MAX</span>
+																{% endif %}
+																		<span name="maxqtyincart" docdetailsid="{{ docdetail.0 }}" hidden>{{ docdetail.27 }}</span>
+																	</div>
+																	<div class="pricediv">
+																		<span class="salesprice" docdetailsid="{{ docdetail.0 }}">{{ docdetail.26 }} </span>
+																		<span class="iso" docdetailsid="{{ docdetail.0 }}">{{ docdetail.12 }}</span>
+																		<span class="listprice" docdetailsid="{{ docdetail.0 }}" hidden>{{ docdetail.11 }}</span>
+																	</div>
+
+																	{{ docdetail.4 }}. {{ docdetail.3 }}
 															</div>
 														</td>
 													</tr>

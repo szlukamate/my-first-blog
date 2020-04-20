@@ -80,24 +80,39 @@ position: absolute;
 right:15mm;
 bottom: 5mm;
 }
+.messagetagincarttop {
+position: absolute;
+left:0mm;
+bottom: 0mm;
+}
+.pricetagincarttop {
+position: absolute;
+left:20mm;
+bottom: 0mm;
+}
 .loader {
   position: absolute;
   right:0mm;
   top: 0mm;
-  border: 6px solid #f3f3f3;
+  border: 5px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 6px solid #3498db;
+  border-top: 5px solid #3498db;
   width: 30px;
   height: 30px;
-  animation: spin 0.5s linear infinite;
+  animation: spin 0.45s linear infinite;
 }
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 #carttoptemplate {
+position: relative;
 height: 20px;
 width: 300px;
+}
+#cartitemstemplate {
+position: relative;
+top: 20px;
 }
 .glyphicon-shopping-cart {
   position: absolute;
@@ -154,7 +169,6 @@ width: 300px;
 
   background-color: #5999ff;
   color: white;
-
   font-size: 12px;
 //  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   border-radius: 6px;

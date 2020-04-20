@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'acustomercartincreasingqty/$', views.acustomercartincreasingqty, name='acustomercartincreasingqty'),
     url(r'acustomercartdecreasingqty/$', views.acustomercartdecreasingqty, name='acustomercartdecreasingqty'),
     url(r'acustomercartproductremove/$', views.acustomercartproductremove, name='acustomercartproductremove'),
+    url(r'acustomercartpricetagtocarttop/$', views.acustomercartpricetagtocarttop, name='acustomercartpricetagtocarttop'),
 
 ]

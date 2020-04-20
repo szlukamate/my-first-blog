@@ -17,7 +17,7 @@ $(function () {
     var currentstep = 0;
     var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
 
-    loaderstartingandsetting();
+    loaderstartingandsetting('Starting');
     hideloader();
     cartrefresh();
 
@@ -53,31 +53,53 @@ $(function () {
     });
     $('body').on("click", ".productincreasebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
-        var maxqty = $('span[name="maxqtyincart"][docdetailsid="' + docdetailsid + '"]').html();
-        var currentqty = $('span[class="qtypurenumber"][docdetailsid="' + docdetailsid + '"]').html();
-
-        var incrementedqty = Number(currentqty) + 1.00;
-                    console.log(currentqty);
-                    console.log(incrementedqty);
-
-            if (incrementedqty >= maxqty ) {
-                    console.log('max');
-                    $('[class="productincreasebutton"][docdetailsid="' + docdetailsid + '"]').prop('disabled', true);
-                    $('[class="maxtag"][docdetailsid="' + docdetailsid + '"]').prop('hidden', false);
-            }
-
+        acustomercartincreasingordecreasing(docdetailsid, 'increasing');
         acustomercartincreasingqty(docdetailsid);
     });
     $('body').on("click", ".productdecreasebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
+        acustomercartincreasingordecreasing(docdetailsid, 'decreasing');
         acustomercartdecreasingqty(docdetailsid);
     });
     $('body').on("click", ".productremovebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
         acustomercartproductremove(docdetailsid);
     });
+    function acustomercartincreasingordecreasing(docdetailsid, upordownflag){
+        var maxqty = $('span[name="maxqtyincart"][docdetailsid="' + docdetailsid + '"]').html();
+        var currentqty = $('span[class="qtynumber"][docdetailsid="' + docdetailsid + '"]').html();
+        var lisprice = $('span[class="listprice"][docdetailsid="' + docdetailsid + '"]').html();
+        var incrementedqty = Number(currentqty) + 1;
+        var decrementedqty = Number(currentqty) - 1;
+        incrementedqty = incrementedqty.toFixed(2);
+        decrementedqty = decrementedqty.toFixed(2);
+        maxqty = Number(maxqty);
+        if (upordownflag === 'increasing' ) {
+
+                    $('span[class="qtynumber"][docdetailsid="' + docdetailsid + '"]').html(incrementedqty);
+                    $('span[class="salesprice"][docdetailsid="' + docdetailsid + '"]').html(lisprice*incrementedqty);
+
+            if (incrementedqty >= maxqty ) {
+//                    console.log('max');
+                    $('[class="productincreasebutton"][docdetailsid="' + docdetailsid + '"]').prop('disabled', true);
+                    $('[class="maxtag"][docdetailsid="' + docdetailsid + '"]').prop('hidden', false);
+            }
+        }
+        if (upordownflag === 'decreasing' ) {
+
+                    $('span[class="qtynumber"][docdetailsid="' + docdetailsid + '"]').html(decrementedqty);
+                    $('span[class="salesprice"][docdetailsid="' + docdetailsid + '"]').html(lisprice*decrementedqty);
+
+            if (decrementedqty <= maxqty ) {
+                    console.log(maxqty);
+                    console.log(decrementedqty);
+                    $('[class="productincreasebutton"][docdetailsid="' + docdetailsid + '"]').prop('disabled', false);
+                    $('[class="maxtag"][docdetailsid="' + docdetailsid + '"]').prop('hidden', true);
+            }
+        }
+    }
     function acustomercartincreasingqty(docdetailsid){
-                loaderstartingandsetting();
+                loaderstartingandsetting('Adding');
 
                 $.ajax({
                     type: 'POST',
@@ -90,10 +112,8 @@ $(function () {
                     },
 
                     success: function(){
-//                      cartrefresh();
                         loadervisibilitydatadoneflag = 1;
                         hideloader();
-
                     },
                     error: function(){
                         alert('failure');
@@ -104,7 +124,7 @@ $(function () {
 
     }
     function acustomercartdecreasingqty(docdetailsid){
-                loaderstartingandsetting();
+                loaderstartingandsetting('Removing');
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartdecreasingqty/',
@@ -116,7 +136,8 @@ $(function () {
                     },
 
                     success: function(){
-                      cartrefresh();
+                        loadervisibilitydatadoneflag = 1;
+                        hideloader();
 
                     },
                     error: function(){
@@ -174,17 +195,17 @@ $(function () {
                 });
 
     }
-    function loaderstartingandsetting(){
+    function loaderstartingandsetting(messagetag){
                 loadervisibilitydelaydoneflag = 0;
                 loadervisibilitydatadoneflag = 0;
-                showloader();
+                showloader(messagetag);
 
                 setTimeout(
                   function()
                   {
                   loadervisibilitydelaydoneflag = 1;
                   hideloader();
-                  }, 1000);
+                  }, 3000);
     }
     function addtocartdoc(){
                 $.ajax({
@@ -210,17 +231,41 @@ $(function () {
                 });
 
     }
-    function showloader(){
-                $('#carttoptemplate').html('<div class="loader"></div>');
+    function showloader(messagetag){
+                $('#carttoptemplate').html('<div class="loader"></div><div class="messagetagincarttop">' + messagetag + '</div>');
+
     }
     function hideloader(){
+            pricetagtocarttop();
             if ((loadervisibilitydelaydoneflag === 1) && (loadervisibilitydatadoneflag === 1 )) {
-                $('#carttoptemplate').html('<span class="glyphicon glyphicon-shopping-cart"></span>').fadeOut(1);
-                $('#carttoptemplate').html('<span class="glyphicon glyphicon-shopping-cart"></span>').fadeIn(500);
+                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="pricetagincarttop">' + 'much' + '</div>').fadeOut(1);
+                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="pricetagincarttop">' + 'much' + '</div>').fadeIn(500);
             }
 
     }
+    function pricetagtocarttop(){
+                $.ajax({
+                    type: 'POST',
+                    url: 'acustomercartpricetagtocarttop/',
 
+                    data: {
+
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(pricetag){
+//                         return pricetag;
+                  console.log(pricetag);
+
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html'
+
+                });
+
+    }
     function tabactivator(){
             if (currentstep == 0 ) {
                 setactivetab(currentstep);

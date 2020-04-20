@@ -498,3 +498,22 @@ def acustomercartrowremove(request, pk):
     transaction.commit()
 
     return redirect('acustomercartform', pk=na)
+@group_required("manager")
+@login_required
+def acustomercartpricetagtocarttop(request):
+    cursor2 = connection.cursor()
+    cursor2.execute(
+        "SELECT "
+        "sum(Qty_tblaDoc_details*unitsalespriceACU_tblaDoc_details) as totalprice "
+
+        "FROM aid_tbladoc_details "
+
+        "WHERE Docid_tblaDoc_details_id=%s ", ['113'])
+    results = cursor2.fetchall()
+    for x in results:
+        totalprice = x[0]
+
+    json_data = json.dumps(totalprice)
+
+
+    return HttpResponse(json_data, content_type="application/json")
