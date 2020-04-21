@@ -16,8 +16,10 @@ $(function () {
     var loadervisibilitydatadoneflag = 0;
     var currentstep = 0;
     var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
+    var pricetagtocarttopvalue = 0;
 
     loaderstartingandsetting('Starting');
+    pricetagtocarttop();
     hideloader();
     cartrefresh();
 
@@ -59,7 +61,6 @@ $(function () {
     $('body').on("click", ".productdecreasebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
         acustomercartincreasingordecreasing(docdetailsid, 'decreasing');
-        acustomercartdecreasingqty(docdetailsid);
     });
     $('body').on("click", ".productremovebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
@@ -96,6 +97,14 @@ $(function () {
                     $('[class="productincreasebutton"][docdetailsid="' + docdetailsid + '"]').prop('disabled', false);
                     $('[class="maxtag"][docdetailsid="' + docdetailsid + '"]').prop('hidden', true);
             }
+            if (decrementedqty <= 0 ) {
+                    acustomercartdecreasingqty(docdetailsid);
+            }
+            else
+            {
+                    console.log('remove');
+                    acustomercartproductremove(docdetailsid);
+            }
         }
     }
     function acustomercartincreasingqty(docdetailsid){
@@ -112,8 +121,8 @@ $(function () {
                     },
 
                     success: function(){
-                        loadervisibilitydatadoneflag = 1;
-                        hideloader();
+                        pricetagtocarttop();
+
                     },
                     error: function(){
                         alert('failure');
@@ -136,8 +145,7 @@ $(function () {
                     },
 
                     success: function(){
-                        loadervisibilitydatadoneflag = 1;
-                        hideloader();
+                        pricetagtocarttop();
 
                     },
                     error: function(){
@@ -236,10 +244,11 @@ $(function () {
 
     }
     function hideloader(){
-            pricetagtocarttop();
             if ((loadervisibilitydelaydoneflag === 1) && (loadervisibilitydatadoneflag === 1 )) {
-                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="pricetagincarttop">' + 'much' + '</div>').fadeOut(1);
-                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="pricetagincarttop">' + 'much' + '</div>').fadeIn(500);
+                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + '</div>').fadeOut(1);
+                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + '</div>').fadeIn(500);
+                loadervisibilitydatadoneflag = 0; // to prevent flashing the pricetagincarttop template because of multi invoke this function
+
             }
 
     }
@@ -254,8 +263,9 @@ $(function () {
                     },
 
                     success: function(pricetag){
-//                         return pricetag;
-                  console.log(pricetag);
+                    pricetagtocarttopvalue = pricetag;
+                    loadervisibilitydatadoneflag = 1;
+                    hideloader();
 
                     },
                     error: function(){

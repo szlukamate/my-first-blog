@@ -83,12 +83,19 @@ bottom: 5mm;
 .messagetagincarttop {
 position: absolute;
 left:0mm;
-bottom: 0mm;
+bottom: 0.43mm;
+font-size:14px;
+opacity: 0.6;
+
 }
 .pricetagincarttop {
 position: absolute;
-left:20mm;
+left:30mm;
 bottom: 0mm;
+font-size:18px;
+//margin:10px 0 15px 10px;
+color:#010101;
+font-weight:bold
 }
 .loader {
   position: absolute;
