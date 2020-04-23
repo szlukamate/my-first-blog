@@ -346,10 +346,9 @@ def acustomercartadditemtocart(request):
         supplierdescriptionclone = instancesingle[7]
         suppliercompanyidclone = instancesingle[8]
         maxqtyincartclone = instancesingle[9]
-
+#        import pdb;
+#        pdb.set_trace()
         unitsalespriceACU=listpricecomputed * currencyrateclone
-    #import pdb;
-    #pdb.set_trace()
 
 
 
@@ -471,7 +470,7 @@ def acustomercartdecreasingqty(request):
         "WHERE Doc_detailsid_tblaDoc_details =%s ", [newqty, docdetailsid])
 
     return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': 1}) #same redirect when xmlresponse arrives therefore same redirecturl.html
-def acustomercartproductremove(request):
+def acustomercartproductremove(request): #item removal from cart with ajax
     docdetailsid = request.POST['docdetailsid']
 
     cursor1 = connection.cursor()
@@ -483,7 +482,7 @@ def acustomercartproductremove(request):
     return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': 1}) #same redirect when xmlresponse arrives therefore same redirecturl.html
 @group_required("manager")
 @login_required
-def acustomercartrowremove(request, pk):
+def acustomercartrowremove(request, pk): #rowremove from customercart doc (from form)
     cursor2 = connection.cursor()
     cursor2.execute(
         "SELECT Docid_tblaDoc_details_id FROM aid_tbladoc_details WHERE Doc_detailsid_tblaDoc_details=%s ", [pk])
@@ -517,3 +516,218 @@ def acustomercartpricetagtocarttop(request):
 
 
     return HttpResponse(json_data, content_type="application/json")
+def acustomercartsaveasorder(request, pk):
+    creatorid = request.user.id
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Docid_tblDoc, "
+                    "Contactid_tblDoc_id, "
+                    "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
+                    "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
+                    "prefacespecforquotation_tbldoc, "
+                    "subject_tbldoc, "
+                    "docnumber_tbldoc, "
+                    "total_tbldoc, "
+                    "deliverydays_tbldoc, "
+                    "paymenttextforquotation_tblpayment_ctbldoc, "
+                    "currencycodeinreport_tbldoc, "
+                    "currencyrateinreport_tbldoc, "
+                    "accountcurrencycode_tbldoc, "
+                    "companyname_tblcompanies_ctbldoc, "
+                    "firstname_tblcontacts_ctbldoc, "
+                    "lastname_tblcontacts_ctbldoc, "
+                    "title_tblcontacts_ctbldoc, "
+                    "mobile_tblcontacts_ctbldoc, "
+                    "email_tblcontacts_ctbldoc, "
+                    "pcd_tblcompanies_ctbldoc, "
+                    "town_tblcompanies_ctbldoc, "
+                    "address_tblcompanies_ctbldoc "
+                    "FROM quotation_tbldoc "
+                    "WHERE docid_tbldoc=%s "
+                    "order by docid_tbldoc desc",
+                    [pk])
+    doc = cursor1.fetchall()
+    for x in doc:
+        contactid = x[1]
+        prefacetext = x[2]
+        backpagetext = x[3]
+        prefacespectext = x[4]
+        subject = x[5]
+        total = x[7]
+        deliverydays = x[8]
+        paymenttext = x[9]
+        currencycodeinreport = x[10]
+        currencyrateinreport = x[11]
+        accountcurrencycode = x[12]
+        companynameclone = x[13]
+        firstnameclone = x[14]
+        lastnameclone = x[15]
+        titleclone = x[16]
+        mobileclone = x[17]
+        emailclone = x[18]
+        pcdclone = x[19]
+        townclone = x[20]
+        addressclone = x[21]
+
+
+    cursor8 = connection.cursor()
+    cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
+                    "WHERE Doc_kindid_tblDoc_id = 2")
+    results = cursor8.fetchall()
+    resultslen = len(results)
+    for x in results:
+        docnumber = x[0]
+        docnumber += 1
+
+    cursor2 = connection.cursor()
+    cursor2.execute("INSERT INTO quotation_tbldoc "
+                    "( Doc_kindid_tblDoc_id, "
+                    "Contactid_tblDoc_id, "
+                    "companyname_tblcompanies_ctbldoc, "
+                    "firstname_tblcontacts_ctbldoc, "
+                    "lastname_tblcontacts_ctbldoc, "
+                    "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
+                    "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
+                    "prefacespecforquotation_tbldoc, "
+                    "subject_tbldoc, "
+                    "docnumber_tblDoc, "
+                    "total_tbldoc, "
+                    "deliverydays_tbldoc, "
+                    "creatorid_tbldoc, "
+                    "title_tblcontacts_ctbldoc, "
+                    "mobile_tblcontacts_ctbldoc, "
+                    "email_tblcontacts_ctbldoc, "
+                    "pcd_tblcompanies_ctbldoc, "
+                    "town_tblcompanies_ctbldoc, "
+                    "address_tblcompanies_ctbldoc, "
+                    "paymenttextforquotation_tblpayment_ctbldoc, "
+                    "currencycodeinreport_tbldoc, "
+                    "currencyrateinreport_tbldoc, "
+                    "doclinkparentid_tbldoc, "
+                    "accountcurrencycode_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    [2, contactid, companynameclone, firstnameclone, lastnameclone, prefacetext, backpagetext, prefacespectext,
+                    subject,
+                    docnumber,
+                    total,
+                    deliverydays,
+                    creatorid,
+                    titleclone,
+                    mobileclone,
+                    emailclone,
+                    pcdclone,
+                    townclone,
+                    addressclone,
+                    paymenttext,
+                    currencycodeinreport,
+                    currencyrateinreport,
+                    pk,
+                    accountcurrencycode])
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
+        results = cursor3.fetchall()
+        for x in results:
+            maxdocid = x[0]
+
+    cursor3.execute("SELECT `Doc_detailsid_tblDoc_details`, "
+                    "`Qty_tblDoc_details`, "
+                    "`Docid_tblDoc_details_id`, "
+                    "`customerdescription_tblProduct_ctblDoc_details`, "
+                    "`firstnum_tblDoc_details`, "
+                    "`fourthnum_tblDoc_details`, "
+                    "`secondnum_tblDoc_details`, "
+                    "`thirdnum_tblDoc_details`, "
+                    "`Note_tblDoc_details`, "
+                    "`creationtime_tblDoc_details`, "
+                    "purchase_price_tblproduct_ctblDoc_details, " #10
+                    "listprice_tblDoc_details, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+                    "Productid_tblDoc_details_id, "
+                    "Doc_detailsid_tblDoc_details, "
+                    "COALESCE(Productid_tblProduct, 0), "
+                    "currencyrate_tblcurrency_ctblDoc_details, "
+                    "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
+                    "unitsalespriceACU_tblDoc_details, "
+                    "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
+                    "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
+                    "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
+                    "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
+                    "unit_tbldocdetails, "
+                    "suppliercompanyid_tbldocdetails, "
+                    "supplierdescription_tblProduct_ctblDoc_details " #25
+
+                    "FROM quotation_tbldoc_details "
+
+                    "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+                    "ON "
+                    "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+
+                    "WHERE docid_tbldoc_details_id=%s "
+                    "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
+                    [pk])
+    docdetails = cursor3.fetchall()
+    for x in docdetails:
+        docdetailsid = x[0]
+        qty = x[1]
+        firstnum = x[4]
+        fourthnum = x[5]
+        secondnum = x[6]
+        thirdnum = x[7]
+        note = x[8]
+        productid = x[13]
+        currencyrate = x[16]
+        suppliercompanyid = x[24]
+        supplierdescriptionclone = x[25]
+
+        purchase_priceclone = x[10]
+        customerdescriptionclone = x[3]
+        currencyisocodeclone = x[12]
+        listpricecomputed = x[11]
+        currencyrateclone = x[16]
+        unitclone = x[23]
+        unitsalespriceACU = x[18]
+
+        cursor4 = connection.cursor()
+        cursor4.execute(
+            "INSERT INTO quotation_tbldoc_details "
+            "( Docid_tblDoc_details_id, "
+            "`Qty_tblDoc_details`, "
+            "`customerdescription_tblProduct_ctblDoc_details`, "
+            "firstnum_tblDoc_details, "
+            "`fourthnum_tblDoc_details`, "
+            "`secondnum_tblDoc_details`, "
+            "`thirdnum_tblDoc_details`, "
+            "`Note_tblDoc_details`, "
+            "purchase_price_tblproduct_ctblDoc_details, "
+            "listprice_tblDoc_details, "
+            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
+            "Productid_tblDoc_details_id, "
+            "currencyrate_tblcurrency_ctblDoc_details, "
+            "unitsalespriceACU_tblDoc_details, "
+            "unit_tbldocdetails, "
+            "suppliercompanyid_tbldocdetails, "
+            "supplierdescription_tblProduct_ctblDoc_details, "
+            "creatorid_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+
+            [maxdocid,
+             qty,
+             customerdescriptionclone,
+             firstnum,
+             fourthnum,
+             secondnum,
+             thirdnum,
+             note,
+             purchase_priceclone,
+             listpricecomputed,
+             currencyisocodeclone,
+             productid,
+             currencyrate,
+             unitsalespriceACU,
+             unitclone,
+             suppliercompanyid,
+             supplierdescriptionclone,
+             creatorid])
+
+
+    return redirect('docselector', pk=maxdocid)

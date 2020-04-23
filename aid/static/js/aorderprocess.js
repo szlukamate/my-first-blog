@@ -10,19 +10,15 @@ localStorage.lastname = "Smith";
 $(function () {
 
     $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
-//    var itemlistincart = [];
-
     var loadervisibilitydelaydoneflag = 0;
     var loadervisibilitydatadoneflag = 0;
     var currentstep = 0;
     var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
     var pricetagtocarttopvalue = 0;
-
     loaderstartingandsetting('Starting');
     pricetagtocarttop();
     hideloader();
     cartrefresh();
-
     //initialize tabs
     $( "#tabs" ).tabs({ //first tab let be active
         active: 0,
@@ -31,12 +27,10 @@ $(function () {
     $( "#tabs" ).tabs("enable", 0); //but first
     $('#previousbutton').prop("disabled", true) //default previousbutton is disabled
     $('#finishbutton').prop("disabled", true) //default finishbutton is disabled
-
     //addtocartbutton eventlistener script
     $('#addtocartbutton').click(function() {
         addtocartdoc();
     });
-
     //nextbutton eventlistener script
     $('#nextbutton').click(function() {
         setactivetabtextfilled('next'); //add ' - OK' to the end of tab
@@ -76,40 +70,31 @@ $(function () {
         decrementedqty = decrementedqty.toFixed(2);
         maxqty = Number(maxqty);
         if (upordownflag === 'increasing' ) {
-
                     $('span[class="qtynumber"][docdetailsid="' + docdetailsid + '"]').html(incrementedqty);
                     $('span[class="salesprice"][docdetailsid="' + docdetailsid + '"]').html(lisprice*incrementedqty);
-
             if (incrementedqty >= maxqty ) {
-//                    console.log('max');
                     $('[class="productincreasebutton"][docdetailsid="' + docdetailsid + '"]').prop('disabled', true);
                     $('[class="maxtag"][docdetailsid="' + docdetailsid + '"]').prop('hidden', false);
             }
         }
         if (upordownflag === 'decreasing' ) {
-
                     $('span[class="qtynumber"][docdetailsid="' + docdetailsid + '"]').html(decrementedqty);
                     $('span[class="salesprice"][docdetailsid="' + docdetailsid + '"]').html(lisprice*decrementedqty);
-
             if (decrementedqty <= maxqty ) {
-                    console.log(maxqty);
-                    console.log(decrementedqty);
                     $('[class="productincreasebutton"][docdetailsid="' + docdetailsid + '"]').prop('disabled', false);
                     $('[class="maxtag"][docdetailsid="' + docdetailsid + '"]').prop('hidden', true);
             }
             if (decrementedqty <= 0 ) {
-                    acustomercartdecreasingqty(docdetailsid);
+                    acustomercartproductremove(docdetailsid);
             }
             else
             {
-                    console.log('remove');
-                    acustomercartproductremove(docdetailsid);
+                    acustomercartdecreasingqty(docdetailsid);
             }
         }
     }
     function acustomercartincreasingqty(docdetailsid){
                 loaderstartingandsetting('Adding');
-
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartincreasingqty/',
@@ -122,15 +107,12 @@ $(function () {
 
                     success: function(){
                         pricetagtocarttop();
-
                     },
                     error: function(){
                         alert('failure');
                     },
                     datatype: 'html'
-
                 });
-
     }
     function acustomercartdecreasingqty(docdetailsid){
                 loaderstartingandsetting('Removing');
@@ -146,17 +128,15 @@ $(function () {
 
                     success: function(){
                         pricetagtocarttop();
-
                     },
                     error: function(){
                         alert('failure');
                     },
                     datatype: 'html'
-
                 });
-
     }
     function acustomercartproductremove(docdetailsid){
+                loaderstartingandsetting('Removing');
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartproductremove/',
@@ -169,19 +149,14 @@ $(function () {
 
                     success: function(){
                       cartrefresh();
-
                     },
                     error: function(){
                         alert('failure');
                     },
                     datatype: 'html'
-
                 });
-
     }
     function cartrefresh(){
-//                loaderstartingandsetting();
-
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartrefresh/',
@@ -192,22 +167,18 @@ $(function () {
 
                     success: function(cartcontent){
                       $('#cartitemstemplate').html(cartcontent)
-                        loadervisibilitydatadoneflag = 1;
-                        hideloader();
+                      pricetagtocarttop();
                     },
                     error: function(){
                         alert('failure');
                     },
                     datatype: 'html'
-
                 });
-
     }
     function loaderstartingandsetting(messagetag){
                 loadervisibilitydelaydoneflag = 0;
                 loadervisibilitydatadoneflag = 0;
                 showloader(messagetag);
-
                 setTimeout(
                   function()
                   {
@@ -226,31 +197,24 @@ $(function () {
 
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
-
                     success: function(url){
                       cartrefresh();
-
                     },
                     error: function(){
                         alert('failure');
                     },
                     datatype: 'html'
-
                 });
-
     }
     function showloader(messagetag){
                 $('#carttoptemplate').html('<div class="loader"></div><div class="messagetagincarttop">' + messagetag + '</div>');
-
     }
     function hideloader(){
             if ((loadervisibilitydelaydoneflag === 1) && (loadervisibilitydatadoneflag === 1 )) {
                 $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + '</div>').fadeOut(1);
                 $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + '</div>').fadeIn(500);
                 loadervisibilitydatadoneflag = 0; // to prevent flashing the pricetagincarttop template because of multi invoke this function
-
             }
-
     }
     function pricetagtocarttop(){
                 $.ajax({
@@ -261,20 +225,16 @@ $(function () {
 
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
-
                     success: function(pricetag){
                     pricetagtocarttopvalue = pricetag;
                     loadervisibilitydatadoneflag = 1;
                     hideloader();
-
                     },
                     error: function(){
                         alert('failure');
                     },
                     datatype: 'html'
-
                 });
-
     }
     function tabactivator(){
             if (currentstep == 0 ) {
@@ -315,7 +275,6 @@ $(function () {
         $( "#tabs" ).tabs({ disabled: true }); //set all tab to disabled
         $( "#tabs" ).tabs("enable", '' + (xstep + 1) + ''); //except this (this parameter is not 0 indexed so +1)
     }
-
 //Cart scrpt begin
     //aidkind script begin
     var handleaidkind = $( "#custom-handle-aidkind" );
