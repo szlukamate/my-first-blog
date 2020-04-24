@@ -9,7 +9,7 @@
     margin-top: -175px !important;
 }
 
-button, input {
+button {
 display: inline;
 border: 1px solid black;
 transition: 250ms background-color;
@@ -19,13 +19,13 @@ button:disabled, input:disabled {
 border: 0px solid black;
 }
 
-button:hover, input:hover {
+button:hover {
 cursor: pointer;
 background-color: black;
 color: white;
 }
 
-button:disabled:hover, input:disabled:hover  {
+button:disabled:hover  {
 cursor: not-allowed;
 opacity: 0.6;
 }
@@ -82,8 +82,8 @@ bottom: 5mm;
 }
 .messagetagincarttop {
 position: absolute;
-left:0mm;
-bottom: 0.43mm;
+left:2mm;
+top: 4mm;
 font-size:14px;
 opacity: 0.6;
 
@@ -91,7 +91,7 @@ opacity: 0.6;
 .pricetagincarttop {
 position: absolute;
 left:30mm;
-bottom: 0mm;
+top: 3.5mm;
 font-size:18px;
 //margin:10px 0 15px 10px;
 color:#010101;
@@ -99,8 +99,8 @@ font-weight:bold
 }
 .loader {
   position: absolute;
-  right:0mm;
-  top: 0mm;
+  right:3mm;
+  top: 3mm;
   border: 5px solid #f3f3f3;
   border-radius: 50%;
   border-top: 5px solid #3498db;
@@ -114,8 +114,11 @@ font-weight:bold
 }
 #carttoptemplate {
 position: relative;
-height: 20px;
+height: 50px;
 width: 300px;
+background-color: white;
+border: 1px solid gray;
+
 }
 #cartitemstemplate {
 position: relative;
@@ -123,8 +126,8 @@ top: 20px;
 }
 .glyphicon-shopping-cart {
   position: absolute;
-  right:0mm;
-  top: 0mm;
+  right: 2mm;
+  top: 3mm;
   font-size: 30px;
   opacity: 0.8;
 }

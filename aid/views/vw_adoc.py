@@ -751,7 +751,8 @@ def adocmyorderssearchcontent(request):
                     "D1.stocktakingdeno_tbladoc, "
                     "D1.denoenabledflag_tbladoc, "
                     "D1.machinemadedocflag_tbladoc, "
-                    "D1.Contactid_tbladoc_id "
+                    "D1.Contactid_tbladoc_id, "
+                    "D1.djangouserid_tbladoc "
 
                     "FROM aid_tbladoc as D1 "
 
@@ -784,7 +785,7 @@ def adocmyorderssearchcontent(request):
                     "           ) as Dto "
                     "ON D1.wheretodocid_tbladoc = Dto.todocid "
 
-                    "HAVING D1.obsolete_tbladoc = 0 " + searchphraseformainresults + " and D1.Contactid_tbladoc_id = " + str(creatorid) + " "
+                    "HAVING D1.obsolete_tbladoc = 0 " + searchphraseformainresults + " and D1.djangouserid_tbladoc = " + str(creatorid) + " and D1.Doc_kindid_tblaDoc_id=2 "
                                                                                      "order by D1.docid_tbladoc desc ")
     docs = cursor1.fetchall()
 

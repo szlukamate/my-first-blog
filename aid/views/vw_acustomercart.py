@@ -17,8 +17,8 @@ import os
 from django.core.mail import EmailMessage
 
 
-# import pdb;
-# pdb.set_trace()
+#import pdb;
+#pdb.set_trace()
 def group_required(group_name, login_url=None):
     """
     Decorator for views that checks whether a user belongs to a particular
@@ -231,18 +231,24 @@ def acustomercartform(request, pk):
                     "LIMIT 1"
                     , [pk])
     maxchapternums = cursor5.fetchall()
-    for x in maxchapternums:
-        maxfirstnum = x[0]
-        maxsecondnum = x[1]
-        maxthirdnum = x[2]
-        maxfourthnum = x[3]
+    if len(maxchapternums) == 0:
+        maxfirstnum = 0
+        maxsecondnum = 0
+        maxthirdnum = 0
+        maxfourthnum = 0
+    else:
+        for x in maxchapternums:
+            maxfirstnum = x[0]
+            maxsecondnum = x[1]
+            maxthirdnum = x[2]
+            maxfourthnum = x[3]
 
-        nextchapternums = array('i', [1, 0, 0, 0])
+    nextchapternums = array('i', [1, 0, 0, 0])
 
-        nextchapternums[0] = maxfirstnum
-        nextchapternums[1] = maxsecondnum
-        nextchapternums[2] = maxthirdnum
-        nextchapternums[3] = maxfourthnum
+    nextchapternums[0] = maxfirstnum
+    nextchapternums[1] = maxsecondnum
+    nextchapternums[2] = maxthirdnum
+    nextchapternums[3] = maxfourthnum
 
     if maxfourthnum == 0:
         if maxthirdnum == 0:
@@ -292,7 +298,7 @@ def acustomercartrefresh(request):
                     "DD.unit_tbladocdetails, "
                     "companyname_tblacompanies, "
                     "DD.supplierdescription_tblProduct_ctblaDoc_details, "  # 25
-                    "round((DD.Qty_tblaDoc_details * DD.listprice_tblaDoc_details),1) as salesprice, "
+                    "round((DD.Qty_tblaDoc_details * DD.unitsalespriceACU_tblaDoc_details),0) as salesprice, "
                     "maxqtyincart_tblaproduct_ctblaDoc_details "
 
                     "FROM aid_tbladoc_details as DD "
@@ -362,8 +368,12 @@ def acustomercartadditemtocart(request):
                         "LIMIT 1"
                         , [113])
         maxchapternums = cursor5.fetchall()
-        for x in maxchapternums:
-            maxfirstnum = x[0]
+
+        if len(maxchapternums) == 0:
+            maxfirstnum = 0
+        else:
+            for x in maxchapternums:
+                maxfirstnum = x[0]
 
         nextfirstnumonhtml = maxfirstnum + 1
         nextsecondnumonhtml =0
@@ -503,50 +513,57 @@ def acustomercartpricetagtocarttop(request):
     cursor2 = connection.cursor()
     cursor2.execute(
         "SELECT "
-        "sum(Qty_tblaDoc_details*unitsalespriceACU_tblaDoc_details) as totalprice "
-
+        "sum(round(Qty_tblaDoc_details*unitsalespriceACU_tblaDoc_details),0) as totalprice "
+#here to cont...
         "FROM aid_tbladoc_details "
 
         "WHERE Docid_tblaDoc_details_id=%s ", ['113'])
     results = cursor2.fetchall()
     for x in results:
         totalprice = x[0]
+    if totalprice is None:
+        totalprice = 0
+    #import pdb;
+    #pdb.set_trace()
 
     json_data = json.dumps(totalprice)
 
 
     return HttpResponse(json_data, content_type="application/json")
-def acustomercartsaveasorder(request, pk):
+def acustomercartsaveasorder(request):
     creatorid = request.user.id
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
-                    "Docid_tblDoc, "
-                    "Contactid_tblDoc_id, "
-                    "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
-                    "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
-                    "prefacespecforquotation_tbldoc, "
-                    "subject_tbldoc, "
-                    "docnumber_tbldoc, "
-                    "total_tbldoc, "
-                    "deliverydays_tbldoc, "
-                    "paymenttextforquotation_tblpayment_ctbldoc, "
-                    "currencycodeinreport_tbldoc, "
-                    "currencyrateinreport_tbldoc, "
-                    "accountcurrencycode_tbldoc, "
-                    "companyname_tblcompanies_ctbldoc, "
-                    "firstname_tblcontacts_ctbldoc, "
-                    "lastname_tblcontacts_ctbldoc, "
-                    "title_tblcontacts_ctbldoc, "
-                    "mobile_tblcontacts_ctbldoc, "
-                    "email_tblcontacts_ctbldoc, "
-                    "pcd_tblcompanies_ctbldoc, "
-                    "town_tblcompanies_ctbldoc, "
-                    "address_tblcompanies_ctbldoc "
-                    "FROM quotation_tbldoc "
-                    "WHERE docid_tbldoc=%s "
-                    "order by docid_tbldoc desc",
-                    [pk])
+                    "Docid_tbladoc, "
+                    "Contactid_tbladoc_id, "
+                    "prefacetextforquotation_tblprefaceforquotation_ctbladoc, "
+                    "backpagetextforquotation_tblbackpageforquotation_ctbladoc, "
+                    "prefacespecforquotation_tbladoc, "
+                    "subject_tbladoc, "
+                    "docnumber_tbladoc, "
+                    "total_tbladoc, "
+                    "deliverydays_tbladoc, "
+                    "paymenttextforquotation_tblpayment_ctbladoc, "
+                    "currencycodeinreport_tbladoc, " #10
+                    "currencyrateinreport_tbladoc, " 
+                    "accountcurrencycode_tbladoc, "
+                    "companyname_tblcompanies_ctbladoc, "
+                    "firstname_tblcontacts_ctbladoc, "
+                    "lastname_tblcontacts_ctbladoc, "
+                    "title_tblcontacts_ctbladoc, "
+                    "mobile_tblcontacts_ctbladoc, "
+                    "email_tblcontacts_ctbladoc, "
+                    "pcd_tblcompanies_ctbladoc, "
+                    "town_tblcompanies_ctbladoc, " #20
+                    "address_tblcompanies_ctbladoc, "
+                    "djangouserid_tbladoc "
+                    ""
+                    "FROM aid_tbladoc "
+                    ""
+                    "WHERE docid_tbladoc=%s "
+                    "order by docid_tbladoc desc",
+                    ['113'])
     doc = cursor1.fetchall()
     for x in doc:
         contactid = x[1]
@@ -569,11 +586,12 @@ def acustomercartsaveasorder(request, pk):
         pcdclone = x[19]
         townclone = x[20]
         addressclone = x[21]
+        djangouseridclone = x[22]
 
 
     cursor8 = connection.cursor()
-    cursor8.execute("SELECT max(docnumber_tblDoc) FROM quotation_tbldoc "
-                    "WHERE Doc_kindid_tblDoc_id = 2")
+    cursor8.execute("SELECT max(docnumber_tbladoc) FROM aid_tbladoc "
+                    "WHERE Doc_kindid_tbladoc_id = 2")
     results = cursor8.fetchall()
     resultslen = len(results)
     for x in results:
@@ -581,31 +599,32 @@ def acustomercartsaveasorder(request, pk):
         docnumber += 1
 
     cursor2 = connection.cursor()
-    cursor2.execute("INSERT INTO quotation_tbldoc "
-                    "( Doc_kindid_tblDoc_id, "
-                    "Contactid_tblDoc_id, "
-                    "companyname_tblcompanies_ctbldoc, "
-                    "firstname_tblcontacts_ctbldoc, "
-                    "lastname_tblcontacts_ctbldoc, "
-                    "prefacetextforquotation_tblprefaceforquotation_ctbldoc, "
-                    "backpagetextforquotation_tblbackpageforquotation_ctbldoc, "
-                    "prefacespecforquotation_tbldoc, "
-                    "subject_tbldoc, "
-                    "docnumber_tblDoc, "
-                    "total_tbldoc, "
-                    "deliverydays_tbldoc, "
-                    "creatorid_tbldoc, "
-                    "title_tblcontacts_ctbldoc, "
-                    "mobile_tblcontacts_ctbldoc, "
-                    "email_tblcontacts_ctbldoc, "
-                    "pcd_tblcompanies_ctbldoc, "
-                    "town_tblcompanies_ctbldoc, "
-                    "address_tblcompanies_ctbldoc, "
-                    "paymenttextforquotation_tblpayment_ctbldoc, "
-                    "currencycodeinreport_tbldoc, "
-                    "currencyrateinreport_tbldoc, "
-                    "doclinkparentid_tbldoc, "
-                    "accountcurrencycode_tbldoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+    cursor2.execute("INSERT INTO aid_tbladoc "
+                    "( Doc_kindid_tbladoc_id, "
+                    "Contactid_tbladoc_id, "
+                    "companyname_tblcompanies_ctbladoc, "
+                    "firstname_tblcontacts_ctbladoc, "
+                    "lastname_tblcontacts_ctbladoc, "
+                    "prefacetextforquotation_tblprefaceforquotation_ctbladoc, "
+                    "backpagetextforquotation_tblbackpageforquotation_ctbladoc, "
+                    "prefacespecforquotation_tbladoc, "
+                    "subject_tbladoc, "
+                    "docnumber_tbladoc, "
+                    "total_tbladoc, "
+                    "deliverydays_tbladoc, "
+                    "creatorid_tbladoc, "
+                    "title_tblcontacts_ctbladoc, "
+                    "mobile_tblcontacts_ctbladoc, "
+                    "email_tblcontacts_ctbladoc, "
+                    "pcd_tblcompanies_ctbladoc, "
+                    "town_tblcompanies_ctbladoc, "
+                    "address_tblcompanies_ctbladoc, "
+                    "paymenttextforquotation_tblpayment_ctbladoc, "
+                    "currencycodeinreport_tbladoc, "
+                    "currencyrateinreport_tbladoc, "
+                    "doclinkparentid_tbladoc, "
+                    "accountcurrencycode_tbladoc, "
+                    "djangouserid_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [2, contactid, companynameclone, firstnameclone, lastnameclone, prefacetext, backpagetext, prefacespectext,
                     subject,
                     docnumber,
@@ -621,51 +640,52 @@ def acustomercartsaveasorder(request, pk):
                     paymenttext,
                     currencycodeinreport,
                     currencyrateinreport,
-                    pk,
-                    accountcurrencycode])
+                    '113',
+                    accountcurrencycode,
+                    djangouseridclone])
 
-        cursor3 = connection.cursor()
-        cursor3.execute("SELECT max(Docid_tblDoc) FROM quotation_tbldoc WHERE creatorid_tbldoc=%s", [creatorid])
-        results = cursor3.fetchall()
-        for x in results:
-            maxdocid = x[0]
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE creatorid_tbladoc=%s", [creatorid])
+    results = cursor3.fetchall()
+    for x in results:
+        maxdocid = x[0]
 
-    cursor3.execute("SELECT `Doc_detailsid_tblDoc_details`, "
-                    "`Qty_tblDoc_details`, "
-                    "`Docid_tblDoc_details_id`, "
-                    "`customerdescription_tblProduct_ctblDoc_details`, "
-                    "`firstnum_tblDoc_details`, "
-                    "`fourthnum_tblDoc_details`, "
-                    "`secondnum_tblDoc_details`, "
-                    "`thirdnum_tblDoc_details`, "
-                    "`Note_tblDoc_details`, "
-                    "`creationtime_tblDoc_details`, "
-                    "purchase_price_tblproduct_ctblDoc_details, " #10
-                    "listprice_tblDoc_details, "
-                    "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-                    "Productid_tblDoc_details_id, "
-                    "Doc_detailsid_tblDoc_details, "
-                    "COALESCE(Productid_tblProduct, 0), "
-                    "currencyrate_tblcurrency_ctblDoc_details, "
-                    "round((((listprice_tblDoc_details-purchase_price_tblproduct_ctblDoc_details)/(listprice_tblDoc_details))*100),1) as listpricemargin, "
-                    "unitsalespriceACU_tblDoc_details, "
-                    "round((purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as purchasepriceACU, "
-                    "round((((unitsalespriceACU_tblDoc_details-(purchase_price_tblproduct_ctblDoc_details * currencyrate_tblcurrency_ctblDoc_details))/(unitsalespriceACU_tblDoc_details))*100),1) as unitsalespricemargin, "
-                    "round((listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details),2) as listpriceACU, "
-                    "(100-round(((unitsalespriceACU_tblDoc_details/(listprice_tblDoc_details * currencyrate_tblcurrency_ctblDoc_details))*100),1)) as discount, "
-                    "unit_tbldocdetails, "
-                    "suppliercompanyid_tbldocdetails, "
-                    "supplierdescription_tblProduct_ctblDoc_details " #25
+    cursor3.execute("SELECT `Doc_detailsid_tbladoc_details`, "
+                    "`Qty_tbladoc_details`, "
+                    "`Docid_tbladoc_details_id`, "
+                    "`customerdescription_tblProduct_ctbladoc_details`, "
+                    "`firstnum_tbladoc_details`, "
+                    "`fourthnum_tbladoc_details`, "
+                    "`secondnum_tbladoc_details`, "
+                    "`thirdnum_tbladoc_details`, "
+                    "`Note_tbladoc_details`, "
+                    "`creationtime_tbladoc_details`, "
+                    "purchase_price_tblproduct_ctbladoc_details, " #10
+                    "listprice_tbladoc_details, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctbladoc_details, "
+                    "Productid_tbladoc_details_id, "
+                    "Doc_detailsid_tbladoc_details, "
+                    "COALESCE(Productid_tblaproduct, 0), "
+                    "currencyrate_tblcurrency_ctbladoc_details, "
+                    "round((((listprice_tbladoc_details-purchase_price_tblproduct_ctbladoc_details)/(listprice_tbladoc_details))*100),1) as listpricemargin, "
+                    "unitsalespriceACU_tbladoc_details, "
+                    "round((purchase_price_tblproduct_ctbladoc_details * currencyrate_tblcurrency_ctbladoc_details),2) as purchasepriceACU, "
+                    "round((((unitsalespriceACU_tbladoc_details-(purchase_price_tblproduct_ctbladoc_details * currencyrate_tblcurrency_ctbladoc_details))/(unitsalespriceACU_tbladoc_details))*100),1) as unitsalespricemargin, "
+                    "round((listprice_tbladoc_details * currencyrate_tblcurrency_ctbladoc_details),2) as listpriceACU, "
+                    "(100-round(((unitsalespriceACU_tbladoc_details/(listprice_tbladoc_details * currencyrate_tblcurrency_ctbladoc_details))*100),1)) as discount, "
+                    "unit_tbladocdetails, "
+                    "suppliercompanyid_tbladocdetails, "
+                    "supplierdescription_tblProduct_ctbladoc_details " #25
 
-                    "FROM quotation_tbldoc_details "
+                    "FROM aid_tbladoc_details "
 
-                    "LEFT JOIN (SELECT Productid_tblProduct FROM quotation_tblproduct WHERE obsolete_tblproduct = 0) as x "
+                    "LEFT JOIN (SELECT Productid_tblaproduct FROM aid_tblaproduct WHERE obsolete_tblaproduct = 0) as x "
                     "ON "
-                    "quotation_tbldoc_details.Productid_tblDoc_details_id = x.Productid_tblProduct "
+                    "aid_tbladoc_details.Productid_tbladoc_details_id = x.Productid_tblaproduct "
 
-                    "WHERE docid_tbldoc_details_id=%s "
-                    "order by firstnum_tblDoc_details,secondnum_tblDoc_details,thirdnum_tblDoc_details,fourthnum_tblDoc_details",
-                    [pk])
+                    "WHERE docid_tbladoc_details_id=%s "
+                    "order by firstnum_tbladoc_details,secondnum_tbladoc_details,thirdnum_tbladoc_details,fourthnum_tbladoc_details",
+                    ['113'])
     docdetails = cursor3.fetchall()
     for x in docdetails:
         docdetailsid = x[0]
@@ -690,25 +710,25 @@ def acustomercartsaveasorder(request, pk):
 
         cursor4 = connection.cursor()
         cursor4.execute(
-            "INSERT INTO quotation_tbldoc_details "
-            "( Docid_tblDoc_details_id, "
-            "`Qty_tblDoc_details`, "
-            "`customerdescription_tblProduct_ctblDoc_details`, "
-            "firstnum_tblDoc_details, "
-            "`fourthnum_tblDoc_details`, "
-            "`secondnum_tblDoc_details`, "
-            "`thirdnum_tblDoc_details`, "
-            "`Note_tblDoc_details`, "
-            "purchase_price_tblproduct_ctblDoc_details, "
-            "listprice_tblDoc_details, "
-            "currencyisocode_tblcurrency_ctblproduct_ctblDoc_details, "
-            "Productid_tblDoc_details_id, "
-            "currencyrate_tblcurrency_ctblDoc_details, "
-            "unitsalespriceACU_tblDoc_details, "
-            "unit_tbldocdetails, "
-            "suppliercompanyid_tbldocdetails, "
-            "supplierdescription_tblProduct_ctblDoc_details, "
-            "creatorid_tbldocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            "INSERT INTO aid_tbladoc_details "
+            "( Docid_tbladoc_details_id, "
+            "`Qty_tbladoc_details`, "
+            "`customerdescription_tblProduct_ctbladoc_details`, "
+            "firstnum_tbladoc_details, "
+            "`fourthnum_tbladoc_details`, "
+            "`secondnum_tbladoc_details`, "
+            "`thirdnum_tbladoc_details`, "
+            "`Note_tbladoc_details`, "
+            "purchase_price_tblproduct_ctbladoc_details, "
+            "listprice_tbladoc_details, "
+            "currencyisocode_tblcurrency_ctblproduct_ctbladoc_details, "
+            "Productid_tbladoc_details_id, "
+            "currencyrate_tblcurrency_ctbladoc_details, "
+            "unitsalespriceACU_tbladoc_details, "
+            "unit_tbladocdetails, "
+            "suppliercompanyid_tbladocdetails, "
+            "supplierdescription_tblProduct_ctbladoc_details, "
+            "creatorid_tbladocdetails) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
 
             [maxdocid,
              qty,
@@ -729,5 +749,4 @@ def acustomercartsaveasorder(request, pk):
              supplierdescriptionclone,
              creatorid])
 
-
-    return redirect('docselector', pk=maxdocid)
+    return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': 1}) #fake - the invoker js processes the response

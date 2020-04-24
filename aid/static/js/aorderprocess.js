@@ -13,11 +13,11 @@ $(function () {
     var loadervisibilitydelaydoneflag = 0;
     var loadervisibilitydatadoneflag = 0;
     var currentstep = 0;
-    var maxstep = 2; //only this parameter is needed to adjust if the number of tabs would change
+    var maxstep = 1; //only this parameter is needed to adjust if the number of tabs would change
     var pricetagtocarttopvalue = 0;
     loaderstartingandsetting('Starting');
-    pricetagtocarttop();
-    hideloader();
+//    pricetagtocarttop();
+//    hideloader();
     cartrefresh();
     //initialize tabs
     $( "#tabs" ).tabs({ //first tab let be active
@@ -50,7 +50,6 @@ $(function () {
     $('body').on("click", ".productincreasebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
         acustomercartincreasingordecreasing(docdetailsid, 'increasing');
-        acustomercartincreasingqty(docdetailsid);
     });
     $('body').on("click", ".productdecreasebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
@@ -63,7 +62,8 @@ $(function () {
     function acustomercartincreasingordecreasing(docdetailsid, upordownflag){
         var maxqty = $('span[name="maxqtyincart"][docdetailsid="' + docdetailsid + '"]').html();
         var currentqty = $('span[class="qtynumber"][docdetailsid="' + docdetailsid + '"]').html();
-        var lisprice = $('span[class="listprice"][docdetailsid="' + docdetailsid + '"]').html();
+        var unitsalespriceACU = Number($('span[class="unitsalespriceACU"][docdetailsid="' + docdetailsid + '"]').html()).toFixed(0);
+        //var lisprice = $('span[class="listprice"][docdetailsid="' + docdetailsid + '"]').html();
         var incrementedqty = Number(currentqty) + 1;
         var decrementedqty = Number(currentqty) - 1;
         incrementedqty = incrementedqty.toFixed(2);
@@ -71,7 +71,8 @@ $(function () {
         maxqty = Number(maxqty);
         if (upordownflag === 'increasing' ) {
                     $('span[class="qtynumber"][docdetailsid="' + docdetailsid + '"]').html(incrementedqty);
-                    $('span[class="salesprice"][docdetailsid="' + docdetailsid + '"]').html(lisprice*incrementedqty);
+                    $('span[class="salesprice"][docdetailsid="' + docdetailsid + '"]').html(unitsalespriceACU*incrementedqty);
+                    acustomercartincreasingqty(docdetailsid);
             if (incrementedqty >= maxqty ) {
                     $('[class="productincreasebutton"][docdetailsid="' + docdetailsid + '"]').prop('disabled', true);
                     $('[class="maxtag"][docdetailsid="' + docdetailsid + '"]').prop('hidden', false);
@@ -79,7 +80,7 @@ $(function () {
         }
         if (upordownflag === 'decreasing' ) {
                     $('span[class="qtynumber"][docdetailsid="' + docdetailsid + '"]').html(decrementedqty);
-                    $('span[class="salesprice"][docdetailsid="' + docdetailsid + '"]').html(lisprice*decrementedqty);
+                    $('span[class="salesprice"][docdetailsid="' + docdetailsid + '"]').html(unitsalespriceACU*decrementedqty);
             if (decrementedqty <= maxqty ) {
                     $('[class="productincreasebutton"][docdetailsid="' + docdetailsid + '"]').prop('disabled', false);
                     $('[class="maxtag"][docdetailsid="' + docdetailsid + '"]').prop('hidden', true);
@@ -187,6 +188,7 @@ $(function () {
                   }, 3000);
     }
     function addtocartdoc(){
+                loaderstartingandsetting('Adding');
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartadditemtocart/',
@@ -240,6 +242,8 @@ $(function () {
             if (currentstep == 0 ) {
                 setactivetab(currentstep);
                 $('#previousbutton').prop("disabled", true)
+                $('#nextbutton').prop("disabled", false)
+                $('#finishbutton').prop("disabled", true)
             }
             if ((currentstep !== 0) && (currentstep !== maxstep )) {
                 setactivetab(currentstep);
@@ -251,6 +255,7 @@ $(function () {
                 setactivetab(currentstep);
                 $('#nextbutton').prop("disabled", true)
                 $('#finishbutton').prop("disabled", false)
+                $('#previousbutton').prop("disabled", false)
             }
     }
     function getactivetabtext(){
@@ -276,6 +281,7 @@ $(function () {
         $( "#tabs" ).tabs("enable", '' + (xstep + 1) + ''); //except this (this parameter is not 0 indexed so +1)
     }
 //Cart scrpt begin
+    $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd', minDate: -20, maxDate: "+10D" });
     //aidkind script begin
     var handleaidkind = $( "#custom-handle-aidkind" );
     $( "#slideraidkind" ).slider({

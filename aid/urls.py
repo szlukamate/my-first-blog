@@ -33,5 +33,6 @@ urlpatterns = [
     url(r'acustomercartdecreasingqty/$', views.acustomercartdecreasingqty, name='acustomercartdecreasingqty'),
     url(r'acustomercartproductremove/$', views.acustomercartproductremove, name='acustomercartproductremove'),
     url(r'acustomercartpricetagtocarttop/$', views.acustomercartpricetagtocarttop, name='acustomercartpricetagtocarttop'),
+    url(r'acustomercartsaveasorder/$', views.acustomercartsaveasorder, name='acustomercartsaveasorder'),
 
 ]
