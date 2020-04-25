@@ -2,7 +2,7 @@
 {% load staticfiles%}
  	{% block content %}
 	                    <div class="post">
-						   <p align="center" style="font-size:260%">Aid</p>
+						   <p align="center" style="font-size:260%">Aid</p>{% csrf_token %}
 
         <button id="previousbutton" type="submit">
            <span>Previous</span>
@@ -10,12 +10,10 @@
         <button id="nextbutton" type="submit">
            <span>Next</span>
         </button>
-        <form action="{% url 'acustomercartsaveasorder' %}" method="post" >{% csrf_token %}
-
-
+        <button id="finishbutton" type="submit">
+           <span>Finish</span>
+        </button>
             <input name="qty2" type="text" value="33" hidden/>
-            <input id="finishbutton" type="submit" value="Finish" />
-        </form>
         <div id="cartframe">
             <div id="carttoptemplate">
             </div>
@@ -29,13 +27,6 @@
             <li><a href="#tabs-2">Aid Start DateTime</a></li>
           </ul>
           <div id="tabs-1">
-            <p>Escort to Doctor</p>
-            <p>Please choose maximum expected duration time in hours with the below slide (overtime 1.5 x base fee)</p>
-
-            <div id="slideraidkind">
-              <div id="custom-handle-aidkind" class="ui-slider-handle"></div>
-            </div>
-
             <select id="addtocartselect">
                 {% for product in  enabledproductstoorderprocess %}
                     <option value="" productid="{{product.0}}" purchaseprice="{{product.1}}" customerdescription="{{product.2}}" margin="{{product.3}}" unit="{{product.4}}" currencyisocode="{{product.7}}">{{product.2}} </option>
@@ -47,11 +38,13 @@
 
           </div>
           <div id="tabs-2">
-            <p>Date: <input type="text" id="datepicker"></p>
-            <label for="appt">Select a time:</label>
-            <p><input type="time" id="appt" name="appt"></p>
+            <p>Date: <input type="text" id="aidstartdate"></p>
+            <label for="aidstarttime_name">Select a time:</label>
+            <p><input type="time" id="aidstarttime" name="aidstarttime_name" value="13:30"></p>
 
           </div>
+        </div>
+        <div id="dialog-message-sendingyourorder" title="Sending Your Order...">
         </div>
 
 

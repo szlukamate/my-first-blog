@@ -298,7 +298,7 @@ def acustomercartrefresh(request):
                     "DD.unit_tbladocdetails, "
                     "companyname_tblacompanies, "
                     "DD.supplierdescription_tblProduct_ctblaDoc_details, "  # 25
-                    "round((DD.Qty_tblaDoc_details * DD.unitsalespriceACU_tblaDoc_details),0) as salesprice, "
+                    "round(DD.Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)),0) as salesprice, "
                     "maxqtyincart_tblaproduct_ctblaDoc_details "
 
                     "FROM aid_tbladoc_details as DD "
@@ -513,8 +513,8 @@ def acustomercartpricetagtocarttop(request):
     cursor2 = connection.cursor()
     cursor2.execute(
         "SELECT "
-        "sum(round(Qty_tblaDoc_details*unitsalespriceACU_tblaDoc_details),0) as totalprice "
-#here to cont...
+        "sum( Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) ) "
+
         "FROM aid_tbladoc_details "
 
         "WHERE Docid_tblaDoc_details_id=%s ", ['113'])
@@ -532,6 +532,8 @@ def acustomercartpricetagtocarttop(request):
     return HttpResponse(json_data, content_type="application/json")
 def acustomercartsaveasorder(request):
     creatorid = request.user.id
+    aidstartdate = request.POST['aidstartdate']
+    aidstarttime = request.POST['aidstarttime']
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -624,7 +626,9 @@ def acustomercartsaveasorder(request):
                     "currencyrateinreport_tbladoc, "
                     "doclinkparentid_tbladoc, "
                     "accountcurrencycode_tbladoc, "
-                    "djangouserid_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "djangouserid_tbladoc, "
+                    "aidstartdate_tbladoc, "
+                    "aidstarttime_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [2, contactid, companynameclone, firstnameclone, lastnameclone, prefacetext, backpagetext, prefacespectext,
                     subject,
                     docnumber,
@@ -642,7 +646,9 @@ def acustomercartsaveasorder(request):
                     currencyrateinreport,
                     '113',
                     accountcurrencycode,
-                    djangouseridclone])
+                    djangouseridclone,
+                    aidstartdate,
+                    aidstarttime])
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE creatorid_tbladoc=%s", [creatorid])
@@ -749,4 +755,4 @@ def acustomercartsaveasorder(request):
              supplierdescriptionclone,
              creatorid])
 
-    return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': 1}) #fake - the invoker js processes the response
+    return render(request, 'aid/acustomerconfirmationredirecturl.html', {})

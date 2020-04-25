@@ -6,18 +6,23 @@ aorderprocess.js
                     // Store
 localStorage.lastname = "Smith";
 // Retrieve
- console.log(localStorage.lastname);
+console.log(localStorage.lastname);
 $(function () {
-
+// Dialog "Sending Your Order..." begin
+    $( "#dialog-message-sendingyourorder" ).dialog({
+      autoOpen: false,
+      modal: true
+    });
+// Dialog "Sending Your Order..." end
     $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
     var loadervisibilitydelaydoneflag = 0;
     var loadervisibilitydatadoneflag = 0;
+    var sendingyourordervisibilitydelaydoneflag = 0;
+    var sendingyourordervisibilitydatadoneflag = 0;
     var currentstep = 0;
     var maxstep = 1; //only this parameter is needed to adjust if the number of tabs would change
     var pricetagtocarttopvalue = 0;
     loaderstartingandsetting('Starting');
-//    pricetagtocarttop();
-//    hideloader();
     cartrefresh();
     //initialize tabs
     $( "#tabs" ).tabs({ //first tab let be active
@@ -45,7 +50,8 @@ $(function () {
     });
     //finishbutton eventlistener script
     $('#finishbutton').click(function() {
-        location.reload();
+        acustomercartsaveasorder();
+//        location.reload();
     });
     $('body').on("click", ".productincreasebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
@@ -213,8 +219,8 @@ $(function () {
     }
     function hideloader(){
             if ((loadervisibilitydelaydoneflag === 1) && (loadervisibilitydatadoneflag === 1 )) {
-                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + '</div>').fadeOut(1);
-                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + '</div>').fadeIn(500);
+                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + ' HUF</div>').fadeOut(1);
+                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + ' HUF</div>').fadeIn(500);
                 loadervisibilitydatadoneflag = 0; // to prevent flashing the pricetagincarttop template because of multi invoke this function
             }
     }
@@ -237,6 +243,48 @@ $(function () {
                     },
                     datatype: 'html'
                 });
+    }
+    function acustomercartsaveasorder(){
+                sendingyourorderstartingandsetting();
+                $.ajax({
+                    type: 'POST',
+                    url: 'acustomercartsaveasorder/',
+
+                    data: {
+                    'aidstartdate' : $('#aidstartdate').val(),
+                    'aidstarttime' : $('#aidstarttime').val(),
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+                    success: function(url){
+                    sendingyourordervisibilitydatadoneflag = 1;
+                    hidesendingyourorder();
+                    },
+                    error: function(){
+                    },
+                    datatype: 'html'
+                });
+                console.log($('#aidstarttime').val());
+    }
+    function showsendingyourorder(){
+                $( "#dialog-message-sendingyourorder" ).dialog( "open" );
+    }
+    function hidesendingyourorder(){
+            if ((sendingyourordervisibilitydelaydoneflag === 1) && (sendingyourordervisibilitydatadoneflag === 1 )) {
+                    $( "#dialog-message-sendingyourorder" ).dialog( "close" );
+            }
+    }
+    function sendingyourorderstartingandsetting(){
+                sendingyourordervisibilitydelaydoneflag = 0;
+                sendingyourordervisibilitydatadoneflag = 0;
+                showsendingyourorder();
+                setTimeout(
+                  function()
+                  {
+                  sendingyourordervisibilitydelaydoneflag = 1;
+                  hidesendingyourorder();
+                    console.log('q');
+
+                  }, 3000);
     }
     function tabactivator(){
             if (currentstep == 0 ) {
@@ -281,8 +329,9 @@ $(function () {
         $( "#tabs" ).tabs("enable", '' + (xstep + 1) + ''); //except this (this parameter is not 0 indexed so +1)
     }
 //Cart scrpt begin
-    $( "#datepicker" ).datepicker({ dateFormat: 'yy-mm-dd', minDate: -20, maxDate: "+10D" });
-    //aidkind script begin
+    $( "#aidstartdate" ).datepicker({ dateFormat: 'yy-mm-dd', minDate: -20, maxDate: "+10D" });
+    $( "#aidstartdate" ).datepicker( "setDate", new Date ); //set today
+//aidkind script begin
     var handleaidkind = $( "#custom-handle-aidkind" );
     $( "#slideraidkind" ).slider({
       min: 2,
