@@ -755,4 +755,86 @@ def acustomercartsaveasorder(request):
              supplierdescriptionclone,
              creatorid])
 
-    return render(request, 'aid/acustomerconfirmationredirecturl.html', {})
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT "
+                    "Doc_kindid_tblaDoc_id, "
+                    "docnumber_tblaDoc, "
+                    "pretag_tbladockind "
+
+                    "FROM aid_tbladoc "
+
+                    "JOIN aid_tbladoc_kind as DK "
+                    "ON Doc_kindid_tblaDoc_id = DK.Doc_kindid_tblaDoc_kind "
+
+                    "WHERE docid_tbladoc=%s ", [maxdocid])
+    customerordernumbers = cursor3.fetchall()
+    for x in customerordernumbers:
+        customerordernumberdocnumber = x[1]
+        customerordernumberpretag = x[2]
+    customerordernumber = str(customerordernumberpretag) + str(customerordernumberdocnumber)
+
+    cursor2 = connection.cursor()
+    cursor2.execute(
+        "SELECT "
+        "sum( CAST(Qty_tblaDoc_details AS DECIMAL(10,0)) * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) ) "
+
+        "FROM aid_tbladoc_details "
+
+        "WHERE Docid_tblaDoc_details_id=%s ", [maxdocid])
+    results = cursor2.fetchall()
+    for x in results:
+        totalprice = x[0]
+    if totalprice is None:
+        totalprice = 0
+
+    cursor13 = connection.cursor()
+    cursor13.execute("SELECT "
+                    "`Doc_detailsid_tbladoc_details`, "
+                    "CAST(Qty_tbladoc_details AS DECIMAL(10,0)), "
+                    "`Docid_tbladoc_details_id`, "
+                    "`customerdescription_tblProduct_ctbladoc_details`, "
+                    "`firstnum_tbladoc_details`, "
+                    "`fourthnum_tbladoc_details`, "
+                    "`secondnum_tbladoc_details`, "
+                    "`thirdnum_tbladoc_details`, "
+                    "`Note_tbladoc_details`, "
+                    "`creationtime_tbladoc_details`, "
+                    "purchase_price_tblproduct_ctbladoc_details, " #10
+                    "listprice_tbladoc_details, "
+                    "currencyisocode_tblcurrency_ctblproduct_ctbladoc_details, "
+                    "Productid_tbladoc_details_id, "
+                    "Doc_detailsid_tbladoc_details, "
+                    "currencyrate_tblcurrency_ctbladoc_details, " #15
+                    "round((((listprice_tbladoc_details-purchase_price_tblproduct_ctbladoc_details)/(listprice_tbladoc_details))*100),1) as listpricemargin, "
+                    "unitsalespriceACU_tbladoc_details, "
+                    "round((purchase_price_tblproduct_ctbladoc_details * currencyrate_tblcurrency_ctbladoc_details),2) as purchasepriceACU, "
+                    "round((((unitsalespriceACU_tbladoc_details-(purchase_price_tblproduct_ctbladoc_details * currencyrate_tblcurrency_ctbladoc_details))/(unitsalespriceACU_tbladoc_details))*100),1) as unitsalespricemargin, "
+                    "round((listprice_tbladoc_details * currencyrate_tblcurrency_ctbladoc_details),2) as listpriceACU, "
+                    "(100-round(((unitsalespriceACU_tbladoc_details/(listprice_tbladoc_details * currencyrate_tblcurrency_ctbladoc_details))*100),1)) as discount, "
+                    "unit_tbladocdetails, "
+                    "suppliercompanyid_tbladocdetails, "
+                    "supplierdescription_tblProduct_ctbladoc_details, "
+                    "CAST(Qty_tblaDoc_details AS DECIMAL(10,0)) * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) as rowprice " #25
+
+                    "FROM aid_tbladoc_details "
+
+                    "WHERE docid_tbladoc_details_id=%s "
+                    "order by firstnum_tbladoc_details,secondnum_tbladoc_details,thirdnum_tbladoc_details,fourthnum_tbladoc_details",
+                    [maxdocid])
+    cordocdetails = cursor13.fetchall()
+
+
+    html_message = render_to_string('aid/acustomeracknowledgementemail.html', {'context': 'values',
+                                                                               'customerordernumber': customerordernumber,
+                                                                               'aidstartdate': aidstartdate,
+                                                                               'aidstarttime': aidstarttime,
+                                                                               'cordocdetails': cordocdetails,
+                                                                               'totalprice': totalprice})
+    email = EmailMessage(
+        'Aid Order Acknowledgement', html_message, 'from@me.com', ['szluka.mate@gmail.com'])  # , cc=[cc])
+    email.content_subtype = "html"
+    email.send()
+    #import pdb;
+    #pdb.set_trace()
+
+    return render(request, 'aid/acustomerconfirmationredirecturl.html', {'docid': maxdocid})

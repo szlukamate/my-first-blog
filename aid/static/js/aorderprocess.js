@@ -245,7 +245,7 @@ $(function () {
                 });
     }
     function acustomercartsaveasorder(){
-                sendingyourorderstartingandsetting();
+//                sendingyourorderstartingandsetting();
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartsaveasorder/',
@@ -256,14 +256,18 @@ $(function () {
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
                     success: function(url){
-                    sendingyourordervisibilitydatadoneflag = 1;
-                    hidesendingyourorder();
+//                    sendingyourordervisibilitydatadoneflag = 1;
+//                    hidesendingyourorder();
+                    console.log(url);
+
+                    window.location.href = url;
+
                     },
                     error: function(){
+                        alert('failure');
                     },
                     datatype: 'html'
                 });
-                console.log($('#aidstarttime').val());
     }
     function showsendingyourorder(){
                 $( "#dialog-message-sendingyourorder" ).dialog( "open" );
