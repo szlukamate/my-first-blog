@@ -859,7 +859,7 @@ def acustomerorderemailtry(request, docid):
     foo = 11
 #    html_message = render_to_string('aid/mail_template.html', {'context': 'values', 'foo': foo})
     email = EmailMessage(
-        'na', 'q', 'from@me.com', ['szluka.mate@gmail.com'])#, cc=[cc])
-    email.content_subtype = "html"
+        'nax46', 'q', 'szluka.mate@gmail.com', ['szluka.matetest4@gmail.com'])#, cc=[cc])
+#    email.content_subtype = "html"
     email.send()
     return redirect('adocselector', pk=docid)

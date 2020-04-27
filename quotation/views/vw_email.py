@@ -239,7 +239,6 @@ def emailadd (request, pk):
 
     if fs.exists(docaspdffullpathfilename):
 
-
         email = EmailMessage(
             emailsubject, emailbodytextmodifiedbyuser, 'from@me.com', [addresseeemail], cc=[cc])
 

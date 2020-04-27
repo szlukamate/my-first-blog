@@ -831,7 +831,7 @@ def acustomercartsaveasorder(request):
                                                                                'cordocdetails': cordocdetails,
                                                                                'totalprice': totalprice})
     email = EmailMessage(
-        'Aid Order Acknowledgement', html_message, 'from@me.com', ['szluka.mate@gmail.com'])  # , cc=[cc])
+        'Aid Order Acknowledgement', html_message, 'szluka.mate@gmail.com', ['szluka.mate@gmail.com'])  # , cc=[cc])
     email.content_subtype = "html"
     email.send()
     #import pdb;
