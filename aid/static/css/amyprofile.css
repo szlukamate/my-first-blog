@@ -1,0 +1,21 @@
+.content-wrapper {
+    min-height: 100px;
+    position: relative;
+    background-color: #f6f6f6;
+    font-family: Helvetica,Arial,sans-serif;
+    font-weight: 400;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 12px 18px;
+    background-color: #ecf9ea;
+    width: 66.66666667%;
+    margin-left: 16.66666667%;
+    display: block;
+    float: left;
+    margin-right: 16.66666667%;
+    padding: 6px;
+
+}

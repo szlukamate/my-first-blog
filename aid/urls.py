@@ -35,5 +35,6 @@ urlpatterns = [
     url(r'acustomercartpricetagtocarttop/$', views.acustomercartpricetagtocarttop, name='acustomercartpricetagtocarttop'),
     url(r'acustomercartsaveasorder/$', views.acustomercartsaveasorder, name='acustomercartsaveasorder'),
     url(r'acustomerconfirmation/(?P<docid>[0-9]+)/$', views.acustomerconfirmation, name='acustomerconfirmation'),
+    url(r'amyprofileform/(?P<pk>[0-9]+)/$', views.amyprofileform, name='amyprofileform'),
 
 ]
