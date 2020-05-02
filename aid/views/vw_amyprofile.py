@@ -20,8 +20,9 @@ import xml.dom.minidom as x12
 # pdb.set_trace()
 @login_required
 def amyprofileform(request, pk):
+    useridnow = request.user.id
 
-        if request.method == "POST":
+    if request.method == "POST":
             fieldvalue = request.POST['fieldvalue']
             rowid = request.POST['rowid']
             fieldname = request.POST['fieldname']
@@ -34,24 +35,24 @@ def amyprofileform(request, pk):
             json_data = json.dumps(results23)
 
             return HttpResponse(json_data, content_type="application/json")
-        cursor0 = connection.cursor()
-        cursor0.execute(
-            "SELECT "
-            "id, "
-            "username, "
-            "email "
-            
-            "FROM auth_user "
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT "
+        "id, "
+        "username, "
+        "email "
+        
+        "FROM auth_user "
 
-            "WHERE id=%s ",
-            [pk])
-        user = cursor0.fetchall()
-        #import pdb;
-        #pdb.set_trace()
+        "WHERE id=%s ",
+        [pk])
+    usernowrowfromtable = cursor0.fetchall()
+    #import pdb;
+    #pdb.set_trace()
 
-        #        for instancesingle in particularcompany:
+    #        for instancesingle in particularcompany:
 #            id = instancesingle[0]
 #            email = instancesingle[1]
 #            email = instancesingle[1]
 
-        return render(request, 'aid/amyprofile.html', {'user': user })
+    return render(request, 'aid/amyprofile.html', {'usernowrowfromtable': usernowrowfromtable })

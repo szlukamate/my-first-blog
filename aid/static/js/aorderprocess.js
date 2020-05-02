@@ -245,7 +245,6 @@ $(function () {
                 });
     }
     function acustomercartsaveasorder(){
-//                sendingyourorderstartingandsetting();
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartsaveasorder/',
@@ -256,8 +255,6 @@ $(function () {
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
                     success: function(url){
-//                    sendingyourordervisibilitydatadoneflag = 1;
-//                    hidesendingyourorder();
                     console.log(url);
 
                     window.location.href = url;

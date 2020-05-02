@@ -36,4 +36,6 @@ def aorderprocess(request):
                          "WHERE enabletoorderprocess_tblaproduct=1 and obsolete_tblaproduct=0 ")
         enabledproductstoorderprocess = cursor1.fetchall()
 
+
+
         return render(request, 'aid/aorderprocess.html', {'enabledproductstoorderprocess': enabledproductstoorderprocess})

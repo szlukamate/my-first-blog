@@ -270,6 +270,24 @@ def acustomercartform(request, pk):
 @group_required("manager")
 @login_required
 def acustomercartrefresh(request):
+    # determine latest available cart begin
+    useridnow = request.user.id
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Docid_tbladoc "
+                    ""
+                    "FROM aid_tbladoc "
+                    ""
+                    "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                    "order by docid_tbladoc desc",
+                    [useridnow])
+    latestunorderedcartdocidtuple = cursor1.fetchall()
+    if len(latestunorderedcartdocidtuple) == 0:
+        latestunorderedcartdocid = 0
+    else:
+        for x in latestunorderedcartdocidtuple:
+            latestunorderedcartdocid = x[0]
+    # determine latest available cart end
     cursor3 = connection.cursor()
     cursor3.execute("SELECT  "
                     "DD.Doc_detailsid_tblaDoc_details, "
@@ -311,13 +329,120 @@ def acustomercartrefresh(request):
 
                     "WHERE DD.docid_tbladoc_details_id=%s "
                     "order by DD.firstnum_tblaDoc_details,DD.secondnum_tblaDoc_details,DD.thirdnum_tblaDoc_details,DD.fourthnum_tblaDoc_details",
-                    [113])
+                    [latestunorderedcartdocid])
     docdetails = cursor3.fetchall()
 
     return render(request, 'aid/acustomercarttemplate.html', {'docdetails': docdetails})
 @group_required("manager")
 @login_required
 def acustomercartadditemtocart(request):
+# determine latest available cart begin
+    useridnow = request.user.id
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Docid_tbladoc "
+                    ""
+                    "FROM aid_tbladoc "
+                    ""
+                    "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                    "order by docid_tbladoc desc",
+                    [useridnow])
+    latestunorderedcartdocidtuple = cursor1.fetchall()
+    if len(latestunorderedcartdocidtuple) == 0:
+        latestunorderedcartdocid = 0
+    else:
+        for x in latestunorderedcartdocidtuple:
+            latestunorderedcartdocid = x[0]
+# determine latest available cart end
+
+# if no available cart creating a cart doc begin
+    if latestunorderedcartdocid == 0:
+        contactid = useridnow
+        prefacetext = ''
+        backpagetext = ''
+        prefacespectext = ''
+        subject = 'x'
+        total = 0
+        deliverydays = 1
+        paymenttext = ''
+        currencycodeinreport = 'HUF'
+        currencyrateinreport = 1
+        accountcurrencycode = 'HUF'
+        companynameclone = 'Aid Customer'
+        firstnameclone = request.user.first_name
+        lastnameclone = request.user.last_name
+        titleclone = 'Mr/Mrs'
+        mobileclone = '11'
+        emailclone = request.user.email
+        pcdclone = '1111'
+        townclone = 'Szeged'
+        addressclone = 'xx'
+        djangouseridclone = request.user.id
+
+
+        cursor8 = connection.cursor()
+        cursor8.execute("SELECT max(docnumber_tbladoc) FROM aid_tbladoc "
+                        "WHERE Doc_kindid_tbladoc_id = 10")
+        results = cursor8.fetchall()
+        resultslen = len(results)
+        for x in results:
+            docnumber = x[0]
+            docnumber += 1
+
+        cursor2 = connection.cursor()
+        cursor2.execute("INSERT INTO aid_tbladoc "
+                        "( Doc_kindid_tbladoc_id, "
+                        "Contactid_tbladoc_id, "
+                        "companyname_tblcompanies_ctbladoc, "
+                        "firstname_tblcontacts_ctbladoc, "
+                        "lastname_tblcontacts_ctbladoc, "
+                        "prefacetextforquotation_tblprefaceforquotation_ctbladoc, "
+                        "backpagetextforquotation_tblbackpageforquotation_ctbladoc, "
+                        "prefacespecforquotation_tbladoc, "
+                        "subject_tbladoc, "
+                        "docnumber_tbladoc, "
+                        "total_tbladoc, "
+                        "deliverydays_tbladoc, "
+                        "creatorid_tbladoc, "
+                        "title_tblcontacts_ctbladoc, "
+                        "mobile_tblcontacts_ctbladoc, "
+                        "email_tblcontacts_ctbladoc, "
+                        "pcd_tblcompanies_ctbladoc, "
+                        "town_tblcompanies_ctbladoc, "
+                        "address_tblcompanies_ctbladoc, "
+                        "paymenttextforquotation_tblpayment_ctbladoc, "
+                        "currencycodeinreport_tbladoc, "
+                        "currencyrateinreport_tbladoc, "
+                        "doclinkparentid_tbladoc, "
+                        "accountcurrencycode_tbladoc, "
+                        "djangouserid_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        [10, contactid, companynameclone, firstnameclone, lastnameclone, prefacetext, backpagetext, prefacespectext,
+                        subject,
+                        docnumber,
+                        total,
+                        deliverydays,
+                        useridnow,
+                        titleclone,
+                        mobileclone,
+                        emailclone,
+                        pcdclone,
+                        townclone,
+                        addressclone,
+                        paymenttext,
+                        currencycodeinreport,
+                        currencyrateinreport,
+                        '12',
+                        accountcurrencycode,
+                        djangouseridclone])
+
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE creatorid_tbladoc=%s", [useridnow])
+        results = cursor3.fetchall()
+        for x in results:
+            latestunorderedcartdocid = x[0]
+
+# if no available cart creating a cart doc end
+
     productid = request.POST['productid']
     qty = request.POST['qty']
 
@@ -356,8 +481,6 @@ def acustomercartadditemtocart(request):
 #        pdb.set_trace()
         unitsalespriceACU=listpricecomputed * currencyrateclone
 
-
-
         cursor5 = connection.cursor()
         cursor5.execute("SELECT `firstnum_tblaDoc_details` "
 
@@ -366,7 +489,7 @@ def acustomercartadditemtocart(request):
                         "WHERE docid_tbladoc_details_id=%s "
                         "order by firstnum_tblaDoc_details desc "
                         "LIMIT 1"
-                        , [113])
+                        , [latestunorderedcartdocid])
         maxchapternums = cursor5.fetchall()
 
         if len(maxchapternums) == 0:
@@ -404,7 +527,7 @@ def acustomercartadditemtocart(request):
 
             "VALUES (%s, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             [qty,
-             113,
+             latestunorderedcartdocid,
              productid,
              nextfirstnumonhtml,
              nextfourthnumonhtml,
@@ -510,6 +633,24 @@ def acustomercartrowremove(request, pk): #rowremove from customercart doc (from 
 @group_required("manager")
 @login_required
 def acustomercartpricetagtocarttop(request):
+    # determine latest available cart begin
+    useridnow = request.user.id
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Docid_tbladoc "
+                    ""
+                    "FROM aid_tbladoc "
+                    ""
+                    "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                    "order by docid_tbladoc desc",
+                    [useridnow])
+    latestunorderedcartdocidtuple = cursor1.fetchall()
+    if len(latestunorderedcartdocidtuple) == 0:
+        latestunorderedcartdocid = 0
+    else:
+        for x in latestunorderedcartdocidtuple:
+            latestunorderedcartdocid = x[0]
+    # determine latest available cart end
     cursor2 = connection.cursor()
     cursor2.execute(
         "SELECT "
@@ -517,7 +658,7 @@ def acustomercartpricetagtocarttop(request):
 
         "FROM aid_tbladoc_details "
 
-        "WHERE Docid_tblaDoc_details_id=%s ", ['113'])
+        "WHERE Docid_tblaDoc_details_id=%s ", [latestunorderedcartdocid])
     results = cursor2.fetchall()
     for x in results:
         totalprice = x[0]
@@ -531,7 +672,25 @@ def acustomercartpricetagtocarttop(request):
 
     return HttpResponse(json_data, content_type="application/json")
 def acustomercartsaveasorder(request):
-    creatorid = request.user.id
+# determine latest available cart begin
+    useridnow = request.user.id
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Docid_tbladoc "
+                    ""
+                    "FROM aid_tbladoc "
+                    ""
+                    "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                    "order by docid_tbladoc desc",
+                    [useridnow])
+    latestunorderedcartdocidtuple = cursor1.fetchall()
+    if len(latestunorderedcartdocidtuple) == 0:
+        latestunorderedcartdocid = 0
+    else:
+        for x in latestunorderedcartdocidtuple:
+            latestunorderedcartdocid = x[0]
+# determine latest available cart end
+    useridnow = request.user.id
     aidstartdate = request.POST['aidstartdate']
     aidstarttime = request.POST['aidstarttime']
 
@@ -565,7 +724,7 @@ def acustomercartsaveasorder(request):
                     ""
                     "WHERE docid_tbladoc=%s "
                     "order by docid_tbladoc desc",
-                    ['113'])
+                    [latestunorderedcartdocid])
     doc = cursor1.fetchall()
     for x in doc:
         contactid = x[1]
@@ -634,7 +793,7 @@ def acustomercartsaveasorder(request):
                     docnumber,
                     total,
                     deliverydays,
-                    creatorid,
+                    useridnow,
                     titleclone,
                     mobileclone,
                     emailclone,
@@ -651,10 +810,16 @@ def acustomercartsaveasorder(request):
                     aidstarttime])
 
     cursor3 = connection.cursor()
-    cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE creatorid_tbladoc=%s", [creatorid])
+    cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE creatorid_tbladoc=%s", [useridnow])
     results = cursor3.fetchall()
     for x in results:
         maxdocid = x[0]
+
+    cursor3 = connection.cursor()
+    cursor3.execute("UPDATE aid_tbladoc "
+                    "SET thiscarthasthisorderdocid_tbladoc=%s "
+                    "WHERE Docid_tbladoc=%s", [maxdocid, latestunorderedcartdocid])
+    resultsx = cursor3.fetchall()
 
     cursor3.execute("SELECT `Doc_detailsid_tbladoc_details`, "
                     "`Qty_tbladoc_details`, "
@@ -691,7 +856,7 @@ def acustomercartsaveasorder(request):
 
                     "WHERE docid_tbladoc_details_id=%s "
                     "order by firstnum_tbladoc_details,secondnum_tbladoc_details,thirdnum_tbladoc_details,fourthnum_tbladoc_details",
-                    ['113'])
+                    [latestunorderedcartdocid])
     docdetails = cursor3.fetchall()
     for x in docdetails:
         docdetailsid = x[0]
@@ -753,7 +918,7 @@ def acustomercartsaveasorder(request):
              unitclone,
              suppliercompanyid,
              supplierdescriptionclone,
-             creatorid])
+             useridnow])
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT "
@@ -830,8 +995,27 @@ def acustomercartsaveasorder(request):
                                                                                'aidstarttime': aidstarttime,
                                                                                'cordocdetails': cordocdetails,
                                                                                'totalprice': totalprice})
+
+    cursor0 = connection.cursor()
+    cursor0.execute(
+        "SELECT "
+        "id, "
+        "username, "
+        "email "
+
+        "FROM auth_user "
+
+        "WHERE id=%s ",
+        [useridnow])
+    usernowrowfromtable = cursor0.fetchall()
+    # import pdb;
+    # pdb.set_trace()
+
+    for instancesingle in usernowrowfromtable:
+        useremailnow = instancesingle[2]
+
     email = EmailMessage(
-        'Aid Order Acknowledgement', html_message, 'szluka.mate@gmail.com', ['szluka.mate@gmail.com'])  # , cc=[cc])
+        'Aid Order Acknowledgement', html_message, 'szluka.mate@gmail.com', [useremailnow])  # , cc=[cc])
     email.content_subtype = "html"
     email.send()
     #import pdb;

@@ -4,14 +4,14 @@
           
 
 				<p align="center" style="font-size:160%;" id="title" >My Profile Form</p>{% csrf_token %}
-				<p align="center" style="font-size:100%;" id="userid" userid="{{ user.0.0 }}" >Userid: {{ user.0.0 }}</p>
+				<p align="center" style="font-size:100%;" id="userid" userid="{{ usernowrowfromtable.0.0 }}" >Userid: {{ usernowrowfromtable.0.0 }}</p>
 				<div id="sqlsaving">
 				</div><br>
 
 				<div class="content-wrapper">
-	 			    <label name="username" rowid="{{ user.0.0}}">{{ user.0.1}}</label><br>
+	 			    <label name="username" rowid="{{ usernowrowfromtable.0.0}}">{{ usernowrowfromtable.0.1}}</label><br>
 
-					<input type="text" class="updateabletblauthuser" value="{{ user.0.2}}" name="email" rowid="{{ user.0.0}}">
+					<input type="text" class="updateabletblauthuser" value="{{ usernowrowfromtable.0.2}}" name="email" rowid="{{ usernowrowfromtable.0.0}}">
 				</div>
 				<script type="text/javascript" src="{% static 'js/amyprofile.js' %}"></script>
 				<link rel="stylesheet" href="{% static 'css/amyprofile.css' %}">
