@@ -18,6 +18,5 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
 # import pdb;
 # pdb.set_trace()
-@login_required
 def awelcome(request):
         return render(request, 'aid/awelcome.html', {})

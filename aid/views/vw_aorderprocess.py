@@ -18,7 +18,6 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
 # import pdb;
 # pdb.set_trace()
-@login_required
 def aorderprocess(request):
         cursor1 = connection.cursor()
         cursor1.execute("SELECT "

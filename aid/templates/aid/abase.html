@@ -30,9 +30,12 @@
 
 			</div>
 			<ul class="nav navbar-nav" id="mainnavbar">
+			    {% if user.is_authenticated %}
 				<li><a href="{% url 'adocsearch' %}">Docsearch</a></li>
 				<li><a href="{% url 'adocmyorderssearch' %}">My Orders</a></li>
 				<li><a href="{% url 'amyprofileform' pk=user.id %}">My Profile</a></li>
+			    {% endif %}
+
 				<li><a href="{% url 'aorderprocess' %}">Order</a></li>
 			</ul>
 		  </div>

@@ -267,10 +267,9 @@ def acustomercartform(request, pk):
                    'polinks': polinks,
                    'stockradiobuttonrows': stockradiobuttonrows,
                    'currencycodes': currencycodes})
-@group_required("manager")
-@login_required
 def acustomercartrefresh(request):
     # determine latest available cart begin
+    sessionid = request.POST['sessionid'] #when anonymoususer add an item to cart
     useridnow = request.user.id
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -282,62 +281,106 @@ def acustomercartrefresh(request):
                     "order by docid_tbladoc desc",
                     [useridnow])
     latestunorderedcartdocidtuple = cursor1.fetchall()
-    if len(latestunorderedcartdocidtuple) == 0:
-        latestunorderedcartdocid = 0
-    else:
-        for x in latestunorderedcartdocidtuple:
-            latestunorderedcartdocid = x[0]
+    for x in latestunorderedcartdocidtuple:
+        latestunorderedcartdocid = x[0]
     # determine latest available cart end
-    cursor3 = connection.cursor()
-    cursor3.execute("SELECT  "
-                    "DD.Doc_detailsid_tblaDoc_details, "
-                    "DD.Qty_tblaDoc_details, "
-                    "DD.Docid_tblaDoc_details_id, "
-                    "DD.customerdescription_tblProduct_ctblaDoc_details, "
-                    "DD.firstnum_tblaDoc_details, "
-                    "DD.fourthnum_tblaDoc_details, "
-                    "DD.secondnum_tblaDoc_details, "
-                    "DD.thirdnum_tblaDoc_details, "
-                    "DD.Note_tblaDoc_details, "
-                    "DD.creationtime_tblaDoc_details, "
-                    "DD.purchase_price_tblproduct_ctblaDoc_details, "  # 10
-                    "DD.listprice_tblaDoc_details, "
-                    "DD.currencyisocode_tblcurrency_ctblproduct_ctblaDoc_details, "
-                    "DD.Productid_tblaDoc_details_id, "
-                    "DD.Doc_detailsid_tblaDoc_details, "
-                    "COALESCE(Productid_tblaProduct, 0), "
-                    "DD.currencyrate_tblcurrency_ctblaDoc_details, "
-                    "round((((DD.listprice_tblaDoc_details-DD.purchase_price_tblproduct_ctblaDoc_details)/(DD.listprice_tblaDoc_details))*100),1) as listpricemargin, "
-                    "DD.unitsalespriceACU_tblaDoc_details, "
-                    "round((DD.purchase_price_tblproduct_ctblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details),2) as purchasepriceACU, "
-                    "round((((DD.unitsalespriceACU_tblaDoc_details-(DD.purchase_price_tblproduct_ctblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details))/(DD.unitsalespriceACU_tblaDoc_details))*100),1) as unitsalespricemargin, "
-                    "round((DD.listprice_tblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details),2) as listpriceACU, "
-                    "(100-round(((DD.unitsalespriceACU_tblaDoc_details/(DD.listprice_tblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details))*100),1)) as discount, "
-                    "DD.unit_tbladocdetails, "
-                    "companyname_tblacompanies, "
-                    "DD.supplierdescription_tblProduct_ctblaDoc_details, "  # 25
-                    "round(DD.Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)),0) as salesprice, "
-                    "maxqtyincart_tblaproduct_ctblaDoc_details "
+    if len(latestunorderedcartdocidtuple) != 0:
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT  "
+                        "DD.Doc_detailsid_tblaDoc_details, "
+                        "DD.Qty_tblaDoc_details, "
+                        "DD.Docid_tblaDoc_details_id, "
+                        "DD.customerdescription_tblProduct_ctblaDoc_details, "
+                        "DD.firstnum_tblaDoc_details, "
+                        "DD.fourthnum_tblaDoc_details, "
+                        "DD.secondnum_tblaDoc_details, "
+                        "DD.thirdnum_tblaDoc_details, "
+                        "DD.Note_tblaDoc_details, "
+                        "DD.creationtime_tblaDoc_details, "
+                        "DD.purchase_price_tblproduct_ctblaDoc_details, "  # 10
+                        "DD.listprice_tblaDoc_details, "
+                        "DD.currencyisocode_tblcurrency_ctblproduct_ctblaDoc_details, "
+                        "DD.Productid_tblaDoc_details_id, "
+                        "DD.Doc_detailsid_tblaDoc_details, "
+                        "COALESCE(Productid_tblaProduct, 0), "
+                        "DD.currencyrate_tblcurrency_ctblaDoc_details, "
+                        "round((((DD.listprice_tblaDoc_details-DD.purchase_price_tblproduct_ctblaDoc_details)/(DD.listprice_tblaDoc_details))*100),1) as listpricemargin, "
+                        "DD.unitsalespriceACU_tblaDoc_details, "
+                        "round((DD.purchase_price_tblproduct_ctblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details),2) as purchasepriceACU, "
+                        "round((((DD.unitsalespriceACU_tblaDoc_details-(DD.purchase_price_tblproduct_ctblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details))/(DD.unitsalespriceACU_tblaDoc_details))*100),1) as unitsalespricemargin, "
+                        "round((DD.listprice_tblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details),2) as listpriceACU, "
+                        "(100-round(((DD.unitsalespriceACU_tblaDoc_details/(DD.listprice_tblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details))*100),1)) as discount, "
+                        "DD.unit_tbladocdetails, "
+                        "companyname_tblacompanies, "
+                        "DD.supplierdescription_tblProduct_ctblaDoc_details, "  # 25
+                        "round(DD.Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)),0) as salesprice, "
+                        "maxqtyincart_tblaproduct_ctblaDoc_details "
+    
+                        "FROM aid_tbladoc_details as DD "
+    
+                        "LEFT JOIN (SELECT Productid_tblaProduct FROM aid_tblaproduct WHERE obsolete_tblaproduct = 0) as x "
+                        "ON DD.Productid_tblaDoc_details_id = x.Productid_tblaProduct "
+    
+                        "LEFT JOIN aid_tblacompanies as C "
+                        "ON DD.suppliercompanyid_tbladocdetails = C.companyid_tblacompanies "
+    
+                        "WHERE DD.docid_tbladoc_details_id=%s "
+                        "order by DD.firstnum_tblaDoc_details,DD.secondnum_tblaDoc_details,DD.thirdnum_tblaDoc_details,DD.fourthnum_tblaDoc_details",
+                        [latestunorderedcartdocid])
+        docdetails = cursor3.fetchall()
+    else: # the webuser packed items to cart as anonymous
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT  "
+                        "DD.Doc_detailsid_tblaDoc_details, "
+                        "DD.Qty_tblaDoc_details, "
+                        "DD.Docid_tblaDoc_details_id, "
+                        "DD.customerdescription_tblProduct_ctblaDoc_details, "
+                        "DD.firstnum_tblaDoc_details, "
+                        "DD.fourthnum_tblaDoc_details, "
+                        "DD.secondnum_tblaDoc_details, "
+                        "DD.thirdnum_tblaDoc_details, "
+                        "DD.Note_tblaDoc_details, "
+                        "DD.creationtime_tblaDoc_details, "
+                        "DD.purchase_price_tblproduct_ctblaDoc_details, "  # 10
+                        "DD.listprice_tblaDoc_details, "
+                        "DD.currencyisocode_tblcurrency_ctblproduct_ctblaDoc_details, "
+                        "DD.Productid_tblaDoc_details_id, "
+                        "DD.Doc_detailsid_tblaDoc_details, "
+                        "COALESCE(Productid_tblaProduct, 0), "
+                        "DD.currencyrate_tblcurrency_ctblaDoc_details, "
+                        "round((((DD.listprice_tblaDoc_details-DD.purchase_price_tblproduct_ctblaDoc_details)/(DD.listprice_tblaDoc_details))*100),1) as listpricemargin, "
+                        "DD.unitsalespriceACU_tblaDoc_details, "
+                        "round((DD.purchase_price_tblproduct_ctblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details),2) as purchasepriceACU, "
+                        "round((((DD.unitsalespriceACU_tblaDoc_details-(DD.purchase_price_tblproduct_ctblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details))/(DD.unitsalespriceACU_tblaDoc_details))*100),1) as unitsalespricemargin, "
+                        "round((DD.listprice_tblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details),2) as listpriceACU, "
+                        "(100-round(((DD.unitsalespriceACU_tblaDoc_details/(DD.listprice_tblaDoc_details * DD.currencyrate_tblcurrency_ctblaDoc_details))*100),1)) as discount, "
+                        "DD.unit_tbladocdetails, "
+                        "companyname_tblacompanies, "
+                        "DD.supplierdescription_tblProduct_ctblaDoc_details, "  # 25
+                        "round(DD.Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)),0) as salesprice, "
+                        "maxqtyincart_tblaproduct_ctblaDoc_details "
 
-                    "FROM aid_tbladoc_details as DD "
+                        "FROM aid_tbladoc_details as DD "
 
-                    "LEFT JOIN (SELECT Productid_tblaProduct FROM aid_tblaproduct WHERE obsolete_tblaproduct = 0) as x "
-                    "ON DD.Productid_tblaDoc_details_id = x.Productid_tblaProduct "
+                        "LEFT JOIN (SELECT Productid_tblaProduct FROM aid_tblaproduct WHERE obsolete_tblaproduct = 0) as x "
+                        "ON DD.Productid_tblaDoc_details_id = x.Productid_tblaProduct "
 
-                    "LEFT JOIN aid_tblacompanies as C "
-                    "ON DD.suppliercompanyid_tbladocdetails = C.companyid_tblacompanies "
+                        "LEFT JOIN aid_tblacompanies as C "
+                        "ON DD.suppliercompanyid_tbladocdetails = C.companyid_tblacompanies "
 
-                    "WHERE DD.docid_tbladoc_details_id=%s "
-                    "order by DD.firstnum_tblaDoc_details,DD.secondnum_tblaDoc_details,DD.thirdnum_tblaDoc_details,DD.fourthnum_tblaDoc_details",
-                    [latestunorderedcartdocid])
-    docdetails = cursor3.fetchall()
-
+                        "WHERE DD.docid_tbladoc_details_id=%s "
+                        "order by DD.firstnum_tblaDoc_details,DD.secondnum_tblaDoc_details,DD.thirdnum_tblaDoc_details,DD.fourthnum_tblaDoc_details",
+                        [sessionid])
+        docdetails = cursor3.fetchall()
     return render(request, 'aid/acustomercarttemplate.html', {'docdetails': docdetails})
-@group_required("manager")
-@login_required
 def acustomercartadditemtocart(request):
-# determine latest available cart begin
+# determine latest  available cart begin
+    sessionid = request.POST['sessionid'] #when anonymoususer add an item to cart
+    sessionid = int(sessionid)
     useridnow = request.user.id
+    if useridnow == None: # the user is not authenticated
+        useridnow = 0
+
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
                     "Docid_tbladoc "
@@ -348,15 +391,12 @@ def acustomercartadditemtocart(request):
                     "order by docid_tbladoc desc",
                     [useridnow])
     latestunorderedcartdocidtuple = cursor1.fetchall()
-    if len(latestunorderedcartdocidtuple) == 0:
-        latestunorderedcartdocid = 0
-    else:
-        for x in latestunorderedcartdocidtuple:
-            latestunorderedcartdocid = x[0]
+    for x in latestunorderedcartdocidtuple:
+        latestunorderedcartdocid = x[0]
 # determine latest available cart end
 
 # if no available cart creating a cart doc begin
-    if latestunorderedcartdocid == 0:
+    if len(latestunorderedcartdocidtuple) == 0 and sessionid == 0:
         contactid = useridnow
         prefacetext = ''
         backpagetext = ''
@@ -369,16 +409,15 @@ def acustomercartadditemtocart(request):
         currencyrateinreport = 1
         accountcurrencycode = 'HUF'
         companynameclone = 'Aid Customer'
-        firstnameclone = request.user.first_name
-        lastnameclone = request.user.last_name
+        firstnameclone = 'xfirstname'
+        lastnameclone = 'xlastname'
         titleclone = 'Mr/Mrs'
         mobileclone = '11'
-        emailclone = request.user.email
+        emailclone = 'xemail'
         pcdclone = '1111'
         townclone = 'Szeged'
         addressclone = 'xx'
-        djangouseridclone = request.user.id
-
+        djangouseridclone = 0
 
         cursor8 = connection.cursor()
         cursor8.execute("SELECT max(docnumber_tbladoc) FROM aid_tbladoc "
@@ -435,11 +474,11 @@ def acustomercartadditemtocart(request):
                         accountcurrencycode,
                         djangouseridclone])
 
-        cursor3 = connection.cursor()
-        cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE creatorid_tbladoc=%s", [useridnow])
-        results = cursor3.fetchall()
-        for x in results:
-            latestunorderedcartdocid = x[0]
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE creatorid_tbladoc=%s", [useridnow])
+    results = cursor3.fetchall()
+    for x in results:
+        latestunorderedcartdocid = x[0]
 
 # if no available cart creating a cart doc end
 
@@ -481,22 +520,22 @@ def acustomercartadditemtocart(request):
 #        pdb.set_trace()
         unitsalespriceACU=listpricecomputed * currencyrateclone
 
-        cursor5 = connection.cursor()
-        cursor5.execute("SELECT `firstnum_tblaDoc_details` "
-
-                        "FROM aid_tbladoc_details "
-
-                        "WHERE docid_tbladoc_details_id=%s "
-                        "order by firstnum_tblaDoc_details desc "
-                        "LIMIT 1"
-                        , [latestunorderedcartdocid])
-        maxchapternums = cursor5.fetchall()
-
-        if len(maxchapternums) == 0:
-            maxfirstnum = 0
-        else:
+        if len(latestunorderedcartdocidtuple) !=0:
+            cursor5 = connection.cursor()
+            cursor5.execute("SELECT `firstnum_tblaDoc_details` "
+    
+                            "FROM aid_tbladoc_details "
+    
+                            "WHERE docid_tbladoc_details_id=%s "
+                            "order by firstnum_tblaDoc_details desc "
+                            "LIMIT 1"
+                            , [latestunorderedcartdocid])
+            maxchapternums = cursor5.fetchall()
             for x in maxchapternums:
                 maxfirstnum = x[0]
+
+        else:
+            maxfirstnum = 0
 
         nextfirstnumonhtml = maxfirstnum + 1
         nextsecondnumonhtml =0
@@ -544,17 +583,17 @@ def acustomercartadditemtocart(request):
              suppliercompanyidclone,
              maxqtyincartclone])
         transaction.commit()
+# sessionidforanonymoususer begin
+    if sessionid == 0 and len(latestunorderedcartdocidtuple) != 0:
+        sessionid = latestunorderedcartdocid
+    else:
+        sessionid = 0
+    json_data = json.dumps(sessionid)
+# sessionidforanonymoususer end
 
-    customerinvoicedocid = 1
+    return HttpResponse(json_data, content_type="application/json")
 
-#    cursor4 = connection.cursor()
-#    cursor4.execute(
-#        "INSERT INTO aid_tbladoc_details ( Note_tblaDoc_details ,Docid_tblaDoc_details_id) VALUES ('mm', %s)",
-#        [113])
 
-    return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': customerinvoicedocid}) #same redirect when xmlresponse arrives therefore same redirecturl.html
-@group_required("manager")
-@login_required
 def acustomercartincreasingqty(request):
     docdetailsid = request.POST['docdetailsid']
 
@@ -578,8 +617,6 @@ def acustomercartincreasingqty(request):
         "WHERE Doc_detailsid_tblaDoc_details =%s ", [newqty, docdetailsid])
 
     return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': 1}) #same redirect when xmlresponse arrives therefore same redirecturl.html
-@group_required("manager")
-@login_required
 def acustomercartdecreasingqty(request):
     docdetailsid = request.POST['docdetailsid']
 
@@ -630,8 +667,6 @@ def acustomercartrowremove(request, pk): #rowremove from customercart doc (from 
     transaction.commit()
 
     return redirect('acustomercartform', pk=na)
-@group_required("manager")
-@login_required
 def acustomercartpricetagtocarttop(request):
     # determine latest available cart begin
     useridnow = request.user.id
@@ -645,25 +680,23 @@ def acustomercartpricetagtocarttop(request):
                     "order by docid_tbladoc desc",
                     [useridnow])
     latestunorderedcartdocidtuple = cursor1.fetchall()
-    if len(latestunorderedcartdocidtuple) == 0:
-        latestunorderedcartdocid = 0
-    else:
-        for x in latestunorderedcartdocidtuple:
-            latestunorderedcartdocid = x[0]
+    for x in latestunorderedcartdocidtuple:
+        latestunorderedcartdocid = x[0]
     # determine latest available cart end
-    cursor2 = connection.cursor()
-    cursor2.execute(
-        "SELECT "
-        "sum( Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) ) "
-
-        "FROM aid_tbladoc_details "
-
-        "WHERE Docid_tblaDoc_details_id=%s ", [latestunorderedcartdocid])
-    results = cursor2.fetchall()
-    for x in results:
-        totalprice = x[0]
-    if totalprice is None:
-        totalprice = 0
+    if len(latestunorderedcartdocidtuple) != 0:
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            "SELECT "
+            "sum( Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) ) "
+    
+            "FROM aid_tbladoc_details "
+    
+            "WHERE Docid_tblaDoc_details_id=%s ", [latestunorderedcartdocid])
+        results = cursor2.fetchall()
+        for x in results:
+            totalprice = x[0]
+    else:
+       totalprice = 0
     #import pdb;
     #pdb.set_trace()
 
@@ -671,6 +704,8 @@ def acustomercartpricetagtocarttop(request):
 
 
     return HttpResponse(json_data, content_type="application/json")
+@group_required("manager")
+@login_required
 def acustomercartsaveasorder(request):
 # determine latest available cart begin
     useridnow = request.user.id
@@ -684,12 +719,16 @@ def acustomercartsaveasorder(request):
                     "order by docid_tbladoc desc",
                     [useridnow])
     latestunorderedcartdocidtuple = cursor1.fetchall()
-    if len(latestunorderedcartdocidtuple) == 0:
-        latestunorderedcartdocid = 0
-    else:
-        for x in latestunorderedcartdocidtuple:
+#    if len(latestunorderedcartdocidtuple) == 0: #not possible
+#        latestunorderedcartdocid = -1
+#    else:
+    for x in latestunorderedcartdocidtuple:
             latestunorderedcartdocid = x[0]
 # determine latest available cart end
+
+    #import pdb;
+    #pdb.set_trace()
+
     useridnow = request.user.id
     aidstartdate = request.POST['aidstartdate']
     aidstarttime = request.POST['aidstarttime']
@@ -748,8 +787,30 @@ def acustomercartsaveasorder(request):
         townclone = x[20]
         addressclone = x[21]
         djangouseridclone = x[22]
-
-
+    '''
+    if len(doc) == 0:
+        contactid = 1
+        prefacetext = ''
+        backpagetext = ''
+        prefacespectext = ''
+        subject = 'xx'
+        total = 0
+        deliverydays = 1
+        paymenttext = ''
+        currencycodeinreport = 'HUF'
+        currencyrateinreport = 1
+        accountcurrencycode = 'HUF'
+        companynameclone = 'c'
+        firstnameclone = 'q'
+        lastnameclone = 'q'
+        titleclone = 'Mr/Mrs'
+        mobileclone = '11'
+        emailclone = 'x@v.vf'
+        pcdclone = '1111'
+        townclone = 'Szeged'
+        addressclone = 'w'
+        djangouseridclone = 1
+    '''
     cursor8 = connection.cursor()
     cursor8.execute("SELECT max(docnumber_tbladoc) FROM aid_tbladoc "
                     "WHERE Doc_kindid_tbladoc_id = 2")

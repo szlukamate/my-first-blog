@@ -15,6 +15,7 @@ $(function () {
     });
 // Dialog "Sending Your Order..." end
     $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
+    var sessionidforanonymoususer = window.sessionStorage;
     var loadervisibilitydelaydoneflag = 0;
     var loadervisibilitydatadoneflag = 0;
     var sendingyourordervisibilitydelaydoneflag = 0;
@@ -164,11 +165,18 @@ $(function () {
                 });
     }
     function cartrefresh(){
+                mysessionidvalue = 0
+                try {
+                    // getter: Fetch previous value
+                    mysessionidvalue = sessionidforanonymoususer.getItem(mysessionid);
+                } catch(e) {}
+
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartrefresh/',
 
                     data: {
+                    'sessionid' : mysessionidvalue,
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
 
@@ -181,6 +189,8 @@ $(function () {
                     },
                     datatype: 'html'
                 });
+                    console.log('cartrefresh: ' + mysessionidvalue);
+
     }
     function loaderstartingandsetting(messagetag){
                 loadervisibilitydelaydoneflag = 0;
@@ -195,17 +205,25 @@ $(function () {
     }
     function addtocartdoc(){
                 loaderstartingandsetting('Adding');
+                mysessionidvalue = 0
+                try {
+                    // getter: Fetch previous value
+                    mysessionidvalue = sessionidforanonymoususer.getItem(mysessionid);
+                } catch(e) {}
+
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartadditemtocart/',
 
                     data: {
+                    'sessionid' : mysessionidvalue,
                     'productid' : $('#addtocartselect').find(":selected").attr('productid'),
                     'qty' : 3,
 
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
-                    success: function(url){
+                    success: function(x){
+                      sessionidforanonymoususer.setItem( 'mysessionid', x );
                       cartrefresh();
                     },
                     error: function(){
@@ -213,6 +231,8 @@ $(function () {
                     },
                     datatype: 'html'
                 });
+                    console.log('addtocart: ' + mysessionidvalue);
+
     }
     function showloader(messagetag){
                 $('#carttoptemplate').html('<div class="loader"></div><div class="messagetagincarttop">' + messagetag + '</div>');
