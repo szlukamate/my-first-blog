@@ -4,12 +4,9 @@
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aid/static/js/aorderprocess.js" beforeDir="false" afterPath="$PROJECT_DIR$/aid/static/js/aorderprocess.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/abase.html" beforeDir="false" afterPath="$PROJECT_DIR$/aid/templates/aid/abase.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aid/views/vw_acustomercart.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/vw_acustomercart.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/views/vw_aorderprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/vw_aorderprocess.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/views/vw_awelcome.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/vw_awelcome.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/templates/registration/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/blog/templates/registration/login.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

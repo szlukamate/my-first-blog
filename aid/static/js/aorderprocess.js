@@ -16,6 +16,7 @@ $(function () {
 // Dialog "Sending Your Order..." end
     $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
     var sessionidforanonymoususer = window.sessionStorage;
+    var anonymoususerid=sessionidforanonymoususer.setItem("anonymoususerid", 0);
     var loadervisibilitydelaydoneflag = 0;
     var loadervisibilitydatadoneflag = 0;
     var sendingyourordervisibilitydelaydoneflag = 0;
@@ -165,18 +166,13 @@ $(function () {
                 });
     }
     function cartrefresh(){
-                mysessionidvalue = 0
-                try {
-                    // getter: Fetch previous value
-                    mysessionidvalue = sessionidforanonymoususer.getItem(mysessionid);
-                } catch(e) {}
-
+                anonymoususerid = sessionidforanonymoususer.getItem('anonymoususerid');
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartrefresh/',
 
                     data: {
-                    'sessionid' : mysessionidvalue,
+                    'anonymoususerid' : anonymoususerid,
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
 
@@ -189,7 +185,6 @@ $(function () {
                     },
                     datatype: 'html'
                 });
-                    console.log('cartrefresh: ' + mysessionidvalue);
 
     }
     function loaderstartingandsetting(messagetag){
@@ -205,25 +200,20 @@ $(function () {
     }
     function addtocartdoc(){
                 loaderstartingandsetting('Adding');
-                mysessionidvalue = 0
-                try {
-                    // getter: Fetch previous value
-                    mysessionidvalue = sessionidforanonymoususer.getItem(mysessionid);
-                } catch(e) {}
+                    console.log('in addtocart anonymousid: ' + anonymoususer());
 
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartadditemtocart/',
 
                     data: {
-                    'sessionid' : mysessionidvalue,
+                    'anonymoususerid' : anonymoususer(),
                     'productid' : $('#addtocartselect').find(":selected").attr('productid'),
                     'qty' : 3,
 
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
                     success: function(x){
-                      sessionidforanonymoususer.setItem( 'mysessionid', x );
                       cartrefresh();
                     },
                     error: function(){
@@ -231,8 +221,29 @@ $(function () {
                     },
                     datatype: 'html'
                 });
-                    console.log('addtocart: ' + mysessionidvalue);
 
+    }
+    function anonymoususer(){
+                anonymoususerid = sessionidforanonymoususer.getItem('anonymoususerid');
+                $.ajax({
+                    type: 'POST',
+                    url: 'anonymoususer/',
+
+                    data: {
+                    'anonymoususerid' : anonymoususerid,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+                    success: function(x){
+                    sessionidforanonymoususer.setItem( 'anonymoususerid', x );
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html',
+                    async: false
+                });
+                    anonymoususerid = sessionidforanonymoususer.getItem('anonymoususerid');
+                    return anonymoususerid
     }
     function showloader(messagetag){
                 $('#carttoptemplate').html('<div class="loader"></div><div class="messagetagincarttop">' + messagetag + '</div>');
@@ -245,12 +256,15 @@ $(function () {
             }
     }
     function pricetagtocarttop(){
+                anonymoususerid = sessionidforanonymoususer.getItem('anonymoususerid');
+
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartpricetagtocarttop/',
 
                     data: {
 
+                    'anonymoususerid': anonymoususerid,
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
                     success: function(pricetag){

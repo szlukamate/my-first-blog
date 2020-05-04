@@ -268,23 +268,54 @@ def acustomercartform(request, pk):
                    'stockradiobuttonrows': stockradiobuttonrows,
                    'currencycodes': currencycodes})
 def acustomercartrefresh(request):
-    # determine latest available cart begin
-    sessionid = request.POST['sessionid'] #when anonymoususer add an item to cart
+# determine latest available cart begin
+    docdetails = None #if there is not item to show in cart (let has an init value)
+    anonymoususerid = request.POST['anonymoususerid']
+    anonymoususerid = int(anonymoususerid)
     useridnow = request.user.id
-    cursor1 = connection.cursor()
-    cursor1.execute("SELECT "
-                    "Docid_tbladoc "
-                    ""
-                    "FROM aid_tbladoc "
-                    ""
-                    "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
-                    "order by docid_tbladoc desc",
-                    [useridnow])
-    latestunorderedcartdocidtuple = cursor1.fetchall()
-    for x in latestunorderedcartdocidtuple:
-        latestunorderedcartdocid = x[0]
-    # determine latest available cart end
-    if len(latestunorderedcartdocidtuple) != 0:
+    if useridnow != None:
+        userkind = 'realuser'
+    else:
+        userkind = 'anonymoususer'
+
+    if userkind == 'realuser':
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT "
+                        "Docid_tbladoc "
+                        ""
+                        "FROM aid_tbladoc "
+                        ""
+                        "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                        "order by docid_tbladoc desc",
+                        [useridnow])
+        results = cursor1.fetchall()
+        if len(results) != 0:
+            hascart = 'hascart'
+            for x in results:
+                latestunorderedcartdocid = x[0]
+        else:
+            hascart = 'hasnotcart'
+
+    if userkind == 'anonymoususer':
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT "
+                        "Docid_tbladoc "
+                        ""
+                        "FROM aid_tbladoc "
+                        ""
+                        "WHERE obsolete_tbladoc=0 and anonymoususerid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                        "order by docid_tbladoc desc",
+                        [anonymoususerid])
+        results = cursor1.fetchall()
+        if len(results) != 0:
+            hascart = 'hascart'
+            for x in results:
+                latestanonymousunorderedcartdocid = x[0]
+        else:
+            hascart = 'hasnotcart'
+
+# determine latest available cart end
+    if userkind == 'realuser' and hascart == 'hascart':
         cursor3 = connection.cursor()
         cursor3.execute("SELECT  "
                         "DD.Doc_detailsid_tblaDoc_details, "
@@ -328,7 +359,7 @@ def acustomercartrefresh(request):
                         "order by DD.firstnum_tblaDoc_details,DD.secondnum_tblaDoc_details,DD.thirdnum_tblaDoc_details,DD.fourthnum_tblaDoc_details",
                         [latestunorderedcartdocid])
         docdetails = cursor3.fetchall()
-    else: # the webuser packed items to cart as anonymous
+    if userkind == 'anonymoususer' and hascart == 'hascart':
         cursor3 = connection.cursor()
         cursor3.execute("SELECT  "
                         "DD.Doc_detailsid_tblaDoc_details, "
@@ -370,34 +401,62 @@ def acustomercartrefresh(request):
 
                         "WHERE DD.docid_tbladoc_details_id=%s "
                         "order by DD.firstnum_tblaDoc_details,DD.secondnum_tblaDoc_details,DD.thirdnum_tblaDoc_details,DD.fourthnum_tblaDoc_details",
-                        [sessionid])
+                        [latestanonymousunorderedcartdocid])
         docdetails = cursor3.fetchall()
     return render(request, 'aid/acustomercarttemplate.html', {'docdetails': docdetails})
 def acustomercartadditemtocart(request):
-# determine latest  available cart begin
-    sessionid = request.POST['sessionid'] #when anonymoususer add an item to cart
-    sessionid = int(sessionid)
+# 1 real user has cart already
+# 2 real user has not cart yet
+# 3 anonymous user has cart already
+# 4 anonymous user has not cart yet
+    anonymoususerid = request.POST['anonymoususerid']
+    anonymoususerid = int(anonymoususerid)
     useridnow = request.user.id
-    if useridnow == None: # the user is not authenticated
-        useridnow = 0
+    if useridnow != None:
+        userkind = 'realuser'
+    else:
+        userkind = 'anonymoususer'
 
-    cursor1 = connection.cursor()
-    cursor1.execute("SELECT "
-                    "Docid_tbladoc "
-                    ""
-                    "FROM aid_tbladoc "
-                    ""
-                    "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
-                    "order by docid_tbladoc desc",
-                    [useridnow])
-    latestunorderedcartdocidtuple = cursor1.fetchall()
-    for x in latestunorderedcartdocidtuple:
-        latestunorderedcartdocid = x[0]
-# determine latest available cart end
+    if userkind == 'realuser':
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT "
+                        "Docid_tbladoc "
+                        ""
+                        "FROM aid_tbladoc "
+                        ""
+                        "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                        "order by docid_tbladoc desc",
+                        [useridnow])
+        results = cursor1.fetchall()
+        if len(results) != 0:
+            hascart = 'hascart'
+        else:
+            hascart = 'hasnotcart'
+
+    if userkind == 'anonymoususer':
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT "
+                        "Docid_tbladoc "
+                        ""
+                        "FROM aid_tbladoc "
+                        ""
+                        "WHERE obsolete_tbladoc=0 and anonymoususerid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                        "order by docid_tbladoc desc",
+                        [anonymoususerid])
+        results = cursor1.fetchall()
+        if len(results) != 0:
+            hascart = 'hascart'
+        else:
+            hascart = 'hasnotcart'
+
+
+    def addingitemtocart(userkind,hascart):
+        return True
+
 
 # if no available cart creating a cart doc begin
-    if len(latestunorderedcartdocidtuple) == 0 and sessionid == 0:
-        contactid = useridnow
+    if hascart == 'hasnotcart':
+        contactid = None
         prefacetext = ''
         backpagetext = ''
         prefacespectext = ''
@@ -440,7 +499,7 @@ def acustomercartadditemtocart(request):
                         "prefacespecforquotation_tbladoc, "
                         "subject_tbladoc, "
                         "docnumber_tbladoc, "
-                        "total_tbladoc, "
+                        "total_tbladoc, " #10
                         "deliverydays_tbladoc, "
                         "creatorid_tbladoc, "
                         "title_tblcontacts_ctbladoc, "
@@ -454,7 +513,8 @@ def acustomercartadditemtocart(request):
                         "currencyrateinreport_tbladoc, "
                         "doclinkparentid_tbladoc, "
                         "accountcurrencycode_tbladoc, "
-                        "djangouserid_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        "djangouserid_tbladoc,"
+                        "anonymoususerid_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         [10, contactid, companynameclone, firstnameclone, lastnameclone, prefacetext, backpagetext, prefacespectext,
                         subject,
                         docnumber,
@@ -472,14 +532,22 @@ def acustomercartadditemtocart(request):
                         currencyrateinreport,
                         '12',
                         accountcurrencycode,
-                        djangouseridclone])
+                        djangouseridclone,
+                        anonymoususerid])
 
-    cursor3 = connection.cursor()
-    cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE creatorid_tbladoc=%s", [useridnow])
-    results = cursor3.fetchall()
-    for x in results:
-        latestunorderedcartdocid = x[0]
+    if userkind == 'realuser':
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE creatorid_tbladoc=%s", [useridnow])
+        results = cursor3.fetchall()
+        for x in results:
+            latestunorderedcartdocid = x[0]
 
+    if userkind == 'anonymoususer':
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT max(Docid_tbladoc) FROM aid_tbladoc WHERE anonymoususerid_tbladoc=%s", [anonymoususerid])
+        results = cursor3.fetchall()
+        for x in results:
+            latestanonymousunorderedcartdocid = x[0]
 # if no available cart creating a cart doc end
 
     productid = request.POST['productid']
@@ -516,83 +584,155 @@ def acustomercartadditemtocart(request):
         supplierdescriptionclone = instancesingle[7]
         suppliercompanyidclone = instancesingle[8]
         maxqtyincartclone = instancesingle[9]
-#        import pdb;
-#        pdb.set_trace()
         unitsalespriceACU=listpricecomputed * currencyrateclone
 
-        if len(latestunorderedcartdocidtuple) !=0:
-            cursor5 = connection.cursor()
-            cursor5.execute("SELECT `firstnum_tblaDoc_details` "
-    
-                            "FROM aid_tbladoc_details "
-    
-                            "WHERE docid_tbladoc_details_id=%s "
-                            "order by firstnum_tblaDoc_details desc "
-                            "LIMIT 1"
-                            , [latestunorderedcartdocid])
-            maxchapternums = cursor5.fetchall()
-            for x in maxchapternums:
-                maxfirstnum = x[0]
-
-        else:
-            maxfirstnum = 0
+        maxfirstnum = 0
+        if hascart == 'hascart':
+            if userkind == 'realuser':
+                cursor5 = connection.cursor()
+                cursor5.execute("SELECT `firstnum_tblaDoc_details` "
+        
+                                "FROM aid_tbladoc_details "
+        
+                                "WHERE docid_tbladoc_details_id=%s "
+                                "order by firstnum_tblaDoc_details desc "
+                                "LIMIT 1"
+                                , [latestunorderedcartdocid])
+                maxchapternums = cursor5.fetchall()
+                for x in maxchapternums:
+                    maxfirstnum = x[0]
+            if userkind == 'anonymoususer':
+                cursor5 = connection.cursor()
+                cursor5.execute("SELECT `firstnum_tblaDoc_details` "
+        
+                                "FROM aid_tbladoc_details "
+        
+                                "WHERE docid_tbladoc_details_id=%s "
+                                "order by firstnum_tblaDoc_details desc "
+                                "LIMIT 1"
+                                , [latestanonymousunorderedcartdocid])
+                maxchapternums = cursor5.fetchall()
+                for x in maxchapternums:
+                    maxfirstnum = x[0]
 
         nextfirstnumonhtml = maxfirstnum + 1
         nextsecondnumonhtml =0
         nextthirdnumonhtml =0
         nextfourthnumonhtml =0
 
-        cursor1 = connection.cursor() # new row needed
-        cursor1.execute(
-            "INSERT INTO aid_tbladoc_details "
-            "(`Qty_tblaDoc_details`, "
-            "`Docid_tblaDoc_details_id`, "
-            "`Productid_tblaDoc_details_id`, "
-            "`firstnum_tblaDoc_details`, "
-            "`fourthnum_tblaDoc_details`, "
-            "`secondnum_tblaDoc_details`, "
-            "`thirdnum_tblaDoc_details`, "
-            "`Note_tblaDoc_details`, "
-            "`purchase_price_tblproduct_ctblaDoc_details`, "
-            "`customerdescription_tblProduct_ctblaDoc_details`, "
-            "`currencyisocode_tblcurrency_ctblproduct_ctblaDoc_details`, "
-            "listprice_tblaDoc_details, "
-            "currencyrate_tblcurrency_ctblaDoc_details, "
-            "unitsalespriceACU_tblaDoc_details, "
-            "unit_tbladocdetails, "
-            "`supplierdescription_tblProduct_ctblaDoc_details`, "
-            "suppliercompanyid_tblaDocdetails, "
-            "maxqtyincart_tblaproduct_ctblaDoc_details ) " 
+        if userkind == 'realuser':
+            cursor1 = connection.cursor() # new row needed
+            cursor1.execute(
+                "INSERT INTO aid_tbladoc_details "
+                "(`Qty_tblaDoc_details`, "
+                "`Docid_tblaDoc_details_id`, "
+                "`Productid_tblaDoc_details_id`, "
+                "`firstnum_tblaDoc_details`, "
+                "`fourthnum_tblaDoc_details`, "
+                "`secondnum_tblaDoc_details`, "
+                "`thirdnum_tblaDoc_details`, "
+                "`Note_tblaDoc_details`, "
+                "`purchase_price_tblproduct_ctblaDoc_details`, "
+                "`customerdescription_tblProduct_ctblaDoc_details`, "
+                "`currencyisocode_tblcurrency_ctblproduct_ctblaDoc_details`, "
+                "listprice_tblaDoc_details, "
+                "currencyrate_tblcurrency_ctblaDoc_details, "
+                "unitsalespriceACU_tblaDoc_details, "
+                "unit_tbladocdetails, "
+                "`supplierdescription_tblProduct_ctblaDoc_details`, "
+                "suppliercompanyid_tblaDocdetails, "
+                "maxqtyincart_tblaproduct_ctblaDoc_details ) " 
+    
+                "VALUES (%s, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                [qty,
+                 latestunorderedcartdocid,
+                 productid,
+                 nextfirstnumonhtml,
+                 nextfourthnumonhtml,
+                 nextsecondnumonhtml,
+                 nextthirdnumonhtml,
+                 purchase_priceclone,
+                 customerdescriptionclone,
+                 currencyisocodeclone,
+                 listpricecomputed,
+                 currencyrateclone,
+                 unitsalespriceACU,
+                 unitclone,
+                 supplierdescriptionclone,
+                 suppliercompanyidclone,
+                 maxqtyincartclone])
+            transaction.commit()
+        if userkind == 'anonymoususer':
+            cursor1 = connection.cursor()
+            cursor1.execute(
+                "INSERT INTO aid_tbladoc_details "
+                "(`Qty_tblaDoc_details`, "
+                "`Docid_tblaDoc_details_id`, "
+                "`Productid_tblaDoc_details_id`, "
+                "`firstnum_tblaDoc_details`, "
+                "`fourthnum_tblaDoc_details`, "
+                "`secondnum_tblaDoc_details`, "
+                "`thirdnum_tblaDoc_details`, "
+                "`Note_tblaDoc_details`, "
+                "`purchase_price_tblproduct_ctblaDoc_details`, "
+                "`customerdescription_tblProduct_ctblaDoc_details`, "
+                "`currencyisocode_tblcurrency_ctblproduct_ctblaDoc_details`, "
+                "listprice_tblaDoc_details, "
+                "currencyrate_tblcurrency_ctblaDoc_details, "
+                "unitsalespriceACU_tblaDoc_details, "
+                "unit_tbladocdetails, "
+                "`supplierdescription_tblProduct_ctblaDoc_details`, "
+                "suppliercompanyid_tblaDocdetails, "
+                "maxqtyincart_tblaproduct_ctblaDoc_details ) " 
+    
+                "VALUES (%s, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                [qty,
+                 latestanonymousunorderedcartdocid,
+                 productid,
+                 nextfirstnumonhtml,
+                 nextfourthnumonhtml,
+                 nextsecondnumonhtml,
+                 nextthirdnumonhtml,
+                 purchase_priceclone,
+                 customerdescriptionclone,
+                 currencyisocodeclone,
+                 listpricecomputed,
+                 currencyrateclone,
+                 unitsalespriceACU,
+                 unitclone,
+                 supplierdescriptionclone,
+                 suppliercompanyidclone,
+                 maxqtyincartclone])
+            transaction.commit()
 
-            "VALUES (%s, %s, %s, %s,%s,%s,%s,'Defaultnote', %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            [qty,
-             latestunorderedcartdocid,
-             productid,
-             nextfirstnumonhtml,
-             nextfourthnumonhtml,
-             nextsecondnumonhtml,
-             nextthirdnumonhtml,
-             purchase_priceclone,
-             customerdescriptionclone,
-             currencyisocodeclone,
-             listpricecomputed,
-             currencyrateclone,
-             unitsalespriceACU,
-             unitclone,
-             supplierdescriptionclone,
-             suppliercompanyidclone,
-             maxqtyincartclone])
-        transaction.commit()
-# sessionidforanonymoususer begin
-    if sessionid == 0 and len(latestunorderedcartdocidtuple) != 0:
-        sessionid = latestunorderedcartdocid
-    else:
-        sessionid = 0
-    json_data = json.dumps(sessionid)
-# sessionidforanonymoususer end
+    gg=1
+    json_data = json.dumps(gg)
 
     return HttpResponse(json_data, content_type="application/json")
 
+
+def anonymoususer(request):
+    neededanewanonymoususeridflag = 0
+    useridnow = request.user.id
+    anonymoususerid = request.POST['anonymoususerid']
+    anonymoususerid = int(anonymoususerid)
+    if anonymoususerid == 0 and useridnow == None:
+        neededanewanonymoususeridflag = 1
+    if neededanewanonymoususeridflag == 1:
+        cursor2 = connection.cursor()
+        cursor2.execute("INSERT INTO aid_tblaanonymoususers "
+                        "(auxfieldforinsert_tblaanonymoususers) VALUES (%s)",
+                        [1])
+        cursor8 = connection.cursor()
+        cursor8.execute("SELECT max(anonymoususerid_tblanonymoususers) FROM aid_tblaanonymoususers")
+        results = cursor8.fetchall()
+        for x in results:
+            newanonymoususerid = x[0]
+    if neededanewanonymoususeridflag == 0:
+        newanonymoususerid = anonymoususerid
+    json_data = json.dumps(newanonymoususerid)
+
+    return HttpResponse(json_data, content_type="application/json")
 
 def acustomercartincreasingqty(request):
     docdetailsid = request.POST['docdetailsid']
@@ -668,22 +808,52 @@ def acustomercartrowremove(request, pk): #rowremove from customercart doc (from 
 
     return redirect('acustomercartform', pk=na)
 def acustomercartpricetagtocarttop(request):
-    # determine latest available cart begin
+    totalprice = 0 #default init
+    anonymoususerid = request.POST['anonymoususerid']
+    anonymoususerid = int(anonymoususerid)
     useridnow = request.user.id
-    cursor1 = connection.cursor()
-    cursor1.execute("SELECT "
-                    "Docid_tbladoc "
-                    ""
-                    "FROM aid_tbladoc "
-                    ""
-                    "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
-                    "order by docid_tbladoc desc",
-                    [useridnow])
-    latestunorderedcartdocidtuple = cursor1.fetchall()
-    for x in latestunorderedcartdocidtuple:
-        latestunorderedcartdocid = x[0]
-    # determine latest available cart end
-    if len(latestunorderedcartdocidtuple) != 0:
+    if useridnow != None:
+        userkind = 'realuser'
+    else:
+        userkind = 'anonymoususer'
+
+    if userkind == 'realuser':
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT "
+                        "Docid_tbladoc "
+                        ""
+                        "FROM aid_tbladoc "
+                        ""
+                        "WHERE obsolete_tbladoc=0 and creatorid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                        "order by docid_tbladoc desc",
+                        [useridnow])
+        results = cursor1.fetchall()
+        if len(results) != 0:
+            hascart = 'hascart'
+            for x in results:
+                latestunorderedcartdocid = x[0]
+        else:
+            hascart = 'hasnotcart'
+
+    if userkind == 'anonymoususer':
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT "
+                        "Docid_tbladoc "
+                        ""
+                        "FROM aid_tbladoc "
+                        ""
+                        "WHERE obsolete_tbladoc=0 and anonymoususerid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                        "order by docid_tbladoc desc",
+                        [anonymoususerid])
+        results = cursor1.fetchall()
+        if len(results) != 0:
+            hascart = 'hascart'
+            for x in results:
+                latestanonymousunorderedcartdocid = x[0]
+        else:
+            hascart = 'hasnotcart'
+
+    if userkind == 'realuser' and hascart == 'hascart':
         cursor2 = connection.cursor()
         cursor2.execute(
             "SELECT "
@@ -695,13 +865,20 @@ def acustomercartpricetagtocarttop(request):
         results = cursor2.fetchall()
         for x in results:
             totalprice = x[0]
-    else:
-       totalprice = 0
-    #import pdb;
-    #pdb.set_trace()
+    if userkind == 'anonymoususer' and hascart == 'hascart':
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            "SELECT "
+            "sum( Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) ) "
+    
+            "FROM aid_tbladoc_details "
+    
+            "WHERE Docid_tblaDoc_details_id=%s ", [latestanonymousunorderedcartdocid])
+        results = cursor2.fetchall()
+        for x in results:
+            totalprice = x[0]
 
     json_data = json.dumps(totalprice)
-
 
     return HttpResponse(json_data, content_type="application/json")
 @group_required("manager")
