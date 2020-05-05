@@ -476,7 +476,6 @@ def acustomercartadditemtocart(request):
         pcdclone = '1111'
         townclone = 'Szeged'
         addressclone = 'xx'
-        djangouseridclone = 0
 
         cursor8 = connection.cursor()
         cursor8.execute("SELECT max(docnumber_tbladoc) FROM aid_tbladoc "
@@ -513,8 +512,7 @@ def acustomercartadditemtocart(request):
                         "currencyrateinreport_tbladoc, "
                         "doclinkparentid_tbladoc, "
                         "accountcurrencycode_tbladoc, "
-                        "djangouserid_tbladoc,"
-                        "anonymoususerid_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        "anonymoususerid_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                         [10, contactid, companynameclone, firstnameclone, lastnameclone, prefacetext, backpagetext, prefacespectext,
                         subject,
                         docnumber,
@@ -532,7 +530,6 @@ def acustomercartadditemtocart(request):
                         currencyrateinreport,
                         '12',
                         accountcurrencycode,
-                        djangouseridclone,
                         anonymoususerid])
 
     if userkind == 'realuser':
@@ -865,6 +862,8 @@ def acustomercartpricetagtocarttop(request):
         results = cursor2.fetchall()
         for x in results:
             totalprice = x[0]
+            if totalprice is None:
+                totalprice = 0
     if userkind == 'anonymoususer' and hascart == 'hascart':
         cursor2 = connection.cursor()
         cursor2.execute(
@@ -933,8 +932,7 @@ def acustomercartsaveasorder(request):
                     "email_tblcontacts_ctbladoc, "
                     "pcd_tblcompanies_ctbladoc, "
                     "town_tblcompanies_ctbladoc, " #20
-                    "address_tblcompanies_ctbladoc, "
-                    "djangouserid_tbladoc "
+                    "address_tblcompanies_ctbladoc "
                     ""
                     "FROM aid_tbladoc "
                     ""
@@ -963,7 +961,6 @@ def acustomercartsaveasorder(request):
         pcdclone = x[19]
         townclone = x[20]
         addressclone = x[21]
-        djangouseridclone = x[22]
     '''
     if len(doc) == 0:
         contactid = 1
@@ -1023,9 +1020,8 @@ def acustomercartsaveasorder(request):
                     "currencyrateinreport_tbladoc, "
                     "doclinkparentid_tbladoc, "
                     "accountcurrencycode_tbladoc, "
-                    "djangouserid_tbladoc, "
                     "aidstartdate_tbladoc, "
-                    "aidstarttime_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "aidstarttime_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [2, contactid, companynameclone, firstnameclone, lastnameclone, prefacetext, backpagetext, prefacespectext,
                     subject,
                     docnumber,
@@ -1043,7 +1039,6 @@ def acustomercartsaveasorder(request):
                     currencyrateinreport,
                     '113',
                     accountcurrencycode,
-                    djangouseridclone,
                     aidstartdate,
                     aidstarttime])
 

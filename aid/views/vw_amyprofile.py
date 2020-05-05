@@ -47,12 +47,5 @@ def amyprofileform(request, pk):
         "WHERE id=%s ",
         [pk])
     usernowrowfromtable = cursor0.fetchall()
-    #import pdb;
-    #pdb.set_trace()
-
-    #        for instancesingle in particularcompany:
-#            id = instancesingle[0]
-#            email = instancesingle[1]
-#            email = instancesingle[1]
 
     return render(request, 'aid/amyprofile.html', {'usernowrowfromtable': usernowrowfromtable })
