@@ -313,8 +313,8 @@ def acustomercartrefresh(request):
                 latestanonymousunorderedcartdocid = x[0]
         else:
             hascart = 'hasnotcart'
+#determine latest available cart end
 
-# determine latest available cart end
     if userkind == 'realuser' and hascart == 'hascart':
         cursor3 = connection.cursor()
         cursor3.execute("SELECT  "
