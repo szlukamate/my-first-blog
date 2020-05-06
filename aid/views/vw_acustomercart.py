@@ -315,6 +315,33 @@ def acustomercartrefresh(request):
             hascart = 'hasnotcart'
 #determine latest available cart end
 
+#save the anonymosuser's cart as realuser's cart begin
+    if userkind == 'realuser' and hascart == 'hasnotcart': #the user became realuser from anonymoususer (the realuser inherited the anonymoususer's cart after login)
+        cursor1 = connection.cursor()
+        cursor1.execute("SELECT "
+                        "Docid_tbladoc "
+                        ""
+                        "FROM aid_tbladoc "
+                        ""
+                        "WHERE obsolete_tbladoc=0 and anonymoususerid_tbladoc=%s and thiscarthasthisorderdocid_tbladoc = 0 and Doc_kindid_tbladoc_id=10 "
+                        "order by docid_tbladoc desc",
+                        [anonymoususerid])
+        results = cursor1.fetchall()
+        if len(results) != 0:
+            hascartasthisuserwhenheshewasanonymous = 'hascart'
+            for x in results:
+                latestanonymousunorderedcartdocid = x[0]
+            cursor12 = connection.cursor()
+            cursor12.execute(
+                "UPDATE aid_tbladoc SET "
+                "creatorid_tbladoc=%s "
+                "WHERE Docid_tbladoc=%s ", [useridnow, latestanonymousunorderedcartdocid])
+            hascart = hascartasthisuserwhenheshewasanonymous
+            latestunorderedcartdocid = latestanonymousunorderedcartdocid
+        else:
+            hascartasthisuserwhenheshewasanonymous = 'hasnotcart'
+#save the anonymosuser's cart as realuser's cart end
+
     if userkind == 'realuser' and hascart == 'hascart':
         cursor3 = connection.cursor()
         cursor3.execute("SELECT  "
@@ -706,31 +733,6 @@ def acustomercartadditemtocart(request):
     json_data = json.dumps(gg)
 
     return HttpResponse(json_data, content_type="application/json")
-
-
-def anonymoususer(request):
-    neededanewanonymoususeridflag = 0
-    useridnow = request.user.id
-    anonymoususerid = request.POST['anonymoususerid']
-    anonymoususerid = int(anonymoususerid)
-    if anonymoususerid == 0 and useridnow == None:
-        neededanewanonymoususeridflag = 1
-    if neededanewanonymoususeridflag == 1:
-        cursor2 = connection.cursor()
-        cursor2.execute("INSERT INTO aid_tblaanonymoususers "
-                        "(auxfieldforinsert_tblaanonymoususers) VALUES (%s)",
-                        [1])
-        cursor8 = connection.cursor()
-        cursor8.execute("SELECT max(anonymoususerid_tblanonymoususers) FROM aid_tblaanonymoususers")
-        results = cursor8.fetchall()
-        for x in results:
-            newanonymoususerid = x[0]
-    if neededanewanonymoususeridflag == 0:
-        newanonymoususerid = anonymoususerid
-    json_data = json.dumps(newanonymoususerid)
-
-    return HttpResponse(json_data, content_type="application/json")
-
 def acustomercartincreasingqty(request):
     docdetailsid = request.POST['docdetailsid']
 
@@ -748,7 +750,6 @@ def acustomercartincreasingqty(request):
 
     cursor1 = connection.cursor()
     cursor1.execute(
-
         "UPDATE aid_tbladoc_details SET "
         "Qty_tblaDoc_details=%s "
         "WHERE Doc_detailsid_tblaDoc_details =%s ", [newqty, docdetailsid])
@@ -1255,3 +1256,28 @@ def acustomercartsaveasorder(request):
     #pdb.set_trace()
 
     return render(request, 'aid/acustomerconfirmationredirecturl.html', {'docid': maxdocid})
+def acustomercartaddinganonymoususerid(request):
+    neededanewanonymoususeridflag = 0
+    useridnow = request.user.id
+    anonymoususerid = request.POST['anonymoususerid']
+    if anonymoususerid == '':
+        anonymoususerid = 0
+    else:
+        anonymoususerid = int(anonymoususerid)
+    if anonymoususerid == 0 and useridnow == None:
+        neededanewanonymoususeridflag = 1
+    if neededanewanonymoususeridflag == 1:
+        cursor2 = connection.cursor()
+        cursor2.execute("INSERT INTO aid_tblaanonymoususers "
+                        "(auxfieldforinsert_tblaanonymoususers) VALUES (%s)",
+                        [1])
+        cursor8 = connection.cursor()
+        cursor8.execute("SELECT max(anonymoususerid_tblanonymoususers) FROM aid_tblaanonymoususers")
+        results = cursor8.fetchall()
+        for x in results:
+            newanonymoususerid = x[0]
+    if neededanewanonymoususeridflag == 0:
+        newanonymoususerid = anonymoususerid
+    json_data = json.dumps(newanonymoususerid)
+
+    return HttpResponse(json_data, content_type="application/json")

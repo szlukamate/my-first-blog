@@ -16,7 +16,7 @@ $(function () {
 // Dialog "Sending Your Order..." end
     $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
     var sessionidforanonymoususer = window.sessionStorage;
-    var anonymoususerid=sessionidforanonymoususer.setItem("anonymoususerid", 0);
+//    var anonymoususerid=sessionidforanonymoususer.setItem("anonymoususerid", 0);
     var loadervisibilitydelaydoneflag = 0;
     var loadervisibilitydatadoneflag = 0;
     var sendingyourordervisibilitydelaydoneflag = 0;
@@ -166,7 +166,7 @@ $(function () {
                 });
     }
     function cartrefresh(){
-                anonymoususerid = sessionidforanonymoususer.getItem('anonymoususerid');
+                anonymoususerid = anonymoususer();
                 $.ajax({
                     type: 'POST',
                     url: 'acustomercartrefresh/',
@@ -185,6 +185,7 @@ $(function () {
                     },
                     datatype: 'html'
                 });
+                    console.log('in cartrefresh:' + anonymoususerid);
 
     }
     function loaderstartingandsetting(messagetag){
@@ -227,7 +228,7 @@ $(function () {
                 anonymoususerid = sessionidforanonymoususer.getItem('anonymoususerid');
                 $.ajax({
                     type: 'POST',
-                    url: 'anonymoususer/',
+                    url: 'acustomercartaddinganonymoususerid/',
 
                     data: {
                     'anonymoususerid' : anonymoususerid,
@@ -235,6 +236,7 @@ $(function () {
                     },
                     success: function(x){
                     sessionidforanonymoususer.setItem( 'anonymoususerid', x );
+
                     },
                     error: function(){
                         alert('failure');
@@ -243,6 +245,8 @@ $(function () {
                     async: false
                 });
                     anonymoususerid = sessionidforanonymoususer.getItem('anonymoususerid');
+                    console.log(anonymoususerid);
+
                     return anonymoususerid
     }
     function showloader(messagetag){
