@@ -1,6 +1,7 @@
 {% extends "aid/abase.html" %}
 
 {% block content %}
+<div class="containers">
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
@@ -18,7 +19,9 @@
         </tr>
         </table>
 
-        <input type="submit" value="login" />
+        <input class="btn btn-lg btn-primary" type="submit" value="login" />
         <input type="hidden" name="next" value="{{ next }}" />
+        <p>Do not have an <a href="{% url 'login' %}">account?</a></p>
     </form>
+</div>
 {% endblock %}
