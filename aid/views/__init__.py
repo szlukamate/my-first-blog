@@ -6,3 +6,4 @@ from .vw_acustomeracknowledgement import *
 from .vw_acustomercart import *
 from .vw_acustomerconfirmation import *
 from .vw_amyprofile import *
+from .vw_aauthentication import *

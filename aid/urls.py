@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'acustomerconfirmation/(?P<docid>[0-9]+)/$', views.acustomerconfirmation, name='acustomerconfirmation'),
     url(r'amyprofileform/(?P<pk>[0-9]+)/$', views.amyprofileform, name='amyprofileform'),
     url(r'acustomercartaddinganonymoususerid/$', views.acustomercartaddinganonymoususerid, name='acustomercartaddinganonymoususerid'),
-
+    url(r'aauthenticationsignup/$', views.aauthenticationsignup, name='aauthenticationsignup'),
+    url(r'^aauthenticationactivate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.aauthenticationactivate, name='aauthenticationactivate'),
 ]
