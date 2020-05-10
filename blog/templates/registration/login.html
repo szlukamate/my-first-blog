@@ -22,6 +22,8 @@
         <input class="btn btn-lg btn-primary" type="submit" value="login" />
         <input type="hidden" name="next" value="{{ next }}" />
         <p>Do not have an <a href="{% url 'aauthenticationsignup' %}">account?</a></p>
+        <p>Did you forget <a href="{% url 'password_reset' %}">password?</a></p>
     </form>
+
 </div>
 {% endblock %}

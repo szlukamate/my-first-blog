@@ -176,11 +176,13 @@ print ("base dir path", BASE_DIR)
 
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST ='email-smtp.us-east-1.amazonaws.com'
+#EMAIL_HOST ='localhost'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+#EMAIL_PORT = 1025
 EMAIL_HOST_USER ='AKIAYTRVRRJXKI4W2GE7'
 EMAIL_HOST_PASSWORD ='BLYy5yfzWoGqCDVwzCv7R1ZUcov/q2Sye5gbsOC9/3dK'
-
+DEFAULT_FROM_EMAIL = 'szluka.mate@gmail.com'
 #MEDIA_URL = '/emailattachmentspre/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'emailattachmentspre')
 

@@ -27,7 +27,9 @@ urlpatterns = [
     url(r'^quotation/', include('quotation.urls')),
     url(r'^developer/', include('developer.urls')),
     url(r'^aid/', include('aid.urls')),
-  #  url(r'ist/', include('ist.urls')),
+    url('^', include('django.contrib.auth.urls')),
+
+    #  url(r'ist/', include('ist.urls')),
 
 ]
 
