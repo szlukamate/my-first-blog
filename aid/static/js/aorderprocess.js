@@ -8,6 +8,7 @@ localStorage.lastname = "Smith";
 // Retrieve
 console.log(localStorage.lastname);
 $(function () {
+    initMap();
 // Dialog "Sending Your Order..." begin
     $( "#dialog-message-sendingyourorder" ).dialog({
       autoOpen: false,
@@ -404,4 +405,125 @@ $(function () {
       }
     });
     //car usage script end
+
+     function initMap() {
+            var myLatlng = {lat: 46.26873280379492, lng: 20.13837369751033};
+            var map = new google.maps.Map(
+                document.getElementById('map'), {zoom: 14, center: myLatlng, mapTypeId: 'hybrid'});
+
+            // Create the initial InfoWindow.
+            var infoWindow = new google.maps.InfoWindow(
+                {content: 'Click the map to get Lat/Lng!', position: myLatlng});
+            infoWindow.open(map);
+
+            // Configure the click listener.
+            map.addListener('click', function(mapsMouseEvent) {
+              // Close the current InfoWindow.
+              infoWindow.close();
+
+              // Create a new InfoWindow.
+              infoWindow = new google.maps.InfoWindow({position: mapsMouseEvent.latLng});
+              infoWindow.setContent(mapsMouseEvent.latLng.toString());
+              infoWindow.open(map);
+              console.log('raw: ' + mapsMouseEvent.latLng.toString());
+              var coordinates = mapsMouseEvent.latLng.toString().split(",")
+              var clickedlat = coordinates[0];
+              clickedlat = clickedlat.tostring();
+              console.log('clickedlat: ' + clickedlat);
+              var clickedlng = coordinates[1];
+              console.log('clickedlng: ' + clickedlng);
+              var coordinates2 = coordinates.toString().substring(1,5);
+              console.log('processed: ' + coordinates2);
+
+            });
+     }
+    calculateDistance();
+
+/*
+      function calculateDistance(origin, destination) {
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix(
+        {
+          origins: ['46.252103811613274,20.146751170256003'],
+          destinations: ['46.253103811613274,20.146751170256003'],
+          travelMode: google.maps.TravelMode.WALKING,
+          unitSystem: google.maps.UnitSystem.IMPERIAL,
+          avoidHighways: false,
+          avoidTolls: false
+        }, callback());
+      }
+
+      function callback(response, status) {
+        console.log(distance.value);
+
+        if (status != google.maps.DistanceMatrixStatus.OK) {
+          $('#result').html(err);
+        } else {
+          var origin = response.originAddresses[0];
+          var destination = response.destinationAddresses[0];
+          if (response.rows[0].elements[0].status === "ZERO_RESULTS") {
+            $('#result').html("Better get on a plane. There are no roads between "
+                              + origin + " and " + destination);
+          } else {
+            var distance = response.rows[0].elements[0].distance;
+            var distance_value = distance.value;
+            var distance_text = distance.text;
+            var miles = distance_text.substring(0, distance_text.length - 3);
+            $('#result').html("It is " + miles + " miles from " + origin + " to " + destination);
+          }
+        }
+      }
+
+      $('#distance_form').submit(function(e){
+          event.preventDefault();
+          var origin = $('#origin').val();
+          var destination = $('#destination').val();
+          var distance_text = calculateDistance(origin, destination);
+      });
+*/
+      function calculateDistance() {
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix(
+            {
+              origins: ['46.252103811613274,20.146751170256003'],
+              destinations: ['46.466103812613274,20.146751170256003'],
+              travelMode: google.maps.TravelMode.WALKING,
+              unitSystem: google.maps.UnitSystem.METRIC,
+              avoidHighways: false,
+              avoidTolls: false
+            }, function (response, status)
+            {
+            console.log('st:' + status);
+                if (status != google.maps.DistanceMatrixStatus.OK)
+                    {
+                      $('#result').html(err);
+                    } else
+                    {
+                      var origin = response.originAddresses[0];
+                      var destination = response.destinationAddresses[0];
+                      if (response.rows[0].elements[0].status === "ZERO_RESULTS")
+                          {
+                            $('#result').html("Better get on a plane. There are no roads between "
+                                              + origin + " and " + destination);
+                          } else
+                          {
+                            var distance = response.rows[0].elements[0].distance;
+                            var duration = response.rows[0].elements[0].duration;
+                            var distance_value = distance.value;
+                            var duration_value = duration.value;
+                            var distance_text = distance.text;
+                            var duration_text = duration.text;
+                            var miles = distance_text.substring(0, distance_text.length - 3);
+                            var seconds = duration_text.substring(0, duration_text.length - 3);
+                            $('#result').html('<p>It is ' + miles + ' miles from ' + origin + ' to ' + destination + '</p><p>It is ' + seconds + ' seconds</p>' );
+                          }
+                    }
+
+
+
+            }
+        )
+      };
+
+
 });
