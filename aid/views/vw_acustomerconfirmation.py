@@ -20,22 +20,23 @@ import xml.dom.minidom as x12
 # pdb.set_trace()
 @login_required
 def acustomerconfirmation(request, docid):
-        cursor3 = connection.cursor()
-        cursor3.execute("SELECT "
-                        "Doc_kindid_tblaDoc_id, "
-                        "docnumber_tblaDoc, "
-                        "pretag_tbladockind "
+    useremail = request.user.email
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT "
+                    "Doc_kindid_tblaDoc_id, "
+                    "docnumber_tblaDoc, "
+                    "pretag_tbladockind "
 
-                        "FROM aid_tbladoc "
+                    "FROM aid_tbladoc "
 
-                        "JOIN aid_tbladoc_kind as DK "
-                        "ON Doc_kindid_tblaDoc_id = DK.Doc_kindid_tblaDoc_kind "
+                    "JOIN aid_tbladoc_kind as DK "
+                    "ON Doc_kindid_tblaDoc_id = DK.Doc_kindid_tblaDoc_kind "
 
-                        "WHERE docid_tbladoc=%s ", [docid])
-        customerordernumbers = cursor3.fetchall()
-        for x in customerordernumbers:
-                customerordernumberdocnumber = x[1]
-                customerordernumberpretag = x[2]
-        customerordernumber = str(customerordernumberpretag) + str(customerordernumberdocnumber)
+                    "WHERE docid_tbladoc=%s ", [docid])
+    customerordernumbers = cursor3.fetchall()
+    for x in customerordernumbers:
+            customerordernumberdocnumber = x[1]
+            customerordernumberpretag = x[2]
+    customerordernumber = str(customerordernumberpretag) + str(customerordernumberdocnumber)
 
-        return render(request, 'aid/acustomerconfirmation.html', {'customerordernumber': customerordernumber})
+    return render(request, 'aid/acustomerconfirmation.html', {'customerordernumber': customerordernumber, 'useremail': useremail})

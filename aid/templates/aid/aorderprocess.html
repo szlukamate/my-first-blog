@@ -30,8 +30,11 @@
                 {% for product in  enabledproductstoorderprocess %}
                     <option value="" productid="{{product.0}}" purchaseprice="{{product.1}}" customerdescription="{{product.2}}" margin="{{product.3}}" unit="{{product.4}}" currencyisocode="{{product.7}}">{{product.2}} </option>
                 {% endfor %}
-            </select><br>
-            <button id="addtocartbutton" type="submit">
+            </select>
+            <button id="seedestinationmapbutton" type="submit">
+               <span>See destination map</span>
+            </button><br>
+            <button id="addtocartbutton" type="submit" hidden>
                <span>Add to cart</span>
             </button>
 

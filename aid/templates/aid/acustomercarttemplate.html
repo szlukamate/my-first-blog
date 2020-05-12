@@ -22,12 +22,14 @@
 																	   <span class="glyphicon glyphicon-plus"></span>
 																	</button>
 																{% else %}
-																	<button class="productincreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit">
+																	<!-- this row is from times when increasing button was enabled <button class="productincreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit"> -->
+																	<button class="productincreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit" disabled>
 																	   <span class="glyphicon glyphicon-plus"></span>
 																	</button>
 																{% endif %}
 
-																	<button class="productdecreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit">
+																	<!-- this row is from times when decreasing button was enabled <button class="productdecreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit"> -->
+																	<button class="productdecreasebutton" docdetailsid="{{ docdetail.0 }}" type="submit" disabled>
 																	   <span class="glyphicon glyphicon-minus"></span>
 																	</button>
 

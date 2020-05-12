@@ -65,7 +65,7 @@ font-size: 10px;
 .qtydiv {
 position: absolute;
 height: 26px;
-width: 58px;
+width: 78px;
 //border:1px solid gray;
 left:0mm;
 top: 13.3mm;
@@ -146,7 +146,7 @@ top: 20px;
 }
 .productincreasebutton {
   position: absolute;
-  left:5mm;
+  left:7mm;
   top: 8mm;
 
   background-color: #5999ff;
@@ -174,7 +174,7 @@ top: 20px;
 }
 .productdecreasebutton {
   position: absolute;
-  left:5mm;
+  left:7mm;
   top: 20mm;
 
   background-color: #5999ff;

@@ -371,7 +371,7 @@ def acustomercartrefresh(request):
                         "DD.unit_tbladocdetails, "
                         "companyname_tblacompanies, "
                         "DD.supplierdescription_tblProduct_ctblaDoc_details, "  # 25
-                        "round(DD.Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)),0) as salesprice, "
+                        "round(DD.Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,1)),1) as salesprice, "
                         "maxqtyincart_tblaproduct_ctblaDoc_details "
     
                         "FROM aid_tbladoc_details as DD "
@@ -415,7 +415,7 @@ def acustomercartrefresh(request):
                         "DD.unit_tbladocdetails, "
                         "companyname_tblacompanies, "
                         "DD.supplierdescription_tblProduct_ctblaDoc_details, "  # 25
-                        "round(DD.Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)),0) as salesprice, "
+                        "round(DD.Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,1)),1) as salesprice, "
                         "maxqtyincart_tblaproduct_ctblaDoc_details "
 
                         "FROM aid_tbladoc_details as DD "
@@ -855,7 +855,7 @@ def acustomercartpricetagtocarttop(request):
         cursor2 = connection.cursor()
         cursor2.execute(
             "SELECT "
-            "sum( Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) ) "
+            "sum( Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,1)) ) "
     
             "FROM aid_tbladoc_details "
     
@@ -869,7 +869,7 @@ def acustomercartpricetagtocarttop(request):
         cursor2 = connection.cursor()
         cursor2.execute(
             "SELECT "
-            "sum( Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) ) "
+            "sum( Qty_tblaDoc_details * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,1)) ) "
     
             "FROM aid_tbladoc_details "
     
@@ -877,6 +877,8 @@ def acustomercartpricetagtocarttop(request):
         results = cursor2.fetchall()
         for x in results:
             totalprice = x[0]
+            if totalprice is None:
+                totalprice = 0
 
     json_data = json.dumps(totalprice)
 
@@ -1175,7 +1177,7 @@ def acustomercartsaveasorder(request):
     cursor2 = connection.cursor()
     cursor2.execute(
         "SELECT "
-        "sum( CAST(Qty_tblaDoc_details AS DECIMAL(10,0)) * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) ) "
+        "sum( CAST(Qty_tbladoc_details AS DECIMAL(10,0)) * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,1)) ) "
 
         "FROM aid_tbladoc_details "
 
@@ -1213,7 +1215,7 @@ def acustomercartsaveasorder(request):
                     "unit_tbladocdetails, "
                     "suppliercompanyid_tbladocdetails, "
                     "supplierdescription_tblProduct_ctbladoc_details, "
-                    "CAST(Qty_tblaDoc_details AS DECIMAL(10,0)) * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,0)) as rowprice " #25
+                    "CAST(Qty_tbladoc_details AS DECIMAL(10,0)) * CAST(unitsalespriceACU_tblaDoc_details AS DECIMAL(10,1)) as rowprice " #25
 
                     "FROM aid_tbladoc_details "
 

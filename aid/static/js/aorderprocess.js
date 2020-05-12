@@ -8,13 +8,15 @@ localStorage.lastname = "Smith";
 // Retrieve
 console.log(localStorage.lastname);
 $(function () {
-    initMap();
+    var globaldistancevalueinmeters = 0;
+    var clickedlatlng = '';
 // Dialog "Sending Your Order..." begin
     $( "#dialog-message-sendingyourorder" ).dialog({
       autoOpen: false,
       modal: true
     });
 // Dialog "Sending Your Order..." end
+
     $('a[href="/aid/aorderprocess/"]').parent().addClass('active');
     var sessionidforanonymoususer = window.sessionStorage;
 //    var anonymoususerid=sessionidforanonymoususer.setItem("anonymoususerid", 0);
@@ -35,6 +37,10 @@ $(function () {
     $( "#tabs" ).tabs("enable", 0); //but first
     $('#previousbutton').prop("disabled", true) //default previousbutton is disabled
     $('#finishbutton').prop("disabled", true) //default finishbutton is disabled
+    //seedestinationmapbutton eventlistener script
+    $('#seedestinationmapbutton').click(function() {
+        seedestinationmap();
+    });
     //addtocartbutton eventlistener script
     $('#addtocartbutton').click(function() {
         addtocartdoc();
@@ -68,6 +74,11 @@ $(function () {
         var docdetailsid = $(this).attr( "docdetailsid" );
         acustomercartproductremove(docdetailsid);
     });
+    function seedestinationmap(){
+    initMap();
+    $('#seedestinationmapbutton').prop('disabled', true);
+    $('#addtocartbutton').prop('hidden', false);
+    }
     function acustomercartincreasingordecreasing(docdetailsid, upordownflag){
         var maxqty = $('span[name="maxqtyincart"][docdetailsid="' + docdetailsid + '"]').html();
         var currentqty = $('span[class="qtynumber"][docdetailsid="' + docdetailsid + '"]').html();
@@ -202,7 +213,6 @@ $(function () {
     }
     function addtocartdoc(){
                 loaderstartingandsetting('Adding');
-                    console.log('in addtocart anonymousid: ' + anonymoususer());
 
                 $.ajax({
                     type: 'POST',
@@ -211,7 +221,7 @@ $(function () {
                     data: {
                     'anonymoususerid' : anonymoususer(),
                     'productid' : $('#addtocartselect').find(":selected").attr('productid'),
-                    'qty' : 3,
+                    'qty' : globaldistancevalueinmeters,
 
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
@@ -426,67 +436,20 @@ $(function () {
               infoWindow.setContent(mapsMouseEvent.latLng.toString());
               infoWindow.open(map);
               console.log('raw: ' + mapsMouseEvent.latLng.toString());
-              var coordinates = mapsMouseEvent.latLng.toString().split(",")
-              var clickedlat = coordinates[0];
-              clickedlat = clickedlat.tostring();
-              console.log('clickedlat: ' + clickedlat);
-              var clickedlng = coordinates[1];
-              console.log('clickedlng: ' + clickedlng);
-              var coordinates2 = coordinates.toString().substring(1,5);
-              console.log('processed: ' + coordinates2);
+              clickedlatlng = mapsMouseEvent.latLng.toString();
+              clickedlatlng = clickedlatlng.substring(1, clickedlatlng.length - 1);
+              calculateDistance();
 
             });
      }
-    calculateDistance();
 
-/*
-      function calculateDistance(origin, destination) {
-        var service = new google.maps.DistanceMatrixService();
-        service.getDistanceMatrix(
-        {
-          origins: ['46.252103811613274,20.146751170256003'],
-          destinations: ['46.253103811613274,20.146751170256003'],
-          travelMode: google.maps.TravelMode.WALKING,
-          unitSystem: google.maps.UnitSystem.IMPERIAL,
-          avoidHighways: false,
-          avoidTolls: false
-        }, callback());
-      }
-
-      function callback(response, status) {
-        console.log(distance.value);
-
-        if (status != google.maps.DistanceMatrixStatus.OK) {
-          $('#result').html(err);
-        } else {
-          var origin = response.originAddresses[0];
-          var destination = response.destinationAddresses[0];
-          if (response.rows[0].elements[0].status === "ZERO_RESULTS") {
-            $('#result').html("Better get on a plane. There are no roads between "
-                              + origin + " and " + destination);
-          } else {
-            var distance = response.rows[0].elements[0].distance;
-            var distance_value = distance.value;
-            var distance_text = distance.text;
-            var miles = distance_text.substring(0, distance_text.length - 3);
-            $('#result').html("It is " + miles + " miles from " + origin + " to " + destination);
-          }
-        }
-      }
-
-      $('#distance_form').submit(function(e){
-          event.preventDefault();
-          var origin = $('#origin').val();
-          var destination = $('#destination').val();
-          var distance_text = calculateDistance(origin, destination);
-      });
-*/
       function calculateDistance() {
+        console.log('clickedlatlngfromcalculatedistance: ' + clickedlatlng);
         var service = new google.maps.DistanceMatrixService();
         service.getDistanceMatrix(
             {
-              origins: ['46.252103811613274,20.146751170256003'],
-              destinations: ['46.466103812613274,20.146751170256003'],
+              origins: ['46.26873280379492,20.13837369751033'],
+              destinations: ['' + clickedlatlng + ''],
               travelMode: google.maps.TravelMode.WALKING,
               unitSystem: google.maps.UnitSystem.METRIC,
               avoidHighways: false,
@@ -509,8 +472,14 @@ $(function () {
                           {
                             var distance = response.rows[0].elements[0].distance;
                             var duration = response.rows[0].elements[0].duration;
-                            var distance_value = distance.value;
-                            var duration_value = duration.value;
+                            var distance_valueinmeters = distance.value;
+                            var duration_valueinseconds = duration.value;
+                            globaldistancevalueinmeters = distance_valueinmeters
+              console.log('globaldistancevalueinmeters: ' + globaldistancevalueinmeters);
+              console.log('durationvalueinseconds: ' + duration_valueinseconds);
+//                            durationinmin = Math.round((distance_valueinmeters/1.3)/60);
+//              console.log('durationinmin: ' + durationinmin);
+
                             var distance_text = distance.text;
                             var duration_text = duration.text;
                             var miles = distance_text.substring(0, distance_text.length - 3);
@@ -518,9 +487,6 @@ $(function () {
                             $('#result').html('<p>It is ' + miles + ' miles from ' + origin + ' to ' + destination + '</p><p>It is ' + seconds + ' seconds</p>' );
                           }
                     }
-
-
-
             }
         )
       };
