@@ -29,7 +29,6 @@ def group_required(group_name, login_url=None):
         if user.groups.filter(name=group_name).exists():
             return True
     return user_passes_test(check_group, login_url=login_url)
-@group_required("manager")
 @login_required
 def acustomercartform(request, pk):
     if request.method == "POST":
@@ -788,7 +787,6 @@ def acustomercartproductremove(request): #item removal from cart with ajax
 
 
     return render(request, 'quotation/customerinvoicexmlresponsepdfstackingredirecturl.html', {'pk': 1}) #same redirect when xmlresponse arrives therefore same redirecturl.html
-@group_required("manager")
 @login_required
 def acustomercartrowremove(request, pk): #rowremove from customercart doc (from form)
     cursor2 = connection.cursor()
@@ -883,7 +881,6 @@ def acustomercartpricetagtocarttop(request):
     json_data = json.dumps(totalprice)
 
     return HttpResponse(json_data, content_type="application/json")
-@group_required("manager")
 @login_required
 def acustomercartsaveasorder(request):
 # determine latest available cart begin

@@ -75,7 +75,6 @@ def aauthenticationactivate(request, uidb64, token):
             "UPDATE auth_user SET "
             "email_confirmedflag_tblauth_user='1' "
             "WHERE id = %s ", [user.id])
-
         user.save()
         login(request, user)
         return redirect('aorderprocess')
