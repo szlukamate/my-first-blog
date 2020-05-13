@@ -59,8 +59,15 @@ $(function () {
     });
     //finishbutton eventlistener script
     $('#finishbutton').click(function() {
-        acustomercartsaveasorder();
-//        location.reload();
+            console.log('checkuserproperties' + checkuserproperties());
+            if (checkuserproperties() === 1 ) {
+                   acustomercartsaveasorder();
+            }
+            else
+            {
+                   alert('Please sign in/up');
+            }
+
     });
     $('body').on("click", ".productincreasebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
@@ -74,6 +81,27 @@ $(function () {
         var docdetailsid = $(this).attr( "docdetailsid" );
         acustomercartproductremove(docdetailsid);
     });
+    function checkuserproperties(){ //request for server that this user whether authenticated?
+                var auxauthenticatedtheuser = 0;
+                $.ajax({
+                    type: 'POST',
+                    url: 'aauthenticationcheckuserproperties/',
+
+                    data: {
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(authenticatedtheuser){
+                        auxauthenticatedtheuser = authenticatedtheuser;
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html',
+                    async: false
+                });
+        return auxauthenticatedtheuser;
+    }
     function seedestinationmap(){
     initMap();
     $('#seedestinationmapbutton').prop('disabled', true);
@@ -484,7 +512,7 @@ $(function () {
                             var duration_text = duration.text;
                             var miles = distance_text.substring(0, distance_text.length - 3);
                             var seconds = duration_text.substring(0, duration_text.length - 3);
-                            $('#result').html('<p>It is ' + miles + ' miles from ' + origin + ' to ' + destination + '</p><p>It is ' + seconds + ' seconds</p>' );
+                            $('#result').html('<p>It is ' + globaldistancevalueinmeters + ' meters from ' + origin + ' to ' + destination + '</p>' );
                           }
                     }
             }

@@ -80,3 +80,12 @@ def aauthenticationactivate(request, uidb64, token):
         return redirect('aorderprocess')
     else:
         return HttpResponseNotFound('account_activation_invalid')
+def aauthenticationcheckuserproperties(request):
+    useridnow = request.user.id
+    if useridnow != None:
+        authenticatedtheuser = 1
+    else:
+        authenticatedtheuser = 0
+    json_data = json.dumps(authenticatedtheuser)
+
+    return HttpResponse(json_data, content_type="application/json")

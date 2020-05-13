@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/static/js/aorderprocess.js" beforeDir="false" afterPath="$PROJECT_DIR$/aid/static/js/aorderprocess.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aid/views/vw_aauthentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/vw_aauthentication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/views/vw_acustomercart.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/vw_acustomercart.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
