@@ -141,6 +141,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 LOGIN_REDIRECT_URL = '/aid'
+LOGOUT_REDIRECT_URL = '/aid'
 #INTERNAL_IPS = ['127.0.0.1']
 
 if DEBUG:
