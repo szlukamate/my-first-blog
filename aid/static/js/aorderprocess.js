@@ -103,6 +103,7 @@ $(function () {
         return auxauthenticatedtheuser;
     }
     function seedestinationmap(){
+    initMaposm();
     initMap();
     $('#seedestinationmapbutton').prop('disabled', true);
     $('#addtocartbutton').prop('hidden', false);
@@ -518,6 +519,23 @@ $(function () {
             }
         )
       };
+     function initMaposm() {
+
+//        map = new OpenLayers.Map("demoMap");
+//        map.addLayer(new OpenLayers.Layer.OSM());
+//        map.zoomToMaxExtent();
+
+        map = new OpenLayers.Map("demoMap");
+        var mapnik         = new OpenLayers.Layer.OSM();
+        var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+        var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+        var position       = new OpenLayers.LonLat(20.138,46.268).transform( fromProjection, toProjection);
+        var zoom           = 15;
+
+        map.addLayer(mapnik);
+        map.setCenter(position, zoom );
+
+     }
 
 
 });

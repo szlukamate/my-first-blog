@@ -51,13 +51,22 @@
         <div id="map">
 
         </div>
+
         <div id="result">
+
+        </div>
+
+        <div id="demoMap" style="height:250px; width:600px">
 
         </div>
 
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxJTfEpAtq-bPM_qS6BEDukOLk4JJzOFc&callback=initMap">
     </script>
+    <script
+    src="{% static 'js/OpenLayers-2.13.1/OpenLayers.js' %}" >
+    </script>
+
 	<script type="text/javascript" src="{% static 'js/aorderprocess.js' %}"></script>
 	<link rel="stylesheet" href="{% static 'css/aorderprocess.css' %}">
 
