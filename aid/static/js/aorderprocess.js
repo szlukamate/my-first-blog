@@ -534,8 +534,15 @@ $(function () {
 
         map.addLayer(mapnik);
         map.setCenter(position, zoom );
-
+        map.events.register('click', map, handleMapClick);
      }
+    function handleMapClick(evt)
+    {
+    var lonlat = map.getLonLatFromViewPortPx(evt.xy);
+    var projout = new OpenLayers.Projection("EPSG:4326");
+    lonlat.transform(map.getProjectionObject(), projout);
+    console.log('osmcoordinates: ' + lonlat.lat + " " + lonlat.lon);
 
+    }
 
 });
