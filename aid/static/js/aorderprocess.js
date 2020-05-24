@@ -8,7 +8,7 @@ localStorage.lastname = "Smith";
 // Retrieve
 console.log(localStorage.lastname);
 $(function () {
-    var globaldistancevalueinmeters = 0;
+    var globaldistancevalueinmeters = 10;
     var clickedlatlng = '';
 // Dialog "Sending Your Order..." begin
     $( "#dialog-message-sendingyourorder" ).dialog({
