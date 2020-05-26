@@ -490,8 +490,8 @@ def acustomercartadditemtocart(request):
         total = 0
         deliverydays = 1
         paymenttext = ''
-        currencycodeinreport = 'HUF'
-        currencyrateinreport = 1
+        currencycodeinreport = 'USD'
+        currencyrateinreport = 320
         accountcurrencycode = 'HUF'
         companynameclone = 'Aid Customer'
         firstnameclone = 'xfirstname'
@@ -607,7 +607,7 @@ def acustomercartadditemtocart(request):
         supplierdescriptionclone = instancesingle[7]
         suppliercompanyidclone = instancesingle[8]
         maxqtyincartclone = instancesingle[9]
-        unitsalespriceACU=listpricecomputed * currencyrateclone
+        unitsalespriceACU=listpricecomputed * currencyrateclone/currencyrateinreport
 
         maxfirstnum = 0
         if hascart == 'hascart':
@@ -730,6 +730,8 @@ def acustomercartadditemtocart(request):
 
     gg=1
     json_data = json.dumps(gg)
+#    import pdb;
+#    pdb.set_trace()
 
     return HttpResponse(json_data, content_type="application/json")
 def acustomercartincreasingqty(request):
@@ -805,6 +807,7 @@ def acustomercartrowremove(request, pk): #rowremove from customercart doc (from 
     return redirect('acustomercartform', pk=na)
 def acustomercartpricetagtocarttop(request):
     totalprice = 0 #default init
+    currencycodeinreport = ''
     anonymoususerid = request.POST['anonymoususerid']
     anonymoususerid = int(anonymoususerid)
     useridnow = request.user.id
@@ -863,6 +866,18 @@ def acustomercartpricetagtocarttop(request):
             totalprice = x[0]
             if totalprice is None:
                 totalprice = 0
+
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            "SELECT "
+            "currencycodeinreport_tbladoc "
+    
+            "FROM aid_tbladoc "
+    
+            "WHERE Docid_tblaDoc=%s ", [latestunorderedcartdocid])
+        results = cursor2.fetchall()
+        for x in results:
+            currencycodeinreport = x[0]
     if userkind == 'anonymoususer' and hascart == 'hascart':
         cursor2 = connection.cursor()
         cursor2.execute(
@@ -878,12 +893,26 @@ def acustomercartpricetagtocarttop(request):
             if totalprice is None:
                 totalprice = 0
 
-    json_data = json.dumps(totalprice)
+        cursor2 = connection.cursor()
+        cursor2.execute(
+            "SELECT "
+            "currencycodeinreport_tbladoc "
+
+            "FROM aid_tbladoc "
+
+            "WHERE Docid_tblaDoc=%s ", [latestanonymousunorderedcartdocid])
+        results = cursor2.fetchall()
+        for x in results:
+            currencycodeinreport = x[0]
+
+    datax = [totalprice,currencycodeinreport]
+    json_data = json.dumps(datax)
+
 
     return HttpResponse(json_data, content_type="application/json")
 @login_required
 def acustomercartsaveasorder(request):
-# determine latest available cart begin
+# determine latest available cart  begin
     useridnow = request.user.id
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "

@@ -27,6 +27,7 @@ $(function () {
     var currentstep = 0;
     var maxstep = 1; //only this parameter is needed to adjust if the number of tabs would change
     var pricetagtocarttopvalue = 0;
+    var pricetagtocarttopcurrencycode = '';
     loaderstartingandsetting('Starting');
     cartrefresh();
     //initialize tabs
@@ -69,6 +70,11 @@ $(function () {
             }
 
     });
+    //paynow2button eventlistener script
+    $('#paynow2button').click(function() {
+        paynow2button();
+    });
+
     $('body').on("click", ".productincreasebutton", function() {
         var docdetailsid = $(this).attr( "docdetailsid" );
         acustomercartincreasingordecreasing(docdetailsid, 'increasing');
@@ -81,6 +87,23 @@ $(function () {
         var docdetailsid = $(this).attr( "docdetailsid" );
         acustomercartproductremove(docdetailsid);
     });
+    function paynow2button(){ //request for server that this user whether authenticated?
+                $.ajax({
+                    type: 'POST',
+                    url: 'aorderprocesspaypalpayment/',
+
+                    data: {
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+
+                    success: function(){
+                    },
+                    error: function(){
+                        alert('failure');
+                    },
+                    datatype: 'html',
+                });
+    }
     function checkuserproperties(){ //request for server that this user whether authenticated?
                 var auxauthenticatedtheuser = 0;
                 $.ajax({
@@ -294,8 +317,8 @@ $(function () {
     }
     function hideloader(){
             if ((loadervisibilitydelaydoneflag === 1) && (loadervisibilitydatadoneflag === 1 )) {
-                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + ' HUF</div>').fadeOut(1);
-                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + ' HUF</div>').fadeIn(500);
+                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + ' ' + pricetagtocarttopcurrencycode + '</div>').fadeOut(1);
+                $('#carttoptemplate').html('<div class="glyphicon glyphicon-shopping-cart"></div><div class="messagetagincarttop">' + 'Guide Price' + '</div><div class="pricetagincarttop">' + pricetagtocarttopvalue + ' ' + pricetagtocarttopcurrencycode + '</div>').fadeIn(500);
                 loadervisibilitydatadoneflag = 0; // to prevent flashing the pricetagincarttop template because of multi invoke this function
             }
     }
@@ -311,8 +334,15 @@ $(function () {
                     'anonymoususerid': anonymoususerid,
                     'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
                     },
-                    success: function(pricetag){
-                    pricetagtocarttopvalue = pricetag;
+                    success: function(jsondata){
+                    var jsondatawithoutbrackets = JSON.stringify(jsondata);
+                    jsondatawithoutbrackets = jsondatawithoutbrackets.substring(1, jsondatawithoutbrackets.length - 1);
+                    var dataarray = jsondatawithoutbrackets.split(',');
+
+                    pricetagtocarttopvalue = dataarray[0];
+                    dataarray[1] = dataarray[1].substring(1, dataarray[1].length - 1); // remove two "s
+                    pricetagtocarttopcurrencycode = dataarray[1];
+
                     loadervisibilitydatadoneflag = 1;
                     hideloader();
                     },

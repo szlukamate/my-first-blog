@@ -40,5 +40,6 @@ urlpatterns = [
     url(r'aauthenticationsignup/$', views.aauthenticationsignup, name='aauthenticationsignup'),
     url(r'^aauthenticationactivate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.aauthenticationactivate, name='aauthenticationactivate'),
     url(r'aauthenticationcheckuserproperties/$', views.aauthenticationcheckuserproperties, name='aauthenticationcheckuserproperties'),
+    url(r'aorderprocesspaypalpayment/$', views.aorderprocesspaypalpayment, name='aorderprocesspaypalpayment'),
 
 ]

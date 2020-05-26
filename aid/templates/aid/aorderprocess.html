@@ -82,7 +82,7 @@
               return actions.order.create({
                 purchase_units: [{
                   amount: {
-                    value: '0.02'
+                    value: '1.00'
                   }
                 }]
               });
@@ -98,6 +98,13 @@
           //This function displays Smart Payment Buttons on your web page.
         </script>
 
+      <div id="paypal-button-container2">
+
+        <button id="paynow2button" type="submit">
+           <span>Pay Now</span>
+        </button>
+
+      </div>
 
 
 	<script type="text/javascript" src="{% static 'js/aorderprocess.js' %}"></script>
