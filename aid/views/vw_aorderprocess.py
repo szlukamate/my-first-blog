@@ -51,23 +51,33 @@ def aorderprocesspaypalpayment(request):
         "payer": {
             "payment_method": "paypal"},
         "redirect_urls": {
-            "return_url": "http://localhost:3000/payment/execute",
+            "return_url": "http://google.com",
             "cancel_url": "http://localhost:3000/"},
         "transactions": [{
             "item_list": {
                 "items": [{
                     "name": "item",
                     "sku": "item",
-                    "price": "5.00",
+                    "price": "6.00",
                     "currency": "USD",
                     "quantity": 1}]},
             "amount": {
-                "total": "5.00",
+                "total": "6.00",
                 "currency": "USD"},
             "description": "This is the payment transaction description."}]})
 
     if payment.create():
         print("Payment created successfully")
+        print("paymentid: " + payment.id)
+        return redirect('aorderprocesspaymentexecute')
+#        return redirect('awelcome')
     else:
         print(payment.error)
+
+#    if payment.execute(str(payment.id)):
+#        print("Payment executed successfully")
     return render(request, 'aid/aorderprocess.html', {})
+def aorderprocesspaymentexecute(request):
+    k =22
+    p = 1
+    return HttpResponseNotFound('Payment Executed')
