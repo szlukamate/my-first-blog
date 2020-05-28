@@ -76,15 +76,25 @@
       <div id="paypal-button-container"></div>
 
       <script>
+                  var msg="Hello Javascript2";
+                    console.log('aa: ' + msg);
+                  var csrftoken = $('input[name=csrfmiddlewaretoken]').val();
+                    console.log('csrftoken: ' + csrftoken);
+
          paypal.Buttons({
-            createOrder: function(data, actions) {
-              // This function sets up the details of the transaction, including the amount and line item details.
-              return actions.order.create({
-                purchase_units: [{
-                  amount: {
-                    value: '100.00'
-                  }
-                }]
+            createOrder: function() {
+              return fetch('aorderprocesspaypalpayment/', {
+                method: 'post',
+                headers: {
+                  'content-type': 'application/json',
+                  'X-CSRFToken' : csrftoken
+                }
+              }).then(function(res) {
+                return res.json();
+              }).then(function(res) {
+                console.log('res: ' + res);
+
+                return res['orderId']; // Use the same key name for order ID on the client and server
               });
             },
             onApprove: function(data, actions) {

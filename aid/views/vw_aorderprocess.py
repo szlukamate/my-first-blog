@@ -58,26 +58,35 @@ def aorderprocesspaypalpayment(request):
                 "items": [{
                     "name": "item",
                     "sku": "item",
-                    "price": "6.00",
+                    "price": "206.00",
                     "currency": "USD",
                     "quantity": 1}]},
             "amount": {
-                "total": "6.00",
+                "total": "206.00",
                 "currency": "USD"},
             "description": "This is the payment transaction description."}]})
 
     if payment.create():
         print("Payment created successfully")
         print("paymentid: " + payment.id)
-        return redirect('aorderprocesspaymentexecute')
+#        return redirect('aorderprocesspaymentexecute')
 #        return redirect('awelcome')
     else:
         print(payment.error)
 
 #    if payment.execute(str(payment.id)):
 #        print("Payment executed successfully")
-    return render(request, 'aid/aorderprocess.html', {})
+#    return render(request, 'aid/aorderprocess.html', {})
+    datavar = payment.id
+    json_data = json.dumps(datavar)
+
+    return HttpResponse(json_data, content_type="application/json")
+
 def aorderprocesspaymentexecute(request):
     k =22
     p = 1
-    return HttpResponseNotFound('Payment Executed')
+
+#    return HttpResponseNotFound('Payment Executed')
+    return render(request, 'aid/awelcome.html', {})
+
+
