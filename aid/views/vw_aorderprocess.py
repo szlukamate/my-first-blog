@@ -16,9 +16,11 @@ import subprocess
 import os
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
-
 import paypalrestsdk
+from paypalrestsdk import Order
+
 import logging
+import re
 
 # import pdb;
 # pdb.set_trace()
@@ -58,35 +60,187 @@ def aorderprocesspaypalpayment(request):
                 "items": [{
                     "name": "item",
                     "sku": "item",
-                    "price": "206.00",
+                    "price": "211.00",
                     "currency": "USD",
                     "quantity": 1}]},
             "amount": {
-                "total": "206.00",
+                "total": "211.00",
                 "currency": "USD"},
             "description": "This is the payment transaction description."}]})
 
     if payment.create():
         print("Payment created successfully")
         print("paymentid: " + payment.id)
-#        return redirect('aorderprocesspaymentexecute')
-#        return redirect('awelcome')
+        for link in payment.links:
+            if link.method == "REDIRECT":
+                redirect_url = link.href
+                print("Redirect for approval: %s" % (redirect_url))
     else:
         print(payment.error)
+    ectoken = re.search('token=(.+)', redirect_url).group(1)
 
-#    if payment.execute(str(payment.id)):
-#        print("Payment executed successfully")
-#    return render(request, 'aid/aorderprocess.html', {})
-    datavar = payment.id
+# aorderdocadd begin
+    dockindidfornewdoc = '2'
+    contactidfornewdoc = '13'
+    creatorid = 2
+
+    cursor1 = connection.cursor()
+    cursor1.execute(
+        "SELECT contactid_tblacontacts, "
+        "companyname_tblacompanies, "
+        "Companyid_tblaCompanies, "
+        "Firstname_tblacontacts, "
+        "lastname_tblacontacts, "
+        "title_tblacontacts, "
+        "mobile_tblacontacts, "
+        "email_tblacontacts, "
+        "pcd_tblacompanies, "
+        "town_tblacompanies, "
+        "address_tblacompanies "
+
+        "FROM aid_tblacontacts "
+
+        "JOIN aid_tblacompanies "
+        "ON aid_tblacompanies.companyid_tblacompanies = aid_tblacontacts.companyid_tblacontacts_id "
+
+        "WHERE contactid_tblacontacts =%s", [contactidfornewdoc])
+    companyandcontactdata = cursor1.fetchall()
+    for instancesingle in companyandcontactdata:
+        companynameclone = instancesingle[1]
+        companyid = instancesingle[2]  # for the lookup the default values in the tblcompanies (i.e. defaultpreface)
+        firstnameclone = instancesingle[3]
+        lastnameclone = instancesingle[4]
+        titleclone = instancesingle[5]
+        mobileclone = instancesingle[6]
+        emailclone = instancesingle[7]
+        pcdclone = instancesingle[8]
+        townclone = instancesingle[9]
+        addressclone = instancesingle[10]
+
+    cursor5 = connection.cursor()
+    cursor5.execute(
+        "SELECT defaultbackpageidforquotation_tblacompanies, "
+        "defaultprefaceidforquotation_tblacompanies, "
+        "defaultpaymentid_tblacompanies "
+
+        "FROM aid_tblacompanies "
+
+        "WHERE Companyid_tblaCompanies = %s", [companyid])
+    defaultsfromtblcompanies = cursor5.fetchall()
+    for instancesingle in defaultsfromtblcompanies:
+        defaultbackpageidforquotation = instancesingle[0]
+        defaultprefaceidforquotation = instancesingle[1]
+        defaultpaymentid = instancesingle[2]
+
+    cursor6 = connection.cursor()
+    cursor6.execute(
+        "SELECT paymenttextforquotation_tblpayment "
+        "FROM quotation_tblpayment "
+        "WHERE paymentid_tblpayment = %s", [defaultpaymentid])
+    paymentset = cursor6.fetchall()
+    for instancesingle in paymentset:
+        paymenttextcloneforquotation = instancesingle[0]
+
+    cursor6 = connection.cursor()
+    cursor6.execute(
+        "SELECT backpagetextforquotation_tblbackpageforquotation "
+        "FROM quotation_tblbackpageforquotation "
+        "WHERE backpageidforquotation_tblbackpageforquotation = %s", [defaultbackpageidforquotation])
+    backpageset = cursor6.fetchall()
+    for instancesingle in backpageset:
+        backpagetextcloneforquotation = instancesingle[0]
+
+    cursor7 = connection.cursor()
+    cursor7.execute(
+        "SELECT prefacetextforquotation_tblprefaceforquotation "
+        "FROM quotation_tblprefaceforquotation "
+        "WHERE prefaceidforquotation_tblprefaceforquotation = %s", [defaultprefaceidforquotation])
+    prefaceset = cursor7.fetchall()
+    for instancesingle in prefaceset:
+        prefacecloneforquotation = instancesingle[0]
+
+    cursor7 = connection.cursor()
+    cursor7.execute(
+        "SELECT currencyisocode_tblcurrency "
+        "FROM quotation_tblcurrency "
+        "WHERE accountcurrency_tblcurrency = 1")
+    results = cursor7.fetchall()
+    for instancesingle in results:
+        accountcurrencycodeclone = instancesingle[0]
+
+    cursor8 = connection.cursor()
+    cursor8.execute("SELECT max(docnumber_tblaDoc) FROM aid_tbladoc "
+                    "WHERE Doc_kindid_tblaDoc_id = %s", [dockindidfornewdoc])
+    results = cursor8.fetchall()
+    resultslen = len(results)
+    # import pdb;
+    # pdb.set_trace()
+
+    if results[0][0] is not None:  # only if there is not doc yet (this would be the first instance)
+        for x in results:
+            docnumber = x[0]
+            docnumber += 1
+    else:
+        docnumber = 80  # arbitrary number
+
+    cursor2 = connection.cursor()
+    cursor2.execute("INSERT INTO aid_tbladoc "
+                    "( Doc_kindid_tblaDoc_id, "
+                    "Contactid_tblaDoc_id,"
+                    "companyname_tblcompanies_ctbladoc, "
+                    "firstname_tblcontacts_ctbladoc, "
+                    "lastname_tblcontacts_ctbladoc, "
+                    "prefacetextforquotation_tblprefaceforquotation_ctbladoc, "
+                    "backpagetextforquotation_tblbackpageforquotation_ctbladoc, "
+                    "docnumber_tblaDoc, "
+                    "creatorid_tbladoc, "
+                    "title_tblcontacts_ctbladoc, "
+                    "mobile_tblcontacts_ctbladoc, "
+                    "email_tblcontacts_ctbladoc, "
+                    "pcd_tblcompanies_ctbladoc, "
+                    "town_tblcompanies_ctbladoc, "
+                    "address_tblcompanies_ctbladoc, "
+                    "paymenttextforquotation_tblpayment_ctbladoc, "
+                    "accountcurrencycode_tbladoc, "
+                    "paypalpayid_tbladoc, "
+                    "paypalectoken_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone,
+                     prefacecloneforquotation, backpagetextcloneforquotation, docnumber, creatorid,
+                     titleclone,
+                     mobileclone,
+                     emailclone,
+                     pcdclone,
+                     townclone,
+                     addressclone,
+                     paymenttextcloneforquotation,
+                     accountcurrencycodeclone,
+                     payment.id,
+                     ectoken])
+
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT max(Docid_tblaDoc) FROM aid_tbladoc")
+    results = cursor3.fetchall()
+    for x in results:
+        maxdocid = x[0]
+
+    cursor4 = connection.cursor()
+    cursor4.execute(
+        "INSERT INTO aid_tbladoc_details ( Docid_tblaDoc_details_id) VALUES (%s)",
+        [maxdocid])
+
+
+    # aorderdocadd end
+    datavar = ectoken
     json_data = json.dumps(datavar)
 
     return HttpResponse(json_data, content_type="application/json")
 
-def aorderprocesspaymentexecute(request):
-    k =22
-    p = 1
+def aorderprocesspaymentcheck(request):
+    ectoken = request.POST['ectoken']
+    print("ectoken from check: " + ectoken)
 
-#    return HttpResponseNotFound('Payment Executed')
+    #import pdb;
+    #pdb.set_trace()
     return render(request, 'aid/awelcome.html', {})
 
 

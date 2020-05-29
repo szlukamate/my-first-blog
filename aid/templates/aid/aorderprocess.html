@@ -94,13 +94,30 @@
               }).then(function(res) {
                 console.log('res: ' + res);
 
-                return res['orderId']; // Use the same key name for order ID on the client and server
+                return res; // Use the same key name for order ID on the client and server
               });
             },
             onApprove: function(data, actions) {
               // This function captures the funds from the transaction.
+                for (const property in data) {
+                  console.log(`${property}: ${data[property]}`);
+                }
+
               return actions.order.capture().then(function(details) {
                 // This function shows a transaction success message to your buyer.
+                for (const property in details) {
+                  console.log(`${property}: ${details[property]}`);
+                }
+                console.log('details.id: ' + JSON.stringify(details.id));
+
+                fetch('aorderprocesspaymentcheck/', {
+                method: 'post',
+                headers: {
+                  'content-type': 'application/json',
+                  'X-CSRFToken' : csrftoken,
+                },
+                body: JSON.stringify(details.id)
+                })
                 alert('Transaction completed by ' + details.payer.name.given_name);
               });
             }
