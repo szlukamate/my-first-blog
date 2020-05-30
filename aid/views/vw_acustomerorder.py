@@ -142,15 +142,15 @@ def acustomerorderform(request, pk):
                     "LEFT JOIN (SELECT Productid_tblaProduct FROM aid_tblaproduct WHERE obsolete_tblaproduct = 0) as x "
                     "ON DD.Productid_tblaDoc_details_id = x.Productid_tblaProduct "
 
-                    "JOIN aid_tblacompanies as C "
+                    "LEFT JOIN aid_tblacompanies as C "
                     "ON DD.suppliercompanyid_tbladocdetails = C.companyid_tblacompanies "
                 
                     "WHERE DD.docid_tbladoc_details_id=%s "
                     "order by DD.firstnum_tblaDoc_details,DD.secondnum_tblaDoc_details,DD.thirdnum_tblaDoc_details,DD.fourthnum_tblaDoc_details",
                     [pk])
     docdetails = cursor3.fetchall()
-#    import pdb;
-#    pdb.set_trace()
+    #import pdb;
+    #pdb.set_trace()
 
     cursor14 = connection.cursor()
     cursor14.execute("SELECT DD.Doc_detailsid_tblaDoc_details, "

@@ -17,6 +17,7 @@ import os
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
 import paypalrestsdk
+from paypalrestsdk import Payment
 from paypalrestsdk import Order
 
 import logging
@@ -56,15 +57,8 @@ def aorderprocesspaypalpayment(request):
             "return_url": "http://google.com",
             "cancel_url": "http://localhost:3000/"},
         "transactions": [{
-            "item_list": {
-                "items": [{
-                    "name": "item",
-                    "sku": "item",
-                    "price": "211.00",
-                    "currency": "USD",
-                    "quantity": 1}]},
             "amount": {
-                "total": "211.00",
+                "total": "214.00",
                 "currency": "USD"},
             "description": "This is the payment transaction description."}]})
 
@@ -202,7 +196,7 @@ def aorderprocesspaypalpayment(request):
                     "address_tblcompanies_ctbladoc, "
                     "paymenttextforquotation_tblpayment_ctbladoc, "
                     "accountcurrencycode_tbladoc, "
-                    "paypalpayid_tbladoc, "
+                    "paypalpaymentid_tbladoc, "
                     "paypalectoken_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone,
                      prefacecloneforquotation, backpagetextcloneforquotation, docnumber, creatorid,
@@ -236,11 +230,32 @@ def aorderprocesspaypalpayment(request):
     return HttpResponse(json_data, content_type="application/json")
 
 def aorderprocesspaymentcheck(request):
+
     ectoken = request.POST['ectoken']
     print("ectoken from check: " + ectoken)
 
-    #import pdb;
-    #pdb.set_trace()
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT "
+
+                    "paypalpaymentid_tbladoc "
+
+                    "FROM aid_tbladoc "
+                    ""
+                    "WHERE paypalectoken_tbladoc=%s ",
+                    [ectoken])
+    results = cursor3.fetchall()
+    for x in results:
+        paymentidfromsql = x[0]
+    print("paymentid from check: " + paymentidfromsql)
+
+    payment = Payment.find(paymentidfromsql)
+    #orderid = payment.transactions[0].related_resources[0].order.id
+    print("from check: " + str(payment.payer.status))
+
+
+    #    order = Order.find(paymentidfromsql)
+#    print("ordersuccess " + order.success())
+
     return render(request, 'aid/awelcome.html', {})
 
 

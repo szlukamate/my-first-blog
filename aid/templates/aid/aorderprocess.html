@@ -108,15 +108,16 @@
                 for (const property in details) {
                   console.log(`${property}: ${details[property]}`);
                 }
-                console.log('details.id: ' + JSON.stringify(details.id));
+                var formData = new FormData();
+
+                formData.append("ectoken", details.id);
 
                 fetch('aorderprocesspaymentcheck/', {
                 method: 'post',
                 headers: {
-                  'content-type': 'application/json',
                   'X-CSRFToken' : csrftoken,
                 },
-                body: JSON.stringify(details.id)
+                body: formData,
                 })
                 alert('Transaction completed by ' + details.payer.name.given_name);
               });

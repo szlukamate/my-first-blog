@@ -208,7 +208,9 @@ def adocsearchcontent(request):
 @group_required("manager")
 @login_required
 def adocadd(request):
+
     if request.method == "POST":
+
         dockindidfornewdoc = request.POST['dockindidfornewdoc']
         contactidfornewdoc = request.POST['contactidfornewdoc']
         creatorid=request.user.id
