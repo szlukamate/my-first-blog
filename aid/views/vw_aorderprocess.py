@@ -17,8 +17,6 @@ import os
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
 import paypalrestsdk
-from paypalrestsdk import Payment
-from paypalrestsdk import Order
 
 import logging
 import re
@@ -49,6 +47,9 @@ def aorderprocesspaypalpayment(request):
         "client_id": "AcTczGRsMLRWW0dxFloKmk1QwEDYEoU82MqbUWihnAwbX3gKP6xvKBVZsTNPfkVGhwVCnqAr98EHvl0E",
         "client_secret": "ECUunsjZzU6QGgi7vGoD88e2W3U63XfbiE8_AxVBuAj7SC6R-kZWG7r3NNTEr0Jt3-yOjGNypE3nxTYu"})
 
+    paypalamounttotal = '217'
+    paypalamountcurrency = 'USD'
+
     payment = paypalrestsdk.Payment({
         "intent": "sale",
         "payer": {
@@ -58,8 +59,8 @@ def aorderprocesspaypalpayment(request):
             "cancel_url": "http://localhost:3000/"},
         "transactions": [{
             "amount": {
-                "total": "214.00",
-                "currency": "USD"},
+                "total": "" + paypalamounttotal + "",
+                "currency": "" + paypalamountcurrency + ""},
             "description": "This is the payment transaction description."}]})
 
     if payment.create():
@@ -197,7 +198,9 @@ def aorderprocesspaypalpayment(request):
                     "paymenttextforquotation_tblpayment_ctbladoc, "
                     "accountcurrencycode_tbladoc, "
                     "paypalpaymentid_tbladoc, "
-                    "paypalectoken_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    "paypalectoken_tbladoc, "
+                    "paypalamounttotal_tbladoc, "
+                    "paypalamountcurrency_tbladoc) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     [dockindidfornewdoc, contactidfornewdoc, companynameclone, firstnameclone, lastnameclone,
                      prefacecloneforquotation, backpagetextcloneforquotation, docnumber, creatorid,
                      titleclone,
@@ -209,7 +212,9 @@ def aorderprocesspaypalpayment(request):
                      paymenttextcloneforquotation,
                      accountcurrencycodeclone,
                      payment.id,
-                     ectoken])
+                     ectoken,
+                     paypalamounttotal,
+                     paypalamountcurrency])
 
     cursor3 = connection.cursor()
     cursor3.execute("SELECT max(Docid_tblaDoc) FROM aid_tbladoc")
@@ -248,9 +253,27 @@ def aorderprocesspaymentcheck(request):
         paymentidfromsql = x[0]
     print("paymentid from check: " + paymentidfromsql)
 
-    payment = Payment.find(paymentidfromsql)
+    payment = paypalrestsdk.Payment.find(paymentidfromsql)
     #orderid = payment.transactions[0].related_resources[0].order.id
     print("from check: " + str(payment.payer.status))
+    print("paymentdetails from check with single quotes: " + str(payment))
+    paymentwithdoublequotes = str(payment).replace("\'", "\"")
+    print("paymentdetails from check with double quotes: " + paymentwithdoublequotes)
+    parsed = json.loads(paymentwithdoublequotes)
+    #import pdb;
+    #pdb.set_trace()
+    print("parsedpayment: " + json.dumps(parsed, indent=4, sort_keys=True))
+
+    print("paymenttransactionwithsinglequotes: " + payment.transactions[0]["amount"].currency)
+    print("paymenttransactionwithsinglequotes: " + payment.transactions[0]["amount"].total)
+    #paymenttransactionwithdoublequotes = str(payment.transactions["description"]).replace("\'", "\"")
+    #print("paymenttransactionwithdoublequotes: " + paymenttransactionwithdoublequotes)
+    #parsedpaymenttransactionwithdoublequotes = json.loads(paymenttransactionwithdoublequotes)
+    #print("parsedpaymenttransactionwithdoublequotes: " + json.dumps(parsedpaymenttransactionwithdoublequotes, indent=4, sort_keys=True))
+
+    #print("paymenttotal: " + payment.transactions.amount.total)
+          #+ payment.transactions.amount.currency )
+    #print("paymentdetails from check: " + str(payment))
 
 
     #    order = Order.find(paymentidfromsql)
