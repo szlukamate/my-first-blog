@@ -42,5 +42,6 @@ urlpatterns = [
     url(r'aauthenticationcheckuserproperties/$', views.aauthenticationcheckuserproperties, name='aauthenticationcheckuserproperties'),
     url(r'aorderprocesspaypalpayment/$', views.aorderprocesspaypalpayment, name='aorderprocesspaypalpayment'),
     url(r'aorderprocesspaymentcheck/$', views.aorderprocesspaymentcheck, name='aorderprocesspaymentcheck'),
+    url(r'aorderprocessmidiordersearch/$', views.aorderprocessmidiordersearch, name='aorderprocessmidiordersearch'),
 
 ]

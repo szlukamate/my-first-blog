@@ -271,7 +271,7 @@ def aorderprocesspaymentcheck(request):
     #parsedpaymenttransactionwithdoublequotes = json.loads(paymenttransactionwithdoublequotes)
     #print("parsedpaymenttransactionwithdoublequotes: " + json.dumps(parsedpaymenttransactionwithdoublequotes, indent=4, sort_keys=True))
 
-    #print("paymenttotal: " + payment.transactions.amount.total)
+    #print("paym enttotal: " + payment.transactions.amount.total)
           #+ payment.transactions.amount.currency )
     #print("paymentdetails from check: " + str(payment))
 
@@ -280,5 +280,25 @@ def aorderprocesspaymentcheck(request):
 #    print("ordersuccess " + order.success())
 
     return render(request, 'aid/awelcome.html', {})
+
+def aorderprocessmidiordersearch(request):
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "Productid_tblaProduct, "
+                    "purchase_price_tblaproduct, "
+                    "customerdescription_tblaProduct, "
+                    "margin_tblaproduct, "
+                    "unit_tblaproduct, "
+                    "enabletoorderprocess_tblaproduct, "
+                    "obsolete_tblaproduct, "
+                    "currencyisocode_tblcurrency_ctblaproduct "
+
+                    "FROM aid_tblaproduct "
+
+                    "WHERE enabletoorderprocess_tblaproduct=1 and obsolete_tblaproduct=0 ")
+    enabledproductstoorderprocess = cursor1.fetchall()
+
+    return render(request, 'aid/aorderprocessmidiordersearch.html',
+                  {'enabledproductstoorderprocess': enabledproductstoorderprocess})
 
 

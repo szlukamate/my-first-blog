@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.~lock.190731 AWS after reboot activities.odt#" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/templates/aid/abase.html" beforeDir="false" afterPath="$PROJECT_DIR$/aid/templates/aid/abase.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aid/views/vw_aorderprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/vw_aorderprocess.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,7 +24,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/quotation/views/vw_customerinvoice.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/aid/static/js/aorderprocessmidiorder.js" />
     <property name="settings.editor.selected.configurable" value="reference.idesettings.emmet" />
   </component>
   <component name="RunDashboard">
