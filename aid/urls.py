@@ -43,5 +43,9 @@ urlpatterns = [
     url(r'aorderprocesspaypalpayment/$', views.aorderprocesspaypalpayment, name='aorderprocesspaypalpayment'),
     url(r'aorderprocesspaymentcheck/$', views.aorderprocesspaymentcheck, name='aorderprocesspaymentcheck'),
     url(r'aorderprocessmidiordersearch/$', views.aorderprocessmidiordersearch, name='aorderprocessmidiordersearch'),
+    url('aorderprocessmidiordersearchcontent/$', views.aorderprocessmidiordersearchcontent, name='aorderprocessmidiordersearchcontent'),
+    url(r'^aorderprocessmidiordercheckoutform/(?P<midifileid>[0-9]+)/$', views.aorderprocessmidiordercheckoutform, name='aorderprocessmidiordercheckoutform'),
+    url(r'aorderprocessmidiorderpaypalpayment/$', views.aorderprocessmidiorderpaypalpayment, name='aorderprocessmidiorderpaypalpayment'),
+    url(r'aorderprocessmidiorderpaymentcheck/$', views.aorderprocessmidiorderpaymentcheck, name='aorderprocessmidiorderpaymentcheck'),
 
 ]

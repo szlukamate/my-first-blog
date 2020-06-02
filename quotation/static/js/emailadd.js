@@ -1,5 +1,5 @@
 /*
-quotation.js
+emailadd.js
 */
 
             var msg="Hello Javascript2";

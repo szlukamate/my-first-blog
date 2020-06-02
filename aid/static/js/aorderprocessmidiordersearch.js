@@ -66,7 +66,7 @@ $('a[href="/aid/aorderprocessmidiordersearch/"]').parent().addClass('active');
 
             $.ajax({
                 type: 'POST',
-                url: 'adocsearchcontent/',
+                url: 'aorderprocessmidiordersearchcontent/',
 
                 data: {
                 'docnumber': $('#docnumber').val(),
@@ -136,6 +136,11 @@ $('a[href="/aid/aorderprocessmidiordersearch/"]').parent().addClass('active');
         //console.log(sessionStorage.docnumber);
 
        window.location.href = djangourl;
+    });
+    $('body').on("click", ".sendtomebutton", function() {
+        var midifileid = $(this).attr('midifileid');
+        console.log(midifileid);
+
     });
     $('#docnumber').keypress(function(event) {
         if (event.keyCode == 13) {

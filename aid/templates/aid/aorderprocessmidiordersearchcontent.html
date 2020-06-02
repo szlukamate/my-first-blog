@@ -14,39 +14,29 @@
 
 
 							<div class="table-responsive text-nowrap" style="max-height: 600px; overflow:scroll;">
-										<table class="table table-striped"">
+										<table class="table table-striped">
 											<thead>
 
 												<tr>
-													<td>Docid</td>
-													<td>Company</td>
-													<td>Docnumber</td>
-													<td>Created</td>
-													<td>Subject</td>
+													<td>Midifileid</td>
+													<td>Title</td>
 												</tr>
 											</thead>
 
 											<tbody>
-												{%  for tblDoc in  docs %}
+												{%  for midifile in  midifiles %}
 
 
 													<tr>
-														<td>{{ tblDoc.0 }}{% if tblDoc.24 == 1 %}-Machine Made{% endif %}</td>
-														<td>{{ tblDoc.4}} ({{ tblDoc.5}} {{ tblDoc.6}})</td>
-
-														{% if tblDoc.22 == 1 and tblDoc.23 == 0 %} <!-- stocktaking == 1 and denoenabledflag == 0 -->
-														<td><a href="#" hrefdjango="{% url 'adocselector' pk=tblDoc.0 %}" class="linkable">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})<span style="color:red;">Stocktaking -- Disabled for Stock</span></td>
-														{% endif %}
-
-														{% if tblDoc.15 != None %}
-														<td><a href="#" hrefdjango="{% url 'adocselector' pk=tblDoc.0 %}" class="linkable">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})<span style="color:red;">{% if tblDoc.15 != None %}{{ tblDoc.15}}/{{ tblDoc.18}}{{ tblDoc.19}}/{% else %} Central Stock {% endif %} --> {{ tblDoc.16}}/{{ tblDoc.20}}{{ tblDoc.21}}/</span></td>
-														{% else %}
-														<td><a href="#" hrefdjango="{% url 'adocselector' pk=tblDoc.0 %}" class="linkable">{{ tblDoc.9}}{{ tblDoc.10}}({{ tblDoc.8}})</td>
-														{% endif %}
-
-														<td>{{ tblDoc.7|date:"Y-m-d H:i" }}</td>
-														<td>{{ tblDoc.12}}</td>
-													<td><a href="{% url 'adocremove' pk=tblDoc.0 %}"><span class="glyphicon glyphicon-remove"></span></a></td>
+														<td>{{ midifile.0 }}</td>
+														<td>{{ midifile.1}}</td>
+														<td>
+															<a href="{% url 'aorderprocessmidiordercheckoutform' midifileid=midifile.0 %}">
+																<button class="sendtomebutton" type="submit" midifileid="{{ midifile.0}}">
+																   <span>Send to Me</span>
+																</button>
+															</a>
+														</td>
 
 													</tr>
 

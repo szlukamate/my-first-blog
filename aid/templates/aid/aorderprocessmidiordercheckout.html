@@ -1,0 +1,87 @@
+{% load static %}
+<html>
+    <head>
+        <title>Quotation Maker</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script type="text/javascript" src="{% static 'js/ajquery-ui.min.js' %}"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="{% static 'css/aid.css' %}">
+		<link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    </head>
+
+	<body>
+      {% csrf_token %}
+      <input type="hidden" name="midifileid" value="{{ midifiles.0.0}}"/>
+	  <p><span>Title:</span><span id="quotationdocid">{{ midifiles.0.1}}</span></p>
+
+      <script
+        src="https://www.paypal.com/sdk/js?client-id=AcTczGRsMLRWW0dxFloKmk1QwEDYEoU82MqbUWihnAwbX3gKP6xvKBVZsTNPfkVGhwVCnqAr98EHvl0E"> // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+      </script>
+
+      <div id="paypal-button-container"></div>
+
+      <script>
+                  var msg="Hello Javascript2";
+                    console.log('aa: ' + msg);
+                  var csrftoken = $('input[name=csrfmiddlewaretoken]').val();
+                  var midifileid = $('input[name=midifileid]').val();
+                    console.log('csrftoken: ' + csrftoken);
+                    console.log('midifileid in paypal javascript: ' + midifileid);
+
+         paypal.Buttons({
+            createOrder: function() {
+                var formDataoncreateorder = new FormData();
+
+                formDataoncreateorder.append("midifileid", midifileid);
+
+
+              return fetch('aorderprocessmidiorderpaypalpayment/', {
+                method: 'post',
+                headers: {
+                  'X-CSRFToken' : csrftoken
+                },
+                body: formDataoncreateorder,
+
+              }).then(function(res) {
+                return res.json();
+              }).then(function(res) {
+                console.log('res: ' + res);
+
+                return res; // Use the same key name for order ID on the client and server
+              });
+            },
+            onApprove: function(data, actions) {
+              // This function captures the funds from the transaction.
+                for (const property in data) {
+                  console.log(`${property}: ${data[property]}`);
+                }
+
+              return actions.order.capture().then(function(details) {
+                // This function shows a transaction success message to your buyer.
+                for (const property in details) {
+                  console.log(`${property}: ${details[property]}`);
+                }
+                var formDataonapprove = new FormData();
+
+                formDataonapprove.append("ectoken", details.id);
+
+                fetch('aorderprocessmidiorderpaymentcheck/', {
+                method: 'post',
+                headers: {
+                  'X-CSRFToken' : csrftoken,
+                },
+                body: formDataonapprove,
+                })
+                alert('Transaction completed by ' + details.payer.name.given_name);
+              });
+            }
+          }).render('#paypal-button-container');
+          //This function displays Smart Payment Buttons on your web page.
+      </script>
+
+
+	</body>
+</html>

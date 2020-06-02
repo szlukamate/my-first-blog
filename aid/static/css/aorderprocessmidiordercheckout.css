@@ -1,0 +1,23 @@
+
+.logocss {
+    position: relative;
+    font-size: 150px;
+}
+.horizontalcross {
+    height: 35px;
+    width: 100px;
+    background-color: red;
+    position: absolute;
+    top: 85px;
+    left:220px;
+}
+.verticalcross {
+    height: 35px;
+    width: 100px;
+    background-color: red;
+    position: absolute;
+    top: 85px;
+    transform: rotate(90deg);
+    left:220px;
+
+}
