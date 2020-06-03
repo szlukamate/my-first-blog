@@ -387,13 +387,12 @@ def aorderprocessmidiordersearchcontent(request):
                                                           'dockindrowsources': dockindrowsources})
 def aorderprocessmidiorderpaypalpayment(request):
     midifileid = request.POST['midifileid']
-    print("midifileid from paymentview: " + midifileid)
     paypalrestsdk.configure({
         "mode": "sandbox",  # sandbox or live
         "client_id": "AcTczGRsMLRWW0dxFloKmk1QwEDYEoU82MqbUWihnAwbX3gKP6xvKBVZsTNPfkVGhwVCnqAr98EHvl0E",
         "client_secret": "ECUunsjZzU6QGgi7vGoD88e2W3U63XfbiE8_AxVBuAj7SC6R-kZWG7r3NNTEr0Jt3-yOjGNypE3nxTYu"})
 
-    paypalamounttotal = '1'
+    paypalamounttotal = '0.89'
     paypalamountcurrency = 'USD'
 
     payment = paypalrestsdk.Payment({
@@ -407,7 +406,7 @@ def aorderprocessmidiorderpaypalpayment(request):
             "amount": {
                 "total": "" + paypalamounttotal + "",
                 "currency": "" + paypalamountcurrency + ""},
-            "description": "This is the payment transaction description."}]})
+            "description": "" + midifileid + ""}]})
 
     if payment.create():
         print("Payment created successfully")
@@ -610,9 +609,14 @@ def aorderprocessmidiorderpaymentcheck(request):
     print("paymenttotal: " + payment.transactions[0]["amount"].total)
     payeremail = payment.payer.payer_info.email
     payerfirstname = payment.payer.payer_info.first_name
+    midifileid = payment.transactions[0]["description"]
+
     print("payeremail: " + payeremail)
 
-    #fullmidifilename = BASE_DIR + '/midifiles/' + customerinvoicedocid + '.pdf'
+    BASE_DIR = settings.BASE_DIR
+    fullmidifilename = BASE_DIR + '/midifiles/' + midifileid + '.mid'
+    print("fullmidifilename from check: " + fullmidifilename)
+
     subject = 'Your midi file from Aid'
     message = render_to_string('aid/amidifilesendingemail.html', {
         'payerfirstname': payerfirstname,
@@ -620,6 +624,7 @@ def aorderprocessmidiorderpaymentcheck(request):
     email = EmailMessage(
         subject, message, 'szluka.mate@gmail.com',
         [payeremail])  # , cc=[cc])
+    email.attach_file('2222.mid',fullmidifilename)
     email.content_subtype = "html"
     email.send()
 
