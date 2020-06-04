@@ -562,15 +562,19 @@ def aorderprocessmidiorderpaypalpayment(request):
                      paypalamountcurrency])
 
     cursor3 = connection.cursor()
-    cursor3.execute("SELECT max(Docid_tblaDoc) FROM aid_tbladoc")
+    cursor3.execute("SELECT "
+                    "Docid_tblaDoc "
+
+                    "FROM aid_tbladoc "
+                    "WHERE paypalectoken_tbladoc=%s",[ectoken])
     results = cursor3.fetchall()
     for x in results:
-        maxdocid = x[0]
+        thisdocid = x[0]
 
     cursor4 = connection.cursor()
     cursor4.execute(
         "INSERT INTO aid_tbladoc_details ( Docid_tblaDoc_details_id) VALUES (%s)",
-        [maxdocid])
+        [thisdocid])
 
 
     # aorderdocadd end
@@ -609,13 +613,56 @@ def aorderprocessmidiorderpaymentcheck(request):
     print("paymenttotal: " + payment.transactions[0]["amount"].total)
     payeremail = payment.payer.payer_info.email
     payerfirstname = payment.payer.payer_info.first_name
-    midifileid = payment.transactions[0]["description"]
+    midifileid = payment.transactions[0]["description"] #midifileid from paypal description
 
     print("payeremail: " + payeremail)
 
     BASE_DIR = settings.BASE_DIR
     fullmidifilename = BASE_DIR + '/midifiles/' + midifileid + '.mid'
     print("fullmidifilename from check: " + fullmidifilename)
+#preparing midifile to send begin (to send Spice_Girls_Wannabe.mid instead of 3.mid - filename preparation)
+    subprocess.call('if [ ! -d "' + BASE_DIR + '/midifilestosend/' + ectoken + '" ]; then mkdir ' + BASE_DIR + '/midifilestosend/' + ectoken + '  ;else rm -rf ' + BASE_DIR + '/midifilestosend/' + ectoken + ' && mkdir ' + BASE_DIR + '/midifilestosend/' + ectoken + ';  fi', shell=True)
+    subprocess.call('find ' + BASE_DIR + '/midifilestosend/* -mtime +2 -exec rm -rf {} \;', shell=True) #delete older than 2 day /midifilestosend/ directories (with midi files into those)
+
+    cursor1 = connection.cursor()
+    cursor1.execute("SELECT "
+                    "midifileid_tblamidifiles, "
+                    "title_tblamidifiles "
+
+                    "FROM aid_tblamidifiles "
+                    "WHERE midifileid_tblamidifiles = %s", [midifileid])
+    midifiles = cursor1.fetchall()
+    for x in midifiles:
+        midifiletitle = x[1]
+
+ # get cornumber from cor begin
+        cursor3 = connection.cursor()
+        cursor3.execute("SELECT "
+                        "Docid_tblaDoc "
+
+                        "FROM aid_tbladoc "
+                        "WHERE paypalectoken_tbladoc=%s", [ectoken])
+        results = cursor3.fetchall()
+        for x in results:
+            cornumber = x[0]
+ # get cornumber from cor end
+
+ # making midifilewithtitle begin
+
+    midifilenamewithid = BASE_DIR + '/midifiles/' + str(midifileid) + '.mid'
+    file = open(midifilenamewithid, 'rb')
+    midifilecontent = file.read()
+    file.close()
+
+    midifilenamewithtitle = BASE_DIR + '/midifilestosend/' + ectoken + '/' + midifiletitle + '_wwwdotaiddotcom_cor' + str(cornumber) + '.mid'
+    file = open(midifilenamewithtitle, 'wb')
+    file.write(midifilecontent)
+    file.close()
+
+ # making midifilewithtitle begin
+
+# preparing midifile to send end
+
 
     subject = 'Your midi file from Aid'
     message = render_to_string('aid/amidifilesendingemail.html', {
@@ -624,7 +671,7 @@ def aorderprocessmidiorderpaymentcheck(request):
     email = EmailMessage(
         subject, message, 'szluka.mate@gmail.com',
         [payeremail])  # , cc=[cc])
-    email.attach_file('2222.mid',fullmidifilename)
+    email.attach_file(midifilenamewithtitle)
     email.content_subtype = "html"
     email.send()
 
