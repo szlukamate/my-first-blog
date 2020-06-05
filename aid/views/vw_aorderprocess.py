@@ -392,11 +392,31 @@ def aorderprocessmidiorderpaypalpayment(request):
         "client_id": "AcTczGRsMLRWW0dxFloKmk1QwEDYEoU82MqbUWihnAwbX3gKP6xvKBVZsTNPfkVGhwVCnqAr98EHvl0E",
         "client_secret": "ECUunsjZzU6QGgi7vGoD88e2W3U63XfbiE8_AxVBuAj7SC6R-kZWG7r3NNTEr0Jt3-yOjGNypE3nxTYu"})
 
+    web_profile = paypalrestsdk.WebProfile({
+        "name": 'aidWeb_Profile_Name',
+        "presentation": {
+            "brand_name": "BusinessName",
+#            "logo_image": URL to logo image,
+        "locale_code": "US"
+    },
+        "input_fields": {
+                            "allow_note": 1,
+                            "no_shipping": 1,
+                            "address_override": 1
+                        },
+                        "flow_config": {
+        "landing_page_type": "Login"
+    }
+    })
+    web_profile.create()  # Will return True or False
+    print("web_profileid: " + web_profile.id)
+
     paypalamounttotal = '0.89'
     paypalamountcurrency = 'USD'
 
     payment = paypalrestsdk.Payment({
         "intent": "sale",
+        "experience_profile_id": web_profile.id,
         "payer": {
             "payment_method": "paypal"},
         "redirect_urls": {
@@ -406,7 +426,17 @@ def aorderprocessmidiorderpaypalpayment(request):
             "amount": {
                 "total": "" + paypalamounttotal + "",
                 "currency": "" + paypalamountcurrency + ""},
-            "description": "" + midifileid + ""}]})
+            "description": "" + midifileid + "",
+            "item_list": {
+                             "shipping_address": {
+                                 "city": "Budapestx",
+                                 "country_code": "HU",
+                                 "line1": "a@v.vv Erzs\\uFFFDbet t\\uFFFDr 9-10",
+                                 "postal_code": "1051",
+                                 "recipient_name": "John Doe",
+                                 "state": "Magyarorszag"
+                             }
+                         }}]})
 
     if payment.create():
         print("Payment created successfully")
