@@ -386,17 +386,36 @@ def aorderprocessmidiordersearchcontent(request):
                                                           'companiesrowsources': companiesrowsources,
                                                           'dockindrowsources': dockindrowsources})
 def aorderprocessmidiorderpaypalpayment(request):
+    BASE_DIR = settings.BASE_DIR
+
     midifileid = request.POST['midifileid']
     paypalrestsdk.configure({
         "mode": "sandbox",  # sandbox or live
         "client_id": "AcTczGRsMLRWW0dxFloKmk1QwEDYEoU82MqbUWihnAwbX3gKP6xvKBVZsTNPfkVGhwVCnqAr98EHvl0E",
         "client_secret": "ECUunsjZzU6QGgi7vGoD88e2W3U63XfbiE8_AxVBuAj7SC6R-kZWG7r3NNTEr0Jt3-yOjGNypE3nxTYu"})
 
+#webprofile handling in Paypal begin
+    #getting old (existing) webprofile from paypal
+    profiles = paypalrestsdk.WebProfile.all()
+#    import pdb;
+#    pdb.set_trace()
+
+    result = []
+    result = [profile.to_dict() for profile in profiles]
+    print("webprofile: " + result[0]['id'])
+
+    #    #deleting old webprofile
+#    profilex = paypalrestsdk.WebProfile.find(result[0]['id'])
+#    profilex.delete()
+#    import pdb;
+#    pdb.set_trace()
+    '''
+    #creating new webprofile
     web_profile = paypalrestsdk.WebProfile({
-        "name": 'aidWeb_Profile_Name',
+        "name": 'aidWeb_Profile_Name2',
         "presentation": {
             "brand_name": "BusinessName",
-#            "logo_image": URL to logo image,
+            "logo_image": "https://drive.google.com/file/d/1O82aq97ZY0p2JtGik44OdZA_lcKgMTBr/view?usp=sharing",
         "locale_code": "US"
     },
         "input_fields": {
@@ -409,14 +428,16 @@ def aorderprocessmidiorderpaypalpayment(request):
     }
     })
     web_profile.create()  # Will return True or False
-    print("web_profileid: " + web_profile.id)
+    '''
+# webprofile handling in Paypal end
+    #import pdb;
+    #pdb.set_trace()
 
     paypalamounttotal = '0.89'
     paypalamountcurrency = 'USD'
-
     payment = paypalrestsdk.Payment({
         "intent": "sale",
-        "experience_profile_id": web_profile.id,
+        "experience_profile_id": result[0]['id'],
         "payer": {
             "payment_method": "paypal"},
         "redirect_urls": {
@@ -652,7 +673,7 @@ def aorderprocessmidiorderpaymentcheck(request):
     print("fullmidifilename from check: " + fullmidifilename)
 #preparing midifile to send begin (to send Spice_Girls_Wannabe.mid instead of 3.mid - filename preparation)
     subprocess.call('if [ ! -d "' + BASE_DIR + '/midifilestosend/' + ectoken + '" ]; then mkdir ' + BASE_DIR + '/midifilestosend/' + ectoken + '  ;else rm -rf ' + BASE_DIR + '/midifilestosend/' + ectoken + ' && mkdir ' + BASE_DIR + '/midifilestosend/' + ectoken + ';  fi', shell=True)
-    subprocess.call('find ' + BASE_DIR + '/midifilestosend/* -mtime +2 -exec rm -rf {} \;', shell=True) #delete older than 2 day /midifilestosend/ directories (with midi files into those)
+    subprocess.call('find ' + BASE_DIR + '/midifilestosend/* -mmin +59 -exec rm -rf {} \;', shell=True) #delete older than 2 day /midifilestosend/ directories (with midi files into those)
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
