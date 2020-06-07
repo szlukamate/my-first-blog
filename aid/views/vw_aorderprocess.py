@@ -20,6 +20,7 @@ import paypalrestsdk
 import logging
 import re
 from django.core.mail import EmailMessage
+from aid.forms import aorderprocessmidiorderprecheckoutform, SignUpForm
 
 # import pdb;
 # pdb.set_trace()
@@ -727,7 +728,7 @@ def aorderprocessmidiorderpaymentcheck(request):
     email.send()
 
     return render(request, 'aid/awelcome.html', {})
-def aorderprocessmidiordercheckoutform(request, midifileid):
+def aorderprocessmidiordercheckoutform(request, midifileid, emailtosend):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
                     "midifileid_tblamidifiles, "
@@ -739,5 +740,30 @@ def aorderprocessmidiordercheckoutform(request, midifileid):
     midifiles = cursor1.fetchall()
 
     return render(request, 'aid/aorderprocessmidiordercheckout.html', {'midifiles': midifiles})
-
+def aorderprocessmidiorderprecheckoutform(request, midifileid):
+    if request.method == 'POST':
+        form = aorderprocessmidiorderprecheckoutform(request.POST)
+        if form.is_valid():
+            '''
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            subject = 'Activate Your Aid Account'
+            message = render_to_string('aid/aaccount_activation_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            email = EmailMessage(
+                subject, message, 'szluka.mate@gmail.com',
+                [user.email])  # , cc=[cc])
+            email.content_subtype = "html"
+            email.send()
+            '''
+            return HttpResponseNotFound('account_activation_sent')
+    else:
+        form = aorderprocessmidiorderprecheckoutform()
+    return render(request, 'aid/aorderprocessmidiorderprecheckout.html', {'form': form})
 

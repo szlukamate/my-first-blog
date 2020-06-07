@@ -18,7 +18,6 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as x12
 
 from django.contrib.auth import login, authenticate
-from aid.forms import SignUpForm
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
