@@ -764,6 +764,12 @@ def aorderprocessmidiorderprecheckoutform(request, midifileid):
             '''
             return HttpResponseNotFound('account_activation_sent')
     else:
-        form = aorderprocessmidiorderprecheckoutform()
+        w = midifileid
+        v = 1
+        #form2 =  aorderprocessmidiorderprecheckoutform()
+        form = SignUpForm()
+    import pdb;
+    pdb.set_trace()
+
     return render(request, 'aid/aorderprocessmidiorderprecheckout.html', {'form': form})
 
