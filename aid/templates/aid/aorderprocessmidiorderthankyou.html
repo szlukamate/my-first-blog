@@ -1,0 +1,25 @@
+{% extends 'aid/abase.html' %}
+{% load staticfiles%}
+ 	{% block content %}
+	<div class="content-wrapper">
+		<div class="order-confirmation--grid">
+			<div class="order-confirmation__full-width-wrapper">
+				<div class="confirmation-message">
+					<div class="confirmation-message--thankyou-section">
+						<div>
+							<span class="fa fa-check-circle" style="font-size:48px;color:green"></span>
+						</div>
+						<div>
+							<h2 >Your order has been placed.</h2>
+							<p>Your order number is <!-- --> <!-- -->{{customerordernumber}}</p>
+							<p>A confirmation of your order has been sent to {{useremail}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="{% static 'js/acustomerconfirmation.js' %}"></script>
+	<link rel="stylesheet" href="{% static 'css/acustomerconfirmation.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	{% endblock %}

@@ -44,9 +44,10 @@ urlpatterns = [
     url(r'aorderprocesspaymentcheck/$', views.aorderprocesspaymentcheck, name='aorderprocesspaymentcheck'),
     url(r'aorderprocessmidiordersearch/$', views.aorderprocessmidiordersearch, name='aorderprocessmidiordersearch'),
     url('aorderprocessmidiordersearchcontent/$', views.aorderprocessmidiordersearchcontent, name='aorderprocessmidiordersearchcontent'),
-    url(r'^aorderprocessmidiordercheckoutform/(?P<midifileid>[0-9]+)/(?P<emailtosend>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.aorderprocessmidiordercheckoutform, name='aorderprocessmidiordercheckoutform'),
+    url(r'^aorderprocessmidiordercheckoutform/(?P<midifileid>[0-9]+)/(?P<emailtosend>[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)/$', views.aorderprocessmidiordercheckoutform, name='aorderprocessmidiordercheckoutform'),
     url(r'aorderprocessmidiorderpaypalpayment/$', views.aorderprocessmidiorderpaypalpayment, name='aorderprocessmidiorderpaypalpayment'),
     url(r'aorderprocessmidiorderpaymentcheck/$', views.aorderprocessmidiorderpaymentcheck, name='aorderprocessmidiorderpaymentcheck'),
     url(r'aorderprocessmidiorderprecheckoutform/(?P<midifileid>[0-9]+)/$', views.aorderprocessmidiorderprecheckoutform, name='aorderprocessmidiorderprecheckoutform'),
+    url(r'^aorderprocessmidiorderthankyou/(?P<midifileid>[0-9]+)/(?P<emailtosend>[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)/$', views.aorderprocessmidiorderthankyou, name='aorderprocessmidiorderthankyou'),
 
 ]

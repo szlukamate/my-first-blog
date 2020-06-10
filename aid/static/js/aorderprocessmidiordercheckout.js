@@ -1,153 +1,81 @@
 /*
-aorderprocessmidiordersearch.js
+aorderprocessmidiordercheckout.js
 */
 
             var msg="Hello Javascript2";
                     console.log(msg);
 
 $(function () {
+                  var msg="Hello Javascript2";
+                    console.log('aa: ' + msg);
+                  var csrftoken = $('input[name=csrfmiddlewaretoken]').val();
+                  var midifileid = $('input[name=midifileid]').val();
+                  var emailtosend = $('input[name=emailtosend]').val();
+                    console.log('csrftoken: ' + csrftoken);
+                    console.log('midifileid in paypal javascript: ' + midifileid);
 
-$('a[href="/aid/aorderprocessmidiordersearch/"]').parent().addClass('active');
+         paypal.Buttons({
+            createOrder: function() {
+                var formDataoncreateorder = new FormData();
 
-    setTimeout(
-      function()
-      {
-            $('#docnumber').val(sessionStorage.docnumber);
-            $('#dockindname').val(sessionStorage.dockindname);
+                formDataoncreateorder.append("midifileid", midifileid);
+                formDataoncreateorder.append("emailtosend", emailtosend);
 
-            if (typeof sessionStorage.fromdate === 'undefined') {
 
-                var d = new Date();
+              return fetch('aorderprocessmidiorderpaypalpayment/', {
+                method: 'post',
+                headers: {
+                  'X-CSRFToken' : csrftoken
+                },
+                body: formDataoncreateorder,
 
-                var fromyear = d.getFullYear()-1; //-1 cause one year diff between fromdate and todate
-                var frommonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                var fromday = d.getDate();
+              }).then(function(res) {
+                return res.json();
+              }).then(function(res) {
+                console.log('res: ' + res);
 
-                var fromoutput = fromyear + '-' +
-                    (frommonth<10 ? '0' : '') + frommonth + '-' +
-                    (fromday<10 ? '0' : '') + fromday;
-                sessionStorage.fromdate = fromoutput;
-                $('#fromdate').val(fromoutput);
-                //console.log(sessionStorage.fromdate);
+                return res; // Use the same key name for order ID on the client and server
+              });
+            },
+            onApprove: function(data, actions) {
+                  // This function captures the funds from the transaction.
+                    for (const property in data) {
+                      console.log(`${property}: ${data[property]}`);
+                    }
 
-            } else {
-            $('#fromdate').val(sessionStorage.fromdate);
+                  return actions.order.capture().then(function(details)
+                        {
+                                    // This function shows a transaction success message to your buyer.
+                                    for (const property in details) {
+                                      console.log(`${property}: ${details[property]}`);
+                                    }
 
+                                var formDataonapprove = new FormData();
+
+                                formDataonapprove.append("ectoken", details.id);
+
+                            fetch('aorderprocessmidiorderpaymentcheck/',
+                                    {
+                                        method: 'post',
+                                        headers:
+                                        {
+                                          'X-CSRFToken' : csrftoken,
+                                        },
+                                        body: formDataonapprove,
+                                    })
+                            fetch('aorderprocessmidiorderthankyouredirecturl/',
+                                    {
+                                        method: 'post',
+                                        headers:
+                                        {
+                                          'X-CSRFToken' : csrftoken,
+                                        }
+                                    })
+//                            alert('Transaction completed by ' + details.payer.name.given_name);
+                        });
             }
-
-            if (typeof sessionStorage.todate === 'undefined') {
-
-                var d = new Date();
-
-                var toyear = d.getFullYear();
-                var tomonth = d.getMonth()+1; // +1 cause 0-11 the javascript months
-                var today = d.getDate();
-
-                var tooutput = toyear + '-' +
-                    (tomonth<10 ? '0' : '') + tomonth + '-' +
-                    (today<10 ? '0' : '') + today;
-                sessionStorage.todate = tooutput;
-                $('#todate').val(tooutput);
-                //console.log(sessionStorage.todate);
-
-            } else {
-            $('#todate').val(sessionStorage.todate);
-
-            }
-
-
-            $('#company').val(sessionStorage.company);
-
-            $('#searchbutton').trigger('click');
-
-      }, 500);
-
-    $('#searchbutton').click(function() {
-
-            $.ajax({
-                type: 'POST',
-                url: 'aorderprocessmidiordersearchcontent/',
-
-                data: {
-                'docnumber': $('#docnumber').val(),
-                'dockindname': $('#dockindname').val(),
-                'fromdate': $('#fromdate').val(),
-                'todate': $('#todate').val(),
-                'company': $('#company').val(),
-
-                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-                },
-
-                success: function(data){
-
-                    $('#docsearchtemplate').html(data);
-                    //console.log(data);
-                },
-                error: function(){
-                    alert('failure');
-                },
-                datatype: 'html'
-
-            });
-                setTimeout(
-                  function()
-                  {
-                    var companyvalueaccumulator=$('select#company').val(); // swap options of select element after html template refresh
-                    var companyswap=$('select#companyswap').html();
-                    $('select#company').html(companyswap);
-                    $('select#company').val(companyvalueaccumulator);
-
-                    var dockindnamevalueaccumulator=$('select#dockindname').val();
-                    var dockindnameswap=$('select#dockindnameswap').html();
-                    $('select#dockindname').html(dockindnameswap);
-                    $('select#dockindname').val(dockindnamevalueaccumulator);
-
-                  }, 500);
-        sessionStorage.docnumber = $('#docnumber').val();
-        sessionStorage.dockindname = $('#dockindname').val();
-        sessionStorage.fromdate = $('#fromdate').val();
-        sessionStorage.todate = $('#todate').val();
-        sessionStorage.company = $('#company').val();
-
-    });
-    $('#searchoutbutton').click(function() {
-        $('#docnumber').val("");
-        sessionStorage.docnumber = ""
-
-        $('#dockindname').val("");
-        sessionStorage.dockindname = ""
-
-        $('#company').val("");
-        sessionStorage.company = ""
-
-        $('#searchbutton').trigger('click');
-
-        //console.log(rowid);
-
-    });
-    $('body').on("click", ".linkable", function() { //save search conditions before jump
-        var djangourl = $(this).attr('hrefdjango');
-        sessionStorage.docnumber = $('#docnumber').val();
-        sessionStorage.dockindname = $('#dockindname').val();
-        sessionStorage.fromdate = $('#fromdate').val();
-        sessionStorage.todate = $('#todate').val();
-        sessionStorage.company = $('#company').val();
-
-        //console.log(sessionStorage.docnumber);
-
-       window.location.href = djangourl;
-    });
-    $('body').on("click", ".sendtomebutton", function() {
-        var midifileid = $(this).attr('midifileid');
-        console.log(midifileid);
-
-    });
-    $('#docnumber').keypress(function(event) {
-        if (event.keyCode == 13) {
-            $('#searchbutton').trigger('click');
-        }
-    });
-
+          }).render('#paypal-button-container');
+          //This function displays Smart Payment Buttons on your web page.
 
 });
 

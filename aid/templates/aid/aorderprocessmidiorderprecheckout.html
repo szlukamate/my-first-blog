@@ -15,7 +15,7 @@
 	<body>
       {% csrf_token %}
       <input type="hidden" name="midifileid" value="{{ midifiles.0.0}}"/>
-      <h2>Sign up</h2>
+      <h2>Please type the delivery email: </h2>
       <form method="post">
         {% csrf_token %}
         {% for field in form %}
@@ -30,7 +30,7 @@
             {% endfor %}
           </p>
         {% endfor %}
-        <button type="submit">Sign up</button>
+        <button type="submit">Submit</button>
       </form>
 
 	<link rel="stylesheet" href="{% static 'css/aorderprocessmidiordercheckout.css' %}">

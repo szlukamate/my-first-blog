@@ -20,7 +20,7 @@ import paypalrestsdk
 import logging
 import re
 from django.core.mail import EmailMessage
-from aid.forms import aorderprocessmidiorderprecheckoutform, SignUpForm
+from aid.forms import aorderprocessmidiorderprecheckoutformclasstemplate, SignUpForm
 
 # import pdb;
 # pdb.set_trace()
@@ -390,6 +390,7 @@ def aorderprocessmidiorderpaypalpayment(request):
     BASE_DIR = settings.BASE_DIR
 
     midifileid = request.POST['midifileid']
+    emailtosend = request.POST['emailtosend']
     paypalrestsdk.configure({
         "mode": "sandbox",  # sandbox or live
         "client_id": "AcTczGRsMLRWW0dxFloKmk1QwEDYEoU82MqbUWihnAwbX3gKP6xvKBVZsTNPfkVGhwVCnqAr98EHvl0E",
@@ -448,7 +449,7 @@ def aorderprocessmidiorderpaypalpayment(request):
             "amount": {
                 "total": "" + paypalamounttotal + "",
                 "currency": "" + paypalamountcurrency + ""},
-            "description": "" + midifileid + "",
+            "description": "" + midifileid + ", " + emailtosend + "",
             "item_list": {
                              "shipping_address": {
                                  "city": "Budapestx",
@@ -665,16 +666,20 @@ def aorderprocessmidiorderpaymentcheck(request):
     print("paymenttotal: " + payment.transactions[0]["amount"].total)
     payeremail = payment.payer.payer_info.email
     payerfirstname = payment.payer.payer_info.first_name
-    midifileid = payment.transactions[0]["description"] #midifileid from paypal description
-
+    description = payment.transactions[0]["description"] #midifileid from paypal description
+    descriptionsplitted = description.split(", ")
+    midifileid = descriptionsplitted[0]
+    emailtosend = descriptionsplitted[1]
     print("payeremail: " + payeremail)
+    print("midifileid: " + midifileid)
+    print("emailtosend: " + emailtosend)
 
     BASE_DIR = settings.BASE_DIR
     fullmidifilename = BASE_DIR + '/midifiles/' + midifileid + '.mid'
     print("fullmidifilename from check: " + fullmidifilename)
 #preparing midifile to send begin (to send Spice_Girls_Wannabe.mid instead of 3.mid - filename preparation)
     subprocess.call('if [ ! -d "' + BASE_DIR + '/midifilestosend/' + ectoken + '" ]; then mkdir ' + BASE_DIR + '/midifilestosend/' + ectoken + '  ;else rm -rf ' + BASE_DIR + '/midifilestosend/' + ectoken + ' && mkdir ' + BASE_DIR + '/midifilestosend/' + ectoken + ';  fi', shell=True)
-    subprocess.call('find ' + BASE_DIR + '/midifilestosend/* -mmin +59 -exec rm -rf {} \;', shell=True) #delete older than 2 day /midifilestosend/ directories (with midi files into those)
+    subprocess.call('find ' + BASE_DIR + '/midifilestosend/* -mmin +59 -exec rm -rf {} \;', shell=True) #delete older than 1 hour /midifilestosend/ directories (with midi files into those)
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -711,7 +716,7 @@ def aorderprocessmidiorderpaymentcheck(request):
     file.write(midifilecontent)
     file.close()
 
- # making midifilewithtitle begin
+ # making midifilewithtitle end
 
 # preparing midifile to send end
 
@@ -722,12 +727,13 @@ def aorderprocessmidiorderpaymentcheck(request):
     })
     email = EmailMessage(
         subject, message, 'szluka.mate@gmail.com',
-        [payeremail])  # , cc=[cc])
+        [emailtosend])  # , cc=[cc])
     email.attach_file(midifilenamewithtitle)
     email.content_subtype = "html"
     email.send()
 
     return render(request, 'aid/awelcome.html', {})
+
 def aorderprocessmidiordercheckoutform(request, midifileid, emailtosend):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
@@ -739,10 +745,10 @@ def aorderprocessmidiordercheckoutform(request, midifileid, emailtosend):
 
     midifiles = cursor1.fetchall()
 
-    return render(request, 'aid/aorderprocessmidiordercheckout.html', {'midifiles': midifiles})
+    return render(request, 'aid/aorderprocessmidiordercheckout.html', {'midifiles': midifiles, 'emailtosend': emailtosend })
 def aorderprocessmidiorderprecheckoutform(request, midifileid):
     if request.method == 'POST':
-        form = aorderprocessmidiorderprecheckoutform(request.POST)
+        form = aorderprocessmidiorderprecheckoutformclasstemplate(request.POST)
         if form.is_valid():
             '''
             user = form.save(commit=False)
@@ -762,14 +768,16 @@ def aorderprocessmidiorderprecheckoutform(request, midifileid):
             email.content_subtype = "html"
             email.send()
             '''
-            return HttpResponseNotFound('account_activation_sent')
+            emailtosend = form.cleaned_data['email']
+            return redirect('aorderprocessmidiordercheckoutform', midifileid = midifileid, emailtosend = emailtosend)
     else:
-        w = midifileid
-        v = 1
-        #form2 =  aorderprocessmidiorderprecheckoutform()
-        form = SignUpForm()
-    import pdb;
-    pdb.set_trace()
+        form = aorderprocessmidiorderprecheckoutformclasstemplate()
+
 
     return render(request, 'aid/aorderprocessmidiorderprecheckout.html', {'form': form})
+
+def aorderprocessmidiorderthankyou(request, midifileid, emailtosend):
+
+
+    return render(request, 'aid/aorderprocessmidiorderthankyou.html', {})
 
