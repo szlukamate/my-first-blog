@@ -14,6 +14,21 @@ $(function () {
                     console.log('csrftoken: ' + csrftoken);
                     console.log('midifileid in paypal javascript: ' + midifileid);
 
+// Dialog "Sending email..." begin
+    $( "#dialog-message" ).dialog({
+      autoOpen: false,
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+
+                $( "#dialog-message" ).dialog("option", "buttons", {}); //remove OK button
+// Dialog "Sending email..." end
+
+
          paypal.Buttons({
             createOrder: function() {
                 var formDataoncreateorder = new FormData();
@@ -38,6 +53,8 @@ $(function () {
               });
             },
             onApprove: function(data, actions) {
+                   $( "#dialog-message" ).dialog( "open" );
+
                   // This function captures the funds from the transaction.
                     for (const property in data) {
                       console.log(`${property}: ${data[property]}`);
@@ -46,10 +63,10 @@ $(function () {
                   return actions.order.capture().then(function(details)
                         {
                                     // This function shows a transaction success message to your buyer.
-                                    for (const property in details) {
-                                      console.log(`${property}: ${details[property]}`);
-                                    }
-
+//                                    for (const property in details) {
+//                                      console.log(`${property}: ${details[property]}`);
+//                                    }
+/*
                                 var formDataonapprove = new FormData();
 
                                 formDataonapprove.append("ectoken", details.id);
@@ -63,14 +80,30 @@ $(function () {
                                         },
                                         body: formDataonapprove,
                                     })
-                            fetch('aorderprocessmidiorderthankyouredirecturl/',
-                                    {
-                                        method: 'post',
-                                        headers:
-                                        {
-                                          'X-CSRFToken' : csrftoken,
-                                        }
-                                    })
+                                    .then(data => console.log(data)); //log the data;
+*/
+
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: 'aorderprocessmidiorderpaymentcheck/',
+
+                                        data: {
+                                        'ectoken' : details.id,
+                                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                                        },
+                                        success: function(url){
+                                        console.log(url);
+
+                                        window.location.href = url;
+
+                                        },
+                                        error: function(){
+                                            alert('failure');
+                                        },
+                                        datatype: 'html'
+                                    });
+
+
 //                            alert('Transaction completed by ' + details.payer.name.given_name);
                         });
             }

@@ -643,7 +643,8 @@ def aorderprocessmidiorderpaymentcheck(request):
     cursor3 = connection.cursor()
     cursor3.execute("SELECT "
 
-                    "paypalpaymentid_tbladoc "
+                    "paypalpaymentid_tbladoc, "
+                    "Docid_tbladoc "
 
                     "FROM aid_tbladoc "
                     ""
@@ -652,6 +653,7 @@ def aorderprocessmidiorderpaymentcheck(request):
     results = cursor3.fetchall()
     for x in results:
         paymentidfromsql = x[0]
+        cordocid = x[1]
     print("paymentid from check: " + paymentidfromsql)
 
     payment = paypalrestsdk.Payment.find(paymentidfromsql)
@@ -732,7 +734,7 @@ def aorderprocessmidiorderpaymentcheck(request):
     email.content_subtype = "html"
     email.send()
 
-    return render(request, 'aid/awelcome.html', {})
+    return render(request, 'aid/aorderprocessmidiorderthankyouredirecturl.html', {'emailtosend': emailtosend,'cordocid': cordocid, 'midifiletitle': midifiletitle })
 
 def aorderprocessmidiordercheckoutform(request, midifileid, emailtosend):
     cursor1 = connection.cursor()
@@ -776,8 +778,17 @@ def aorderprocessmidiorderprecheckoutform(request, midifileid):
 
     return render(request, 'aid/aorderprocessmidiorderprecheckout.html', {'form': form})
 
-def aorderprocessmidiorderthankyou(request, midifileid, emailtosend):
+def aorderprocessmidiorderthankyou(request,emailtosend,cordocid,midifiletitle):
+    cursor3 = connection.cursor()
+    cursor3.execute("SELECT "
+                    "Docid_tblaDoc, "
+                    "docnumber_tbladoc "
 
+                    "FROM aid_tbladoc "
+                    "WHERE Docid_tblaDoc=%s", [cordocid])
+    results = cursor3.fetchall()
+    for x in results:
+        cordocnumber = x[1]
 
-    return render(request, 'aid/aorderprocessmidiorderthankyou.html', {})
+    return render(request, 'aid/aorderprocessmidiorderthankyou.html', {'emailtosend': emailtosend,'cordocnumber': cordocnumber, 'midifiletitle': midifiletitle })
 

@@ -48,6 +48,6 @@ urlpatterns = [
     url(r'aorderprocessmidiorderpaypalpayment/$', views.aorderprocessmidiorderpaypalpayment, name='aorderprocessmidiorderpaypalpayment'),
     url(r'aorderprocessmidiorderpaymentcheck/$', views.aorderprocessmidiorderpaymentcheck, name='aorderprocessmidiorderpaymentcheck'),
     url(r'aorderprocessmidiorderprecheckoutform/(?P<midifileid>[0-9]+)/$', views.aorderprocessmidiorderprecheckoutform, name='aorderprocessmidiorderprecheckoutform'),
-    url(r'^aorderprocessmidiorderthankyou/(?P<midifileid>[0-9]+)/(?P<emailtosend>[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)/$', views.aorderprocessmidiorderthankyou, name='aorderprocessmidiorderthankyou'),
+    url(r'^aorderprocessmidiorderthankyou/(?P<emailtosend>[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)/(?P<cordocid>[0-9]+)/(?P<midifiletitle>[a-zA-Z0-9_.+-]+)/$', views.aorderprocessmidiorderthankyou, name='aorderprocessmidiorderthankyou'),
 
 ]
