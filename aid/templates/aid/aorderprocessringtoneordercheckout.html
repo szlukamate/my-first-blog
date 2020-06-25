@@ -1,0 +1,55 @@
+{% load static %}
+<html>
+    <head>
+        <title>Quotation Maker</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script type="text/javascript" src="{% static 'js/ajquery-ui.min.js' %}"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="{% static 'css/aid.css' %}">
+		<link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    </head>
+
+	<body>
+      {% csrf_token %}
+      <input type="hidden" name="ringtonemasterfileid" value="{{ ringtonemasterfiles.0.0}}"/>
+      <input type="hidden" name="emailtosend" value="{{ emailtosend}}"/>
+
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-offset-3">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h3 class="price"><span class="currency">$</span>0.89</h3>
+                        </div>
+                        <div class="card-block text-center">
+                            <div class="card-title">
+
+                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item">ringtonemaster title: {{ ringtonemasterfiles.0.1}}</li>
+                                <li class="list-group-item">To email: {{ emailtosend}}</li>
+                            </ul>
+                            <div id="paypal-button-container"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      <script
+        src="https://www.paypal.com/sdk/js?client-id=AcTczGRsMLRWW0dxFloKmk1QwEDYEoU82MqbUWihnAwbX3gKP6xvKBVZsTNPfkVGhwVCnqAr98EHvl0E"> // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+      </script>
+
+      <div id="dialog-message" title="Sending email...">
+      </div>
+
+	<script type="text/javascript" src="{% static 'js/aorderprocessringtoneordercheckout.js' %}"></script>
+	<link rel="stylesheet" href="{% static 'css/aorderprocessringtoneordercheckout.css' %}">
+
+	</body>
+</html>

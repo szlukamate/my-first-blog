@@ -20,7 +20,7 @@ import paypalrestsdk
 import logging
 import re
 from django.core.mail import EmailMessage
-from aid.forms import aorderprocessmidiorderprecheckoutformclasstemplate, SignUpForm
+from aid.forms import aorderprocessringtoneorderprecheckoutformclasstemplate, SignUpForm
 
 # import pdb;
 # pdb.set_trace()
@@ -276,13 +276,12 @@ def aorderprocesspaymentcheck(request):
           #+ payment.transactions.amount.currency )
     #print("paymentdetails from check: " + str(payment))
 
-
     #    order = Order.find(paymentidfromsql)
 #    print("ordersuccess " + order.success())
 
     return render(request, 'aid/awelcome.html', {})
 
-def aorderprocessmidiordersearch(request):
+def aorderprocessringtoneordersearch(request):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
                     "Productid_tblaProduct, "
@@ -299,11 +298,11 @@ def aorderprocessmidiordersearch(request):
                     "WHERE enabletoorderprocess_tblaproduct=1 and obsolete_tblaproduct=0 ")
     enabledproductstoorderprocess = cursor1.fetchall()
 
-    return render(request, 'aid/aorderprocessmidiordersearch.html',
+    return render(request, 'aid/aorderprocessringtoneordersearch.html',
                   {'enabledproductstoorderprocess': enabledproductstoorderprocess})
 
 
-def aorderprocessmidiordersearchcontent(request):
+def aorderprocessringtoneordersearchcontent(request):
     docnumber = request.POST['docnumber']
     dockindname = request.POST['dockindname']
     fromdate = request.POST['fromdate']
@@ -346,14 +345,14 @@ def aorderprocessmidiordersearchcontent(request):
     # pdb.set_trace()
 
     cursor1.execute("SELECT "
-                    "midifileid_tblamidifiles, "
-                    "title_tblamidifiles "
+                    "ringtonemasterfileid_tblaringtonemasterfiles, "
+                    "title_tblaringtonemasterfiles "
 
-                    "FROM aid_tblamidifiles ")
+                    "FROM aid_tblaringtonemasterfiles ")
 
 #                    "HAVING D1.obsolete_tbladoc = 0 " + searchphraseformainresults + ""
 #                    "order by D1.docid_tbladoc desc ")
-    midifiles = cursor1.fetchall()
+    ringtonemasterfiles = cursor1.fetchall()
     # import pdb;
     # pdb.set_trace()
 
@@ -383,13 +382,13 @@ def aorderprocessmidiordersearchcontent(request):
                                                                                                 "GROUP BY Doc_kind_name_tblDoc_kind ")
 
     dockindrowsources = cursor1.fetchall()
-    return render(request, 'aid/aorderprocessmidiordersearchcontent.html', {'midifiles': midifiles,
+    return render(request, 'aid/aorderprocessringtoneordersearchcontent.html', {'ringtonemasterfiles': ringtonemasterfiles,
                                                           'companiesrowsources': companiesrowsources,
                                                           'dockindrowsources': dockindrowsources})
-def aorderprocessmidiorderpaypalpayment(request):
+def aorderprocessringtoneorderpaypalpayment(request):
     BASE_DIR = settings.BASE_DIR
 
-    midifileid = request.POST['midifileid']
+    ringtonemasterfileid = request.POST['ringtonemasterfileid']
     emailtosend = request.POST['emailtosend']
     paypalrestsdk.configure({
         "mode": "sandbox",  # sandbox or live
@@ -449,7 +448,7 @@ def aorderprocessmidiorderpaypalpayment(request):
             "amount": {
                 "total": "" + paypalamounttotal + "",
                 "currency": "" + paypalamountcurrency + ""},
-            "description": "" + midifileid + ", " + emailtosend + "",
+            "description": "" + ringtonemasterfileid + ", " + emailtosend + "",
             "item_list": {
                              "shipping_address": {
                                  "city": "Budapestx",
@@ -467,7 +466,7 @@ def aorderprocessmidiorderpaypalpayment(request):
         for link in payment.links:
             if link.method == "REDIRECT":
                 redirect_url = link.href
-                print("Redirect for approval: %s" % (redirect_url))
+                #print("Redirect for approval: %s" % (redirect_url))
     else:
         print(payment.error)
     ectoken = re.search('token=(.+)', redirect_url).group(1)
@@ -635,7 +634,7 @@ def aorderprocessmidiorderpaypalpayment(request):
     json_data = json.dumps(datavar)
 
     return HttpResponse(json_data, content_type="application/json")
-def aorderprocessmidiorderpaymentcheck(request):
+def aorderprocessringtoneorderpaymentcheck(request):
 
     ectoken = request.POST['ectoken']
     print("ectoken from check: " + ectoken)
@@ -668,31 +667,31 @@ def aorderprocessmidiorderpaymentcheck(request):
     print("paymenttotal: " + payment.transactions[0]["amount"].total)
     payeremail = payment.payer.payer_info.email
     payerfirstname = payment.payer.payer_info.first_name
-    description = payment.transactions[0]["description"] #midifileid from paypal description
+    description = payment.transactions[0]["description"] #ringtonemasterfileid from paypal description
     descriptionsplitted = description.split(", ")
-    midifileid = descriptionsplitted[0]
+    ringtonemasterfileid = descriptionsplitted[0]
     emailtosend = descriptionsplitted[1]
     print("payeremail: " + payeremail)
-    print("midifileid: " + midifileid)
+    print("ringtonemasterfileid: " + ringtonemasterfileid)
     print("emailtosend: " + emailtosend)
 
     BASE_DIR = settings.BASE_DIR
-    fullmidifilename = BASE_DIR + '/midifiles/' + midifileid + '.mid'
-    print("fullmidifilename from check: " + fullmidifilename)
-#preparing midifile to send begin (to send Spice_Girls_Wannabe.mid instead of 3.mid - filename preparation)
-    subprocess.call('if [ ! -d "' + BASE_DIR + '/midifilestosend/' + ectoken + '" ]; then mkdir ' + BASE_DIR + '/midifilestosend/' + ectoken + '  ;else rm -rf ' + BASE_DIR + '/midifilestosend/' + ectoken + ' && mkdir ' + BASE_DIR + '/midifilestosend/' + ectoken + ';  fi', shell=True)
-    subprocess.call('find ' + BASE_DIR + '/midifilestosend/* -mmin +59 -exec rm -rf {} \;', shell=True) #delete older than 1 hour /midifilestosend/ directories (with midi files into those)
+    fullringtonemasterfilename = BASE_DIR + '/ringtonemasterfiles/' + ringtonemasterfileid + '.mp3'
+    print("fullringtonemasterfilename from check: " + fullringtonemasterfilename)
+#preparing ringtonemodifiedfile to send begin (to send Spice_Girls_Wannabe.mid instead of 3.mid - filename preparation)
+    subprocess.call('if [ ! -d "' + BASE_DIR + '/ringtonemodifiedfiles/' + ectoken + '" ]; then mkdir ' + BASE_DIR + '/ringtonemodifiedfiles/' + ectoken + '  ;else rm -rf ' + BASE_DIR + '/ringtonemodifiedfiles/' + ectoken + ' && mkdir ' + BASE_DIR + '/ringtonemodifiedfiles/' + ectoken + ';  fi', shell=True)
+    subprocess.call('find ' + BASE_DIR + '/ringtonemodifiedfiles/* -mmin +59 -exec rm -rf {} \;', shell=True) #delete older than 1 hour /ringtonemodifiedfiles/ directories (with ringtonemodified files into those)
 
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
-                    "midifileid_tblamidifiles, "
-                    "title_tblamidifiles "
+                    "ringtonemasterfileid_tblaringtonemasterfiles, "
+                    "title_tblaringtonemasterfiles "
 
-                    "FROM aid_tblamidifiles "
-                    "WHERE midifileid_tblamidifiles = %s", [midifileid])
-    midifiles = cursor1.fetchall()
-    for x in midifiles:
-        midifiletitle = x[1]
+                    "FROM aid_tblaringtonemasterfiles "
+                    "WHERE ringtonemasterfileid_tblaringtonemasterfiles = %s", [ringtonemasterfileid])
+    ringtonemasterfiles = cursor1.fetchall()
+    for x in ringtonemasterfiles:
+        ringtonemasterfiletitle = x[1]
 
  # get cornumber from cor begin
         cursor3 = connection.cursor()
@@ -706,51 +705,52 @@ def aorderprocessmidiorderpaymentcheck(request):
             cornumber = x[0]
  # get cornumber from cor end
 
- # making midifilewithtitle begin
+ # making ringtonemodifiedfilewithtitle begin
 
-    midifilenamewithid = BASE_DIR + '/midifiles/' + str(midifileid) + '.mid'
-    file = open(midifilenamewithid, 'rb')
-    midifilecontent = file.read()
+    ringtonemasterfilenamewithid = BASE_DIR + '/ringtonemasterfiles/' + str(ringtonemasterfileid) + '.mp3'
+    file = open(ringtonemasterfilenamewithid, 'rb')
+    ringtonemasterfilecontent = file.read()
     file.close()
 
-    midifilenamewithtitle = BASE_DIR + '/midifilestosend/' + ectoken + '/' + midifiletitle + '_wwwdotaiddotcom_cor' + str(cornumber) + '.mid'
-    file = open(midifilenamewithtitle, 'wb')
-    file.write(midifilecontent)
+    ringtonemodifiedfilepathandtitle = BASE_DIR + '/ringtonemodifiedfiles/' + ectoken + '/' + ringtonemasterfiletitle + '_wwwdotaiddotcom_cor' + str(cornumber) + '.mp3'
+    file = open(ringtonemodifiedfilepathandtitle, 'wb')
+    file.write(ringtonemasterfilecontent)
     file.close()
 
- # making midifilewithtitle end
+    ringtonemodifiedfiletitle = ringtonemasterfiletitle + '_wwwdotaiddotcom_cor' + str(cornumber) + '.mp3'
+ # making ringtonemodifiedfilewithtitle end
 
-# preparing midifile to send end
+# preparing ringtonemodifiedfile to send end
 
 
-    subject = 'Your midi file from Aid'
-    message = render_to_string('aid/amidifilesendingemail.html', {
+    subject = 'Your ringtone file from Aid'
+    message = render_to_string('aid/aringtonemodifiedfilesendingemail.html', {
         'payerfirstname': payerfirstname,
     })
     email = EmailMessage(
         subject, message, 'szluka.mate@gmail.com',
         [emailtosend])  # , cc=[cc])
-    email.attach_file(midifilenamewithtitle)
+    email.attach_file(ringtonemodifiedfilepathandtitle)
     email.content_subtype = "html"
     email.send()
 
-    return render(request, 'aid/aorderprocessmidiorderthankyouredirecturl.html', {'emailtosend': emailtosend,'cordocid': cordocid, 'midifiletitle': midifiletitle })
+    return render(request, 'aid/aorderprocessringtoneorderthankyouredirecturl.html', {'emailtosend': emailtosend,'cordocid': cordocid, 'ringtonemodifiedfiletitle': ringtonemodifiedfiletitle })
 
-def aorderprocessmidiordercheckoutform(request, midifileid, emailtosend):
+def aorderprocessringtoneordercheckoutform(request, ringtonemasterfileid, emailtosend):
     cursor1 = connection.cursor()
     cursor1.execute("SELECT "
-                    "midifileid_tblamidifiles, "
-                    "title_tblamidifiles "
+                    "ringtonemasterfileid_tblaringtonemasterfiles, "
+                    "title_tblaringtonemasterfiles "
 
-                    "FROM aid_tblamidifiles "
-                    "WHERE midifileid_tblamidifiles = %s", [midifileid])
+                    "FROM aid_tblaringtonemasterfiles "
+                    "WHERE ringtonemasterfileid_tblaringtonemasterfiles = %s", [ringtonemasterfileid])
 
-    midifiles = cursor1.fetchall()
+    ringtonemasterfiles = cursor1.fetchall()
 
-    return render(request, 'aid/aorderprocessmidiordercheckout.html', {'midifiles': midifiles, 'emailtosend': emailtosend })
-def aorderprocessmidiorderprecheckoutform(request, midifileid):
+    return render(request, 'aid/aorderprocessringtoneordercheckout.html', {'ringtonemasterfiles': ringtonemasterfiles, 'emailtosend': emailtosend })
+def aorderprocessringtoneorderprecheckoutform(request, ringtonemasterfileid):
     if request.method == 'POST':
-        form = aorderprocessmidiorderprecheckoutformclasstemplate(request.POST)
+        form = aorderprocessringtoneorderprecheckoutformclasstemplate(request.POST)
         if form.is_valid():
             '''
             user = form.save(commit=False)
@@ -771,14 +771,14 @@ def aorderprocessmidiorderprecheckoutform(request, midifileid):
             email.send()
             '''
             emailtosend = form.cleaned_data['email']
-            return redirect('aorderprocessmidiordercheckoutform', midifileid = midifileid, emailtosend = emailtosend)
+            return redirect('aorderprocessringtoneordercheckoutform', ringtonemasterfileid = ringtonemasterfileid, emailtosend = emailtosend)
     else:
-        form = aorderprocessmidiorderprecheckoutformclasstemplate()
+        form = aorderprocessringtoneorderprecheckoutformclasstemplate()
 
 
-    return render(request, 'aid/aorderprocessmidiorderprecheckout.html', {'form': form})
+    return render(request, 'aid/aorderprocessringtoneorderprecheckout.html', {'form': form})
 
-def aorderprocessmidiorderthankyou(request,emailtosend,cordocid,midifiletitle):
+def aorderprocessringtoneorderthankyou(request,emailtosend,cordocid,ringtonemodifiedfiletitle):
     cursor3 = connection.cursor()
     cursor3.execute("SELECT "
                     "Docid_tblaDoc, "
@@ -787,8 +787,9 @@ def aorderprocessmidiorderthankyou(request,emailtosend,cordocid,midifiletitle):
                     "FROM aid_tbladoc "
                     "WHERE Docid_tblaDoc=%s", [cordocid])
     results = cursor3.fetchall()
+
     for x in results:
         cordocnumber = x[1]
 
-    return render(request, 'aid/aorderprocessmidiorderthankyou.html', {'emailtosend': emailtosend,'cordocnumber': cordocnumber, 'midifiletitle': midifiletitle })
+    return render(request, 'aid/aorderprocessringtoneorderthankyou.html', {'emailtosend': emailtosend,'cordocnumber': cordocnumber, 'ringtonemodifiedfiletitle': ringtonemodifiedfiletitle })
 

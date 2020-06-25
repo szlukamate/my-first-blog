@@ -10,6 +10,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="{% static 'css/aid.css' %}">
 		<link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>
 	<div class="page-header">
@@ -35,7 +36,7 @@
 			    {% endif %}
 
 				<li><a href="{% url 'aorderprocess' %}">Order</a></li>
-				<li><a href="{% url 'aorderprocessmidiordersearch' %}">Midi Order</a></li>
+				<li><a href="{% url 'aorderprocessringtoneordersearch' %}">Ringtone Order</a></li>
 			</ul>
 		  </div>
 		</nav>

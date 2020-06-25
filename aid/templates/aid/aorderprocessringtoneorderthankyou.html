@@ -1,0 +1,24 @@
+{% extends 'aid/abase.html' %}
+{% load staticfiles%}
+ 	{% block content %}
+	<div class="content-wrapper">
+		<div class="order-confirmation--grid">
+			<div class="order-confirmation__full-width-wrapper">
+				<div class="confirmation-message">
+					<div class="confirmation-message--thankyou-section">
+						<div>
+							<span class="fa fa-check-circle" style="font-size:48px;color:green"></span>
+						</div>
+						<div>
+							<h2 >Thank You for your order!<br>The ringtone was sent to {{emailtosend}}</h2>
+							<p>Your order number is COR-{{cordocnumber}}</p>
+							<p>Ringtone filename: {{ringtonemodifiedfiletitle}}.mp3</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<link rel="stylesheet" href="{% static 'css/aorderprocessringtoneorderthankyou.css' %}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	{% endblock %}
