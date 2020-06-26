@@ -1,3 +1,4 @@
+{% load staticfiles%}
 	{% block content %}
 							  <select id="companyswap" hidden >
 									<option value="" ></option>
@@ -11,14 +12,17 @@
 										<option value="{{ dockindrowsource.0 }}">{{ dockindrowsource.0 }}</option>
 									{% endfor %}
 							  </select>
-
+{% comment "Optional note" %}
+    <p>Commented out text with {{ create_date|date:"c" }}</p>
+{% endcomment %}
 
 							<div class="table-responsive text-nowrap" style="max-height: 600px; overflow:scroll;">
 										<table class="table table-striped">
 											<thead>
 
 												<tr>
-													<td>ringtonemasterfileid</td>
+													<td>Ringtonemasterfileid</td>
+													<td></td>
 													<td>Title</td>
 												</tr>
 											</thead>
@@ -33,6 +37,13 @@
 																<button class="playbutton" type="submit" ringtonemasterfileid="{{ ringtonemasterfile.0}}">
 																   <span><i class="fa fa-play-circle"></i></span>
 																</button>
+																<audio controls src="{{ringtonemasterfilespath}}"></audio>
+																{% comment "Optional note" %}
+																<audio controls src="{% static 'js/5.mp3' %}"></audio>
+																{% endcomment %}
+																<audio controls src="{% static 'js/5.mp3' %}"></audio>
+																<audio controls src="{% static '../mysite/ringtonemasterfiles/5.mp3' %}"></audio>
+
 														</td>
 														<td>{{ ringtonemasterfile.1}}</td>
 														<td>

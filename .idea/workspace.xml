@@ -2,24 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebc911f0-9746-42b0-b068-7722acbf6992" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/static/css/aorderprocessmidiorder.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/static/css/aorderprocessmidiordercheckout.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/static/css/aorderprocessmidiordersearch.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/static/css/aorderprocessmidiorderthankyou.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/static/js/aorderprocessmidiordercheckout.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/static/js/aorderprocessmidiordersearch.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/abase.html" beforeDir="false" afterPath="$PROJECT_DIR$/aid/templates/aid/abase.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/amidifilesendingemail.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/aorderprocessmidiordercheckout.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/aorderprocessmidiorderprecheckout.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/aorderprocessmidiordersearch.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/aorderprocessmidiordersearchcontent.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/aorderprocessmidiorderthankyou.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/templates/aid/aorderprocessmidiorderthankyouredirecturl.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/aid/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aid/templates/aid/aorderprocessringtoneordersearchcontent.html" beforeDir="false" afterPath="$PROJECT_DIR$/aid/templates/aid/aorderprocessringtoneordersearchcontent.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aid/views/vw_aorderprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/aid/views/vw_aorderprocess.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

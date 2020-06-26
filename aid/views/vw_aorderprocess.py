@@ -21,6 +21,7 @@ import logging
 import re
 from django.core.mail import EmailMessage
 from aid.forms import aorderprocessringtoneorderprecheckoutformclasstemplate, SignUpForm
+import aid
 
 # import pdb;
 # pdb.set_trace()
@@ -303,6 +304,14 @@ def aorderprocessringtoneordersearch(request):
 
 
 def aorderprocessringtoneordersearchcontent(request):
+    BASE_DIR = settings.BASE_DIR
+    STATIC_URL = settings.STATIC_URL
+    STATIC_ROOT = settings.STATIC_ROOT
+    print("STATIC_URL: " + STATIC_URL)
+    print("STATIC_ROOT: " + STATIC_ROOT)
+    APP_PATH = os.path.dirname(aid.__file__)
+    print("APP_PATH: " + APP_PATH)
+
     docnumber = request.POST['docnumber']
     dockindname = request.POST['dockindname']
     fromdate = request.POST['fromdate']
@@ -353,8 +362,7 @@ def aorderprocessringtoneordersearchcontent(request):
 #                    "HAVING D1.obsolete_tbladoc = 0 " + searchphraseformainresults + ""
 #                    "order by D1.docid_tbladoc desc ")
     ringtonemasterfiles = cursor1.fetchall()
-    # import pdb;
-    # pdb.set_trace()
+    ringtonemasterfilespath = BASE_DIR + '/ringtonemasterfiles/5.mp3'
 
     cursor2 = connection.cursor()
     cursor2.execute("SELECT "
@@ -384,6 +392,7 @@ def aorderprocessringtoneordersearchcontent(request):
     dockindrowsources = cursor1.fetchall()
     return render(request, 'aid/aorderprocessringtoneordersearchcontent.html', {'ringtonemasterfiles': ringtonemasterfiles,
                                                           'companiesrowsources': companiesrowsources,
+                                                          'ringtonemasterfilespath': ringtonemasterfilespath,
                                                           'dockindrowsources': dockindrowsources})
 def aorderprocessringtoneorderpaypalpayment(request):
     BASE_DIR = settings.BASE_DIR
