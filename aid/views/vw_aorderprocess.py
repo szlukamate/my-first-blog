@@ -309,8 +309,6 @@ def aorderprocessringtoneordersearchcontent(request):
     STATIC_ROOT = settings.STATIC_ROOT
     print("STATIC_URL: " + STATIC_URL)
     print("STATIC_ROOT: " + STATIC_ROOT)
-    APP_PATH = os.path.dirname(aid.__file__)
-    print("APP_PATH: " + APP_PATH)
 
     docnumber = request.POST['docnumber']
     dockindname = request.POST['dockindname']
@@ -362,7 +360,6 @@ def aorderprocessringtoneordersearchcontent(request):
 #                    "HAVING D1.obsolete_tbladoc = 0 " + searchphraseformainresults + ""
 #                    "order by D1.docid_tbladoc desc ")
     ringtonemasterfiles = cursor1.fetchall()
-    ringtonemasterfilespath = BASE_DIR + '/ringtonemasterfiles/5.mp3'
 
     cursor2 = connection.cursor()
     cursor2.execute("SELECT "
@@ -392,7 +389,6 @@ def aorderprocessringtoneordersearchcontent(request):
     dockindrowsources = cursor1.fetchall()
     return render(request, 'aid/aorderprocessringtoneordersearchcontent.html', {'ringtonemasterfiles': ringtonemasterfiles,
                                                           'companiesrowsources': companiesrowsources,
-                                                          'ringtonemasterfilespath': ringtonemasterfilespath,
                                                           'dockindrowsources': dockindrowsources})
 def aorderprocessringtoneorderpaypalpayment(request):
     BASE_DIR = settings.BASE_DIR
@@ -644,6 +640,8 @@ def aorderprocessringtoneorderpaypalpayment(request):
 
     return HttpResponse(json_data, content_type="application/json")
 def aorderprocessringtoneorderpaymentcheck(request):
+    APP_PATH = os.path.dirname(aid.__file__)
+    print("APP_PATH: " + APP_PATH)
 
     ectoken = request.POST['ectoken']
     print("ectoken from check: " + ectoken)
@@ -685,9 +683,8 @@ def aorderprocessringtoneorderpaymentcheck(request):
     print("emailtosend: " + emailtosend)
 
     BASE_DIR = settings.BASE_DIR
-    fullringtonemasterfilename = BASE_DIR + '/ringtonemasterfiles/' + ringtonemasterfileid + '.mp3'
-    print("fullringtonemasterfilename from check: " + fullringtonemasterfilename)
-#preparing ringtonemodifiedfile to send begin (to send Spice_Girls_Wannabe.mid instead of 3.mid - filename preparation)
+
+    #preparing ringtonemodifiedfile to send begin (to send Spice_Girls_Wannabe.mid instead of 3.mid - filename preparation)
     subprocess.call('if [ ! -d "' + BASE_DIR + '/ringtonemodifiedfiles/' + ectoken + '" ]; then mkdir ' + BASE_DIR + '/ringtonemodifiedfiles/' + ectoken + '  ;else rm -rf ' + BASE_DIR + '/ringtonemodifiedfiles/' + ectoken + ' && mkdir ' + BASE_DIR + '/ringtonemodifiedfiles/' + ectoken + ';  fi', shell=True)
     subprocess.call('find ' + BASE_DIR + '/ringtonemodifiedfiles/* -mmin +59 -exec rm -rf {} \;', shell=True) #delete older than 1 hour /ringtonemodifiedfiles/ directories (with ringtonemodified files into those)
 
@@ -716,7 +713,7 @@ def aorderprocessringtoneorderpaymentcheck(request):
 
  # making ringtonemodifiedfilewithtitle begin
 
-    ringtonemasterfilenamewithid = BASE_DIR + '/ringtonemasterfiles/' + str(ringtonemasterfileid) + '.mp3'
+    ringtonemasterfilenamewithid = APP_PATH + '/static/ringtonemasterfiles/' + str(ringtonemasterfileid) + '.mp3'
     file = open(ringtonemasterfilenamewithid, 'rb')
     ringtonemasterfilecontent = file.read()
     file.close()

@@ -34,15 +34,10 @@
 													<tr>
 														<td>{{ ringtonemasterfile.0 }}</td>
 														<td>
-																<button class="playbutton" type="submit" ringtonemasterfileid="{{ ringtonemasterfile.0}}">
-																   <span><i class="fa fa-play-circle"></i></span>
-																</button>
-																<audio controls src="{{ringtonemasterfilespath}}"></audio>
 																{% comment "Optional note" %}
 																<audio controls src="{% static 'js/5.mp3' %}"></audio>
 																{% endcomment %}
-																<audio controls src="{% static 'js/5.mp3' %}"></audio>
-																<audio controls src="{% static '../mysite/ringtonemasterfiles/5.mp3' %}"></audio>
+																<audio controls src="{% static 'ringtonemasterfiles/' %}{{ ringtonemasterfile.0}}.mp3"></audio>
 
 														</td>
 														<td>{{ ringtonemasterfile.1}}</td>
