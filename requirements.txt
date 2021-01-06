@@ -1,6 +1,6 @@
 backcall==0.1.0
 cairocffi==0.9.0
-CairoSVG==2.2.1
+CairoSVG==2.5.1
 cffi==1.11.5
 cssselect2==0.2.1
 decorator==4.3.0
